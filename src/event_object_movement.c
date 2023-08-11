@@ -2140,11 +2140,7 @@ static void LoadObjectEventPalette(u16 paletteTag)
 {
     u16 i = FindObjectEventPaletteIndexByTag(paletteTag);
 
-#ifdef BUGFIX
     if (sObjectEventSpritePalettes[i].tag != OBJ_EVENT_PAL_TAG_NONE)
-#else
-    if (i != OBJ_EVENT_PAL_TAG_NONE) // always true
-#endif
     {
         TryLoadObjectPalette(&sObjectEventSpritePalettes[i]);
     }

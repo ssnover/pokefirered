@@ -1758,20 +1758,20 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u32 personality;
     u32 value;
     u16 checksum;
+    bool32 shouldBeShiny;
+    bool32 isShiny;
+    u32 shinyValue;
 
     ZeroBoxMonData(boxMon);
 
-    if (hasFixedPersonality)
+    if (hasFixedPersonality) {
         personality = fixedPersonality;
-    else
+    } else {
         personality = Random32();
-
-    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
-
+    }
     // Determine original trainer ID
     if (otIdType == OT_ID_RANDOM_NO_SHINY) // Pokemon cannot be shiny
     {
-        u32 shinyValue;
         do
         {
             value = Random32();
@@ -1787,6 +1787,18 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         value = gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
     }
 
+    shinyValue = GET_SHINY_VALUE(value, personality);
+    // It's possible for a Pokemon to be shiny with 1/4096 odds but not 1/8192 odds
+    shouldBeShiny = shinyValue < SHINY_ODDS;
+    isShiny = shinyValue < SHINY_ODDS_CLASSIC;
+    // If we get a 1/4096 value, but not a 1/8192 value, modify personality value to get a 1/8192 value
+    // This allows shiny-ness to persist in games that have not modified shiny odds
+    if (shouldBeShiny && !isShiny && !hasFixedPersonality) {
+        // This can only occur if bit 3 is still high, so we flip that one
+        personality ^= (1 << 3);
+    }
+
+    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
     SetBoxMonData(boxMon, MON_DATA_OT_ID, &value);
 
     checksum = CalculateBoxMonChecksum(boxMon);
@@ -2137,10 +2149,8 @@ void CalculateMonStats(struct Pokemon *mon)
         {
             // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
             currentHP += newMaxHP - oldMaxHP;
-#ifdef BUGFIX
             if (currentHP <= 0)
                 currentHP = 1;
-#endif
         }
         else
             return;
@@ -3602,11 +3612,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IVS:
     {
-#ifdef BUGFIX
         u32 ivs = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
-#else
-        u32 ivs = *data; // Bug: Only the HP IV and the lower 3 bits of the Attack IV are read. The rest become 0.
-#endif
         substruct3->hpIV = ivs & MAX_IV_MASK;
         substruct3->attackIV = (ivs >> 5) & MAX_IV_MASK;
         substruct3->defenseIV = (ivs >> 10) & MAX_IV_MASK;
@@ -5311,17 +5317,7 @@ u8 GetTrainerEncounterMusicId(u16 trainerId)
 
 static u16 ModifyStatByNature(u8 nature, u16 stat, u8 statIndex)
 {
-    // Because this is a u16 it will be unable to store the
-    // result of the multiplication for any stat > 595 for a
-    // positive nature and > 728 for a negative nature.
-    // Neither occur in the base game, but this can happen if
-    // any Nature-affected base stat is increased to a value
-    // above 248. The closest by default is Shuckle at 230.
-#ifdef BUGFIX
     u32 retVal;
-#else
-    u16 retVal;
-#endif
 
     // Don't modify HP, Accuracy, or Evasion by nature
     if (statIndex <= STAT_HP || statIndex > NUM_NATURE_STATS)
