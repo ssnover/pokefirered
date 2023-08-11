@@ -34,12 +34,12 @@ static void Task_Teleport2Warp(u8 taskId);
 static void Task_TeleportWarp(u8 taskId);
 static void Task_DoorWarp(u8 taskId);
 static void Task_StairWarp(u8 taskId);
-static void ForceStairsMovement(u16 metatileBehavior, s16 *x, s16 *y);
-static void GetStairsMovementDirection(u8 metatileBehavior, s16 *x, s16 *y);
-static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
+static void ForceStairsMovement(u16 metatileBehavior, s16* x, s16* y);
+static void GetStairsMovementDirection(u8 metatileBehavior, s16* x, s16* y);
+static void UpdateStairsMovement(s16 speedX, s16 speedY, s16* offsetX, s16* offsetY, s16* timer);
 static void Task_ExitStairs(u8 taskId);
-static void ExitStairsMovement(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
-static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
+static void ExitStairsMovement(s16* speedX, s16* speedY, s16* offsetX, s16* offsetY, s16* timer);
+static bool8 WaitStairExitMovementFinished(s16* speedX, s16* speedY, s16* offsetX, s16* offsetY, s16* timer);
 
 void palette_bg_faded_fill_white(void)
 {
@@ -94,7 +94,7 @@ void FadeInFromBlack(void)
 
 void WarpFadeOutScreen(void)
 {
-    const struct MapHeader *header = GetDestinationWarpMapHeader();
+    const struct MapHeader* header = GetDestinationWarpMapHeader();
     if (header->regionMapSectionId != gMapHeader.regionMapSectionId && MapHasPreviewScreen(header->regionMapSectionId, MPS_TYPE_CAVE))
         FadeScreen(FADE_TO_BLACK, 0);
     else
@@ -169,7 +169,7 @@ void FieldCB_ContinueScript(void)
 
 static void Task_ReturnToFieldCableLink(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -203,7 +203,7 @@ void FieldCB_ReturnToFieldCableLink(void)
 
 static void Task_ReturnToFieldRecordMixing(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -313,9 +313,9 @@ static void FieldCB_TeleportWarpIn(void)
 
 static void Task_ExitDoor(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
-    s16 *x = &task->data[2];
-    s16 *y = &task->data[3];
+    struct Task* task = &gTasks[taskId];
+    s16* x = &task->data[2];
+    s16* y = &task->data[3];
 
     if (task->data[0] == 0)
         task->data[0] = 5;
@@ -370,7 +370,7 @@ static void Task_ExitDoor(u8 taskId)
             task->data[0] = 4;
         }
         break;
-    // Legacy RS
+        // Legacy RS
     case 1:
         if (FieldFadeTransitionBackgroundEffectIsFinished())
         {
@@ -401,9 +401,9 @@ static void Task_ExitDoor(u8 taskId)
 
 static void Task_ExitNonAnimDoor(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
-    s16 *x = &task->data[2];
-    s16 *y = &task->data[3];
+    struct Task* task = &gTasks[taskId];
+    s16* x = &task->data[2];
+    s16* y = &task->data[3];
 
     switch (task->data[0])
     {
@@ -621,7 +621,7 @@ static void DoPortholeWarp(void) // Unused
 
 static void Task_CableClubWarp(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -651,7 +651,7 @@ void DoCableClubWarp(void)
 
 static void Task_ReturnFromLinkRoomWarp(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     switch (data[0])
     {
     case 0:
@@ -686,7 +686,7 @@ void ReturnFromLinkRoom(void)
 
 static void Task_Teleport2Warp(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -708,7 +708,7 @@ static void Task_Teleport2Warp(u8 taskId)
 
 static void Task_TeleportWarp(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -739,9 +739,9 @@ static void Task_TeleportWarp(u8 taskId)
 
 static void Task_DoorWarp(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
-    s16 *xp = &task->data[2];
-    s16 *yp = &task->data[3];
+    struct Task* task = &gTasks[taskId];
+    s16* xp = &task->data[2];
+    s16* yp = &task->data[3];
     switch (task->data[0])
     {
     case 0:
@@ -790,9 +790,9 @@ static void Task_DoorWarp(u8 taskId)
 
 static void Task_StairWarp(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-    struct ObjectEvent *playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
-    struct Sprite *playerSpr = &gSprites[gPlayerAvatar.spriteId];
+    s16* data = gTasks[taskId].data;
+    struct ObjectEvent* playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct Sprite* playerSpr = &gSprites[gPlayerAvatar.spriteId];
     switch (data[0])
     {
     case 0:
@@ -840,10 +840,10 @@ static void Task_StairWarp(u8 taskId)
     }
 }
 
-static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer)
+static void UpdateStairsMovement(s16 speedX, s16 speedY, s16* offsetX, s16* offsetY, s16* timer)
 {
-    struct Sprite *playerSpr = &gSprites[gPlayerAvatar.spriteId];
-    struct ObjectEvent *playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct Sprite* playerSpr = &gSprites[gPlayerAvatar.spriteId];
+    struct ObjectEvent* playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
     if (speedY > 0 || *timer > 6)
         *offsetY += speedY;
     *offsetX += speedX;
@@ -854,13 +854,13 @@ static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offs
         ObjectEventForceSetHeldMovement(playerObj, GetWalkInPlaceNormalMovementAction(GetPlayerFacingDirection()));
 }
 
-static void ForceStairsMovement(u16 metatileBehavior, s16 *x, s16 *y)
+static void ForceStairsMovement(u16 metatileBehavior, s16* x, s16* y)
 {
     ObjectEventForceSetHeldMovement(&gObjectEvents[gPlayerAvatar.objectEventId], GetWalkInPlaceNormalMovementAction(GetPlayerFacingDirection()));
     GetStairsMovementDirection(metatileBehavior, x, y);
 }
 
-static void GetStairsMovementDirection(u8 metatileBehavior, s16 *x, s16 *y)
+static void GetStairsMovementDirection(u8 metatileBehavior, s16* x, s16* y)
 {
     if (MetatileBehavior_IsDirectionalUpRightStairWarp(metatileBehavior))
     {
@@ -891,7 +891,7 @@ static void GetStairsMovementDirection(u8 metatileBehavior, s16 *x, s16 *y)
 
 static void Task_ExitStairs(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     switch (data[0])
     {
     default:
@@ -916,12 +916,12 @@ static void Task_ExitStairs(u8 taskId)
     }
 }
 
-static void ExitStairsMovement(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer)
+static void ExitStairsMovement(s16* speedX, s16* speedY, s16* offsetX, s16* offsetY, s16* timer)
 {
     s16 x, y;
     u8 metatileBehavior;
     s32 direction;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     PlayerGetDestCoords(&x, &y);
     metatileBehavior = MapGridGetMetatileBehaviorAt(x, y);
     if (MetatileBehavior_IsDirectionalDownRightStairWarp(metatileBehavior) || MetatileBehavior_IsDirectionalUpRightStairWarp(metatileBehavior))
@@ -940,9 +940,9 @@ static void ExitStairsMovement(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offs
     *speedY *= -1;
 }
 
-static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer)
+static bool8 WaitStairExitMovementFinished(s16* speedX, s16* speedY, s16* offsetX, s16* offsetY, s16* timer)
 {
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     sprite = &gSprites[gPlayerAvatar.spriteId];
     if (*timer != 0)
     {

@@ -16,18 +16,18 @@
 
 struct CommandHandler
 {
-    const char *inputFileExtension;
-    const char *outputFileExtension;
-    void(*function)(char *inputPath, char *outputPath, int argc, char **argv);
+    const char* inputFileExtension;
+    const char* outputFileExtension;
+    void(*function)(char* inputPath, char* outputPath, int argc, char** argv);
 };
 
-void ConvertGbaToPng(char *inputPath, char *outputPath, struct GbaToPngOptions *options)
+void ConvertGbaToPng(char* inputPath, char* outputPath, struct GbaToPngOptions* options)
 {
     struct Image image;
 
     if (options->paletteFilePath != NULL)
     {
-        char *paletteFileExtension = GetFileExtensionAfterDot(options->paletteFilePath);
+        char* paletteFileExtension = GetFileExtensionAfterDot(options->paletteFilePath);
 
         if (strcmp(paletteFileExtension, "gbapal") == 0)
         {
@@ -68,7 +68,7 @@ void ConvertGbaToPng(char *inputPath, char *outputPath, struct GbaToPngOptions *
     FreeImage(&image);
 }
 
-void ConvertPngToGba(char *inputPath, char *outputPath, struct PngToGbaOptions *options)
+void ConvertPngToGba(char* inputPath, char* outputPath, struct PngToGbaOptions* options)
 {
     struct Image image;
 
@@ -82,9 +82,9 @@ void ConvertPngToGba(char *inputPath, char *outputPath, struct PngToGbaOptions *
     FreeImage(&image);
 }
 
-void HandleGbaToPngCommand(char *inputPath, char *outputPath, int argc, char **argv)
+void HandleGbaToPngCommand(char* inputPath, char* outputPath, int argc, char** argv)
 {
-    char *inputFileExtension = GetFileExtensionAfterDot(inputPath);
+    char* inputFileExtension = GetFileExtensionAfterDot(inputPath);
     struct GbaToPngOptions options;
     options.paletteFilePath = NULL;
     options.bitDepth = inputFileExtension[0] - '0';
@@ -97,7 +97,7 @@ void HandleGbaToPngCommand(char *inputPath, char *outputPath, int argc, char **a
 
     for (int i = 3; i < argc; i++)
     {
-        char *option = argv[i];
+        char* option = argv[i];
 
         if (strcmp(option, "-palette") == 0)
         {
@@ -174,9 +174,9 @@ void HandleGbaToPngCommand(char *inputPath, char *outputPath, int argc, char **a
     ConvertGbaToPng(inputPath, outputPath, &options);
 }
 
-void HandlePngToGbaCommand(char *inputPath, char *outputPath, int argc, char **argv)
+void HandlePngToGbaCommand(char* inputPath, char* outputPath, int argc, char** argv)
 {
-    char *outputFileExtension = GetFileExtensionAfterDot(outputPath);
+    char* outputFileExtension = GetFileExtensionAfterDot(outputPath);
     int bitDepth = outputFileExtension[0] - '0';
     struct PngToGbaOptions options;
     options.numTilesMode = NUM_TILES_IGNORE;
@@ -189,7 +189,7 @@ void HandlePngToGbaCommand(char *inputPath, char *outputPath, int argc, char **a
 
     for (int i = 3; i < argc; i++)
     {
-        char *option = argv[i];
+        char* option = argv[i];
 
         if (strcmp(option, "-num_tiles") == 0)
         {
@@ -245,7 +245,7 @@ void HandlePngToGbaCommand(char *inputPath, char *outputPath, int argc, char **a
     ConvertPngToGba(inputPath, outputPath, &options);
 }
 
-void HandlePngToJascPaletteCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandlePngToJascPaletteCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Palette palette = {};
 
@@ -253,7 +253,7 @@ void HandlePngToJascPaletteCommand(char *inputPath, char *outputPath, int argc U
     WriteJascPalette(outputPath, &palette);
 }
 
-void HandlePngToGbaPaletteCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandlePngToGbaPaletteCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Palette palette = {};
 
@@ -261,7 +261,7 @@ void HandlePngToGbaPaletteCommand(char *inputPath, char *outputPath, int argc UN
     WriteGbaPalette(outputPath, &palette);
 }
 
-void HandleGbaToJascPaletteCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleGbaToJascPaletteCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Palette palette = {};
 
@@ -269,13 +269,13 @@ void HandleGbaToJascPaletteCommand(char *inputPath, char *outputPath, int argc U
     WriteJascPalette(outputPath, &palette);
 }
 
-void HandleJascToGbaPaletteCommand(char *inputPath, char *outputPath, int argc, char **argv)
+void HandleJascToGbaPaletteCommand(char* inputPath, char* outputPath, int argc, char** argv)
 {
     int numColors = 0;
 
     for (int i = 3; i < argc; i++)
     {
-        char *option = argv[i];
+        char* option = argv[i];
 
         if (strcmp(option, "-num_colors") == 0)
         {
@@ -306,7 +306,7 @@ void HandleJascToGbaPaletteCommand(char *inputPath, char *outputPath, int argc, 
     WriteGbaPalette(outputPath, &palette);
 }
 
-void HandleLatinFontToPngCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleLatinFontToPngCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -317,7 +317,7 @@ void HandleLatinFontToPngCommand(char *inputPath, char *outputPath, int argc UNU
     FreeImage(&image);
 }
 
-void HandlePngToLatinFontCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandlePngToLatinFontCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -330,7 +330,7 @@ void HandlePngToLatinFontCommand(char *inputPath, char *outputPath, int argc UNU
     FreeImage(&image);
 }
 
-void HandleHalfwidthJapaneseFontToPngCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleHalfwidthJapaneseFontToPngCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -341,7 +341,7 @@ void HandleHalfwidthJapaneseFontToPngCommand(char *inputPath, char *outputPath, 
     FreeImage(&image);
 }
 
-void HandlePngToHalfwidthJapaneseFontCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandlePngToHalfwidthJapaneseFontCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -354,7 +354,7 @@ void HandlePngToHalfwidthJapaneseFontCommand(char *inputPath, char *outputPath, 
     FreeImage(&image);
 }
 
-void HandleFullwidthJapaneseFontToPngCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleFullwidthJapaneseFontToPngCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -365,7 +365,7 @@ void HandleFullwidthJapaneseFontToPngCommand(char *inputPath, char *outputPath, 
     FreeImage(&image);
 }
 
-void HandlePngToFullwidthJapaneseFontCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandlePngToFullwidthJapaneseFontCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     struct Image image;
     image.tilemap.data.affine = NULL; // initialize to NULL to avoid issues in FreeImage
@@ -378,14 +378,14 @@ void HandlePngToFullwidthJapaneseFontCommand(char *inputPath, char *outputPath, 
     FreeImage(&image);
 }
 
-void HandleLZCompressCommand(char *inputPath, char *outputPath, int argc, char **argv)
+void HandleLZCompressCommand(char* inputPath, char* outputPath, int argc, char** argv)
 {
     int overflowSize = 0;
     int minDistance = 2; // default, for compatibility with LZ77UnCompVram()
 
     for (int i = 3; i < argc; i++)
     {
-        char *option = argv[i];
+        char* option = argv[i];
 
         if (strcmp(option, "-overflow") == 0)
         {
@@ -426,10 +426,10 @@ void HandleLZCompressCommand(char *inputPath, char *outputPath, int argc, char *
     // the data.
 
     int fileSize;
-    unsigned char *buffer = ReadWholeFileZeroPadded(inputPath, &fileSize, overflowSize);
+    unsigned char* buffer = ReadWholeFileZeroPadded(inputPath, &fileSize, overflowSize);
 
     int compressedSize;
-    unsigned char *compressedData = LZCompress(buffer, fileSize + overflowSize, &compressedSize, minDistance);
+    unsigned char* compressedData = LZCompress(buffer, fileSize + overflowSize, &compressedSize, minDistance);
 
     compressedData[1] = (unsigned char)fileSize;
     compressedData[2] = (unsigned char)(fileSize >> 8);
@@ -442,13 +442,13 @@ void HandleLZCompressCommand(char *inputPath, char *outputPath, int argc, char *
     free(compressedData);
 }
 
-void HandleLZDecompressCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleLZDecompressCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(inputPath, &fileSize);
+    unsigned char* buffer = ReadWholeFile(inputPath, &fileSize);
 
     int uncompressedSize;
-    unsigned char *uncompressedData = LZDecompress(buffer, fileSize, &uncompressedSize);
+    unsigned char* uncompressedData = LZDecompress(buffer, fileSize, &uncompressedSize);
 
     free(buffer);
 
@@ -457,13 +457,13 @@ void HandleLZDecompressCommand(char *inputPath, char *outputPath, int argc UNUSE
     free(uncompressedData);
 }
 
-void HandleRLCompressCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleRLCompressCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(inputPath, &fileSize);
+    unsigned char* buffer = ReadWholeFile(inputPath, &fileSize);
 
     int compressedSize;
-    unsigned char *compressedData = RLCompress(buffer, fileSize, &compressedSize);
+    unsigned char* compressedData = RLCompress(buffer, fileSize, &compressedSize);
 
     free(buffer);
 
@@ -472,13 +472,13 @@ void HandleRLCompressCommand(char *inputPath, char *outputPath, int argc UNUSED,
     free(compressedData);
 }
 
-void HandleRLDecompressCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleRLDecompressCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(inputPath, &fileSize);
+    unsigned char* buffer = ReadWholeFile(inputPath, &fileSize);
 
     int uncompressedSize;
-    unsigned char *uncompressedData = RLDecompress(buffer, fileSize, &uncompressedSize);
+    unsigned char* uncompressedData = RLDecompress(buffer, fileSize, &uncompressedSize);
 
     free(buffer);
 
@@ -487,14 +487,14 @@ void HandleRLDecompressCommand(char *inputPath, char *outputPath, int argc UNUSE
     free(uncompressedData);
 }
 
-void HandleHuffCompressCommand(char *inputPath, char *outputPath, int argc, char **argv)
+void HandleHuffCompressCommand(char* inputPath, char* outputPath, int argc, char** argv)
 {
     int fileSize;
     int bitDepth = 4;
 
     for (int i = 3; i < argc; i++)
     {
-        char *option = argv[i];
+        char* option = argv[i];
 
         if (strcmp(option, "-depth") == 0)
         {
@@ -515,10 +515,10 @@ void HandleHuffCompressCommand(char *inputPath, char *outputPath, int argc, char
         }
     }
 
-    unsigned char *buffer = ReadWholeFile(inputPath, &fileSize);
+    unsigned char* buffer = ReadWholeFile(inputPath, &fileSize);
 
     int compressedSize;
-    unsigned char *compressedData = HuffCompress(buffer, fileSize, &compressedSize, bitDepth);
+    unsigned char* compressedData = HuffCompress(buffer, fileSize, &compressedSize, bitDepth);
 
     free(buffer);
 
@@ -527,13 +527,13 @@ void HandleHuffCompressCommand(char *inputPath, char *outputPath, int argc, char
     free(compressedData);
 }
 
-void HandleHuffDecompressCommand(char *inputPath, char *outputPath, int argc UNUSED, char **argv UNUSED)
+void HandleHuffDecompressCommand(char* inputPath, char* outputPath, int argc UNUSED, char** argv UNUSED)
 {
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(inputPath, &fileSize);
+    unsigned char* buffer = ReadWholeFile(inputPath, &fileSize);
 
     int uncompressedSize;
-    unsigned char *uncompressedData = HuffDecompress(buffer, fileSize, &uncompressedSize);
+    unsigned char* uncompressedData = HuffDecompress(buffer, fileSize, &uncompressedSize);
 
     free(buffer);
 
@@ -542,7 +542,7 @@ void HandleHuffDecompressCommand(char *inputPath, char *outputPath, int argc UNU
     free(uncompressedData);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     char converted = 0;
 
@@ -576,10 +576,10 @@ int main(int argc, char **argv)
         { NULL, NULL, NULL }
     };
 
-    char *inputPath = argv[1];
-    char *outputPath = argv[2];
-    char *inputFileExtension = GetFileExtensionAfterDot(inputPath);
-    char *outputFileExtension = GetFileExtensionAfterDot(outputPath);
+    char* inputPath = argv[1];
+    char* outputPath = argv[2];
+    char* inputFileExtension = GetFileExtensionAfterDot(inputPath);
+    char* outputFileExtension = GetFileExtensionAfterDot(outputPath);
 
     if (inputFileExtension == NULL)
         FATAL_ERROR("Input file \"%s\" has no extension.\n", inputPath);

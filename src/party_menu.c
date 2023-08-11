@@ -3029,12 +3029,12 @@ static u8 GetPartyMenuActionsType(struct Pokemon *mon)
     case PARTY_MENU_TYPE_SPIN_TRADE:
         actionType = ACTIONS_SPIN_TRADE;
         break;
-    // The following have no selection actions (i.e. they exit immediately upon selection)
-    // PARTY_MENU_TYPE_CONTEST
-    // PARTY_MENU_TYPE_CHOOSE_SINGLE_MON
-    // PARTY_MENU_TYPE_MULTI_SHOWCASE
-    // PARTY_MENU_TYPE_MOVE_RELEARNER
-    // PARTY_MENU_TYPE_MINIGAME
+        // The following have no selection actions (i.e. they exit immediately upon selection)
+        // PARTY_MENU_TYPE_CONTEST
+        // PARTY_MENU_TYPE_CHOOSE_SINGLE_MON
+        // PARTY_MENU_TYPE_MULTI_SHOWCASE
+        // PARTY_MENU_TYPE_MOVE_RELEARNER
+        // PARTY_MENU_TYPE_MINIGAME
     default:
         actionType = ACTIONS_NONE;
         break;

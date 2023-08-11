@@ -12,15 +12,15 @@
 // must take 500 steps before any more rewards can be received.
 #define MAX_REWARD 5
 
-static u32 GetRewardItem(struct WonderNewsMetadata *);
-static u32 GetRewardType(struct WonderNewsMetadata *);
-static void IncrementRewardCounter(struct WonderNewsMetadata *);
-static void IncrementSentRewardCounter(struct WonderNewsMetadata *);
-static void ResetSentRewardCounter(struct WonderNewsMetadata *);
+static u32 GetRewardItem(struct WonderNewsMetadata*);
+static u32 GetRewardType(struct WonderNewsMetadata*);
+static void IncrementRewardCounter(struct WonderNewsMetadata*);
+static void IncrementSentRewardCounter(struct WonderNewsMetadata*);
+static void ResetSentRewardCounter(struct WonderNewsMetadata*);
 
 void WonderNews_SetReward(u32 newsType)
 {
-    struct WonderNewsMetadata *data = GetSavedWonderNewsMetadata();
+    struct WonderNewsMetadata* data = GetSavedWonderNewsMetadata();
 
     data->newsType = newsType;
     switch (newsType)
@@ -41,7 +41,7 @@ void WonderNews_SetReward(u32 newsType)
 
 void WonderNews_Reset(void)
 {
-    struct WonderNewsMetadata *data = GetSavedWonderNewsMetadata();
+    struct WonderNewsMetadata* data = GetSavedWonderNewsMetadata();
 
     data->newsType = WONDER_NEWS_NONE;
     data->sentRewardCounter = 0;
@@ -52,8 +52,8 @@ void WonderNews_Reset(void)
 
 void WonderNews_IncrementStepCounter(void)
 {
-    u16 *stepCounter = GetVarPointer(VAR_WONDER_NEWS_STEP_COUNTER);
-    struct WonderNewsMetadata *data = GetSavedWonderNewsMetadata();
+    u16* stepCounter = GetVarPointer(VAR_WONDER_NEWS_STEP_COUNTER);
+    struct WonderNewsMetadata* data = GetSavedWonderNewsMetadata();
 
     // If the player has reached the reward limit, start counting steps.
     // When they reach 500 steps reset the reward counter to allow them to
@@ -67,8 +67,8 @@ void WonderNews_IncrementStepCounter(void)
 
 u16 WonderNews_GetRewardInfo(void)
 {
-    u16 *result = &gSpecialVar_Result;
-    struct WonderNewsMetadata *data = GetSavedWonderNewsMetadata();
+    u16* result = &gSpecialVar_Result;
+    struct WonderNewsMetadata* data = GetSavedWonderNewsMetadata();
     u16 rewardType;
 
     if (!IsMysteryGiftEnabled() || !ValidateSavedWonderNews())
@@ -99,7 +99,7 @@ u16 WonderNews_GetRewardInfo(void)
     return rewardType;
 }
 
-static u32 GetRewardItem(struct WonderNewsMetadata *data)
+static u32 GetRewardItem(struct WonderNewsMetadata* data)
 {
     u32 itemId;
 
@@ -110,27 +110,27 @@ static u32 GetRewardItem(struct WonderNewsMetadata *data)
     return itemId;
 }
 
-static void ResetSentRewardCounter(struct WonderNewsMetadata *data)
+static void ResetSentRewardCounter(struct WonderNewsMetadata* data)
 {
     data->sentRewardCounter = 0;
 }
 
 // Track number of times a reward was received (or attmepted to receive) for sending Wonder News to a link partner.
-static void IncrementSentRewardCounter(struct WonderNewsMetadata *data)
+static void IncrementSentRewardCounter(struct WonderNewsMetadata* data)
 {
     data->sentRewardCounter++;
     if (data->sentRewardCounter > MAX_SENT_REWARD)
         data->sentRewardCounter = MAX_SENT_REWARD;
 }
 
-static void IncrementRewardCounter(struct WonderNewsMetadata *data)
+static void IncrementRewardCounter(struct WonderNewsMetadata* data)
 {
     data->rewardCounter++;
     if (data->rewardCounter > MAX_REWARD)
         data->rewardCounter = MAX_REWARD;
 }
 
-static u32 GetRewardType(struct WonderNewsMetadata *data)
+static u32 GetRewardType(struct WonderNewsMetadata* data)
 {
     if (data->rewardCounter == MAX_REWARD)
         return NEWS_REWARD_AT_MAX;

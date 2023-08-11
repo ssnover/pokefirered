@@ -3,7 +3,7 @@
 #include "pokedex_screen.h"
 
 // Unused
-const u8 *GetPokedexCategoryName(u16 dexNum)
+const u8* GetPokedexCategoryName(u16 dexNum)
 {
     return gPokedexEntries[dexNum].categoryName;
 }

@@ -20,14 +20,14 @@ enum {
 struct WonderNewsData
 {
     struct WonderNews news;
-    const struct WonderGraphics * gfx;
-    bool8 verticalScrollDisabled:1;
-    u8 enterExitState:7;
+    const struct WonderGraphics* gfx;
+    bool8 verticalScrollDisabled : 1;
+    u8 enterExitState : 7;
     u8 arrowTaskId;
-    bool8 scrolling:1;
-    u8 scrollIncrement:7;
-    bool8 scrollingDown:1;
-    u8 scrollTotal:7;
+    bool8 scrolling : 1;
+    u8 scrollIncrement : 7;
+    bool8 scrollingDown : 1;
+    u8 scrollTotal : 7;
     u16 scrollEnd;
     u16 scrollOffset;
     u16 windowIds[WIN_COUNT];
@@ -38,7 +38,7 @@ struct WonderNewsData
     u8 bgTilemapBuffer[0x1000];
 };
 
-static EWRAM_DATA struct WonderNewsData * sWonderNewsData = NULL;
+static EWRAM_DATA struct WonderNewsData* sWonderNewsData = NULL;
 
 static void BufferNewsText(void);
 static void DrawNewsWindows(void);
@@ -107,7 +107,7 @@ static const struct WonderGraphics sNewsGraphics[NUM_WONDER_BGS] = {
     {.titleTextPal = 1, .bodyTextPal = 0, .tiles = sNews7Gfx, .map = sNews7Map, .pal = sNews7Pal}
 };
 
-bool32 WonderNews_Init(const struct WonderNews * news)
+bool32 WonderNews_Init(const struct WonderNews* news)
 {
     if (news == NULL)
         return FALSE;
@@ -364,14 +364,14 @@ static void DrawNewsWindows(void)
     if (x < 0)
         x = 0;
     AddTextPrinterParameterized3(sWonderNewsData->windowIds[WIN_TITLE], FONT_NORMAL_COPY_2, x, 6, sTextColorTable[sWonderNewsData->gfx->titleTextPal], 0, sWonderNewsData->titleText);
-    
+
     // Print body text
     for (; i < WONDER_NEWS_BODY_TEXT_LINES; ++i)
     {
         AddTextPrinterParameterized3(sWonderNewsData->windowIds[WIN_BODY], FONT_NORMAL_COPY_2, 0,
-                                     16 * i + 2,
-                                     sTextColorTable[sWonderNewsData->gfx->bodyTextPal],
-                                     0, sWonderNewsData->bodyText[i]);
+            16 * i + 2,
+            sTextColorTable[sWonderNewsData->gfx->bodyTextPal],
+            0, sWonderNewsData->bodyText[i]);
     }
     CopyWindowToVram(sWonderNewsData->windowIds[WIN_TITLE], COPYWIN_FULL);
     CopyWindowToVram(sWonderNewsData->windowIds[WIN_BODY], COPYWIN_FULL);

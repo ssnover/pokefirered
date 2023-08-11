@@ -71,9 +71,9 @@ struct UnionRoomChat
     u8 sendMessageBuffer[0x28];
 };
 
-static EWRAM_DATA struct UnionRoomChat * sWork = NULL;
+static EWRAM_DATA struct UnionRoomChat* sWork = NULL;
 
-static void InitChatWork(struct UnionRoomChat * unionRoomChat);
+static void InitChatWork(struct UnionRoomChat* unionRoomChat);
 static void CB2_LoadInterface(void);
 static void VBlankCB_UnionRoomChatMain(void);
 static void CB2_UnionRoomChatMain(void);
@@ -97,17 +97,17 @@ static bool32 ChatMsgHasAtLeastOneCharcter(void);
 static void RegisterTextAtRow(void);
 static void ResetMessageEntryBuffer(void);
 static void SaveRegisteredTextsToSB1(void);
-static u8 *GetEndOfUnk1A(void);
-static u8 *GetPtrToLastCharOfUnk1A(void);
-static void PrepareSendBuffer_Null(u8 *ptr);
-static void PrepareSendBuffer_Join(u8 *ptr);
-static void PrepareSendBuffer_Chat(u8 *ptr);
-static void PrepareSendBuffer_Leave(u8 *ptr);
-static void PrepareSendBuffer_Drop(u8 *ptr);
-static void PrepareSendBuffer_Disband(u8 *ptr);
+static u8* GetEndOfUnk1A(void);
+static u8* GetPtrToLastCharOfUnk1A(void);
+static void PrepareSendBuffer_Null(u8* ptr);
+static void PrepareSendBuffer_Join(u8* ptr);
+static void PrepareSendBuffer_Chat(u8* ptr);
+static void PrepareSendBuffer_Leave(u8* ptr);
+static void PrepareSendBuffer_Drop(u8* ptr);
+static void PrepareSendBuffer_Disband(u8* ptr);
 static void Task_ReceiveChatMessage(u8 taskId);
 
-static void (*const sChatEntryRoutines[])(void) = {
+static void (* const sChatEntryRoutines[])(void) = {
     [CHATENTRYROUTINE_JOIN] = ChatEntryRoutine_Join,
     [CHATNETRYROUTINE_HANDLE_INPUT] = ChatEntryRoutine_HandleInput,
     [CHATENTRYROUTINE_SWITCH] = ChatEntryRoutine_Switch,
@@ -242,7 +242,7 @@ static const u8 sCaseToggleTable[256] = {
     [CHAR_MN] = CHAR_MN,
     [CHAR_PO] = CHAR_PO,
     [CHAR_KE] = CHAR_KE,
-    [CHAR_SUPER_E]  = CHAR_SUPER_E,
+    [CHAR_SUPER_E] = CHAR_SUPER_E,
     [CHAR_SUPER_ER] = CHAR_SUPER_ER,
     [CHAR_SUPER_RE] = CHAR_SUPER_RE,
     [CHAR_PERIOD] = CHAR_PERIOD,
@@ -275,7 +275,7 @@ static const u8 sCaseToggleTable[256] = {
     [CHAR_BLACK_TRIANGLE] = CHAR_BLACK_TRIANGLE,
 };
 
-const u8 *const gUnionRoomKeyboardText[UNION_ROOM_KB_PAGE_COUNT][UNION_ROOM_KB_ROW_COUNT] = {
+const u8* const gUnionRoomKeyboardText[UNION_ROOM_KB_PAGE_COUNT][UNION_ROOM_KB_ROW_COUNT] = {
     [UNION_ROOM_KB_PAGE_UPPER] = {
         gText_UnionRoomChatKeyboard_ABCDE,
         gText_UnionRoomChatKeyboard_FGHIJ,
@@ -324,7 +324,7 @@ void EnterUnionRoomChat(void)
     SetMainCallback2(CB2_LoadInterface);
 }
 
-static void InitChatWork(struct UnionRoomChat * unionRoomChat)
+static void InitChatWork(struct UnionRoomChat* unionRoomChat)
 {
     int i;
 
@@ -1074,9 +1074,9 @@ static bool32 TypeChatMessage_HandleDPad(void)
 static void AppendCharacterToChatMessageBuffer(void)
 {
     int i;
-    const u8 *charsStr;
+    const u8* charsStr;
     int strLength;
-    u8 *str;
+    u8* str;
     u8 buffer[21];
 
     if (sWork->currentPage != UNION_ROOM_KB_PAGE_COUNT)
@@ -1093,7 +1093,7 @@ static void AppendCharacterToChatMessageBuffer(void)
     }
     else
     {
-        u8 *tempStr = StringCopy(buffer, sWork->registeredTexts[sWork->currentRow]);
+        u8* tempStr = StringCopy(buffer, sWork->registeredTexts[sWork->currentRow]);
         tempStr[0] = CHAR_SPACE;
         tempStr[1] = EOS;
         charsStr = buffer;
@@ -1129,7 +1129,7 @@ static void DeleteLastCharacterOfChatMessageBuffer(void)
     sWork->lastBufferCursorPos = sWork->bufferCursorPos;
     if (sWork->bufferCursorPos)
     {
-        u8 *str = GetPtrToLastCharOfUnk1A();
+        u8* str = GetPtrToLastCharOfUnk1A();
         *str = EOS;
         sWork->bufferCursorPos--;
     }
@@ -1137,7 +1137,7 @@ static void DeleteLastCharacterOfChatMessageBuffer(void)
 
 static void ToggleCaseOfLastCharacterInChatMessageBuffer(void)
 {
-    u8 *str;
+    u8* str;
     u8 character;
 
     sWork->lastBufferCursorPos = sWork->bufferCursorPos - 1;
@@ -1160,7 +1160,7 @@ static bool32 ChatMsgHasAtLeastOneCharcter(void)
 
 static void RegisterTextAtRow(void)
 {
-    u8 *src = UnionRoomChat_GetEndOfMessageEntryBuffer();
+    u8* src = UnionRoomChat_GetEndOfMessageEntryBuffer();
     StringCopy(sWork->registeredTexts[sWork->currentRow], src);
     sWork->changedRegisteredTexts = TRUE;
 }
@@ -1179,24 +1179,24 @@ static void SaveRegisteredTextsToSB1(void)
         StringCopy(gSaveBlock1Ptr->registeredTexts[i], sWork->registeredTexts[i]);
 }
 
-u8 *UnionRoomChat_GetWorkRegisteredText(int arg0)
+u8* UnionRoomChat_GetWorkRegisteredText(int arg0)
 {
     return sWork->registeredTexts[arg0];
 }
 
-static u8 *GetEndOfUnk1A(void)
+static u8* GetEndOfUnk1A(void)
 {
-    u8 *str = sWork->messageEntryBuffer;
+    u8* str = sWork->messageEntryBuffer;
     while (*str != EOS)
         str++;
 
     return str;
 }
 
-static u8 *GetPtrToLastCharOfUnk1A(void)
+static u8* GetPtrToLastCharOfUnk1A(void)
 {
-    u8 *str = sWork->messageEntryBuffer;
-    u8 *str2 = str;
+    u8* str = sWork->messageEntryBuffer;
+    u8* str2 = str;
     while (*str != EOS)
     {
         str2 = str;
@@ -1210,7 +1210,7 @@ static u8 *GetPtrToLastCharOfUnk1A(void)
 
 static u16 GetNumCharsInMessageEntryBuffer(void)
 {
-    u8 *str;
+    u8* str;
     u32 i, numChars, strLength;
 
     strLength = StringLength_Multibyte(sWork->messageEntryBuffer);
@@ -1232,26 +1232,26 @@ static u16 GetNumCharsInMessageEntryBuffer(void)
     return numChars;
 }
 
-static void PrepareSendBuffer_Null(u8 *arg0)
+static void PrepareSendBuffer_Null(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_0;
 }
 
-static void PrepareSendBuffer_Join(u8 *arg0)
+static void PrepareSendBuffer_Join(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_JOIN;
     StringCopy(&arg0[1], gSaveBlock2Ptr->playerName);
     arg0[1 + (PLAYER_NAME_LENGTH + 1)] = sWork->multiplayerId;
 }
 
-static void PrepareSendBuffer_Chat(u8 *arg0)
+static void PrepareSendBuffer_Chat(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_CHAT;
     StringCopy(&arg0[1], gSaveBlock2Ptr->playerName);
     StringCopy(&arg0[1 + (PLAYER_NAME_LENGTH + 1)], sWork->messageEntryBuffer);
 }
 
-static void PrepareSendBuffer_Leave(u8 *arg0)
+static void PrepareSendBuffer_Leave(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_LEAVE;
     StringCopy(&arg0[1], gSaveBlock2Ptr->playerName);
@@ -1259,25 +1259,25 @@ static void PrepareSendBuffer_Leave(u8 *arg0)
     RfuSetNormalDisconnectMode();
 }
 
-static void PrepareSendBuffer_Drop(u8 *arg0)
+static void PrepareSendBuffer_Drop(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_DROP;
     StringCopy(&arg0[1], gSaveBlock2Ptr->playerName);
     arg0[1 + (PLAYER_NAME_LENGTH + 1)] = sWork->multiplayerId;
 }
 
-static void PrepareSendBuffer_Disband(u8 *arg0)
+static void PrepareSendBuffer_Disband(u8* arg0)
 {
     arg0[0] = CHAT_MESSAGE_DISBAND;
     StringCopy(&arg0[1], gSaveBlock2Ptr->playerName);
     arg0[1 + (PLAYER_NAME_LENGTH + 1)] = sWork->multiplayerId;
 }
 
-static bool32 ProcessReceivedChatMessage(u8 *dest, u8 *recvMessage)
+static bool32 ProcessReceivedChatMessage(u8* dest, u8* recvMessage)
 {
-    u8 *tempStr;
+    u8* tempStr;
     u8 cmd = *recvMessage;
-    u8 *name = recvMessage + 1;
+    u8* name = recvMessage + 1;
     recvMessage = name;
     recvMessage += PLAYER_NAME_LENGTH + 1;
 
@@ -1322,24 +1322,24 @@ u8 GetCurrentKeyboardPage(void)
     return sWork->currentPage;
 }
 
-void UnionRoomChat_GetCursorColAndRow(u8 *colp, u8 *rowp)
+void UnionRoomChat_GetCursorColAndRow(u8* colp, u8* rowp)
 {
     *colp = sWork->currentCol;
     *rowp = sWork->currentRow;
 }
 
-u8 *UnionRoomChat_GetMessageEntryBuffer(void)
+u8* UnionRoomChat_GetMessageEntryBuffer(void)
 {
     return sWork->messageEntryBuffer;
 }
 
 int UnionRoomChat_LenMessageEntryBuffer(void)
 {
-    u8 *str = UnionRoomChat_GetMessageEntryBuffer();
+    u8* str = UnionRoomChat_GetMessageEntryBuffer();
     return StringLength_Multibyte(str);
 }
 
-void UnionRoomChat_GetBufferSelectionRegion(u32 *startp, u32 *diffp)
+void UnionRoomChat_GetBufferSelectionRegion(u32* startp, u32* diffp)
 {
     int diff = sWork->bufferCursorPos - sWork->lastBufferCursorPos;
     if (diff < 0)
@@ -1355,11 +1355,11 @@ void UnionRoomChat_GetBufferSelectionRegion(u32 *startp, u32 *diffp)
     *diffp = diff;
 }
 
-u8 *UnionRoomChat_GetEndOfMessageEntryBuffer(void)
+u8* UnionRoomChat_GetEndOfMessageEntryBuffer(void)
 {
     int i;
     u16 numChars = GetNumCharsInMessageEntryBuffer();
-    u8 *str = sWork->messageEntryBuffer;
+    u8* str = sWork->messageEntryBuffer;
     for (i = 0; i < numChars; i++)
     {
         if (*str == CHAR_EXTRA_SYMBOL)
@@ -1377,7 +1377,7 @@ u16 UnionRoomChat_GetNumCharsInMessageEntryBuffer(void)
     u16 count;
     u32 i;
     u16 numChars = GetNumCharsInMessageEntryBuffer();
-    u8 *str = sWork->messageEntryBuffer;
+    u8* str = sWork->messageEntryBuffer;
     for (count = 0, i = 0; i < numChars; count++, i++)
     {
         if (*str == CHAR_EXTRA_SYMBOL)
@@ -1389,7 +1389,7 @@ u16 UnionRoomChat_GetNumCharsInMessageEntryBuffer(void)
     return count;
 }
 
-u8 *UnionRoomChat_GetLastReceivedMessage(void)
+u8* UnionRoomChat_GetLastReceivedMessage(void)
 {
     return sWork->receivedMessage;
 }
@@ -1407,7 +1407,7 @@ int UnionRoomChat_GetMessageEntryCursorPosition(void)
 // This probably does more in the Japanese titles.
 int UnionRoomChat_GetWhetherShouldShowCaseToggleIcon(void)
 {
-    u8 *str = GetPtrToLastCharOfUnk1A();
+    u8* str = GetPtrToLastCharOfUnk1A();
     u32 character = *str;
     if (character > 0xFF || sCaseToggleTable[character] == character || sCaseToggleTable[character] == 0)
         return 3;
@@ -1415,7 +1415,7 @@ int UnionRoomChat_GetWhetherShouldShowCaseToggleIcon(void)
         return 0;
 }
 
-u8 *UnionRoomChat_GetNameOfPlayerWhoDisbandedChat(void)
+u8* UnionRoomChat_GetNameOfPlayerWhoDisbandedChat(void)
 {
     return sWork->hostName;
 }
@@ -1443,8 +1443,8 @@ void UnionRoomChat_InitializeRegisteredTexts(void)
 
 static void Task_ReceiveChatMessage(u8 taskId)
 {
-    u8 *buffer;
-    s16 *data = gTasks[taskId].data;
+    u8* buffer;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -1486,7 +1486,7 @@ static void Task_ReceiveChatMessage(u8 taskId)
 
         tCurrLinkPlayer = tI;
         ResetBlockReceivedFlag(tCurrLinkPlayer);
-        buffer = (u8 *)gBlockRecvBuffer[tI];
+        buffer = (u8*)gBlockRecvBuffer[tI];
         switch (buffer[0])
         {
         default:
@@ -1497,7 +1497,7 @@ static void Task_ReceiveChatMessage(u8 taskId)
         case CHAT_MESSAGE_DISBAND: tNextState = 6; break;
         }
 
-        if (ProcessReceivedChatMessage(sWork->receivedMessage, (u8 *)gBlockRecvBuffer[tI]))
+        if (ProcessReceivedChatMessage(sWork->receivedMessage, (u8*)gBlockRecvBuffer[tI]))
         {
             sWork->receivedPlayerIndex = tI;
             UnionRoomChat_StartDisplaySubtask(CHATDISPLAYROUTINE_SCROLLCHAT, 2);

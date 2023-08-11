@@ -5,7 +5,7 @@ EWRAM_DATA u8 gStringVar1[32] = {};
 EWRAM_DATA u8 gStringVar2[20] = {};
 EWRAM_DATA u8 gStringVar3[20] = {};
 EWRAM_DATA u8 gStringVar4[1000] = {};
-EWRAM_DATA u8 gUnknownStringVar[16] = {0};
+EWRAM_DATA u8 gUnknownStringVar[16] = { 0 };
 
 static const u8 sDigits[] = __("0123456789ABCDEF");
 
@@ -37,7 +37,7 @@ extern u8 gExpandedPlaceholder_Groudon[];
 extern u8 gExpandedPlaceholder_Red[];
 extern u8 gExpandedPlaceholder_Green[];
 
-u8 *StringCopy_Nickname(u8 *dest, const u8 *src)
+u8* StringCopy_Nickname(u8* dest, const u8* src)
 {
     u8 i;
     u32 limit = POKEMON_NAME_LENGTH;
@@ -54,7 +54,7 @@ u8 *StringCopy_Nickname(u8 *dest, const u8 *src)
     return &dest[i];
 }
 
-u8 *StringGet_Nickname(u8 *str)
+u8* StringGet_Nickname(u8* str)
 {
     u8 i;
     u32 limit = POKEMON_NAME_LENGTH;
@@ -67,7 +67,7 @@ u8 *StringGet_Nickname(u8 *str)
     return &str[i];
 }
 
-u8 *StringCopy_PlayerName(u8 *dest, const u8 *src)
+u8* StringCopy_PlayerName(u8* dest, const u8* src)
 {
     s32 i;
     s32 limit = PLAYER_NAME_LENGTH;
@@ -84,7 +84,7 @@ u8 *StringCopy_PlayerName(u8 *dest, const u8 *src)
     return &dest[i];
 }
 
-u8 *StringCopy(u8 *dest, const u8 *src)
+u8* StringCopy(u8* dest, const u8* src)
 {
     while (*src != EOS)
     {
@@ -97,7 +97,7 @@ u8 *StringCopy(u8 *dest, const u8 *src)
     return dest;
 }
 
-u8 *StringAppend(u8 *dest, const u8 *src)
+u8* StringAppend(u8* dest, const u8* src)
 {
     while (*dest != EOS)
         dest++;
@@ -105,7 +105,7 @@ u8 *StringAppend(u8 *dest, const u8 *src)
     return StringCopy(dest, src);
 }
 
-u8 *StringCopyN(u8 *dest, const u8 *src, u8 n)
+u8* StringCopyN(u8* dest, const u8* src, u8 n)
 {
     u16 i;
 
@@ -115,7 +115,7 @@ u8 *StringCopyN(u8 *dest, const u8 *src, u8 n)
     return &dest[n];
 }
 
-u8 *StringAppendN(u8 *dest, const u8 *src, u8 n)
+u8* StringAppendN(u8* dest, const u8* src, u8 n)
 {
     while (*dest != EOS)
         dest++;
@@ -123,7 +123,7 @@ u8 *StringAppendN(u8 *dest, const u8 *src, u8 n)
     return StringCopyN(dest, src, n);
 }
 
-u16 StringLength(const u8 *str)
+u16 StringLength(const u8* str)
 {
     u16 length = 0;
 
@@ -133,7 +133,7 @@ u16 StringLength(const u8 *str)
     return length;
 }
 
-s32 StringCompare(const u8 *str1, const u8 *str2)
+s32 StringCompare(const u8* str1, const u8* str2)
 {
     while (*str1 == *str2)
     {
@@ -146,7 +146,7 @@ s32 StringCompare(const u8 *str1, const u8 *str2)
     return *str1 - *str2;
 }
 
-s32 StringCompareN(const u8 *str1, const u8 *str2, u32 n)
+s32 StringCompareN(const u8* str1, const u8* str2, u32 n)
 {
     while (*str1 == *str2)
     {
@@ -161,7 +161,7 @@ s32 StringCompareN(const u8 *str1, const u8 *str2, u32 n)
     return *str1 - *str2;
 }
 
-u8 *ConvertIntToDecimalStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 n)
+u8* ConvertIntToDecimalStringN(u8* dest, s32 value, enum StringConvertMode mode, u8 n)
 {
     enum { WAITING_FOR_NONZERO_DIGIT, WRITING_DIGITS, WRITING_SPACES } state;
     s32 powerOfTen;
@@ -177,7 +177,7 @@ u8 *ConvertIntToDecimalStringN(u8 *dest, s32 value, enum StringConvertMode mode,
 
     for (powerOfTen = largestPowerOfTen; powerOfTen > 0; powerOfTen /= 10)
     {
-        u8 *out;
+        u8* out;
         u8 c;
         u16 digit = value / powerOfTen;
         s32 temp = value - (powerOfTen * digit);
@@ -217,7 +217,7 @@ u8 *ConvertIntToDecimalStringN(u8 *dest, s32 value, enum StringConvertMode mode,
     return dest;
 }
 
-u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 n)
+u8* ConvertIntToHexStringN(u8* dest, s32 value, enum StringConvertMode mode, u8 n)
 {
     enum { WAITING_FOR_NONZERO_DIGIT, WRITING_DIGITS, WRITING_SPACES } state;
     u8 i;
@@ -237,7 +237,7 @@ u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 
 
     for (powerOfSixteen = largestPowerOfSixteen; powerOfSixteen > 0; powerOfSixteen /= 16)
     {
-        u8 *out;
+        u8* out;
         u8 c;
         u32 digit = value / powerOfSixteen;
         s32 temp = value % powerOfSixteen;
@@ -277,57 +277,57 @@ u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 
     return dest;
 }
 
-u8 *StringExpandPlaceholders(u8 *dest, const u8 *src)
+u8* StringExpandPlaceholders(u8* dest, const u8* src)
 {
     for (;;)
     {
         u8 c = *src++;
         u8 placeholderId;
-        u8 *expandedString;
+        u8* expandedString;
 
         switch (c)
         {
-            case PLACEHOLDER_BEGIN:
-                placeholderId = *src++;
-                expandedString = GetExpandedPlaceholder(placeholderId);
-                dest = StringExpandPlaceholders(dest, expandedString);
-                break;
-            case EXT_CTRL_CODE_BEGIN:
-                *dest++ = c;
-                c = *src++;
-                *dest++ = c;
+        case PLACEHOLDER_BEGIN:
+            placeholderId = *src++;
+            expandedString = GetExpandedPlaceholder(placeholderId);
+            dest = StringExpandPlaceholders(dest, expandedString);
+            break;
+        case EXT_CTRL_CODE_BEGIN:
+            *dest++ = c;
+            c = *src++;
+            *dest++ = c;
 
-                switch (c)
-                {
-                    case 0x07:
-                    case 0x09:
-                    case 0x0F:
-                    case 0x15:
-                    case 0x16:
-                    case 0x17:
-                    case 0x18:
-                        break;
-                    case 0x04:
-                        *dest++ = *src++;
-                    case 0x0B:
-                        *dest++ = *src++;
-                    default:
-                        *dest++ = *src++;
-                }
+            switch (c)
+            {
+            case 0x07:
+            case 0x09:
+            case 0x0F:
+            case 0x15:
+            case 0x16:
+            case 0x17:
+            case 0x18:
                 break;
-            case EOS:
-                *dest = EOS;
-                return dest;
-            case 0xFA:
-            case 0xFB:
-            case 0xFE:
+            case 0x04:
+                *dest++ = *src++;
+            case 0x0B:
+                *dest++ = *src++;
             default:
-                *dest++ = c;
+                *dest++ = *src++;
+            }
+            break;
+        case EOS:
+            *dest = EOS;
+            return dest;
+        case 0xFA:
+        case 0xFB:
+        case 0xFE:
+        default:
+            *dest++ = c;
         }
     }
 }
 
-u8 *StringBraille(u8 *dest, const u8 *src)
+u8* StringBraille(u8* dest, const u8* src)
 {
     u8 setBrailleFont[] = { 0xFC, 0x06, 0x06, 0xFF };
     u8 gotoLine2[] = { 0xFE, 0xFC, 0x0E, 0x02, 0xFF };
@@ -340,46 +340,46 @@ u8 *StringBraille(u8 *dest, const u8 *src)
 
         switch (c)
         {
-            case EOS:
-                *dest = c;
-                return dest;
-            case 0xFE:
-                dest = StringCopy(dest, gotoLine2);
-                break;
-            default:
-                *dest++ = c;
-                *dest++ = c + 0x40;
-                break;
+        case EOS:
+            *dest = c;
+            return dest;
+        case 0xFE:
+            dest = StringCopy(dest, gotoLine2);
+            break;
+        default:
+            *dest++ = c;
+            *dest++ = c + 0x40;
+            break;
         }
     }
 }
 
-static u8 *ExpandPlaceholder_UnknownStringVar(void)
+static u8* ExpandPlaceholder_UnknownStringVar(void)
 {
     return gUnknownStringVar;
 }
 
-static u8 *ExpandPlaceholder_PlayerName(void)
+static u8* ExpandPlaceholder_PlayerName(void)
 {
     return gSaveBlock2Ptr->playerName;
 }
 
-static u8 *ExpandPlaceholder_StringVar1(void)
+static u8* ExpandPlaceholder_StringVar1(void)
 {
     return gStringVar1;
 }
 
-static u8 *ExpandPlaceholder_StringVar2(void)
+static u8* ExpandPlaceholder_StringVar2(void)
 {
     return gStringVar2;
 }
 
-static u8 *ExpandPlaceholder_StringVar3(void)
+static u8* ExpandPlaceholder_StringVar3(void)
 {
     return gStringVar3;
 }
 
-static u8 *ExpandPlaceholder_KunChan(void)
+static u8* ExpandPlaceholder_KunChan(void)
 {
     if (gSaveBlock2Ptr->playerGender == MALE)
         return gExpandedPlaceholder_Kun;
@@ -387,7 +387,7 @@ static u8 *ExpandPlaceholder_KunChan(void)
         return gExpandedPlaceholder_Chan;
 }
 
-static u8 *ExpandPlaceholder_RivalName(void)
+static u8* ExpandPlaceholder_RivalName(void)
 {
     if (gSaveBlock1Ptr->rivalName[0] == EOS)
     {
@@ -402,7 +402,7 @@ static u8 *ExpandPlaceholder_RivalName(void)
     }
 }
 
-static u8 *ExpandPlaceholder_Version(void)
+static u8* ExpandPlaceholder_Version(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Ruby;
@@ -411,7 +411,7 @@ static u8 *ExpandPlaceholder_Version(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Magma(void)
+static u8* ExpandPlaceholder_Magma(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Magma;
@@ -420,7 +420,7 @@ static u8 *ExpandPlaceholder_Magma(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Aqua(void)
+static u8* ExpandPlaceholder_Aqua(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Aqua;
@@ -429,7 +429,7 @@ static u8 *ExpandPlaceholder_Aqua(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Maxie(void)
+static u8* ExpandPlaceholder_Maxie(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Maxie;
@@ -438,7 +438,7 @@ static u8 *ExpandPlaceholder_Maxie(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Archie(void)
+static u8* ExpandPlaceholder_Archie(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Archie;
@@ -447,7 +447,7 @@ static u8 *ExpandPlaceholder_Archie(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Groudon(void)
+static u8* ExpandPlaceholder_Groudon(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Groudon;
@@ -456,7 +456,7 @@ static u8 *ExpandPlaceholder_Groudon(void)
 #endif
 }
 
-static u8 *ExpandPlaceholder_Kyogre(void)
+static u8* ExpandPlaceholder_Kyogre(void)
 {
 #if defined(FIRERED)
     return gExpandedPlaceholder_Kyogre;
@@ -465,26 +465,26 @@ static u8 *ExpandPlaceholder_Kyogre(void)
 #endif
 }
 
-u8 *GetExpandedPlaceholder(u32 id)
+u8* GetExpandedPlaceholder(u32 id)
 {
-    typedef u8 *(*ExpandPlaceholderFunc)(void);
+    typedef u8* (*ExpandPlaceholderFunc)(void);
 
     static const ExpandPlaceholderFunc funcs[] =
     {
-        [PLACEHOLDER_ID_UNKNOWN]      = ExpandPlaceholder_UnknownStringVar,
-        [PLACEHOLDER_ID_PLAYER]       = ExpandPlaceholder_PlayerName,
+        [PLACEHOLDER_ID_UNKNOWN] = ExpandPlaceholder_UnknownStringVar,
+        [PLACEHOLDER_ID_PLAYER] = ExpandPlaceholder_PlayerName,
         [PLACEHOLDER_ID_STRING_VAR_1] = ExpandPlaceholder_StringVar1,
         [PLACEHOLDER_ID_STRING_VAR_2] = ExpandPlaceholder_StringVar2,
         [PLACEHOLDER_ID_STRING_VAR_3] = ExpandPlaceholder_StringVar3,
-        [PLACEHOLDER_ID_KUN]          = ExpandPlaceholder_KunChan,
-        [PLACEHOLDER_ID_RIVAL]        = ExpandPlaceholder_RivalName,
-        [PLACEHOLDER_ID_VERSION]      = ExpandPlaceholder_Version,
-        [PLACEHOLDER_ID_MAGMA]        = ExpandPlaceholder_Magma,
-        [PLACEHOLDER_ID_AQUA]         = ExpandPlaceholder_Aqua,
-        [PLACEHOLDER_ID_MAXIE]        = ExpandPlaceholder_Maxie,
-        [PLACEHOLDER_ID_ARCHIE]       = ExpandPlaceholder_Archie,
-        [PLACEHOLDER_ID_GROUDON]      = ExpandPlaceholder_Groudon,
-        [PLACEHOLDER_ID_KYOGRE]       = ExpandPlaceholder_Kyogre,
+        [PLACEHOLDER_ID_KUN] = ExpandPlaceholder_KunChan,
+        [PLACEHOLDER_ID_RIVAL] = ExpandPlaceholder_RivalName,
+        [PLACEHOLDER_ID_VERSION] = ExpandPlaceholder_Version,
+        [PLACEHOLDER_ID_MAGMA] = ExpandPlaceholder_Magma,
+        [PLACEHOLDER_ID_AQUA] = ExpandPlaceholder_Aqua,
+        [PLACEHOLDER_ID_MAXIE] = ExpandPlaceholder_Maxie,
+        [PLACEHOLDER_ID_ARCHIE] = ExpandPlaceholder_Archie,
+        [PLACEHOLDER_ID_GROUDON] = ExpandPlaceholder_Groudon,
+        [PLACEHOLDER_ID_KYOGRE] = ExpandPlaceholder_Kyogre,
     };
 
     if (id >= NELEMS(funcs))
@@ -493,7 +493,7 @@ u8 *GetExpandedPlaceholder(u32 id)
         return funcs[id]();
 }
 
-u8 *StringFill(u8 *dest, u8 c, u16 n)
+u8* StringFill(u8* dest, u8 c, u16 n)
 {
     u16 i;
 
@@ -504,7 +504,7 @@ u8 *StringFill(u8 *dest, u8 c, u16 n)
     return dest;
 }
 
-u8 *StringCopyPadded(u8 *dest, const u8 *src, u8 c, u16 n)
+u8* StringCopyPadded(u8* dest, const u8* src, u8 c, u16 n)
 {
     while (*src != EOS)
     {
@@ -526,12 +526,12 @@ u8 *StringCopyPadded(u8 *dest, const u8 *src, u8 c, u16 n)
     return dest;
 }
 
-u8 *StringFillWithTerminator(u8 *dest, u16 n)
+u8* StringFillWithTerminator(u8* dest, u16 n)
 {
     return StringFill(dest, EOS, n);
 }
 
-u8 *StringCopyN_Multibyte(u8 *dest, const u8 *src, u32 n)
+u8* StringCopyN_Multibyte(u8* dest, const u8* src, u32 n)
 {
     u32 i;
 
@@ -553,7 +553,7 @@ u8 *StringCopyN_Multibyte(u8 *dest, const u8 *src, u32 n)
     return dest;
 }
 
-u32 StringLength_Multibyte(const u8 *str)
+u32 StringLength_Multibyte(const u8* str)
 {
     u32 length = 0;
 
@@ -568,7 +568,7 @@ u32 StringLength_Multibyte(const u8 *str)
     return length;
 }
 
-u8 *WriteColorChangeControlCode(u8 *dest, u32 colorType, u8 color)
+u8* WriteColorChangeControlCode(u8* dest, u32 colorType, u8 color)
 {
     *dest = 0xFC;
     dest++;
@@ -632,7 +632,7 @@ u8 GetExtCtrlCodeLength(u8 code)
     return length;
 }
 
-static const u8 *SkipExtCtrlCode(const u8 *s)
+static const u8* SkipExtCtrlCode(const u8* s)
 {
     while (*s == 0xFC)
     {
@@ -643,7 +643,7 @@ static const u8 *SkipExtCtrlCode(const u8 *s)
     return s;
 }
 
-s32 StringCompareWithoutExtCtrlCodes(const u8 *str1, const u8 *str2)
+s32 StringCompareWithoutExtCtrlCodes(const u8* str1, const u8* str2)
 {
     s32 retVal = 0;
 
@@ -677,7 +677,7 @@ s32 StringCompareWithoutExtCtrlCodes(const u8 *str1, const u8 *str2)
     return retVal;
 }
 
-void ConvertInternationalString(u8 *s, u8 language)
+void ConvertInternationalString(u8* s, u8 language)
 {
     if (language == LANGUAGE_JAPANESE)
     {
@@ -702,7 +702,7 @@ void ConvertInternationalString(u8 *s, u8 language)
     }
 }
 
-void StripExtCtrlCodes(u8 *str)
+void StripExtCtrlCodes(u8* str)
 {
     u16 srcIndex = 0;
     u16 destIndex = 0;

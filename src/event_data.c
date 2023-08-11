@@ -37,7 +37,7 @@ EWRAM_DATA u8 sSpecialFlags[SPECIAL_FLAGS_SIZE] = {};
 
 u16 gLastQuestLogStoredFlagOrVarIdx;
 
-extern u16 *const gSpecialVars[];
+extern u16* const gSpecialVars[];
 
 void InitEventData(void)
 {
@@ -60,7 +60,7 @@ void ClearTempFieldEventData(void)
 // Unused
 static void DisableNationalPokedex_RSE(void)
 {
-    u16 *ptr = GetVarPointer(VAR_0x403C);
+    u16* ptr = GetVarPointer(VAR_0x403C);
     gSaveBlock2Ptr->pokedex.unused = 0;
     *ptr = 0;
     FlagClear(FLAG_0x838);
@@ -71,7 +71,7 @@ static void DisableNationalPokedex_RSE(void)
 void EnableNationalPokedex_RSE(void)
 {
     // Note: the var, struct member, and flag are never used
-    u16 *ptr = GetVarPointer(VAR_0x403C);
+    u16* ptr = GetVarPointer(VAR_0x403C);
     gSaveBlock2Ptr->pokedex.unused = 0xDA;
     *ptr = 0x0302;
     FlagSet(FLAG_0x838);
@@ -81,8 +81,8 @@ void EnableNationalPokedex_RSE(void)
 static bool32 IsNationalPokedexEnabled_RSE(void)
 {
     if (gSaveBlock2Ptr->pokedex.unused == 0xDA
-            && VarGet(VAR_0x403C) == 0x0302
-            && FlagGet(FLAG_0x838))
+        && VarGet(VAR_0x403C) == 0x0302
+        && FlagGet(FLAG_0x838))
         return TRUE;
 
     return FALSE;
@@ -90,7 +90,7 @@ static bool32 IsNationalPokedexEnabled_RSE(void)
 
 void DisableNationalPokedex(void)
 {
-    u16 *nationalDexVar = GetVarPointer(VAR_NATIONAL_DEX);
+    u16* nationalDexVar = GetVarPointer(VAR_NATIONAL_DEX);
     gSaveBlock2Ptr->pokedex.nationalMagic = 0;
     *nationalDexVar = 0;
     FlagClear(FLAG_SYS_NATIONAL_DEX);
@@ -98,7 +98,7 @@ void DisableNationalPokedex(void)
 
 void EnableNationalPokedex(void)
 {
-    u16 *nationalDexVar = GetVarPointer(VAR_NATIONAL_DEX);
+    u16* nationalDexVar = GetVarPointer(VAR_NATIONAL_DEX);
     gSaveBlock2Ptr->pokedex.nationalMagic = 0xB9;
     *nationalDexVar = 0x6258;
     FlagSet(FLAG_SYS_NATIONAL_DEX);
@@ -107,8 +107,8 @@ void EnableNationalPokedex(void)
 bool32 IsNationalPokedexEnabled(void)
 {
     if (gSaveBlock2Ptr->pokedex.nationalMagic == 0xB9
-            && VarGet(VAR_NATIONAL_DEX) == 0x6258
-            && FlagGet(FLAG_SYS_NATIONAL_DEX))
+        && VarGet(VAR_NATIONAL_DEX) == 0x6258
+        && FlagGet(FLAG_SYS_NATIONAL_DEX))
         return TRUE;
 
     return FALSE;
@@ -152,13 +152,13 @@ void ClearMysteryGiftFlags(void)
 void ClearMysteryGiftVars(void)
 {
     VarSet(VAR_EVENT_PICHU_SLOT, 0);
-    VarSet(VAR_MYSTERY_GIFT_1,  0);
-    VarSet(VAR_MYSTERY_GIFT_2,  0);
-    VarSet(VAR_MYSTERY_GIFT_3,  0);
-    VarSet(VAR_MYSTERY_GIFT_4,  0);
-    VarSet(VAR_MYSTERY_GIFT_5,  0);
-    VarSet(VAR_MYSTERY_GIFT_6,  0);
-    VarSet(VAR_MYSTERY_GIFT_7,  0);
+    VarSet(VAR_MYSTERY_GIFT_1, 0);
+    VarSet(VAR_MYSTERY_GIFT_2, 0);
+    VarSet(VAR_MYSTERY_GIFT_3, 0);
+    VarSet(VAR_MYSTERY_GIFT_4, 0);
+    VarSet(VAR_MYSTERY_GIFT_5, 0);
+    VarSet(VAR_MYSTERY_GIFT_6, 0);
+    VarSet(VAR_MYSTERY_GIFT_7, 0);
     VarSet(VAR_ALTERING_CAVE_WILD_SET, 0);
 }
 
@@ -183,9 +183,9 @@ bool32 CanResetRTC(void)
     return TRUE;
 }
 
-u16 *GetVarPointer(u16 idx)
+u16* GetVarPointer(u16 idx)
 {
-    u16 *ptr;
+    u16* ptr;
     if (idx < VARS_START)
         return NULL;
     if (idx < SPECIAL_VARS_START)
@@ -234,7 +234,7 @@ static bool8 IsFlagOrVarStoredInQuestLog(u16 idx, bool8 isVar)
 
 u16 VarGet(u16 idx)
 {
-    u16 *ptr = GetVarPointer(idx);
+    u16* ptr = GetVarPointer(idx);
     if (ptr == NULL)
         return idx;
     return *ptr;
@@ -242,7 +242,7 @@ u16 VarGet(u16 idx)
 
 bool8 VarSet(u16 idx, u16 val)
 {
-    u16 *ptr = GetVarPointer(idx);
+    u16* ptr = GetVarPointer(idx);
     if (ptr == NULL)
         return FALSE;
     *ptr = val;
@@ -254,9 +254,9 @@ u8 VarGetObjectEventGraphicsId(u8 idx)
     return VarGet(VAR_OBJ_GFX_ID_0 + idx);
 }
 
-u8 *GetFlagAddr(u16 idx)
+u8* GetFlagAddr(u16 idx)
 {
-    u8 *ptr;
+    u8* ptr;
     if (idx == 0)
         return NULL;
     if (idx < SPECIAL_FLAGS_START)
@@ -286,7 +286,7 @@ u8 *GetFlagAddr(u16 idx)
 
 bool8 FlagSet(u16 idx)
 {
-    u8 *ptr = GetFlagAddr(idx);
+    u8* ptr = GetFlagAddr(idx);
     if (ptr != NULL)
         *ptr |= 1 << (idx & 7);
     return FALSE;
@@ -294,7 +294,7 @@ bool8 FlagSet(u16 idx)
 
 bool8 FlagClear(u16 idx)
 {
-    u8 *ptr = GetFlagAddr(idx);
+    u8* ptr = GetFlagAddr(idx);
     if (ptr != NULL)
         *ptr &= ~(1 << (idx & 7));
     return FALSE;
@@ -302,7 +302,7 @@ bool8 FlagClear(u16 idx)
 
 bool8 FlagGet(u16 idx)
 {
-    u8 *ptr = GetFlagAddr(idx);
+    u8* ptr = GetFlagAddr(idx);
     if (ptr == NULL)
         return FALSE;
     if (!(*ptr & 1 << (idx & 7)))

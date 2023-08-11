@@ -22,9 +22,9 @@ enum
 
 struct RGBColor
 {
-    u16 r:5;
-    u16 g:5;
-    u16 b:5;
+    u16 r : 5;
+    u16 g : 5;
+    u16 b : 5;
 };
 
 struct WeatherPaletteData
@@ -37,12 +37,12 @@ struct WeatherCallbacks
     void (*initVars)(void);
     void (*main)(void);
     void (*initAll)(void);
-    bool8 (*finish)(void);
+    bool8(*finish)(void);
 };
 
 static EWRAM_DATA struct Weather sWeather = {};
 static EWRAM_DATA u8 sFieldEffectPaletteGammaTypes[32] = {};
-static EWRAM_DATA const u8 *sPaletteGammaTypes = NULL;
+static EWRAM_DATA const u8* sPaletteGammaTypes = NULL;
 static EWRAM_DATA u16 sDroughtFrameDelay = 0;
 
 static void Task_WeatherMain(u8 taskId);
@@ -63,7 +63,7 @@ static void DoNothing(void);
 static void ApplyFogBlend(u8 blendCoeff, u16 blendColor);
 static bool8 LightenSpritePaletteInFog(u8 paletteIndex);
 
-struct Weather *const gWeatherPtr = &sWeather;
+struct Weather* const gWeatherPtr = &sWeather;
 
 static const struct WeatherCallbacks sWeatherFuncs[] = {
     {None_Init, None_Main, None_Init, None_Finish},
@@ -83,7 +83,7 @@ static const struct WeatherCallbacks sWeatherFuncs[] = {
     {Bubbles_InitVars, Bubbles_Main, Bubbles_InitAll, Bubbles_Finish},
 };
 
-static void (*const sWeatherPalStateFuncs[])(void) = {
+static void (* const sWeatherPalStateFuncs[])(void) = {
     UpdateWeatherGammaShift,
     FadeInScreenWithWeather,
     DoNothing,
@@ -261,7 +261,7 @@ static u8 None_Finish(void)
 static void BuildGammaShiftTables(void)
 {
     u16 v0;
-    u8 (*gammaTable)[32];
+    u8(*gammaTable)[32];
     u16 v2;
     u16 v4;
     u16 v5;
@@ -443,7 +443,7 @@ static void ApplyGammaShift(u8 startPalIndex, u8 numPalettes, s8 gammaIndex)
 {
     u16 curPalIndex;
     u16 palOffset;
-    u8 *gammaTable;
+    u8* gammaTable;
     u16 i;
 
     if (gammaIndex > 0)
@@ -474,7 +474,7 @@ static void ApplyGammaShift(u8 startPalIndex, u8 numPalettes, s8 gammaIndex)
                 for (i = 0; i < 16; i++)
                 {
                     // Apply gamma shift to the original color.
-                    struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                    struct RGBColor baseColor = *(struct RGBColor*)&gPlttBufferUnfaded[palOffset];
                     r = gammaTable[baseColor.r];
                     g = gammaTable[baseColor.g];
                     b = gammaTable[baseColor.b];
@@ -502,7 +502,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
     u16 palOffset;
     u16 curPalIndex;
     u16 i;
-    struct RGBColor color = *(struct RGBColor *)&blendColor;
+    struct RGBColor color = *(struct RGBColor*)&blendColor;
     u8 rBlend = color.r;
     u8 gBlend = color.g;
     u8 bBlend = color.b;
@@ -522,7 +522,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
         }
         else
         {
-            u8 *gammaTable;
+            u8* gammaTable;
 
             if (sPaletteGammaTypes[curPalIndex] == GAMMA_NORMAL)
                 gammaTable = gWeatherPtr->gammaShifts[gammaIndex];
@@ -531,7 +531,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
 
             for (i = 0; i < 16; i++)
             {
-                struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                struct RGBColor baseColor = *(struct RGBColor*)&gPlttBufferUnfaded[palOffset];
                 u8 r = gammaTable[baseColor.r];
                 u8 g = gammaTable[baseColor.g];
                 u8 b = gammaTable[baseColor.b];
@@ -559,7 +559,7 @@ static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 bl
     u16 i;
 
     gammaIndex = -gammaIndex - 1;
-    color = *(struct RGBColor *)&blendColor;
+    color = *(struct RGBColor*)&blendColor;
     rBlend = color.r;
     gBlend = color.g;
     bBlend = color.b;
@@ -582,7 +582,7 @@ static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 bl
                 u8 r1, g1, b1;
                 u8 r2, g2, b2;
 
-                color1 = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                color1 = *(struct RGBColor*)&gPlttBufferUnfaded[palOffset];
                 r1 = color1.r;
                 g1 = color1.g;
                 b1 = color1.b;
@@ -606,7 +606,7 @@ static void ApplyFogBlend(u8 blendCoeff, u16 blendColor)
     u16 curPalIndex;
 
     BlendPalette(0, 256, blendCoeff, blendColor);
-    color = *(struct RGBColor *)&blendColor;
+    color = *(struct RGBColor*)&blendColor;
     rBlend = color.r;
     gBlend = color.g;
     bBlend = color.b;
@@ -620,7 +620,7 @@ static void ApplyFogBlend(u8 blendCoeff, u16 blendColor)
 
             while (palOffset < palEnd)
             {
-                struct RGBColor color = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                struct RGBColor color = *(struct RGBColor*)&gPlttBufferUnfaded[palOffset];
                 u8 r = color.r;
                 u8 g = color.g;
                 u8 b = color.b;
@@ -881,13 +881,13 @@ static u8 IsWeatherFadingIn(void)
         return 0;
 }
 
-void LoadCustomWeatherSpritePalette(const u16 *palette)
+void LoadCustomWeatherSpritePalette(const u16* palette)
 {
     LoadPalette(palette, OBJ_PLTT_ID(gWeatherPtr->weatherPicSpritePalIndex), PLTT_SIZE_4BPP);
     UpdateSpritePaletteWithWeather(gWeatherPtr->weatherPicSpritePalIndex);
 }
 
-static void LoadDroughtWeatherPalette(u8 *gammaIndexPtr, u8 *a1)
+static void LoadDroughtWeatherPalette(u8* gammaIndexPtr, u8* a1)
 {
     // Dummied out in FRLG
     // *gammaIndexPtr = 0x20;
@@ -1132,7 +1132,7 @@ void ResetPreservedPalettesInWeather(void)
     sPaletteGammaTypes = sBasePaletteGammaTypes;
 }
 
-void SlightlyDarkenPalsInWeather(u16 *palbuf, u16 *unused, u32 size)
+void SlightlyDarkenPalsInWeather(u16* palbuf, u16* unused, u32 size)
 {
     switch (gWeatherPtr->currWeather)
     {

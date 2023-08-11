@@ -188,9 +188,9 @@ struct PokemonJumpGfx
     u8 itemQuantityStr[64];
     u8 prizeMsg[256];
     u16 tilemapBuffer[0x4000]; // Bug: way larger than it should be
-    struct Sprite *monSprites[MAX_RFU_PLAYERS];
-    struct Sprite *starSprites[MAX_RFU_PLAYERS];
-    struct Sprite *vineSprites[VINE_SPRITES_PER_SIDE * 2];
+    struct Sprite* monSprites[MAX_RFU_PLAYERS];
+    struct Sprite* starSprites[MAX_RFU_PLAYERS];
+    struct Sprite* vineSprites[VINE_SPRITES_PER_SIDE * 2];
     u8 unused3[12];
     u8 monSpriteSubpriorities[MAX_RFU_PLAYERS];
 };
@@ -261,7 +261,7 @@ struct PokemonJump
     struct PokemonJumpGfx jumpGfx;
     struct PokemonJump_MonInfo monInfo[MAX_RFU_PLAYERS];
     struct PokemonJump_Player players[MAX_RFU_PLAYERS];
-    struct PokemonJump_Player *player;
+    struct PokemonJump_Player* player;
 };
 
 static void Task_StaticCountdown(u8 taskId);
@@ -269,12 +269,12 @@ static void Task_StaticCountdown_Init(u8 taskId);
 static void Task_StaticCountdown_Free(u8 taskId);
 static void Task_StaticCountdown_Start(u8 taskId);
 static void Task_StaticCountdown_Run(u8 taskId);
-static void InitGame(struct PokemonJump *);
-static void ResetForNewGame(struct PokemonJump *);
+static void InitGame(struct PokemonJump*);
+static void ResetForNewGame(struct PokemonJump*);
 static void InitPlayerAndJumpTypes(void);
 static void ResetPlayersForNewGame(void);
 static s16 GetPokemonJumpSpeciesIdx(u16 species);
-static void InitJumpMonInfo(struct PokemonJump_MonInfo *monInfo, struct Pokemon *mon);
+static void InitJumpMonInfo(struct PokemonJump_MonInfo* monInfo, struct Pokemon* mon);
 static void CB2_PokemonJump(void);
 static void Task_StartPokemonJump(u8 taskId);
 static void Task_PokemonJump_Leader(u8 taskId);
@@ -331,13 +331,13 @@ static bool32 ShouldPlayAgain(void);
 static void AddJumpScore(int);
 static int GetPlayersAtJumpPeak(void);
 static bool32 AreLinkQueuesEmpty(void);
-static int GetNumPlayersForBonus(u8 *);
+static int GetNumPlayersForBonus(u8*);
 static void ClearUnreadField(void);
 static int GetScoreBonus(int);
 static void TryUpdateExcellentsRecord(u16);
 static bool32 HasEnoughScoreForPrize(void);
 static u16 GetPrizeData(void);
-static void UnpackPrizeData(u16, u16 *, u16 *);
+static void UnpackPrizeData(u16, u16*, u16*);
 static u16 GetPrizeItemId(void);
 static u16 GetPrizeQuantity(void);
 static u16 GetQuantityLimitedByBag(u16 item, u16 quantity);
@@ -363,16 +363,16 @@ static void PrintPokeJumpPlayerNames(bool32);
 static void DrawPlayerNameWindows(void);
 static void ShowBonus(u8);
 static void Task_UpdateBonus(u8 taskId);
-static void InitPokeJumpGfx(struct PokemonJumpGfx *);
-static void SpriteCB_Star(struct Sprite *sprite);
-static void SpriteCB_MonHitShake(struct Sprite *sprite);
-static void SpriteCB_MonHitFlash(struct Sprite *sprite);
-static void SpriteCB_MonIntroBounce(struct Sprite *sprite);
+static void InitPokeJumpGfx(struct PokemonJumpGfx*);
+static void SpriteCB_Star(struct Sprite* sprite);
+static void SpriteCB_MonHitShake(struct Sprite* sprite);
+static void SpriteCB_MonHitFlash(struct Sprite* sprite);
+static void SpriteCB_MonIntroBounce(struct Sprite* sprite);
 static void Task_ShowPokemonJumpRecords(u8 taskId);
-static void TruncateToFirstWordOnly(u8 *str);
+static void TruncateToFirstWordOnly(u8* str);
 static void PrintRecordsText(u16 windowId);
 static void UpdateVineSwing(int id);
-static void StartPokeJumpGfx(struct PokemonJumpGfx *);
+static void StartPokeJumpGfx(struct PokemonJumpGfx*);
 static void FreeWindowsAndDigitObj(void);
 static void SetUpPokeJumpGfxFuncById(int);
 static bool32 IsPokeJumpGfxFuncFinished(void);
@@ -383,7 +383,7 @@ static void PrintPrizeFilledBagMessage(u16);
 static void PrintNoRoomForPrizeMessage(u16);
 static bool32 DoPrizeMessageAndFanfare(void);
 static void ClearMessageWindow(void);
-static void SetMonSpriteY(u32 , s16);
+static void SetMonSpriteY(u32, s16);
 static void StartMonHitShake(u8);
 static bool32 RemoveMessageWindow(void);
 static void PrintScore(int);
@@ -396,33 +396,33 @@ static void StopMonHitFlash(void);
 static void ResetMonSpriteSubpriorities(void);
 static void StartMonIntroBounce(int);
 static int IsMonIntroBounceActive(void);
-static void SendPacket_MonInfo(struct PokemonJump_MonInfo *);
-static bool32 RecvPacket_MonInfo(int multiplayerId, struct PokemonJump_MonInfo *);
-static void SendPacket_LeaderState(struct PokemonJump_Player *, struct PokemonJump_CommData *);
-static bool32 RecvPacket_LeaderState(struct PokemonJump_Player *, struct PokemonJump_CommData *);
-static void SendPacket_MemberState(struct PokemonJump_Player *, u8, u16);
-static bool32 RecvPacket_MemberStateToLeader(struct PokemonJump_Player *, int, u8 *, u16 *);
-static bool32 RecvPacket_MemberStateToMember(struct PokemonJump_Player *, int);
+static void SendPacket_MonInfo(struct PokemonJump_MonInfo*);
+static bool32 RecvPacket_MonInfo(int multiplayerId, struct PokemonJump_MonInfo*);
+static void SendPacket_LeaderState(struct PokemonJump_Player*, struct PokemonJump_CommData*);
+static bool32 RecvPacket_LeaderState(struct PokemonJump_Player*, struct PokemonJump_CommData*);
+static void SendPacket_MemberState(struct PokemonJump_Player*, u8, u16);
+static bool32 RecvPacket_MemberStateToLeader(struct PokemonJump_Player*, int, u8*, u16*);
+static bool32 RecvPacket_MemberStateToMember(struct PokemonJump_Player*, int);
 static bool32 TryUpdateRecords(u32, u16, u16);
 static void IncrementGamesWithMaxPlayers(void);
-static void LoadSpriteSheetsAndPalettes(struct PokemonJumpGfx *);
-static void CreateVineSprites(struct PokemonJumpGfx *);
-static void StartPokeJumpCountdown(struct PokemonJumpGfx *);
+static void LoadSpriteSheetsAndPalettes(struct PokemonJumpGfx*);
+static void CreateVineSprites(struct PokemonJumpGfx*);
+static void StartPokeJumpCountdown(struct PokemonJumpGfx*);
 static bool32 IsPokeJumpCountdownRunning(void);
-static void UpdateVineAnim(struct PokemonJumpGfx *, int);
-static void DoStarAnim(struct PokemonJumpGfx *, int);
-static void CreateJumpMonSprite(struct PokemonJumpGfx *, struct PokemonJump_MonInfo *,s16, s16, u8);
-static void CreateStarSprite(struct PokemonJumpGfx *,s16, s16, u8);
-static void Gfx_StartMonHitShake(struct PokemonJumpGfx *, int);
-static void Gfx_StartMonHitFlash(struct PokemonJumpGfx *, int);
-static bool32 Gfx_IsMonHitShakeActive(struct PokemonJumpGfx *, int);
-static void Gfx_StopMonHitFlash(struct PokemonJumpGfx *);
-static void Gfx_ResetMonSpriteSubpriorities(struct PokemonJumpGfx *);
-static void Gfx_StartMonIntroBounce(struct PokemonJumpGfx *, int);
-static bool32 Gfx_IsMonIntroBounceActive(struct PokemonJumpGfx *);
+static void UpdateVineAnim(struct PokemonJumpGfx*, int);
+static void DoStarAnim(struct PokemonJumpGfx*, int);
+static void CreateJumpMonSprite(struct PokemonJumpGfx*, struct PokemonJump_MonInfo*, s16, s16, u8);
+static void CreateStarSprite(struct PokemonJumpGfx*, s16, s16, u8);
+static void Gfx_StartMonHitShake(struct PokemonJumpGfx*, int);
+static void Gfx_StartMonHitFlash(struct PokemonJumpGfx*, int);
+static bool32 Gfx_IsMonHitShakeActive(struct PokemonJumpGfx*, int);
+static void Gfx_StopMonHitFlash(struct PokemonJumpGfx*);
+static void Gfx_ResetMonSpriteSubpriorities(struct PokemonJumpGfx*);
+static void Gfx_StartMonIntroBounce(struct PokemonJumpGfx*, int);
+static bool32 Gfx_IsMonIntroBounceActive(struct PokemonJumpGfx*);
 
-EWRAM_DATA static struct PokemonJump *sPokemonJump = NULL;
-EWRAM_DATA static struct PokemonJumpGfx *sPokemonJumpGfx = NULL;
+EWRAM_DATA static struct PokemonJump* sPokemonJump = NULL;
+EWRAM_DATA static struct PokemonJumpGfx* sPokemonJumpGfx = NULL;
 
 // Unused static version of the wireless minigame countdown
 
@@ -494,12 +494,12 @@ static const union AnimCmd sAnim_StaticCountdown_StartRight[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_StaticCountdown[] = {
-    [ANIM_THREE]       = sAnim_StaticCountdown_Three,
-    [ANIM_TWO]         = sAnim_StaticCountdown_Two,
-    [ANIM_ONE]         = sAnim_StaticCountdown_One,
-    [ANIM_START_LEFT]  = sAnim_StaticCountdown_StartLeft,
-    [ANIM_START_MID]   = sAnim_StaticCountdown_StartMid,
+static const union AnimCmd* const sAnims_StaticCountdown[] = {
+    [ANIM_THREE] = sAnim_StaticCountdown_Three,
+    [ANIM_TWO] = sAnim_StaticCountdown_Two,
+    [ANIM_ONE] = sAnim_StaticCountdown_One,
+    [ANIM_START_LEFT] = sAnim_StaticCountdown_StartLeft,
+    [ANIM_START_MID] = sAnim_StaticCountdown_StartMid,
     [ANIM_START_RIGHT] = sAnim_StaticCountdown_StartRight
 };
 
@@ -517,10 +517,10 @@ static const struct SpriteTemplate sSpriteTemplate_StaticCountdown[] = {
 static const TaskFunc sStaticCountdownFuncs[][4] =
 {
     {
-        [FUNC_INIT]  = Task_StaticCountdown_Init,
-        [FUNC_FREE]  = Task_StaticCountdown_Free,
+        [FUNC_INIT] = Task_StaticCountdown_Init,
+        [FUNC_FREE] = Task_StaticCountdown_Free,
         [FUNC_START] = Task_StaticCountdown_Start,
-        [FUNC_RUN]   = Task_StaticCountdown_Run
+        [FUNC_RUN] = Task_StaticCountdown_Run
     },
 };
 
@@ -554,7 +554,7 @@ static const TaskFunc sStaticCountdownFuncs[][4] =
 static u8 CreateStaticCountdownTask(u8 funcSetId, u8 taskPriority)
 {
     u8 taskId = CreateTask(Task_StaticCountdown, taskPriority);
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     task->tState = STATE_IDLE;
     task->tFuncSetId = funcSetId;
@@ -581,11 +581,11 @@ static bool32 IsStaticCountdownRunning(void)
 
 static void Task_StaticCountdown(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
-    // STATE_IDLE does nothing; wait until started
+        // STATE_IDLE does nothing; wait until started
     case STATE_START:
         sStaticCountdownFuncs[tFuncSetId][FUNC_START](taskId);
         tState = STATE_RUN;
@@ -600,10 +600,10 @@ static void Task_StaticCountdown(u8 taskId)
     }
 }
 
-static void StaticCountdown_CreateSprites(u8 taskId, s16 *data)
+static void StaticCountdown_CreateSprites(u8 taskId, s16* data)
 {
     u8 i;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
 
     LoadCompressedSpriteSheet(&sSpriteSheet_321Start_Static[tSpriteSheetId]);
     LoadSpritePalette(&sSpritePalette_321Start_Static[tSpritePalId]);
@@ -623,7 +623,7 @@ static void StaticCountdown_CreateSprites(u8 taskId, s16 *data)
 
 static void Task_StaticCountdown_Init(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     tSpriteTemplateId = 0;
     tSpriteSheetId = 0;
     tSpritePalId = 0;
@@ -645,7 +645,7 @@ static void Task_StaticCountdown_Init(u8 taskId)
 static void Task_StaticCountdown_Free(u8 taskId)
 {
     u8 i = 0;
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     for (i = 0; i < tNumSprites; i++)
         DestroySprite(&gSprites[tSpriteIds(i)]);
@@ -653,9 +653,9 @@ static void Task_StaticCountdown_Free(u8 taskId)
     FreeSpritePaletteByTag(sSpritePalette_321Start_Static[tSpritePalId].tag);
 }
 
-static void SpriteCB_StaticCountdown(struct Sprite *sprite)
+static void SpriteCB_StaticCountdown(struct Sprite* sprite)
 {
-    s16 *data = gTasks[sprite->sTaskId].data;
+    s16* data = gTasks[sprite->sTaskId].data;
 
     if (tTimer % tInterval != 0)
         return;
@@ -693,7 +693,7 @@ static void SpriteCB_StaticCountdown(struct Sprite *sprite)
 
 static void Task_StaticCountdown_Start(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     PlaySE(SE_BALL_BOUNCE_1);
     gSprites[tSpriteIds(0)].callback = SpriteCB_StaticCountdown;
     gSprites[tSpriteIds(0)].invisible = FALSE;
@@ -707,7 +707,7 @@ static void Task_StaticCountdown_Start(u8 taskId)
 static void Task_StaticCountdown_Run(u8 taskId)
 {
     u16 packet[RFU_PACKET_SIZE];
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (gReceivedRemoteLinkPlayers)
     {
@@ -765,106 +765,106 @@ static const struct PokemonJumpMons
     u16 jumpType;
 } sPokeJumpMons[] =
 {
-    { .species = SPECIES_BULBASAUR,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_CHARMANDER, .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_SQUIRTLE,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_CATERPIE,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_METAPOD,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_WEEDLE,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_KAKUNA,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_RATTATA,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_RATICATE,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_PIKACHU,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SANDSHREW,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_NIDORAN_F,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_NIDORAN_M,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_CLEFAIRY,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_VULPIX,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_JIGGLYPUFF, .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_ODDISH,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_PARAS,      .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_MEOWTH,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_PSYDUCK,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_MANKEY,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_GROWLITHE,  .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_POLIWAG,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_BELLSPROUT, .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SHELLDER,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_KRABBY,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_EXEGGCUTE,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_CUBONE,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_DITTO,      .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_EEVEE,      .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_OMANYTE,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_KABUTO,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_CHIKORITA,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_CYNDAQUIL,  .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_TOTODILE,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SPINARAK,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_PICHU,      .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_CLEFFA,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_IGGLYBUFF,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_TOGEPI,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_MAREEP,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_BELLOSSOM,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_MARILL,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SUNKERN,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_WOOPER,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_PINECO,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SNUBBULL,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SHUCKLE,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_TEDDIURSA,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SLUGMA,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SWINUB,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_HOUNDOUR,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_PHANPY,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_PORYGON2,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_TYROGUE,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_SMOOCHUM,   .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_ELEKID,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_MAGBY,      .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_LARVITAR,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_TREECKO,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_TORCHIC,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_MUDKIP,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_MARSHTOMP,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_POOCHYENA,  .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_ZIGZAGOON,  .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_LINOONE,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_WURMPLE,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_SILCOON,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_CASCOON,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_LOTAD,      .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SEEDOT,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_RALTS,      .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_KIRLIA,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SURSKIT,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SHROOMISH,  .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_NINCADA,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_WHISMUR,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_AZURILL,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SKITTY,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SABLEYE,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_MAWILE,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_ARON,       .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_MEDITITE,   .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_ELECTRIKE,  .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_PLUSLE,     .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_MINUN,      .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_VOLBEAT,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_ILLUMISE,   .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_ROSELIA,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_GULPIN,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_NUMEL,      .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_TORKOAL,    .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_SPOINK,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_TRAPINCH,   .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_CACNEA,     .jumpType = JUMP_TYPE_SLOW },
-    { .species = SPECIES_ANORITH,    .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_WYNAUT,     .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_SNORUNT,    .jumpType = JUMP_TYPE_NORMAL },
-    { .species = SPECIES_CLAMPERL,   .jumpType = JUMP_TYPE_FAST },
-    { .species = SPECIES_BAGON,      .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_BULBASAUR,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_CHARMANDER, .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_SQUIRTLE,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_CATERPIE,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_METAPOD,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_WEEDLE,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_KAKUNA,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_RATTATA,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_RATICATE,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_PIKACHU,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SANDSHREW,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_NIDORAN_F,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_NIDORAN_M,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_CLEFAIRY,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_VULPIX,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_JIGGLYPUFF, .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_ODDISH,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_PARAS,      .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_MEOWTH,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_PSYDUCK,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_MANKEY,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_GROWLITHE,  .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_POLIWAG,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_BELLSPROUT, .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SHELLDER,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_KRABBY,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_EXEGGCUTE,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_CUBONE,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_DITTO,      .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_EEVEE,      .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_OMANYTE,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_KABUTO,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_CHIKORITA,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_CYNDAQUIL,  .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_TOTODILE,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SPINARAK,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_PICHU,      .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_CLEFFA,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_IGGLYBUFF,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_TOGEPI,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_MAREEP,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_BELLOSSOM,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_MARILL,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SUNKERN,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_WOOPER,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_PINECO,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SNUBBULL,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SHUCKLE,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_TEDDIURSA,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SLUGMA,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SWINUB,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_HOUNDOUR,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_PHANPY,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_PORYGON2,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_TYROGUE,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_SMOOCHUM,   .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_ELEKID,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_MAGBY,      .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_LARVITAR,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_TREECKO,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_TORCHIC,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_MUDKIP,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_MARSHTOMP,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_POOCHYENA,  .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_ZIGZAGOON,  .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_LINOONE,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_WURMPLE,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_SILCOON,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_CASCOON,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_LOTAD,      .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SEEDOT,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_RALTS,      .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_KIRLIA,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SURSKIT,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SHROOMISH,  .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_NINCADA,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_WHISMUR,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_AZURILL,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SKITTY,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SABLEYE,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_MAWILE,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_ARON,       .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_MEDITITE,   .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_ELECTRIKE,  .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_PLUSLE,     .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_MINUN,      .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_VOLBEAT,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_ILLUMISE,   .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_ROSELIA,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_GULPIN,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_NUMEL,      .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_TORKOAL,    .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_SPOINK,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_TRAPINCH,   .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_CACNEA,     .jumpType = JUMP_TYPE_SLOW },
+    {.species = SPECIES_ANORITH,    .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_WYNAUT,     .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_SNORUNT,    .jumpType = JUMP_TYPE_NORMAL },
+    {.species = SPECIES_CLAMPERL,   .jumpType = JUMP_TYPE_FAST },
+    {.species = SPECIES_BAGON,      .jumpType = JUMP_TYPE_FAST },
 };
 
 void StartPokemonJump(u16 partyId, MainCallback exitCallback)
@@ -900,7 +900,7 @@ static void FreePokemonJump(void)
     Free(sPokemonJump);
 }
 
-static void InitGame(struct PokemonJump *jump)
+static void InitGame(struct PokemonJump* jump)
 {
     jump->numPlayers = GetLinkPlayerCount();
     jump->comm.funcId = FUNC_RESET_GAME;
@@ -911,7 +911,7 @@ static void InitGame(struct PokemonJump *jump)
         IncrementGamesWithMaxPlayers();
 }
 
-static void ResetForNewGame(struct PokemonJump *jump)
+static void ResetForNewGame(struct PokemonJump* jump)
 {
     int i;
 
@@ -992,7 +992,7 @@ static s16 GetPokemonJumpSpeciesIdx(u16 species)
     return -1; // species isnt allowed
 }
 
-static void InitJumpMonInfo(struct PokemonJump_MonInfo *monInfo, struct Pokemon *mon)
+static void InitJumpMonInfo(struct PokemonJump_MonInfo* monInfo, struct Pokemon* mon)
 {
     monInfo->species = GetMonData(mon, MON_DATA_SPECIES);
     monInfo->otId = GetMonData(mon, MON_DATA_OT_ID);
@@ -1137,17 +1137,17 @@ static void RecvLinkData_Leader(void)
         sPokemonJump->allPlayersReady = TRUE;
 }
 
-static bool32 (* const sPokeJumpLeaderFuncs[])(void) =
+static bool32(* const sPokeJumpLeaderFuncs[])(void) =
 {
-    [FUNC_GAME_INTRO]     = GameIntro_Leader,
-    [FUNC_WAIT_ROUND]     = WaitRound_Leader,
-    [FUNC_GAME_ROUND]     = GameRound_Leader,
-    [FUNC_GAME_OVER]      = GameOver_Leader,
+    [FUNC_GAME_INTRO] = GameIntro_Leader,
+    [FUNC_WAIT_ROUND] = WaitRound_Leader,
+    [FUNC_GAME_ROUND] = GameRound_Leader,
+    [FUNC_GAME_OVER] = GameOver_Leader,
     [FUNC_ASK_PLAY_AGAIN] = AskPlayAgain_Leader,
-    [FUNC_RESET_GAME]     = ResetGame_Leader,
-    [FUNC_EXIT]           = ExitGame,
-    [FUNC_GIVE_PRIZE]     = GivePrize_Leader,
-    [FUNC_SAVE]           = SavePokeJump,
+    [FUNC_RESET_GAME] = ResetGame_Leader,
+    [FUNC_EXIT] = ExitGame,
+    [FUNC_GIVE_PRIZE] = GivePrize_Leader,
+    [FUNC_SAVE] = SavePokeJump,
 };
 
 static void Task_PokemonJump_Leader(u8 taskId)
@@ -1204,7 +1204,7 @@ static void RecvLinkData_Member(void)
     if (RecvPacket_LeaderState(sPokemonJump->players, &leaderData))
     {
         if (sPokemonJump->players[sPokemonJump->multiplayerId].funcFinished == TRUE
-         && leaderData.funcId != sPokemonJump->comm.funcId)
+            && leaderData.funcId != sPokemonJump->comm.funcId)
         {
             SetFunc_Member(leaderData.funcId);
         }
@@ -1236,17 +1236,17 @@ static void RecvLinkData_Member(void)
     }
 }
 
-static bool32 (* const sPokeJumpMemberFuncs[])(void) =
+static bool32(* const sPokeJumpMemberFuncs[])(void) =
 {
-    [FUNC_GAME_INTRO]     = GameIntro_Member,
-    [FUNC_WAIT_ROUND]     = WaitRound_Member,
-    [FUNC_GAME_ROUND]     = GameRound_Member,
-    [FUNC_GAME_OVER]      = GameOver_Member,
+    [FUNC_GAME_INTRO] = GameIntro_Member,
+    [FUNC_WAIT_ROUND] = WaitRound_Member,
+    [FUNC_GAME_ROUND] = GameRound_Member,
+    [FUNC_GAME_OVER] = GameOver_Member,
     [FUNC_ASK_PLAY_AGAIN] = AskPlayAgain_Member,
-    [FUNC_RESET_GAME]     = ResetGame_Member,
-    [FUNC_EXIT]           = ExitGame,
-    [FUNC_GIVE_PRIZE]     = GivePrize_Member,
-    [FUNC_SAVE]           = SavePokeJump,
+    [FUNC_RESET_GAME] = ResetGame_Member,
+    [FUNC_EXIT] = ExitGame,
+    [FUNC_GIVE_PRIZE] = GivePrize_Member,
+    [FUNC_SAVE] = SavePokeJump,
 };
 
 static void Task_PokemonJump_Member(u8 taskId)
@@ -1982,8 +1982,8 @@ static bool32 CloseMessageAndResetScore(void)
 static void Task_CommunicateMonInfo(u8 taskId)
 {
     int i;
-    s16 *data = gTasks[taskId].data;
-    struct PokemonJump *jump = (struct PokemonJump *)GetWordTaskArg(taskId, DATAIDX_GAME_STRUCT);
+    s16* data = gTasks[taskId].data;
+    struct PokemonJump* jump = (struct PokemonJump*)GetWordTaskArg(taskId, DATAIDX_GAME_STRUCT);
 
     switch (tState)
     {
@@ -2062,7 +2062,7 @@ static void UpdateVineState(void)
         sPokemonJump->prevVineState = sPokemonJump->vineState;
         sPokemonJump->vineState = sPokemonJump->vineStateTimer >> 8;
 
-         // If beginning upswing
+        // If beginning upswing
         if (sPokemonJump->vineState > VINE_UPSWING_LOWER && sPokemonJump->prevVineState < VINE_UPSWING_LOW)
         {
             sPokemonJump->ignoreJumpInput++;
@@ -2090,8 +2090,8 @@ static int GetVineSpeed(void)
     return speed;
 }
 
-static const u16 sVineBaseSpeeds[] = {26, 31, 36, 41, 46, 51, 56, 61};
-static const u16 sVineSpeedDelays[] = {0, 1, 1, 2};
+static const u16 sVineBaseSpeeds[] = { 26, 31, 36, 41, 46, 51, 56, 61 };
+static const u16 sVineSpeedDelays[] = { 0, 1, 1, 2 };
 
 static void UpdateVineSpeed(void)
 {
@@ -2210,7 +2210,7 @@ static void SetMonStateNormal(void)
     sPokemonJump->player->monState = MONSTATE_NORMAL;
 }
 
-static const u16 sSoundEffects[MAX_RFU_PLAYERS - 1] = {SE_RS_SHOP, SE_SHINY, SE_M_MORNING_SUN, SE_POKE_JUMP_SUCCESS};
+static const u16 sSoundEffects[MAX_RFU_PLAYERS - 1] = { SE_RS_SHOP, SE_SHINY, SE_M_MORNING_SUN, SE_POKE_JUMP_SUCCESS };
 
 static void UpdateGame(void)
 {
@@ -2304,13 +2304,13 @@ static const s8 sJumpOffsets[][48] =
                           -28, -27, -26, -25, -23, -22, -20, -18,
                           -17, -15, -13, -11,  -8,  -6,  -4,  -1},
 
-    [JUMP_TYPE_FAST]  = { -3,  -6,  -9, -11, -14, -16, -18, -20,
+    [JUMP_TYPE_FAST] = { -3,  -6,  -9, -11, -14, -16, -18, -20,
                          -22, -24, -26, -28, -29,
                          JUMP_PEAK, JUMP_PEAK,
                          -28, -26, -24, -22, -20, -18, -16, -14,
                          -11, -9,  -6,  -4,  -1},
 
-    [JUMP_TYPE_SLOW]  = { -3,  -6,  -9, -11, -13, -15, -17, -19,
+    [JUMP_TYPE_SLOW] = { -3,  -6,  -9, -11, -13, -15, -17, -19,
                          -21, -23, -25, -27, -28, -29,
                          JUMP_PEAK, JUMP_PEAK, JUMP_PEAK, JUMP_PEAK,
                          -29, -29, -28, -28, -27, -27, -26, -25,
@@ -2322,7 +2322,7 @@ static void UpdateJump(int multiplayerId)
 {
     int jumpOffsetIdx;
     int jumpOffset;
-    struct PokemonJump_Player *player;
+    struct PokemonJump_Player* player;
 
     if (sPokemonJump->skipJumpUpdate) // Always false
         return;
@@ -2449,8 +2449,8 @@ static bool32 UpdateVineHitStates(void)
     }
 
     if (sPokemonJump->vineState == VINE_UPSWING_LOW
-     && sPokemonJump->prevVineState == VINE_UPSWING_LOWER
-     && sPokemonJump->player->monState != MONSTATE_HIT)
+        && sPokemonJump->prevVineState == VINE_UPSWING_LOWER
+        && sPokemonJump->player->monState != MONSTATE_HIT)
     {
         sPokemonJump->player->jumpState = JUMPSTATE_SUCCESS;
         SetLinkTimeInterval(LINK_INTERVAL_SHORT);
@@ -2543,7 +2543,7 @@ static bool32 AreLinkQueuesEmpty(void)
     return !gRfu.recvQueue.count && !gRfu.sendQueue.count;
 }
 
-static int GetNumPlayersForBonus(u8 *arg0)
+static int GetNumPlayersForBonus(u8* arg0)
 {
     int i = 0;
     int flags = 0;
@@ -2572,7 +2572,7 @@ static void ClearUnreadField(void)
 
 // Bonuses given depend on the number of
 // players that jumped at the same time
-static const int sScoreBonuses[MAX_RFU_PLAYERS + 1] = {0, 0, 50, 100, 200, 500};
+static const int sScoreBonuses[MAX_RFU_PLAYERS + 1] = { 0, 0, 50, 100, 200, 500 };
 
 static int GetScoreBonus(int numPlayers)
 {
@@ -2601,11 +2601,11 @@ struct {
     u32 quantity;
 } static const sPrizeQuantityData[] =
 {
-    { .score =  5000, .quantity = 1},
-    { .score =  8000, .quantity = 2},
-    { .score = 12000, .quantity = 3},
-    { .score = 16000, .quantity = 4},
-    { .score = 20000, .quantity = 5},
+    {.score = 5000, .quantity = 1},
+    {.score = 8000, .quantity = 2},
+    {.score = 12000, .quantity = 3},
+    {.score = 16000, .quantity = 4},
+    {.score = 20000, .quantity = 5},
 };
 
 static bool32 HasEnoughScoreForPrize(void)
@@ -2623,7 +2623,7 @@ static u16 GetPrizeData(void)
     return (quantity << 12) | (itemId & 0xFFF);
 }
 
-static void UnpackPrizeData(u16 data, u16 *itemId, u16 *quantity)
+static void UnpackPrizeData(u16 data, u16* itemId, u16* quantity)
 {
     *quantity = data >> 12;
     *itemId = data & 0xFFF;
@@ -2669,12 +2669,12 @@ static u16 GetPokeJumpMultiplayerId(void)
     return sPokemonJump->multiplayerId;
 }
 
-static struct PokemonJump_MonInfo *GetMonInfoByMultiplayerId(u8 multiplayerId)
+static struct PokemonJump_MonInfo* GetMonInfoByMultiplayerId(u8 multiplayerId)
 {
     return &sPokemonJump->monInfo[multiplayerId];
 }
 
-static u8 *GetPokeJumpPlayerName(u8 multiplayerId)
+static u8* GetPokeJumpPlayerName(u8 multiplayerId)
 {
     return sPokemonJump->players[multiplayerId].name;
 }
@@ -2712,7 +2712,7 @@ struct MonInfoPacket
     u32 otId;
 };
 
-static void SendPacket_MonInfo(struct PokemonJump_MonInfo *monInfo)
+static void SendPacket_MonInfo(struct PokemonJump_MonInfo* monInfo)
 {
     struct MonInfoPacket packet;
     packet.id = PACKET_MON_INFO;
@@ -2722,7 +2722,7 @@ static void SendPacket_MonInfo(struct PokemonJump_MonInfo *monInfo)
     Rfu_SendPacket(&packet);
 }
 
-static bool32 RecvPacket_MonInfo(int multiplayerId, struct PokemonJump_MonInfo *monInfo)
+static bool32 RecvPacket_MonInfo(int multiplayerId, struct PokemonJump_MonInfo* monInfo)
 {
     struct MonInfoPacket packet;
 
@@ -2763,15 +2763,15 @@ struct LeaderStatePacket
     u8 id;
     u8 funcId;
     u8 monState;
-    u8 receivedBonusFlags:5; // 1 bit for each player (MAX_RFU_PLAYERS)
-    u8 jumpState:3;
+    u8 receivedBonusFlags : 5; // 1 bit for each player (MAX_RFU_PLAYERS)
+    u8 jumpState : 3;
     u16 jumpTimeStart;
     u16 vineTimer;
-    u32 jumpsInRow:15;
-    u32 jumpScore:17;
+    u32 jumpsInRow : 15;
+    u32 jumpScore : 17;
 };
 
-static void SendPacket_LeaderState(struct PokemonJump_Player *player, struct PokemonJump_CommData *comm)
+static void SendPacket_LeaderState(struct PokemonJump_Player* player, struct PokemonJump_CommData* comm)
 {
     struct LeaderStatePacket packet;
     packet.id = PACKET_LEADER_STATE;
@@ -2787,7 +2787,7 @@ static void SendPacket_LeaderState(struct PokemonJump_Player *player, struct Pok
 }
 
 // Used by group members to read the state of the group leader
-static bool32 RecvPacket_LeaderState(struct PokemonJump_Player *player, struct PokemonJump_CommData *comm)
+static bool32 RecvPacket_LeaderState(struct PokemonJump_Player* player, struct PokemonJump_CommData* comm)
 {
     struct LeaderStatePacket packet;
 
@@ -2820,7 +2820,7 @@ struct MemberStatePacket
     u16 playAgainState;
 };
 
-static void SendPacket_MemberState(struct PokemonJump_Player *player, u8 funcId, u16 playAgainState)
+static void SendPacket_MemberState(struct PokemonJump_Player* player, u8 funcId, u16 playAgainState)
 {
     struct MemberStatePacket packet;
     packet.id = PACKET_MEMBER_STATE;
@@ -2834,7 +2834,7 @@ static void SendPacket_MemberState(struct PokemonJump_Player *player, u8 funcId,
 }
 
 // Used by the group leader to read the state of group members
-static bool32 RecvPacket_MemberStateToLeader(struct PokemonJump_Player *player, int multiplayerId, u8 *funcId, u16 *playAgainState)
+static bool32 RecvPacket_MemberStateToLeader(struct PokemonJump_Player* player, int multiplayerId, u8* funcId, u16* playAgainState)
 {
     struct MemberStatePacket packet;
 
@@ -2855,7 +2855,7 @@ static bool32 RecvPacket_MemberStateToLeader(struct PokemonJump_Player *player, 
 }
 
 // Used by group members to read the state of other group members
-static bool32 RecvPacket_MemberStateToMember(struct PokemonJump_Player *player, int multiplayerId)
+static bool32 RecvPacket_MemberStateToMember(struct PokemonJump_Player* player, int multiplayerId)
 {
     struct MemberStatePacket packet;
 
@@ -2873,7 +2873,7 @@ static bool32 RecvPacket_MemberStateToMember(struct PokemonJump_Player *player, 
     return TRUE;
 }
 
-static void StartPokeJumpGfx(struct PokemonJumpGfx *jumpGfx)
+static void StartPokeJumpGfx(struct PokemonJumpGfx* jumpGfx)
 {
     u8 taskId;
 
@@ -2891,7 +2891,7 @@ static void FreeWindowsAndDigitObj(void)
     DigitObjUtil_Free();
 }
 
-static void InitPokeJumpGfx(struct PokemonJumpGfx *jumpGfx)
+static void InitPokeJumpGfx(struct PokemonJumpGfx* jumpGfx)
 {
     jumpGfx->mainState = 0;
     jumpGfx->funcFinished = FALSE;
@@ -3021,7 +3021,7 @@ static void Task_RunPokeJumpGfxFunc(u8 taskId)
     if (!sPokemonJumpGfx->funcFinished)
     {
         // Read the function set in the data by SetUpPokeJumpGfxFunc
-        void (*func)(void) = (void *)(GetWordTaskArg(taskId, 0));
+        void (*func)(void) = (void*)(GetWordTaskArg(taskId, 0));
 
         func();
     }
@@ -3499,7 +3499,7 @@ static void CreatePokeJumpYesNoMenu(u16 left, u16 top, u8 cursorPos)
 // "Points" for jump score and "times" for number of jumps in a row
 static void PrintScoreSuffixes(void)
 {
-    u8 color[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+    u8 color[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY };
 
     PutWindowTilemap(WIN_POINTS);
     PutWindowTilemap(WIN_TIMES);
@@ -3520,20 +3520,20 @@ enum {
 };
 
 static const u8 sVenusaurStates[] = {
-    [VINE_HIGHEST]          = VENUSAUR_UP,
+    [VINE_HIGHEST] = VENUSAUR_UP,
     [VINE_DOWNSWING_HIGHER] = VENUSAUR_UP,
-    [VINE_DOWNSWING_HIGH]   = VENUSAUR_NEUTRAL,
-    [VINE_DOWNSWING_LOW]    = VENUSAUR_NEUTRAL,
-    [VINE_DOWNSWING_LOWER]  = VENUSAUR_DOWN,
-    [VINE_LOWEST]           = VENUSAUR_DOWN,
-    [VINE_UPSWING_LOWER]    = VENUSAUR_DOWN,
-    [VINE_UPSWING_LOW]      = VENUSAUR_NEUTRAL,
-    [VINE_UPSWING_HIGH]     = VENUSAUR_NEUTRAL,
-    [VINE_UPSWING_HIGHER]   = VENUSAUR_UP,
+    [VINE_DOWNSWING_HIGH] = VENUSAUR_NEUTRAL,
+    [VINE_DOWNSWING_LOW] = VENUSAUR_NEUTRAL,
+    [VINE_DOWNSWING_LOWER] = VENUSAUR_DOWN,
+    [VINE_LOWEST] = VENUSAUR_DOWN,
+    [VINE_UPSWING_LOWER] = VENUSAUR_DOWN,
+    [VINE_UPSWING_LOW] = VENUSAUR_NEUTRAL,
+    [VINE_UPSWING_HIGH] = VENUSAUR_NEUTRAL,
+    [VINE_UPSWING_HIGHER] = VENUSAUR_UP,
 };
 
-static const struct CompressedSpriteSheet sSpriteSheet_Digits = {gMinigameDigits_Gfx, 0, TAG_DIGITS};
-static const struct SpritePalette sSpritePalette_Digits = {gMinigameDigits_Pal, TAG_DIGITS};
+static const struct CompressedSpriteSheet sSpriteSheet_Digits = { gMinigameDigits_Gfx, 0, TAG_DIGITS };
+static const struct SpritePalette sSpritePalette_Digits = { gMinigameDigits_Pal, TAG_DIGITS };
 
 static const u16 sPlayerNameWindowCoords_2Players[] = {
      6, 8,
@@ -3558,7 +3558,7 @@ static const u16 sPlayerNameWindowCoords_5Players[] = {
     20, 6
 };
 
-static const u16 *const sPlayerNameWindowCoords[MAX_RFU_PLAYERS - 1] =
+static const u16* const sPlayerNameWindowCoords[MAX_RFU_PLAYERS - 1] =
 {
     sPlayerNameWindowCoords_2Players,
     sPlayerNameWindowCoords_3Players,
@@ -3566,12 +3566,12 @@ static const u16 *const sPlayerNameWindowCoords[MAX_RFU_PLAYERS - 1] =
     sPlayerNameWindowCoords_5Players,
 };
 
-static const s16 sMonXCoords_2Players[] = {88, 152};
-static const s16 sMonXCoords_3Players[] = {88, 120, 152};
-static const s16 sMonXCoords_4Players[] = {56, 88, 152, 184};
-static const s16 sMonXCoords_5Players[] = {56, 88, 120, 152, 184};
+static const s16 sMonXCoords_2Players[] = { 88, 152 };
+static const s16 sMonXCoords_3Players[] = { 88, 120, 152 };
+static const s16 sMonXCoords_4Players[] = { 56, 88, 152, 184 };
+static const s16 sMonXCoords_5Players[] = { 56, 88, 120, 152, 184 };
 
-static const s16 *const sMonXCoords[MAX_RFU_PLAYERS - 1] =
+static const s16* const sMonXCoords[MAX_RFU_PLAYERS - 1] =
 {
     sMonXCoords_2Players,
     sMonXCoords_3Players,
@@ -3582,11 +3582,11 @@ static const s16 *const sMonXCoords[MAX_RFU_PLAYERS - 1] =
 static void CreateJumpMonSprites(void)
 {
     int i, y, playersCount = GetNumPokeJumpPlayers();
-    const s16 *xCoords = sMonXCoords[playersCount - 2];
+    const s16* xCoords = sMonXCoords[playersCount - 2];
 
     for (i = 0; i < playersCount; i++)
     {
-        struct PokemonJump_MonInfo *info = GetMonInfoByMultiplayerId(i);
+        struct PokemonJump_MonInfo* info = GetMonInfoByMultiplayerId(i);
 
         y = gMonFrontPicCoords[info->species].y_offset;
         CreateJumpMonSprite(sPokemonJumpGfx, info, *xCoords, y + 112, i);
@@ -3699,7 +3699,7 @@ static void AddPlayerNameWindows(void)
 {
     struct WindowTemplate window;
     int i, playersCount = GetNumPokeJumpPlayers();
-    const u16 *winCoords = sPlayerNameWindowCoords[playersCount - 2];
+    const u16* winCoords = sPlayerNameWindowCoords[playersCount - 2];
 
     window.bg = BG_INTERFACE;
     window.width = 8;
@@ -3723,7 +3723,7 @@ static void AddPlayerNameWindows(void)
 static void PrintPokeJumpPlayerName(int multiplayerId, u8 bgColor, u8 fgColor, u8 shadow)
 {
     u32 x;
-    u8 colors[3] = {bgColor, fgColor, shadow};
+    u8 colors[3] = { bgColor, fgColor, shadow };
 
     FillWindowPixelBuffer(sPokemonJumpGfx->nameWindowIds[multiplayerId], PIXEL_FILL(0));
     x = 64 - GetStringWidth(FONT_SMALL, GetPokeJumpPlayerName(multiplayerId), -1);
@@ -3844,9 +3844,9 @@ static const s16 sVineYCoords[VINE_SPRITES_PER_SIDE][NUM_VINESTATES] =
     {42, 72, 96, 114, 128, 136, 128, 114, 96, 72},
 };
 
-static const s16 sVineXCoords[VINE_SPRITES_PER_SIDE * 2] = {16, 40, 72, 104, 136, 168, 200, 224};
+static const s16 sVineXCoords[VINE_SPRITES_PER_SIDE * 2] = { 16, 40, 72, 104, 136, 168, 200, 224 };
 
-static const struct SpriteTemplate *const sSpriteTemplates_Vine[VINE_SPRITES_PER_SIDE] =
+static const struct SpriteTemplate* const sSpriteTemplates_Vine[VINE_SPRITES_PER_SIDE] =
 {
     &sSpriteTemplate_Vine1,
     &sSpriteTemplate_Vine2,
@@ -3994,7 +3994,7 @@ static const union AnimCmd sAnims_VineTall_Lowest[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_Vine[] =
+static const union AnimCmd* const sAnims_Vine[] =
 {
     sAnims_Vine_Highest,
     sAnims_Vine_Higher,
@@ -4005,7 +4005,7 @@ static const union AnimCmd *const sAnims_Vine[] =
 };
 
 // Vine 2 needs its own set of anims because the graphic is twice as large
-static const union AnimCmd *const sAnims_VineTall[] =
+static const union AnimCmd* const sAnims_VineTall[] =
 {
     sAnims_VineTall_Highest,
     sAnims_VineTall_Higher,
@@ -4093,7 +4093,7 @@ static const union AnimCmd sAnim_Star_Spinning[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_Star[] =
+static const union AnimCmd* const sAnims_Star[] =
 {
     sAnim_Star_Still,
     sAnim_Star_Spinning
@@ -4110,7 +4110,7 @@ static const struct SpriteTemplate sSpriteTemplate_Star =
     .callback = SpriteCallbackDummy,
 };
 
-static void LoadSpriteSheetsAndPalettes(struct PokemonJumpGfx *jumpGfx)
+static void LoadSpriteSheetsAndPalettes(struct PokemonJumpGfx* jumpGfx)
 {
     int i;
 
@@ -4124,20 +4124,20 @@ static void LoadSpriteSheetsAndPalettes(struct PokemonJumpGfx *jumpGfx)
     jumpGfx->vinePalNumUpswing = IndexOfSpritePaletteTag(PALTAG_2);
 }
 
-static void ResetPokeJumpSpriteData(struct Sprite *sprite)
+static void ResetPokeJumpSpriteData(struct Sprite* sprite)
 {
     int i;
     for (i = 0; i < (int)ARRAY_COUNT(sprite->data); i++)
         sprite->data[i] = 0;
 }
 
-static void CreateJumpMonSprite(struct PokemonJumpGfx *jumpGfx, struct PokemonJump_MonInfo *monInfo, s16 x, s16 y, u8 multiplayerId)
+static void CreateJumpMonSprite(struct PokemonJumpGfx* jumpGfx, struct PokemonJump_MonInfo* monInfo, s16 x, s16 y, u8 multiplayerId)
 {
     struct SpriteTemplate spriteTemplate;
     struct SpriteSheet spriteSheet;
     struct CompressedSpritePalette spritePalette;
-    u8 *buffer;
-    u8 *unusedBuffer;
+    u8* buffer;
+    u8* unusedBuffer;
     u8 subpriority;
     u8 spriteId;
 
@@ -4187,7 +4187,7 @@ static void CreateJumpMonSprite(struct PokemonJumpGfx *jumpGfx, struct PokemonJu
 #define sTimer data[1]
 #define sOffset data[7] // Never read
 
-static void DoStarAnim(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
+static void DoStarAnim(struct PokemonJumpGfx* jumpGfx, int multiplayerId)
 {
     ResetPokeJumpSpriteData(jumpGfx->starSprites[multiplayerId]);
     jumpGfx->starSprites[multiplayerId]->sOffset = jumpGfx->monSprites[multiplayerId] - gSprites;
@@ -4197,7 +4197,7 @@ static void DoStarAnim(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
     StartSpriteAnim(jumpGfx->starSprites[multiplayerId], 1);
 }
 
-static void SpriteCB_Star(struct Sprite *sprite)
+static void SpriteCB_Star(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -4231,14 +4231,14 @@ static void SpriteCB_Star(struct Sprite *sprite)
 #undef sTimer
 #undef sOffset
 
-static void Gfx_StartMonHitShake(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
+static void Gfx_StartMonHitShake(struct PokemonJumpGfx* jumpGfx, int multiplayerId)
 {
     jumpGfx->monSprites[multiplayerId]->callback = SpriteCB_MonHitShake;
     jumpGfx->monSprites[multiplayerId]->y2 = 0;
     ResetPokeJumpSpriteData(jumpGfx->monSprites[multiplayerId]);
 }
 
-static bool32 Gfx_IsMonHitShakeActive(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
+static bool32 Gfx_IsMonHitShakeActive(struct PokemonJumpGfx* jumpGfx, int multiplayerId)
 {
     return jumpGfx->monSprites[multiplayerId]->callback == SpriteCB_MonHitShake;
 }
@@ -4246,7 +4246,7 @@ static bool32 Gfx_IsMonHitShakeActive(struct PokemonJumpGfx *jumpGfx, int multip
 #define sTimer     data[1]
 #define sNumShakes data[2]
 
-static void SpriteCB_MonHitShake(struct Sprite *sprite)
+static void SpriteCB_MonHitShake(struct Sprite* sprite)
 {
     if (++sprite->sTimer > 1)
     {
@@ -4268,13 +4268,13 @@ static void SpriteCB_MonHitShake(struct Sprite *sprite)
 #undef sTimer
 #undef sNumShakes
 
-static void Gfx_StartMonHitFlash(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
+static void Gfx_StartMonHitFlash(struct PokemonJumpGfx* jumpGfx, int multiplayerId)
 {
     ResetPokeJumpSpriteData(jumpGfx->monSprites[multiplayerId]);
     jumpGfx->monSprites[multiplayerId]->callback = SpriteCB_MonHitFlash;
 }
 
-static void Gfx_StopMonHitFlash(struct PokemonJumpGfx *jumpGfx)
+static void Gfx_StopMonHitFlash(struct PokemonJumpGfx* jumpGfx)
 {
     int i;
     u16 numPlayers = GetNumPokeJumpPlayers();
@@ -4291,7 +4291,7 @@ static void Gfx_StopMonHitFlash(struct PokemonJumpGfx *jumpGfx)
 
 #define sTimer data[0]
 
-static void SpriteCB_MonHitFlash(struct Sprite *sprite)
+static void SpriteCB_MonHitFlash(struct Sprite* sprite)
 {
     if (++sprite->sTimer > 3)
     {
@@ -4302,7 +4302,7 @@ static void SpriteCB_MonHitFlash(struct Sprite *sprite)
 
 #undef sTimer
 
-static void Gfx_ResetMonSpriteSubpriorities(struct PokemonJumpGfx *jumpGfx)
+static void Gfx_ResetMonSpriteSubpriorities(struct PokemonJumpGfx* jumpGfx)
 {
     int i;
     u16 numPlayers = GetNumPokeJumpPlayers();
@@ -4310,13 +4310,13 @@ static void Gfx_ResetMonSpriteSubpriorities(struct PokemonJumpGfx *jumpGfx)
         jumpGfx->monSprites[i]->subpriority = jumpGfx->monSpriteSubpriorities[i];
 }
 
-static void Gfx_StartMonIntroBounce(struct PokemonJumpGfx *jumpGfx, int multiplayerId)
+static void Gfx_StartMonIntroBounce(struct PokemonJumpGfx* jumpGfx, int multiplayerId)
 {
     ResetPokeJumpSpriteData(jumpGfx->monSprites[multiplayerId]);
     jumpGfx->monSprites[multiplayerId]->callback = SpriteCB_MonIntroBounce;
 }
 
-static bool32 Gfx_IsMonIntroBounceActive(struct PokemonJumpGfx *jumpGfx)
+static bool32 Gfx_IsMonIntroBounceActive(struct PokemonJumpGfx* jumpGfx)
 {
     int i;
     u16 numPlayers = GetNumPokeJumpPlayers();
@@ -4333,7 +4333,7 @@ static bool32 Gfx_IsMonIntroBounceActive(struct PokemonJumpGfx *jumpGfx)
 #define sHopPos  data[1]
 #define sNumHops data[2]
 
-static void SpriteCB_MonIntroBounce(struct Sprite *sprite)
+static void SpriteCB_MonIntroBounce(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -4363,7 +4363,7 @@ static void SpriteCB_MonIntroBounce(struct Sprite *sprite)
 #undef sHopPos
 #undef sNumHops
 
-static void CreateStarSprite(struct PokemonJumpGfx *jumpGfx, s16 x, s16 y, u8 multiplayerId)
+static void CreateStarSprite(struct PokemonJumpGfx* jumpGfx, s16 x, s16 y, u8 multiplayerId)
 {
     u8 spriteId = CreateSprite(&sSpriteTemplate_Star, x, y, 1);
     if (spriteId != MAX_SPRITES)
@@ -4373,7 +4373,7 @@ static void CreateStarSprite(struct PokemonJumpGfx *jumpGfx, s16 x, s16 y, u8 mu
     }
 }
 
-static void CreateVineSprites(struct PokemonJumpGfx *jumpGfx)
+static void CreateVineSprites(struct PokemonJumpGfx* jumpGfx)
 {
     int i;
     int count;
@@ -4396,7 +4396,7 @@ static void CreateVineSprites(struct PokemonJumpGfx *jumpGfx)
     }
 }
 
-static void UpdateVineAnim(struct PokemonJumpGfx *jumpGfx, int vineState)
+static void UpdateVineAnim(struct PokemonJumpGfx* jumpGfx, int vineState)
 {
     int i, count, palNum;
     int priority;
@@ -4435,7 +4435,7 @@ static void UpdateVineAnim(struct PokemonJumpGfx *jumpGfx, int vineState)
     }
 }
 
-static void StartPokeJumpCountdown(struct PokemonJumpGfx *jumpGfx)
+static void StartPokeJumpCountdown(struct PokemonJumpGfx* jumpGfx)
 {
     StartMinigameCountdown(GFXTAG_COUNTDOWN, PALTAG_COUNTDOWN, 120, 80, 0);
     Gfx_ResetMonSpriteSubpriorities(jumpGfx);
@@ -4446,14 +4446,14 @@ static bool32 IsPokeJumpCountdownRunning(void)
     return IsMinigameCountdownRunning();
 }
 
-static struct PokemonJumpRecords *GetPokeJumpRecords(void)
+static struct PokemonJumpRecords* GetPokeJumpRecords(void)
 {
     return &gSaveBlock2Ptr->pokeJump;
 }
 
 void ResetPokemonJumpRecords(void)
 {
-    struct PokemonJumpRecords *records = GetPokeJumpRecords();
+    struct PokemonJumpRecords* records = GetPokeJumpRecords();
     records->jumpsInRow = 0;
     records->bestJumpScore = 0;
     records->excellentsInRow = 0;
@@ -4464,7 +4464,7 @@ void ResetPokemonJumpRecords(void)
 
 static bool32 TryUpdateRecords(u32 jumpScore, u16 jumpsInRow, u16 excellentsInRow)
 {
-    struct PokemonJumpRecords *records = GetPokeJumpRecords();
+    struct PokemonJumpRecords* records = GetPokeJumpRecords();
     bool32 newRecord = FALSE;
 
     if (records->bestJumpScore < jumpScore && jumpScore <= MAX_JUMP_SCORE)
@@ -4479,7 +4479,7 @@ static bool32 TryUpdateRecords(u32 jumpScore, u16 jumpsInRow, u16 excellentsInRo
 
 static void IncrementGamesWithMaxPlayers(void)
 {
-    struct PokemonJumpRecords *records = GetPokeJumpRecords();
+    struct PokemonJumpRecords* records = GetPokeJumpRecords();
     if (records->gamesWithMaxPlayers < 9999)
         records->gamesWithMaxPlayers++;
 }
@@ -4501,14 +4501,14 @@ static const struct WindowTemplate sWindowTemplate_Records =
     .baseBlock = 0x1,
 };
 
-static const u8 *const sRecordsTexts[] = {gText_JumpsInARow, gText_BestScore2, gText_ExcellentsInARow};
+static const u8* const sRecordsTexts[] = { gText_JumpsInARow, gText_BestScore2, gText_ExcellentsInARow };
 
 #define tState data[0]
 #define tWindowId data[1]
 
 static void Task_ShowPokemonJumpRecords(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -4548,7 +4548,7 @@ static void PrintRecordsText(u16 windowId)
 {
     int i, x;
     int recordNums[3];
-    struct PokemonJumpRecords *records = GetPokeJumpRecords();
+    struct PokemonJumpRecords* records = GetPokeJumpRecords();
     u8 strbuf[8];
     recordNums[0] = records->jumpsInRow;
     recordNums[1] = records->bestJumpScore;
@@ -4569,7 +4569,7 @@ static void PrintRecordsText(u16 windowId)
     PutWindowTilemap(windowId);
 }
 
-static void TruncateToFirstWordOnly(u8 *str)
+static void TruncateToFirstWordOnly(u8* str)
 {
     for (;*str != EOS; str++)
     {

@@ -12,8 +12,8 @@ struct Berry
     u16 size;
     u8 maxYield;
     u8 minYield;
-    const u8 *description1;
-    const u8 *description2;
+    const u8* description1;
+    const u8* description2;
     u8 stageDuration;
     u8 spicy;
     u8 dry;
@@ -32,8 +32,8 @@ struct Berry2
     u16 size;
     u8 maxYield;
     u8 minYield;
-    u8 *description1;
-    u8 *description2;
+    u8* description1;
+    u8* description2;
     u8 stageDuration;
     u8 spicy;
     u8 dry;
@@ -63,15 +63,15 @@ struct BattleEnigmaBerry
 struct BerryTree
 {
     u8 berry;
-    u8 stage:7;
-    u8 growthSparkle:1;
+    u8 stage : 7;
+    u8 growthSparkle : 1;
     u16 minutesUntilNextStage;
     u8 berryYield;
-    u8 regrowthCount:4;
-    u8 watered1:1;
-    u8 watered2:1;
-    u8 watered3:1;
-    u8 watered4:1;
+    u8 regrowthCount : 4;
+    u8 watered1 : 1;
+    u8 watered2 : 1;
+    u8 watered3 : 1;
+    u8 watered4 : 1;
 };
 
 #endif // GUARD_GLOBAL_BERRY_H

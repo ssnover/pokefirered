@@ -27,10 +27,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * mini-printf courtesy of https://github.com/mludvig/mini-printf
- * stripped to reduce file size for agb needs
- */
+ /*
+  * mini-printf courtesy of https://github.com/mludvig/mini-printf
+  * stripped to reduce file size for agb needs
+  */
 
 #include "mini_printf.h"
 #include "gba/types.h"
@@ -42,9 +42,9 @@
 #ifndef NDEBUG
 #if (PRETTY_PRINT_HANDLER != PRETTY_PRINT_OFF)
 
-struct mini_buff 
+struct mini_buff
 {
-    char *buffer, *pbuffer;
+    char* buffer, * pbuffer;
     u32 buffer_len;
 };
 
@@ -52,11 +52,11 @@ static inline char mini_pchar_decode(char encoded)
 {
     char ret = '?';
     if (encoded >= CHAR_a && encoded <= CHAR_z)
-        ret = encoded-(CHAR_a-'a'); // lower-case characters
+        ret = encoded - (CHAR_a - 'a'); // lower-case characters
     else if (encoded >= CHAR_A && encoded <= CHAR_Z)
-        ret = encoded-(CHAR_A-'A'); // upper-case characters
+        ret = encoded - (CHAR_A - 'A'); // upper-case characters
     else if (encoded >= CHAR_0 && encoded <= CHAR_9)
-        ret = encoded-(CHAR_0-'0'); // numbers
+        ret = encoded - (CHAR_0 - '0'); // numbers
     else if (encoded == CHAR_SPACE)
         ret = ' '; // space
     else if (encoded == CHAR_EXCL_MARK)
@@ -90,13 +90,13 @@ static inline char mini_pchar_decode(char encoded)
     return ret;
 }
 
-static s32 _putsAscii(char *s, s32 len, void *buf)
+static s32 _putsAscii(char* s, s32 len, void* buf)
 {
-    char *p0;
+    char* p0;
     s32 i;
-    struct mini_buff *b;
+    struct mini_buff* b;
 
-    if (!buf) 
+    if (!buf)
         return len;
 
     b = buf;
@@ -104,22 +104,22 @@ static s32 _putsAscii(char *s, s32 len, void *buf)
 
     /* Copy to buffer */
     for (i = 0; i < len; i++) {
-        if(b->pbuffer == b->buffer + b->buffer_len - 1) {
+        if (b->pbuffer == b->buffer + b->buffer_len - 1) {
             break;
         }
-        *(b->pbuffer ++) = s[i];
+        *(b->pbuffer++) = s[i];
     }
     *(b->pbuffer) = 0;
     return b->pbuffer - p0;
 }
 
-static s32 _putsEncoded(char *s, s32 len, void *buf)
+static s32 _putsEncoded(char* s, s32 len, void* buf)
 {
-    char *p0;
+    char* p0;
     s32 i;
-    struct mini_buff *b;
+    struct mini_buff* b;
 
-    if (!buf) 
+    if (!buf)
         return len;
 
     b = buf;
@@ -127,25 +127,25 @@ static s32 _putsEncoded(char *s, s32 len, void *buf)
 
     /* Copy to buffer */
     for (i = 0; i < len; i++) {
-        if(b->pbuffer == b->buffer + b->buffer_len - 1) {
+        if (b->pbuffer == b->buffer + b->buffer_len - 1) {
             break;
         }
-        *(b->pbuffer ++) = mini_pchar_decode(s[i]);
+        *(b->pbuffer++) = mini_pchar_decode(s[i]);
     }
     *(b->pbuffer) = 0;
     return b->pbuffer - p0;
 }
 
-static s32 mini_strlen(const char *s)
+static s32 mini_strlen(const char* s)
 {
     s32 len = 0;
     while (s[len] != '\0') len++;
     return len;
 }
 
-static s32 mini_itoa(s32 value, u32 radix, s32 uppercase, bool32 unsig, char *buffer)
+static s32 mini_itoa(s32 value, u32 radix, s32 uppercase, bool32 unsig, char* buffer)
 {
-    char *pbuffer = buffer;
+    char* pbuffer = buffer;
     s32 negative = 0;
     s32 i, len;
 
@@ -160,7 +160,7 @@ static s32 mini_itoa(s32 value, u32 radix, s32 uppercase, bool32 unsig, char *bu
     }
 
     /* This builds the string back to front ... */
-    do 
+    do
     {
         s32 digit = value % radix;
         *(pbuffer++) = (digit < 10 ? '0' + digit : (uppercase ? 'A' : 'a') + digit - 10);
@@ -178,36 +178,36 @@ static s32 mini_itoa(s32 value, u32 radix, s32 uppercase, bool32 unsig, char *bu
     for (i = 0; i < len / 2; i++)
     {
         char j = buffer[i];
-        buffer[i] = buffer[len-i-1];
-        buffer[len-i-1] = j;
+        buffer[i] = buffer[len - i - 1];
+        buffer[len - i - 1] = j;
     }
 
     return len;
 }
 
-static s32 mini_pad(char* ptr, s32 len, char pad_char, s32 pad_to, char *buffer)
+static s32 mini_pad(char* ptr, s32 len, char pad_char, s32 pad_to, char* buffer)
 {
     s32 i;
     bool32 overflow = FALSE;
-    char * pbuffer = buffer;
-    if(pad_to == 0)
+    char* pbuffer = buffer;
+    if (pad_to == 0)
         pad_to = len;
     if (len > pad_to) {
         len = pad_to;
         overflow = TRUE;
     }
-    for(i = pad_to - len; i > 0; i --)
+    for (i = pad_to - len; i > 0; i--)
     {
         *(pbuffer++) = pad_char;
     }
-    for(i = len; i > 0; i --)
+    for (i = len; i > 0; i--)
     {
         *(pbuffer++) = *(ptr++);
     }
     len = pbuffer - buffer;
-    if(overflow)
+    if (overflow)
     {
-        for (i = 0; i < 3 && pbuffer > buffer; i ++)
+        for (i = 0; i < 3 && pbuffer > buffer; i++)
         {
             *(pbuffer-- - 1) = '*';
         }
@@ -215,7 +215,7 @@ static s32 mini_pad(char* ptr, s32 len, char pad_char, s32 pad_to, char *buffer)
     return len;
 }
 
-s32 mini_vsnprintf(char *buffer, u32 buffer_len, const char *fmt, va_list va)
+s32 mini_vsnprintf(char* buffer, u32 buffer_len, const char* fmt, va_list va)
 {
     struct mini_buff b;
     s32 n;
@@ -230,28 +230,29 @@ s32 mini_vsnprintf(char *buffer, u32 buffer_len, const char *fmt, va_list va)
     return b.pbuffer - b.buffer;
 }
 
-s32 mini_vpprintf(void* buf, const char *fmt, va_list va)
+s32 mini_vpprintf(void* buf, const char* fmt, va_list va)
 {
     char bf[24];
     char bf2[24];
     char ch;
     s32 n;
     n = 0;
-    while ((ch=*(fmt++)))
+    while ((ch = *(fmt++)))
     {
         s32 len;
         if (ch != '%')
         {
             len = 1;
             len = _putsAscii(&ch, len, buf);
-        } else 
+        }
+        else
         {
             char pad_char = ' ';
             s32 pad_to = 0;
             char l = 0;
-            char *ptr;
+            char* ptr;
 
-            ch=*(fmt++);
+            ch = *(fmt++);
 
             /* Zero padding requested */
             if (ch == '0')
@@ -259,90 +260,93 @@ s32 mini_vpprintf(void* buf, const char *fmt, va_list va)
             while (ch >= '0' && ch <= '9')
             {
                 pad_to = pad_to * 10 + (ch - '0');
-                ch= *(fmt++);
+                ch = *(fmt++);
             }
-            if(pad_to > (s32) sizeof(bf))
+            if (pad_to > (s32)sizeof(bf))
             {
                 pad_to = sizeof(bf);
             }
             if (ch == 'l')
             {
                 l = 1;
-                ch=*(fmt++);
+                ch = *(fmt++);
             }
 
-            switch (ch) 
+            switch (ch)
             {
-                case 0:
-                    goto end;
-                case 'u':
-                case 'd':
-                    if(l)
+            case 0:
+                goto end;
+            case 'u':
+            case 'd':
+                if (l)
+                {
+                    len = mini_itoa(va_arg(va, u32), 10, 0, (ch == 'u'), bf2);
+                }
+                else
+                {
+                    if (ch == 'u')
                     {
-                        len = mini_itoa(va_arg(va, u32), 10, 0, (ch=='u'), bf2);
-                    } else
-                    {
-                        if(ch == 'u')
-                        {
-                            len = mini_itoa((u32) va_arg(va, u32), 10, 0, 1, bf2);
-                        }
-                        else
-                        {
-                            len = mini_itoa((s32) va_arg(va, s32), 10, 0, 0, bf2);
-                        }
-                    }
-                    len = mini_pad(bf2, len, pad_char, pad_to, bf);
-                    len = _putsAscii(bf, len, buf);
-                    break;
-
-                case 'x':
-                case 'X':
-                    if(l)
-                    {
-                        len = mini_itoa(va_arg(va, u32), 16, (ch=='X'), 1, bf2);
+                        len = mini_itoa((u32)va_arg(va, u32), 10, 0, 1, bf2);
                     }
                     else
                     {
-                        len = mini_itoa((u32) va_arg(va, u32), 16, (ch=='X'), 1, bf2);
+                        len = mini_itoa((s32)va_arg(va, s32), 10, 0, 0, bf2);
                     }
-                    len = mini_pad(bf2, len, pad_char, pad_to, bf);
-                    len = _putsAscii(bf, len, buf);
-                    break;
+                }
+                len = mini_pad(bf2, len, pad_char, pad_to, bf);
+                len = _putsAscii(bf, len, buf);
+                break;
 
-                case 'c' :
-                    ch = (char)(va_arg(va, s32));
-                    len = mini_pad(&ch, 1, pad_char, pad_to, bf);
-                    len = _putsAscii(bf, len, buf);
-                    break;
+            case 'x':
+            case 'X':
+                if (l)
+                {
+                    len = mini_itoa(va_arg(va, u32), 16, (ch == 'X'), 1, bf2);
+                }
+                else
+                {
+                    len = mini_itoa((u32)va_arg(va, u32), 16, (ch == 'X'), 1, bf2);
+                }
+                len = mini_pad(bf2, len, pad_char, pad_to, bf);
+                len = _putsAscii(bf, len, buf);
+                break;
 
-                case 's' :
-                    ptr = va_arg(va, char*);
-                    len = mini_strlen(ptr);
-                    if (pad_to > 0)
-                    {
-                        len = mini_pad(ptr, len, pad_char, pad_to, bf);
-                        len = _putsAscii(bf, len, buf);
-                    } else
-                    {
-                        len = _putsAscii(ptr, len, buf);
-                    }
-                    break;
-                case 'S' : // preproc encoded string handler
-                    ptr = va_arg(va, char*);
-                    len = StringLength(ptr);
-                    if (pad_to > 0)
-                    {
-                        len = mini_pad(ptr, len, pad_char, pad_to, bf);
-                        len = _putsEncoded(bf, len, buf);
-                    } else
-                    {
-                        len = _putsEncoded(ptr, len, buf);
-                    }
-                    break;
-                default:
-                    len = 1;
-                    len = _putsAscii(&ch, len, buf);
-                    break;
+            case 'c':
+                ch = (char)(va_arg(va, s32));
+                len = mini_pad(&ch, 1, pad_char, pad_to, bf);
+                len = _putsAscii(bf, len, buf);
+                break;
+
+            case 's':
+                ptr = va_arg(va, char*);
+                len = mini_strlen(ptr);
+                if (pad_to > 0)
+                {
+                    len = mini_pad(ptr, len, pad_char, pad_to, bf);
+                    len = _putsAscii(bf, len, buf);
+                }
+                else
+                {
+                    len = _putsAscii(ptr, len, buf);
+                }
+                break;
+            case 'S': // preproc encoded string handler
+                ptr = va_arg(va, char*);
+                len = StringLength(ptr);
+                if (pad_to > 0)
+                {
+                    len = mini_pad(ptr, len, pad_char, pad_to, bf);
+                    len = _putsEncoded(bf, len, buf);
+                }
+                else
+                {
+                    len = _putsEncoded(ptr, len, buf);
+                }
+                break;
+            default:
+                len = 1;
+                len = _putsAscii(&ch, len, buf);
+                break;
             }
         }
         n = n + len;

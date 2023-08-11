@@ -1,6 +1,6 @@
 #include "global.h"
 
-vu16 *const gBGControlRegs[] =
+vu16* const gBGControlRegs[] =
 {
     &REG_BG0CNT,
     &REG_BG1CNT,
@@ -8,7 +8,7 @@ vu16 *const gBGControlRegs[] =
     &REG_BG3CNT,
 };
 
-vu16 *const gBGHOffsetRegs[] =
+vu16* const gBGHOffsetRegs[] =
 {
     &REG_BG0HOFS,
     &REG_BG1HOFS,
@@ -16,7 +16,7 @@ vu16 *const gBGHOffsetRegs[] =
     &REG_BG3HOFS,
 };
 
-vu16 *const gBGVOffsetRegs[] =
+vu16* const gBGVOffsetRegs[] =
 {
     &REG_BG0VOFS,
     &REG_BG1VOFS,

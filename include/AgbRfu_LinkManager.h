@@ -120,8 +120,8 @@ typedef struct InitializeParametersTag {
     // rfu_REQB_configGameData argument
     u8 mboot_flag;                            // Multiplayer boot flag
     u16 serialNo;                            // Game serial number
-    u8 *gameName;                            // Game name
-    u8 *userName;                            // User name
+    u8* gameName;                            // Game name
+    u8* userName;                            // User name
 
     // ON/OFF flag for parent fast search operation by child.
     u8 fastSearchParent_flag;                // Flag indicating whether parent fast search operation to be performed by child.
@@ -167,10 +167,10 @@ typedef struct linkManagerTag
     /* 0x01a */ u16 connect_period;
     /* 0x01c */ u16 pcswitch_period_bak;
     /* 0x01e */ u16 work;
-    /* 0x020 */ u16 *acceptable_serialNo_list;
+    /* 0x020 */ u16* acceptable_serialNo_list;
     /* 0x024 */ VBL_TIMER nameAcceptTimer;
     /* 0x030 */ VBL_TIMER linkRecoveryTimer;
-    /* 0x03c */ INIT_PARAM *init_param;
+    /* 0x03c */ INIT_PARAM* init_param;
     /* 0x040 */ void (*LMAN_callback)(u8, u8);
     /* 0x044 */ void (*MSC_callback)(u16);
 } LINK_MANAGER;
@@ -179,8 +179,8 @@ extern struct linkManagerTag lman;
 
 u32 rfu_LMAN_REQBN_softReset_and_checkID(void);
 void rfu_LMAN_requestChangeAgbClockMaster(void);
-void rfu_LMAN_initializeRFU(INIT_PARAM *init_params);
-u8 rfu_LMAN_establishConnection(u8 parent_child, u16 connect_period, u16 name_accept_period, u16 *acceptable_serialNo_list);
+void rfu_LMAN_initializeRFU(INIT_PARAM* init_params);
+u8 rfu_LMAN_establishConnection(u8 parent_child, u16 connect_period, u16 name_accept_period, u16* acceptable_serialNo_list);
 void rfu_LMAN_stopManager(bool8 forced_stop_and_RFU_reset_flag);
 void rfu_LMAN_setMSCCallback(void (*MSC_callback_p)(u16));
 void rfu_LMAN_REQ_sendData(bool8 clockChangeFlag);

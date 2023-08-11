@@ -24,14 +24,14 @@ static void CrackedFloorPerStepCallback(u8 taskId);
 
 static const TaskFunc sPerStepCallbacks[] =
 {
-    [STEP_CB_DUMMY]             = DummyPerStepCallback,
-    [STEP_CB_ASH]               = AshGrassPerStepCallback,
-    [STEP_CB_FORTREE_BRIDGE]    = DummyPerStepCallback,
+    [STEP_CB_DUMMY] = DummyPerStepCallback,
+    [STEP_CB_ASH] = AshGrassPerStepCallback,
+    [STEP_CB_FORTREE_BRIDGE] = DummyPerStepCallback,
     [STEP_CB_PACIFIDLOG_BRIDGE] = DummyPerStepCallback,
-    [STEP_CB_ICE]               = IcefallCaveIcePerStepCallback,
-    [STEP_CB_TRUCK]             = DummyPerStepCallback,
-    [STEP_CB_SECRET_BASE]       = DummyPerStepCallback,
-    [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback
+    [STEP_CB_ICE] = IcefallCaveIcePerStepCallback,
+    [STEP_CB_TRUCK] = DummyPerStepCallback,
+    [STEP_CB_SECRET_BASE] = DummyPerStepCallback,
+    [STEP_CB_CRACKED_FLOOR] = CrackedFloorPerStepCallback
 };
 
 static const u8 sIcefallCaveIceTileCoords[][2] =
@@ -55,7 +55,7 @@ static void Task_RunPerStepCallback(u8 taskId)
 
 static void Task_RunTimeBasedEvents(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (!ArePlayerFieldControlsLocked())
     {
@@ -84,7 +84,7 @@ void ActivatePerStepCallback(u8 callbackId)
     if (taskId != 0xff)
     {
         s32 i;
-        s16 *data = gTasks[taskId].data;
+        s16* data = gTasks[taskId].data;
 
         for (i = 0; i < 16; i++)
             data[i] = 0;
@@ -103,7 +103,7 @@ void ActivatePerStepCallback(u8 callbackId)
 void ResetFieldTasksArgs(void)
 {
     u8 taskId;
-    s16 *data;
+    s16* data;
 
     taskId = FindTaskIdByFunc(Task_RunPerStepCallback);
     if (taskId != 0xff)
@@ -154,71 +154,71 @@ static void IcefallCaveIcePerStepCallback(u8 taskId)
 {
     s16 x, y;
     u8 tileBehavior;
-    u16 *iceStepCount;
-    s16 *data = gTasks[taskId].data;
+    u16* iceStepCount;
+    s16* data = gTasks[taskId].data;
     switch (data[1])
     {
-        case 0:
-            PlayerGetDestCoords(&x, &y);
+    case 0:
+        PlayerGetDestCoords(&x, &y);
+        data[2] = x;
+        data[3] = y;
+        data[1] = 1;
+        break;
+    case 1:
+        PlayerGetDestCoords(&x, &y);
+        if (x != data[2] || y != data[3])
+        {
             data[2] = x;
             data[3] = y;
+            tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
+            if (MetatileBehavior_IsThinIce(tileBehavior) == TRUE)
+            {
+                MarkIcefallCaveCoordVisited(x, y);
+                data[6] = 4;
+                data[1] = 2;
+                data[4] = x;
+                data[5] = y;
+            }
+            else if (MetatileBehavior_IsCrackedIce(tileBehavior) == TRUE)
+            {
+                data[6] = 4;
+                data[1] = 3;
+                data[4] = x;
+                data[5] = y;
+            }
+        }
+        break;
+    case 2:
+        if (data[6] != 0)
+        {
+            data[6]--;
+        }
+        else
+        {
+            x = data[4];
+            y = data[5];
+            PlaySE(SE_ICE_CRACK);
+            MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_CrackedIce);
+            CurrentMapDrawMetatileAt(x, y);
             data[1] = 1;
-            break;
-        case 1:
-            PlayerGetDestCoords(&x, &y);
-            if (x != data[2] || y != data[3])
-            {
-                data[2] = x;
-                data[3] = y;
-                tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
-                if (MetatileBehavior_IsThinIce(tileBehavior) == TRUE)
-                {
-                    MarkIcefallCaveCoordVisited(x, y);
-                    data[6] = 4;
-                    data[1] = 2;
-                    data[4] = x;
-                    data[5] = y;
-                }
-                else if (MetatileBehavior_IsCrackedIce(tileBehavior) == TRUE)
-                {
-                    data[6] = 4;
-                    data[1] = 3;
-                    data[4] = x;
-                    data[5] = y;
-                }
-            }
-            break;
-        case 2:
-            if (data[6] != 0)
-            {
-                data[6]--;
-            }
-            else
-            {
-                x = data[4];
-                y = data[5];
-                PlaySE(SE_ICE_CRACK);
-                MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_CrackedIce);
-                CurrentMapDrawMetatileAt(x, y);
-                data[1] = 1;
-            }
-            break;
-        case 3:
-            if (data[6] != 0)
-            {
-                data[6]--;
-            }
-            else
-            {
-                x = data[4];
-                y = data[5];
-                PlaySE(SE_ICE_BREAK);
-                MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_IceHole);
-                CurrentMapDrawMetatileAt(x, y);
-                VarSet(VAR_TEMP_1, 1);
-                data[1] = 1;
-            }
-            break;
+        }
+        break;
+    case 3:
+        if (data[6] != 0)
+        {
+            data[6]--;
+        }
+        else
+        {
+            x = data[4];
+            y = data[5];
+            PlaySE(SE_ICE_BREAK);
+            MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_IceHole);
+            CurrentMapDrawMetatileAt(x, y);
+            VarSet(VAR_TEMP_1, 1);
+            data[1] = 1;
+        }
+        break;
     }
 }
 
@@ -226,8 +226,8 @@ static void IcefallCaveIcePerStepCallback(u8 taskId)
 static void AshGrassPerStepCallback(u8 taskId)
 {
     s16 x, y;
-    u16 *ashGatherCount;
-    s16 *data = gTasks[taskId].data;
+    u16* ashGatherCount;
+    s16* data = gTasks[taskId].data;
     PlayerGetDestCoords(&x, &y);
     if (x != data[1] || y != data[2])
     {
@@ -254,7 +254,7 @@ static void CrackedFloorPerStepCallback(u8 taskId)
 {
     s16 x, y;
     u16 behavior;
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     PlayerGetDestCoords(&x, &y);
     behavior = MapGridGetMetatileBehaviorAt(x, y);
     if (data[4] != 0 && (--data[4]) == 0)

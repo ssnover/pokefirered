@@ -44,7 +44,7 @@ static const u8 sGiftRibbonsMonDataIds[] =
 
 #define CM_PER_INCH 2.54
 
-static u32 GetMonSizeHash(struct Pokemon * pkmn)
+static u32 GetMonSizeHash(struct Pokemon* pkmn)
 {
     u16 personality = GetMonData(pkmn, MON_DATA_PERSONALITY);
     u16 hpIV = GetMonData(pkmn, MON_DATA_HP_IV) & 0xF;
@@ -88,7 +88,7 @@ static u32 GetMonSize(u16 species, u16 b)
     return height * unk0 / 10;
 }
 
-static void FormatMonSizeRecord(u8 *string, u32 size)
+static void FormatMonSizeRecord(u8* string, u32 size)
 {
 #ifdef UNITS_IMPERIAL
     //Convert size from centimeters to inches
@@ -101,7 +101,7 @@ static void FormatMonSizeRecord(u8 *string, u32 size)
     ConvertIntToDecimalStringN(string, size % 10, STR_CONV_MODE_LEFT_ALIGN, 1);
 }
 
-static u8 CompareMonSize(u16 species, u16 *sizeRecord)
+static u8 CompareMonSize(u16 species, u16* sizeRecord)
 {
     if (gSpecialVar_Result >= PARTY_SIZE)
     {
@@ -109,7 +109,7 @@ static u8 CompareMonSize(u16 species, u16 *sizeRecord)
     }
     else
     {
-        struct Pokemon * pkmn = &gPlayerParty[gSpecialVar_Result];
+        struct Pokemon* pkmn = &gPlayerParty[gSpecialVar_Result];
 
         if (GetMonData(pkmn, MON_DATA_IS_EGG) == TRUE || GetMonData(pkmn, MON_DATA_SPECIES) != species)
         {
@@ -144,7 +144,7 @@ static u8 CompareMonSize(u16 species, u16 *sizeRecord)
 }
 
 // Stores species name in gStringVar1, trainer's name in gStringVar2, and size in gStringVar3
-static void GetMonSizeRecordInfo(u16 species, u16 *sizeRecord)
+static void GetMonSizeRecordInfo(u16 species, u16* sizeRecord)
 {
     u32 size = GetMonSize(species, *sizeRecord);
 
@@ -159,14 +159,14 @@ void InitHeracrossSizeRecord(void)
 
 void GetHeracrossSizeRecordInfo(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
+    u16* sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
 
     GetMonSizeRecordInfo(SPECIES_HERACROSS, sizeRecord);
 }
 
 void CompareHeracrossSize(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
+    u16* sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
 
     gSpecialVar_Result = CompareMonSize(SPECIES_HERACROSS, sizeRecord);
 }
@@ -178,14 +178,14 @@ void InitMagikarpSizeRecord(void)
 
 void GetMagikarpSizeRecordInfo(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
+    u16* sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
 
     GetMonSizeRecordInfo(SPECIES_MAGIKARP, sizeRecord);
 }
 
 void CompareMagikarpSize(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
+    u16* sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
 
     gSpecialVar_Result = CompareMonSize(SPECIES_MAGIKARP, sizeRecord);
 }
@@ -203,7 +203,7 @@ void GiveGiftRibbonToParty(u8 index, u8 ribbonId)
         gSaveBlock1Ptr->giftRibbons[index] = ribbonId;
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            struct Pokemon * mon = &gPlayerParty[i];
+            struct Pokemon* mon = &gPlayerParty[i];
 
             if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(mon, MON_DATA_SANITY_IS_EGG))
             {

@@ -2,27 +2,27 @@
 #include "gflib.h"
 
 u8 gWindowClearTile;
-void *gWindowBgTilemapBuffers[4];
+void* gWindowBgTilemapBuffers[4];
 
-EWRAM_DATA struct Window gWindows[WINDOWS_MAX] = {0};
+EWRAM_DATA struct Window gWindows[WINDOWS_MAX] = { 0 };
 
 static u8 GetNumActiveWindowsOnBg(u8 bgId);
 
-static const struct WindowTemplate sDummyWindowTemplate = {0xFF, 0, 0, 0, 0, 0, 0};
+static const struct WindowTemplate sDummyWindowTemplate = { 0xFF, 0, 0, 0, 0, 0, 0 };
 
 static void nullsub_8(void)
 {
 
 }
 
-bool16 InitWindows(const struct WindowTemplate *templates)
+bool16 InitWindows(const struct WindowTemplate* templates)
 {
     int i;
-    void *bgTilemapBuffer;
+    void* bgTilemapBuffer;
     int j;
     u8 bgLayer;
     u16 bgSize;
-    u8 *allocatedTilemapBuffer;
+    u8* allocatedTilemapBuffer;
     int allocatedBaseBlock;
 
     for (i = 0; i < 4; ++i)
@@ -98,13 +98,13 @@ bool16 InitWindows(const struct WindowTemplate *templates)
     return TRUE;
 }
 
-u16 AddWindow(const struct WindowTemplate *template)
+u16 AddWindow(const struct WindowTemplate* template)
 {
     u16 win;
     u8 bgLayer;
     int allocatedBaseBlock;
     u16 bgSize;
-    u8 *allocatedTilemapBuffer;
+    u8* allocatedTilemapBuffer;
     int i;
 
     for (win = 0; win < WINDOWS_MAX; ++win)
@@ -227,16 +227,16 @@ void CopyWindowToVram(u8 windowId, u8 mode)
 
     switch (mode)
     {
-        case COPYWIN_MAP:
-            CopyBgTilemapBufferToVram(windowLocal.window.bg);
-            break;
-        case COPYWIN_GFX:
-            LoadBgTiles(windowLocal.window.bg, windowLocal.tileData, windowSize, windowLocal.window.baseBlock);
-            break;
-        case COPYWIN_FULL:
-            LoadBgTiles(windowLocal.window.bg, windowLocal.tileData, windowSize, windowLocal.window.baseBlock);
-            CopyBgTilemapBufferToVram(windowLocal.window.bg);
-            break;
+    case COPYWIN_MAP:
+        CopyBgTilemapBufferToVram(windowLocal.window.bg);
+        break;
+    case COPYWIN_GFX:
+        LoadBgTiles(windowLocal.window.bg, windowLocal.tileData, windowSize, windowLocal.window.baseBlock);
+        break;
+    case COPYWIN_FULL:
+        LoadBgTiles(windowLocal.window.bg, windowLocal.tileData, windowSize, windowLocal.window.baseBlock);
+        CopyBgTilemapBufferToVram(windowLocal.window.bg);
+        break;
     }
 }
 
@@ -313,17 +313,17 @@ void PutWindowRectTilemap(u8 windowId, u8 x, u8 y, u8 width, u8 height)
     }
 }
 
-void BlitBitmapToWindow(u8 windowId, const u8 *pixels, u16 x, u16 y, u16 width, u16 height)
+void BlitBitmapToWindow(u8 windowId, const u8* pixels, u16 x, u16 y, u16 width, u16 height)
 {
     BlitBitmapRectToWindow(windowId, pixels, 0, 0, width, height, x, y, width, height);
 }
 
-void BlitBitmapRectToWindow(u8 windowId, const u8 *pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight)
+void BlitBitmapRectToWindow(u8 windowId, const u8* pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight)
 {
     struct Bitmap sourceRect;
     struct Bitmap destRect;
 
-    sourceRect.pixels = (u8 *)pixels;
+    sourceRect.pixels = (u8*)pixels;
     sourceRect.width = srcWidth;
     sourceRect.height = srcHeight;
 
@@ -334,12 +334,12 @@ void BlitBitmapRectToWindow(u8 windowId, const u8 *pixels, u16 srcX, u16 srcY, u
     BlitBitmapRect4Bit(&sourceRect, &destRect, srcX, srcY, destX, destY, rectWidth, rectHeight, 0);
 }
 
-void BlitBitmapRectToWindowWithColorKey(u8 windowId, const u8 *pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight, u8 colorKey)
+void BlitBitmapRectToWindowWithColorKey(u8 windowId, const u8* pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight, u8 colorKey)
 {
     struct Bitmap sourceRect;
     struct Bitmap destRect;
 
-    sourceRect.pixels = (u8 *)pixels;
+    sourceRect.pixels = (u8*)pixels;
     sourceRect.width = srcWidth;
     sourceRect.height = srcHeight;
 
@@ -361,7 +361,7 @@ void FillWindowPixelRect(u8 windowId, u8 fillValue, u16 x, u16 y, u16 width, u16
     FillBitmapRect4Bit(&pixelRect, x, y, width, height, fillValue);
 }
 
-void CopyToWindowPixelBuffer(u8 windowId, const void *src, u16 size, u16 tileOffset)
+void CopyToWindowPixelBuffer(u8 windowId, const void* src, u16 size, u16 tileOffset)
 {
     if (size != 0)
         CpuCopy16(src, gWindows[windowId].tileData + (0x20 * tileOffset), size);
@@ -400,7 +400,7 @@ void FillWindowPixelBuffer(u8 windowId, u8 fillValue)
 void ScrollWindow(u8 windowId, u8 direction, u8 distance, u8 fillValue)
 {
     struct WindowTemplate window = gWindows[windowId].window;
-    u8 *tileData = gWindows[windowId].tileData;
+    u8* tileData = gWindows[windowId].tileData;
     u32 fillValue32 = (fillValue << 24) | (fillValue << 16) | (fillValue << 8) | fillValue;
     s32 size = window.height * window.width * 32;
     u32 width = window.width;
@@ -415,13 +415,13 @@ void ScrollWindow(u8 windowId, u8 direction, u8 distance, u8 fillValue)
         {
             distanceLoop = distance;
             MOVE_TILES_DOWN(0)
-            MOVE_TILES_DOWN(4)
-            MOVE_TILES_DOWN(8)
-            MOVE_TILES_DOWN(12)
-            MOVE_TILES_DOWN(16)
-            MOVE_TILES_DOWN(20)
-            MOVE_TILES_DOWN(24)
-            MOVE_TILES_DOWN(28)
+                MOVE_TILES_DOWN(4)
+                MOVE_TILES_DOWN(8)
+                MOVE_TILES_DOWN(12)
+                MOVE_TILES_DOWN(16)
+                MOVE_TILES_DOWN(20)
+                MOVE_TILES_DOWN(24)
+                MOVE_TILES_DOWN(28)
         }
         break;
     case 1:
@@ -430,13 +430,13 @@ void ScrollWindow(u8 windowId, u8 direction, u8 distance, u8 fillValue)
         {
             distanceLoop = distance;
             MOVE_TILES_UP(0)
-            MOVE_TILES_UP(4)
-            MOVE_TILES_UP(8)
-            MOVE_TILES_UP(12)
-            MOVE_TILES_UP(16)
-            MOVE_TILES_UP(20)
-            MOVE_TILES_UP(24)
-            MOVE_TILES_UP(28)
+                MOVE_TILES_UP(4)
+                MOVE_TILES_UP(8)
+                MOVE_TILES_UP(12)
+                MOVE_TILES_UP(16)
+                MOVE_TILES_UP(20)
+                MOVE_TILES_UP(24)
+                MOVE_TILES_UP(28)
         }
         break;
     case 2:

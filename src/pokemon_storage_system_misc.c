@@ -405,7 +405,7 @@ static void MultiMove_SetIconToBg(u8 x, u8 y)
 
     if (species != SPECIES_NONE)
     {
-        const u8 *iconGfx = GetMonIconPtr(species, personality, 1);
+        const u8* iconGfx = GetMonIconPtr(species, personality, 1);
         u8 palNum = GetValidMonIconPalIndex(species) + 8;
         BlitBitmapRectToWindow4BitTo8Bit(gStorage->multiMoveWindowId, iconGfx, 0, 0, 32, 32, 24 * x, 24 * y, 32, 32, palNum);
     }
@@ -459,7 +459,7 @@ static void MultiMove_GetMonsFromSelection(void)
         u8 boxPosition = (IN_BOX_COLUMNS * i) + sMultiMove->minColumn;
         for (j = sMultiMove->minColumn; j < columnCount; j++)
         {
-            struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+            struct BoxPokemon* boxMon = GetBoxedMonPtr(boxId, boxPosition);
             // UB: possible null dereference
 #ifdef UBFIX
             if (boxMon != NULL)
@@ -588,20 +588,20 @@ static u8 GetNewItemIconIdx(void);
 static bool32 IsItemIconAtPosition(u8 cursorArea, u8 cursorPos);
 static u8 GetItemIconIdxByPosition(u8 cursorArea, u8 cursorPos);
 static void SetItemIconPosition(u8 id, u8 cursorArea, u8 cursorPos);
-static void LoadItemIconGfx(u8 id, const u32 * tiles, const u32 * pal);
+static void LoadItemIconGfx(u8 id, const u32* tiles, const u32* pal);
 static void SetItemIconAffineAnim(u8 id, u8 affineAnimNo);
 static void SetItemIconCallback(u8 id, u8 command, u8 cursorArea, u8 cursorPos);
 static void SetItemIconActive(u8 id, bool8 show);
-static const u32 *GetItemIconPic(u16 itemId);
-static const u32 *GetItemIconPalette(u16 itemId);
+static const u32* GetItemIconPic(u16 itemId);
+static const u32* GetItemIconPalette(u16 itemId);
 static void DrawItemInfoWindow(u32 x);
-static void SpriteCB_ItemIcon_WaitAnim(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_ToHand(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_SetPosToCursor(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_ToMon(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_SwapToHand(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_SwapToMon(struct Sprite *sprite);
-static void SpriteCB_ItemIcon_HideParty(struct Sprite *sprite);
+static void SpriteCB_ItemIcon_WaitAnim(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_ToHand(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_SetPosToCursor(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_ToMon(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_SwapToHand(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_SwapToMon(struct Sprite* sprite);
+static void SpriteCB_ItemIcon_HideParty(struct Sprite* sprite);
 
 static const u32 sItemInfoFrame_Gfx[] = INCBIN_U32("graphics/pokemon_storage/item_info_frame.4bpp");
 
@@ -663,14 +663,14 @@ static const union AffineAnimCmd sAffineAnim_ItemIcon_Large[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnims_ItemIcon[] = {
-    [ITEM_ANIM_NONE]      = sAffineAnim_ItemIcon_Small,
-    [ITEM_ANIM_APPEAR]    = sAffineAnim_ItemIcon_Appear,
+static const union AffineAnimCmd* const sAffineAnims_ItemIcon[] = {
+    [ITEM_ANIM_NONE] = sAffineAnim_ItemIcon_Small,
+    [ITEM_ANIM_APPEAR] = sAffineAnim_ItemIcon_Appear,
     [ITEM_ANIM_DISAPPEAR] = sAffineAnim_ItemIcon_Disappear,
-    [ITEM_ANIM_PICK_UP]   = sAffineAnim_ItemIcon_PickUp,
-    [ITEM_ANIM_PUT_DOWN]  = sAffineAnim_ItemIcon_PutDown,
-    [ITEM_ANIM_PUT_AWAY]  = sAffineAnim_ItemIcon_PutAway,
-    [ITEM_ANIM_LARGE]     = sAffineAnim_ItemIcon_Large,
+    [ITEM_ANIM_PICK_UP] = sAffineAnim_ItemIcon_PickUp,
+    [ITEM_ANIM_PUT_DOWN] = sAffineAnim_ItemIcon_PutDown,
+    [ITEM_ANIM_PUT_AWAY] = sAffineAnim_ItemIcon_PutAway,
+    [ITEM_ANIM_LARGE] = sAffineAnim_ItemIcon_Large,
 };
 
 static const struct SpriteTemplate sSpriteTemplate_ItemIcon = {
@@ -701,7 +701,7 @@ void CreateItemIconSprites(void)
         {
             spriteSheet.tag = GFXTAG_ITEM_ICON_0 + i;
             LoadCompressedSpriteSheet(&spriteSheet);
-            gStorage->itemIcons[i].tiles = GetSpriteTileStartByTag(spriteSheet.tag) * TILE_SIZE_4BPP + (void *)(OBJ_VRAM0);
+            gStorage->itemIcons[i].tiles = GetSpriteTileStartByTag(spriteSheet.tag) * TILE_SIZE_4BPP + (void*)(OBJ_VRAM0);
             gStorage->itemIcons[i].palIndex = AllocSpritePalette(PALTAG_ITEM_ICON_0 + i);
             gStorage->itemIcons[i].palIndex = OBJ_PLTT_ID(gStorage->itemIcons[i].palIndex);
             spriteTemplate.tileTag = GFXTAG_ITEM_ICON_0 + i;
@@ -740,8 +740,8 @@ void TryLoadItemIconAtPos(u8 cursorArea, u8 cursorPos)
 
     if (heldItem != ITEM_NONE)
     {
-        const u32 *tiles = GetItemIconPic(heldItem);
-        const u32 *pal = GetItemIconPalette(heldItem);
+        const u32* tiles = GetItemIconPic(heldItem);
+        const u32* pal = GetItemIconPalette(heldItem);
         u8 id = GetNewItemIconIdx();
 
         SetItemIconPosition(id, cursorArea, cursorPos);
@@ -776,7 +776,7 @@ void Item_FromMonToMoving(u8 cursorArea, u8 cursorPos)
     SetItemIconAffineAnim(id, ITEM_ANIM_PICK_UP);
     SetItemIconCallback(id, ITEM_CB_TO_HAND, cursorArea, cursorPos);
     SetItemIconPosition(id, CURSOR_AREA_IN_HAND, 0);
-    if (cursorArea  == CURSOR_AREA_IN_BOX)
+    if (cursorArea == CURSOR_AREA_IN_BOX)
     {
         SetCurrentBoxMonData(cursorPos, MON_DATA_HELD_ITEM, &item);
         SetBoxMonIconObjMode(cursorPos, ST_OAM_OBJ_BLEND);
@@ -792,8 +792,8 @@ void Item_FromMonToMoving(u8 cursorArea, u8 cursorPos)
 
 void InitItemIconInCursor(u16 item)
 {
-    const u32 *tiles = GetItemIconPic(item);
-    const u32 *pal = GetItemIconPalette(item);
+    const u32* tiles = GetItemIconPic(item);
+    const u32* pal = GetItemIconPalette(item);
     u8 id = GetNewItemIconIdx();
 
     LoadItemIconGfx(id, tiles, pal);
@@ -867,7 +867,7 @@ void Item_TakeMons(u8 cursorArea, u8 cursorPos)
     id = GetItemIconIdxByPosition(cursorArea, cursorPos);
     SetItemIconAffineAnim(id, ITEM_ANIM_DISAPPEAR);
     SetItemIconCallback(id, ITEM_CB_WAIT_ANIM, cursorArea, cursorPos);
-    if (cursorArea  == CURSOR_AREA_IN_BOX)
+    if (cursorArea == CURSOR_AREA_IN_BOX)
     {
         SetCurrentBoxMonData(cursorPos, MON_DATA_HELD_ITEM, &item);
         SetBoxMonIconObjMode(cursorPos, ST_OAM_OBJ_BLEND);
@@ -940,7 +940,7 @@ bool8 IsActiveItemMoving(void)
     return FALSE;
 }
 
-const u8 *GetMovingItemName(void)
+const u8* GetMovingItemName(void)
 {
     return ItemId_GetName(gStorage->movingItemId);
 }
@@ -996,7 +996,7 @@ static u8 GetItemIconIdxByPosition(u8 cursorArea, u8 cursorPos)
     return MAX_ITEM_ICONS;
 }
 
-static u8 GetItemIconIdxBySprite(struct Sprite *sprite)
+static u8 GetItemIconIdxBySprite(struct Sprite* sprite)
 {
     u8 i;
 
@@ -1045,7 +1045,7 @@ static void SetItemIconPosition(u8 id, u8 cursorArea, u8 cursorPos)
     gStorage->itemIcons[id].cursorPos = cursorPos;
 }
 
-static void LoadItemIconGfx(u8 id, const u32 *itemTiles, const u32 *itemPal)
+static void LoadItemIconGfx(u8 id, const u32* itemTiles, const u32* itemPal)
 {
     s32 i;
 
@@ -1126,19 +1126,19 @@ static void SetItemIconActive(u8 id, bool8 show)
     gStorage->itemIcons[id].sprite->invisible = (show == FALSE);
 }
 
-static const u32 *GetItemIconPic(u16 itemId)
+static const u32* GetItemIconPic(u16 itemId)
 {
     return GetItemIconGfxPtr(itemId, ITEMICON_TILES);
 }
 
-static const u32 *GetItemIconPalette(u16 itemId)
+static const u32* GetItemIconPalette(u16 itemId)
 {
     return GetItemIconGfxPtr(itemId, ITEMICON_PAL);
 }
 
 void PrintItemDescription(void)
 {
-    const u8 *description;
+    const u8* description;
 
     if (IsActiveItemMoving())
         description = ItemId_GetDescription(gStorage->movingItemId);
@@ -1206,7 +1206,7 @@ static void DrawItemInfoWindow(u32 x)
     ScheduleBgCopyTilemapToVram(0);
 }
 
-static void SpriteCB_ItemIcon_WaitAnim(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_WaitAnim(struct Sprite* sprite)
 {
     if (sprite->affineAnimEnded)
     {
@@ -1215,7 +1215,7 @@ static void SpriteCB_ItemIcon_WaitAnim(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ItemIcon_ToHand(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_ToHand(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -1237,14 +1237,14 @@ static void SpriteCB_ItemIcon_ToHand(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ItemIcon_SetPosToCursor(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_SetPosToCursor(struct Sprite* sprite)
 {
     sprite->x = gStorage->cursorSprite->x + 4;
     sprite->y = gStorage->cursorSprite->y + gStorage->cursorSprite->y2 + 8;
     sprite->oam.priority = gStorage->cursorSprite->oam.priority;
 }
 
-static void SpriteCB_ItemIcon_ToMon(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_ToMon(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -1269,7 +1269,7 @@ static void SpriteCB_ItemIcon_ToMon(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ItemIcon_SwapToHand(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_SwapToHand(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -1296,7 +1296,7 @@ static void SpriteCB_ItemIcon_SwapToHand(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ItemIcon_SwapToMon(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_SwapToMon(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -1323,7 +1323,7 @@ static void SpriteCB_ItemIcon_SwapToMon(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ItemIcon_HideParty(struct Sprite *sprite)
+static void SpriteCB_ItemIcon_HideParty(struct Sprite* sprite)
 {
     sprite->y -= 8;
     if (sprite->y + sprite->y2 < -16)
@@ -1343,12 +1343,12 @@ static void SpriteCB_ItemIcon_HideParty(struct Sprite *sprite)
 //  Storage with UnkUtil_Run, but neither of the Add functions are ever used,
 //  so UnkUtil_Run performs no actions.
 
-static EWRAM_DATA struct UnkUtil *sUnkUtil = NULL;
+static EWRAM_DATA struct UnkUtil* sUnkUtil = NULL;
 
-static void UnkUtil_CpuRun(struct UnkUtilData *unkStruct);
-static void UnkUtil_DmaRun(struct UnkUtilData *unkStruct);
+static void UnkUtil_CpuRun(struct UnkUtilData* unkStruct);
+static void UnkUtil_DmaRun(struct UnkUtilData* unkStruct);
 
-void UnkUtil_Init(struct UnkUtil *util, struct UnkUtilData *data, u32 max)
+void UnkUtil_Init(struct UnkUtil* util, struct UnkUtilData* data, u32 max)
 {
     sUnkUtil = util;
     util->data = data;
@@ -1363,7 +1363,7 @@ void UnkUtil_Run(void)
     {
         for (i = 0; i < sUnkUtil->numActive; i++)
         {
-            struct UnkUtilData *data = &sUnkUtil->data[i];
+            struct UnkUtilData* data = &sUnkUtil->data[i];
             data->func(data);
         }
         sUnkUtil->numActive = 0;
@@ -1371,9 +1371,9 @@ void UnkUtil_Run(void)
 }
 
 // Unused
-static bool8 UnkUtil_CpuAdd(u8 *dest, u16 dLeft, u16 dTop, const u8 *src, u16 sLeft, u16 sTop, u16 width, u16 height, u16 unkArg)
+static bool8 UnkUtil_CpuAdd(u8* dest, u16 dLeft, u16 dTop, const u8* src, u16 sLeft, u16 sTop, u16 width, u16 height, u16 unkArg)
 {
-    struct UnkUtilData *data;
+    struct UnkUtilData* data;
 
     if (sUnkUtil->numActive >= sUnkUtil->max)
         return FALSE;
@@ -1389,7 +1389,7 @@ static bool8 UnkUtil_CpuAdd(u8 *dest, u16 dLeft, u16 dTop, const u8 *src, u16 sL
 }
 
 // Functionally unused
-static void UnkUtil_CpuRun(struct UnkUtilData *data)
+static void UnkUtil_CpuRun(struct UnkUtilData* data)
 {
     u16 i;
 
@@ -1402,9 +1402,9 @@ static void UnkUtil_CpuRun(struct UnkUtilData *data)
 }
 
 // Unused
-static bool8 UnkUtil_DmaAdd(void *dest, u16 dLeft, u16 dTop, u16 width, u16 height)
+static bool8 UnkUtil_DmaAdd(void* dest, u16 dLeft, u16 dTop, u16 width, u16 height)
 {
-    struct UnkUtilData *data;
+    struct UnkUtilData* data;
 
     if (sUnkUtil->numActive >= sUnkUtil->max)
         return FALSE;
@@ -1418,7 +1418,7 @@ static bool8 UnkUtil_DmaAdd(void *dest, u16 dLeft, u16 dTop, u16 width, u16 heig
 }
 
 // Functionally unused
-static void UnkUtil_DmaRun(struct UnkUtilData *data)
+static void UnkUtil_DmaRun(struct UnkUtilData* data)
 {
     u16 i;
 

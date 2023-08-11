@@ -3,7 +3,7 @@
 
 static const char AgbLibFlashVersion[] = "FLASH1M_V103";
 
-const struct FlashSetupInfo * const sSetupInfos[] =
+const struct FlashSetupInfo* const sSetupInfos[] =
 {
     &MX29L010,
     &LE26FV10N1TS,
@@ -14,7 +14,7 @@ u16 IdentifyFlash(void)
 {
     u16 result;
     u16 flashId;
-    const struct FlashSetupInfo * const *setupInfo;
+    const struct FlashSetupInfo* const* setupInfo;
 
     REG_WAITCNT = (REG_WAITCNT & ~WAITCNT_SRAM_MASK) | WAITCNT_SRAM_8;
 
@@ -48,7 +48,7 @@ u16 IdentifyFlash(void)
     return result;
 }
 
-u16 WaitForFlashWrite_Common(u8 phase, u8 *addr, u8 lastData)
+u16 WaitForFlashWrite_Common(u8 phase, u8* addr, u8 lastData)
 {
     u16 result = 0;
     u8 status;

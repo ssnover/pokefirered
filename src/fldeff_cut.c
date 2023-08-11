@@ -21,16 +21,16 @@
 #define CUT_GRASS_SPRITE_COUNT 8
 #define CUT_SIDE 3
 
-static EWRAM_DATA u8 *sCutGrassSpriteArrayPtr = NULL;
+static EWRAM_DATA u8* sCutGrassSpriteArrayPtr = NULL;
 static EWRAM_DATA bool8 sScheduleOpenDottedHole = FALSE;
 
 static void FieldCallback_CutGrass(void);
 static void FieldCallback_CutTree(void);
 static void FieldMoveCallback_CutGrass(void);
 static void SetCutGrassMetatileAt(s16 x, s16 y);
-static void SpriteCallback_CutGrass_Init(struct Sprite *sprite);
-static void SpriteCallback_CutGrass_Run(struct Sprite *sprite);
-static void SpriteCallback_CutGrass_Cleanup(struct Sprite *sprite);
+static void SpriteCallback_CutGrass_Init(struct Sprite* sprite);
+static void SpriteCallback_CutGrass_Run(struct Sprite* sprite);
+static void SpriteCallback_CutGrass_Cleanup(struct Sprite* sprite);
 static void FieldMoveCallback_CutTree(void);
 
 static const u16 sCutGrassMetatileMapping[][2] = {
@@ -88,7 +88,7 @@ static const union AnimCmd sSpriteAnim_Fldeff_CutGrass_0[] = {
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sSpriteAnimTable_FldEff_CutGrass[] = {
+static const union AnimCmd* const sSpriteAnimTable_FldEff_CutGrass[] = {
     sSpriteAnim_Fldeff_CutGrass_0
 };
 
@@ -134,11 +134,11 @@ bool8 SetUpFieldMove_Cut(void)
         gPostMenuFieldCallback = FieldCallback_CutTree;
         return TRUE;
     }
-    
+
     else
     {
         PlayerGetDestCoords(&gPlayerFacingPosition.x, &gPlayerFacingPosition.y);
-    
+
         for (i = 0; i < CUT_SIDE; i++)
         {
             y = gPlayerFacingPosition.y - 1 + i;
@@ -251,7 +251,7 @@ static void SetCutGrassMetatileAt(s16 x, s16 y)
     }
 }
 
-static void SpriteCallback_CutGrass_Init(struct Sprite *sprite)
+static void SpriteCallback_CutGrass_Init(struct Sprite* sprite)
 {
     sprite->data[0] = 8;
     sprite->data[1] = 0;
@@ -259,7 +259,7 @@ static void SpriteCallback_CutGrass_Init(struct Sprite *sprite)
     sprite->callback = SpriteCallback_CutGrass_Run;
 }
 
-static void SpriteCallback_CutGrass_Run(struct Sprite *sprite)
+static void SpriteCallback_CutGrass_Run(struct Sprite* sprite)
 {
     sprite->x2 = Sin(sprite->data[2], sprite->data[0]);
     sprite->y2 = Cos(sprite->data[2], sprite->data[0]);
@@ -274,7 +274,7 @@ static void SpriteCallback_CutGrass_Run(struct Sprite *sprite)
         sprite->callback = SpriteCallback_CutGrass_Cleanup;
 }
 
-static void SpriteCallback_CutGrass_Cleanup(struct Sprite *sprite)
+static void SpriteCallback_CutGrass_Cleanup(struct Sprite* sprite)
 {
     u8 i;
     for (i = 1; i < CUT_GRASS_SPRITE_COUNT; i++)

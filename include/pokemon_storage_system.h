@@ -49,15 +49,15 @@ struct PokemonStorage
     /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
 };
 
-u8 *GetBoxNamePtr(u8 boxNumber);
-struct BoxPokemon *GetBoxedMonPtr(u8 boxId, u8 monPosition);
-void SetBoxMonNickAt(u8 boxId, u8 monPosition, const u8 *newNick);
+u8* GetBoxNamePtr(u8 boxNumber);
+struct BoxPokemon* GetBoxedMonPtr(u8 boxId, u8 monPosition);
+void SetBoxMonNickAt(u8 boxId, u8 monPosition, const u8* newNick);
 s16 CompactPartySlots(void);
 u32 GetBoxMonDataAt(u8 boxId, u8 monPosition, s32 request);
 void ZeroBoxMonAt(u8 boxId, u8 monPosition);
 void CB2_ReturnToPokeStorage(void);
 void ResetPokemonStorageSystem(void);
 u8 StorageGetCurrentBox(void);
-void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, u8 *buffer, s32 bytesToBuffer);
+void DrawTextWindowAndBufferTiles(const u8* string, void* dst, u8 zero1, u8 zero2, u8* buffer, s32 bytesToBuffer);
 
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H

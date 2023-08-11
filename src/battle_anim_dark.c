@@ -6,19 +6,19 @@
 #include "trig.h"
 #include "util.h"
 
-static void AnimUnusedBagSteal(struct Sprite *sprite);
-static void AnimUnusedBagSteal_Step(struct Sprite *sprite);
-static void AnimBite(struct Sprite *sprite);
-static void AnimTearDrop(struct Sprite *sprite);
-static void AnimClawSlash(struct Sprite *sprite);
+static void AnimUnusedBagSteal(struct Sprite* sprite);
+static void AnimUnusedBagSteal_Step(struct Sprite* sprite);
+static void AnimBite(struct Sprite* sprite);
+static void AnimTearDrop(struct Sprite* sprite);
+static void AnimClawSlash(struct Sprite* sprite);
 static void AnimTask_AttackerFadeToInvisible_Step(u8 taskId);
 static void AnimTask_AttackerFadeFromInvisible_Step(u8 taskId);
-static void AnimBite_Step1(struct Sprite *sprite);
-static void AnimBite_Step2(struct Sprite *sprite);
-static void AnimTearDrop_Step(struct Sprite *sprite);
+static void AnimBite_Step1(struct Sprite* sprite);
+static void AnimBite_Step2(struct Sprite* sprite);
+static void AnimTearDrop_Step(struct Sprite* sprite);
 static void SetAllBattlersSpritePriority(u8 priority);
 static void AnimTask_MoveAttackerMementoShadow_Step(u8 taskId);
-static void DoMementoShadowEffect(struct Task *task);
+static void DoMementoShadowEffect(struct Task* task);
 static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId);
 static void AnimTask_MetallicShine_Step(u8 taskId);
 
@@ -82,7 +82,7 @@ static const union AffineAnimCmd sAffineAnim_Bite_7[] =
     AFFINEANIMCMD_END,
 };
 
-const union AffineAnimCmd *const gAffineAnims_Bite[] =
+const union AffineAnimCmd* const gAffineAnims_Bite[] =
 {
     sAffineAnim_Bite_0,
     sAffineAnim_Bite_1,
@@ -130,7 +130,7 @@ static const union AffineAnimCmd sAffineAnim_TearDrop_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_TearDrop[] =
+static const union AffineAnimCmd* const sAffineAnims_TearDrop[] =
 {
     sAffineAnim_TearDrop_0,
     sAffineAnim_TearDrop_1,
@@ -167,7 +167,7 @@ static const union AnimCmd sAnim_ClawSlash_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_ClawSlash[] =
+static const union AnimCmd* const sAnims_ClawSlash[] =
 {
     sAnim_ClawSlash_0,
     sAnim_ClawSlash_1,
@@ -266,7 +266,7 @@ void AnimTask_InitAttackerFadeFromInvisible(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-static void AnimUnusedBagSteal(struct Sprite *sprite)
+static void AnimUnusedBagSteal(struct Sprite* sprite)
 {
     sprite->data[1] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
     sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
@@ -281,7 +281,7 @@ static void AnimUnusedBagSteal(struct Sprite *sprite)
     sprite->callback(sprite);
 }
 
-static void AnimUnusedBagSteal_Step(struct Sprite *sprite)
+static void AnimUnusedBagSteal_Step(struct Sprite* sprite)
 {
     sprite->data[3] += sprite->data[1];
     sprite->data[4] += sprite->data[2];
@@ -308,7 +308,7 @@ static void AnimUnusedBagSteal_Step(struct Sprite *sprite)
 }
 
 // Move sprite inward for Bite/Crunch and Clamp
-static void AnimBite(struct Sprite *sprite)
+static void AnimBite(struct Sprite* sprite)
 {
     sprite->x += gBattleAnimArgs[0];
     sprite->y += gBattleAnimArgs[1];
@@ -319,7 +319,7 @@ static void AnimBite(struct Sprite *sprite)
     sprite->callback = AnimBite_Step1;
 }
 
-static void AnimBite_Step1(struct Sprite *sprite)
+static void AnimBite_Step1(struct Sprite* sprite)
 {
     sprite->data[4] += sprite->data[0];
     sprite->data[5] += sprite->data[1];
@@ -329,7 +329,7 @@ static void AnimBite_Step1(struct Sprite *sprite)
         sprite->callback = AnimBite_Step2;
 }
 
-static void AnimBite_Step2(struct Sprite *sprite)
+static void AnimBite_Step2(struct Sprite* sprite)
 {
     sprite->data[4] -= sprite->data[0];
     sprite->data[5] -= sprite->data[1];
@@ -340,7 +340,7 @@ static void AnimBite_Step2(struct Sprite *sprite)
 }
 
 // Launches a tear drop away from the battler. Used by Fake Tears
-static void AnimTearDrop(struct Sprite *sprite)
+static void AnimTearDrop(struct Sprite* sprite)
 {
     u8 battler;
     s8 xOffset;
@@ -382,7 +382,7 @@ static void AnimTearDrop(struct Sprite *sprite)
     sprite->callback = AnimTearDrop_Step;
 }
 
-static void AnimTearDrop_Step(struct Sprite *sprite)
+static void AnimTearDrop_Step(struct Sprite* sprite)
 {
     if (TranslateAnimHorizontalArc(sprite))
         DestroySpriteAndMatrix(sprite);
@@ -395,7 +395,7 @@ void AnimTask_MoveAttackerMementoShadow(u8 taskId)
     u16 i;
     u8 pos;
     s32 var0;
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     task->data[7] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y) + 31;
     task->data[6] = GetBattlerSpriteCoordAttr(gBattleAnimAttacker, BATTLER_COORD_ATTR_TOP) - 7;
@@ -456,7 +456,7 @@ void AnimTask_MoveAttackerMementoShadow(u8 taskId)
 
 static void AnimTask_MoveAttackerMementoShadow_Step(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->data[0])
     {
@@ -511,7 +511,7 @@ void AnimTask_MoveTargetMementoShadow(u8 taskId)
     struct ScanlineEffectParams scanlineParams;
     u8 x;
     u16 i;
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->data[0])
     {
@@ -609,7 +609,7 @@ static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId)
 {
     u8 pos;
     u16 i;
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->data[0])
     {
@@ -675,7 +675,7 @@ static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId)
     }
 }
 
-static void DoMementoShadowEffect(struct Task *task)
+static void DoMementoShadowEffect(struct Task* task)
 {
     s32 var0, var1, var4;
     s16 var2, i;
@@ -743,7 +743,7 @@ void AnimTask_InitMementoShadow(u8 taskId)
 void AnimTask_MementoHandleBg(u8 taskId)
 {
     bool8 toBG2 = GetBattlerSpriteBGPriorityRank(gBattleAnimAttacker) ^ 1 ? TRUE : FALSE;
-    
+
     ResetBattleAnimBg(toBG2);
     if (IsBattlerSpriteVisible(BATTLE_PARTNER(gBattleAnimAttacker)))
         ResetBattleAnimBg(toBG2 ^ 1);
@@ -751,7 +751,7 @@ void AnimTask_MementoHandleBg(u8 taskId)
 }
 
 // Animates a deep slash from a claw. Used by Metal Claw, Dragon Claw, and Crush Claw
-static void AnimClawSlash(struct Sprite *sprite)
+static void AnimClawSlash(struct Sprite* sprite)
 {
     sprite->x += gBattleAnimArgs[0];
     sprite->y += gBattleAnimArgs[1];

@@ -7,13 +7,13 @@
 #include "gfx.h"
 
 struct GbaToPngOptions {
-    char *paletteFilePath;
+    char* paletteFilePath;
     int bitDepth;
     bool hasTransparency;
     int width;
     int metatileWidth;
     int metatileHeight;
-    char *tilemapFilePath;
+    char* tilemapFilePath;
     bool isAffineMap;
 };
 
@@ -23,7 +23,7 @@ struct PngToGbaOptions {
     int bitDepth;
     int metatileWidth;
     int metatileHeight;
-    char *tilemapFilePath;
+    char* tilemapFilePath;
     bool isAffineMap;
 };
 

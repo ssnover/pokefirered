@@ -65,12 +65,12 @@ void ProcessDma3Requests(void);
 // Copy size bytes from src to dest.
 // mode takes a DMA3_*BIT macro
 // Returns the request index
-s16 RequestDma3Copy(const void *src, void *dest, u16 size, u8 mode);
+s16 RequestDma3Copy(const void* src, void* dest, u16 size, u8 mode);
 
 // Fill size bytes at dest with value.
 // mode takes a DMA3_*BIT macro
 // Returns the request index
-s16 RequestDma3Fill(s32 value, void *dest, u16 size, u8 mode);
+s16 RequestDma3Fill(s32 value, void* dest, u16 size, u8 mode);
 
 // index is the return value from RequestDma3*
 // if index = -1, will check if any request is pending

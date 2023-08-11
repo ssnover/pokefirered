@@ -81,21 +81,21 @@ struct Tileset
 {
     /*0x00*/ bool8 isCompressed;
     /*0x01*/ bool8 isSecondary;
-    /*0x04*/ const u32 *tiles;
-    /*0x08*/ const u16 (*palettes)[16];
-    /*0x0c*/ const u16 *metatiles;
+    /*0x04*/ const u32* tiles;
+    /*0x08*/ const u16(*palettes)[16];
+    /*0x0c*/ const u16* metatiles;
     /*0x10*/ TilesetCB callback;
-    /*0x14*/ const u32 *metatileAttributes;
+    /*0x14*/ const u32* metatileAttributes;
 };
 
 struct MapLayout
 {
     /*0x00*/ s32 width;
     /*0x04*/ s32 height;
-    /*0x08*/ const u16 *border;
-    /*0x0c*/ const u16 *map;
-    /*0x10*/ const struct Tileset *primaryTileset;
-    /*0x14*/ const struct Tileset *secondaryTileset;
+    /*0x08*/ const u16* border;
+    /*0x0c*/ const u16* map;
+    /*0x10*/ const struct Tileset* primaryTileset;
+    /*0x14*/ const struct Tileset* secondaryTileset;
     /*0x18*/ u8 borderWidth;
     /*0x19*/ u8 borderHeight;
 };
@@ -104,7 +104,7 @@ struct BackupMapLayout
 {
     s32 Xsize;
     s32 Ysize;
-    u16 *map;
+    u16* map;
 };
 
 struct ObjectEventTemplate
@@ -117,8 +117,8 @@ struct ObjectEventTemplate
         struct {
             u8 elevation;
             u8 movementType;
-            u16 movementRangeX:4;
-            u16 movementRangeY:4;
+            u16 movementRangeX : 4;
+            u16 movementRangeY : 4;
             u16 trainerType;
             u16 trainerRange_berryTreeId;
         } normal;
@@ -129,7 +129,7 @@ struct ObjectEventTemplate
             u16 targetMapGroup;
         } clone;
     } objUnion;
-    const u8 *script;
+    const u8* script;
     u16 flagId;
 };  /*size = 0x18*/
 
@@ -148,7 +148,7 @@ struct CoordEvent
     u8 elevation;
     u16 trigger;
     u16 index;
-    const u8 *script;
+    const u8* script;
 };
 
 struct BgEvent
@@ -157,7 +157,7 @@ struct BgEvent
     u8 elevation;
     u8 kind; // The "kind" field determines how to access bgUnion union below.
     union {
-        const u8 *script;
+        const u8* script;
         u32 hiddenItem; // Contains all the hidden item data. See GET_HIDDEN_ITEM_* defines further up
     } bgUnion;
 };
@@ -168,77 +168,77 @@ struct MapEvents
     u8 warpCount;
     u8 coordEventCount;
     u8 bgEventCount;
-    const struct ObjectEventTemplate *objectEvents;
-    const struct WarpEvent *warps;
-    const struct CoordEvent *coordEvents;
-    const struct BgEvent *bgEvents;
+    const struct ObjectEventTemplate* objectEvents;
+    const struct WarpEvent* warps;
+    const struct CoordEvent* coordEvents;
+    const struct BgEvent* bgEvents;
 };
 
 struct MapConnection
 {
- /*0x00*/ u8 direction;
- /*0x04*/ u32 offset;
- /*0x08*/ u8 mapGroup;
- /*0x09*/ u8 mapNum;
+    /*0x00*/ u8 direction;
+    /*0x04*/ u32 offset;
+    /*0x08*/ u8 mapGroup;
+    /*0x09*/ u8 mapNum;
 };
 
 struct MapConnections
 {
     s32 count;
-    const struct MapConnection *connections;
+    const struct MapConnection* connections;
 };
 
 struct MapHeader
 {
-    /* 0x00 */ const struct MapLayout *mapLayout;
-    /* 0x04 */ const struct MapEvents *events;
-    /* 0x08 */ const u8 *mapScripts;
-    /* 0x0C */ const struct MapConnections *connections;
+    /* 0x00 */ const struct MapLayout* mapLayout;
+    /* 0x04 */ const struct MapEvents* events;
+    /* 0x08 */ const u8* mapScripts;
+    /* 0x0C */ const struct MapConnections* connections;
     /* 0x10 */ u16 music;
     /* 0x12 */ u16 mapLayoutId;
     /* 0x14 */ u8 regionMapSectionId;
     /* 0x15 */ u8 cave;
     /* 0x16 */ u8 weather;
     /* 0x17 */ u8 mapType;
-               // fields correspond to the arguments in the map_header_flags macro
+    // fields correspond to the arguments in the map_header_flags macro
     /* 0x18 */ bool8 bikingAllowed;
-    /* 0x19 */ bool8 allowEscaping:1; // Escape Rope and Dig
-               bool8 allowRunning:1;
-               bool8 showMapName:6; // the last 5 bits are unused
+    /* 0x19 */ bool8 allowEscaping : 1; // Escape Rope and Dig
+    bool8 allowRunning : 1;
+    bool8 showMapName : 6; // the last 5 bits are unused
     /* 0x1A */ s8 floorNum;
     /* 0x1B */ u8 battleType;
 };
 
 struct ObjectEvent
 {
-    /*0x00*/ /* 0*/ u32 active:1;
-             /* 1*/ u32 singleMovementActive:1;
-             /* 2*/ u32 triggerGroundEffectsOnMove:1;
-             /* 3*/ u32 triggerGroundEffectsOnStop:1;
-             /* 4*/ u32 disableCoveringGroundEffects:1;
-             /* 5*/ u32 landingJump:1;
-             /* 6*/ u32 heldMovementActive:1;
-             /* 7*/ u32 heldMovementFinished:1;
-    /*0x01*/ /* 8*/ u32 frozen:1;
-             /* 9*/ u32 facingDirectionLocked:1;
-             /*10*/ u32 disableAnim:1;
-             /*11*/ u32 enableAnim:1;
-             /*12*/ u32 inanimate:1;
-             /*13*/ u32 invisible:1;
-             /*14*/ u32 offScreen:1;
-             /*15*/ u32 trackedByCamera:1;
-    /*0x02*/ /*16*/ u32 isPlayer:1;
-             /*17*/ u32 hasReflection:1;
-             /*18*/ u32 inShortGrass:1;
-             /*19*/ u32 inShallowFlowingWater:1;
-             /*20*/ u32 inSandPile:1;
-             /*21*/ u32 inHotSprings:1;
-             /*22*/ u32 hasShadow:1;
-             /*23*/ u32 spriteAnimPausedBackup:1;
-    /*0x03*/ /*24*/ u32 spriteAffineAnimPausedBackup:1;
-             /*25*/ u32 disableJumpLandingGroundEffect:1;
-             /*26*/ u32 fixedPriority:1;
-             /*27*/ u32 hideReflection:1;
+    /*0x00*/ /* 0*/ u32 active : 1;
+    /* 1*/ u32 singleMovementActive : 1;
+    /* 2*/ u32 triggerGroundEffectsOnMove : 1;
+    /* 3*/ u32 triggerGroundEffectsOnStop : 1;
+    /* 4*/ u32 disableCoveringGroundEffects : 1;
+    /* 5*/ u32 landingJump : 1;
+    /* 6*/ u32 heldMovementActive : 1;
+    /* 7*/ u32 heldMovementFinished : 1;
+    /*0x01*/ /* 8*/ u32 frozen : 1;
+    /* 9*/ u32 facingDirectionLocked : 1;
+    /*10*/ u32 disableAnim : 1;
+    /*11*/ u32 enableAnim : 1;
+    /*12*/ u32 inanimate : 1;
+    /*13*/ u32 invisible : 1;
+    /*14*/ u32 offScreen : 1;
+    /*15*/ u32 trackedByCamera : 1;
+    /*0x02*/ /*16*/ u32 isPlayer : 1;
+    /*17*/ u32 hasReflection : 1;
+    /*18*/ u32 inShortGrass : 1;
+    /*19*/ u32 inShallowFlowingWater : 1;
+    /*20*/ u32 inSandPile : 1;
+    /*21*/ u32 inHotSprings : 1;
+    /*22*/ u32 hasShadow : 1;
+    /*23*/ u32 spriteAnimPausedBackup : 1;
+    /*0x03*/ /*24*/ u32 spriteAffineAnimPausedBackup : 1;
+    /*25*/ u32 disableJumpLandingGroundEffect : 1;
+    /*26*/ u32 fixedPriority : 1;
+    /*27*/ u32 hideReflection : 1;
     /*0x04*/        u8 spriteId;
     /*0x05*/        u8 graphicsId;
     /*0x06*/        u8 movementType;
@@ -246,15 +246,15 @@ struct ObjectEvent
     /*0x08*/        u8 localId;
     /*0x09*/        u8 mapNum;
     /*0x0A*/        u8 mapGroup;
-    /*0x0B*/        u8 currentElevation:4;
-                    u8 previousElevation:4;
+    /*0x0B*/        u8 currentElevation : 4;
+    u8 previousElevation : 4;
     /*0x0C*/        struct Coords16 initialCoords;
     /*0x10*/        struct Coords16 currentCoords;
     /*0x14*/        struct Coords16 previousCoords;
-    /*0x18*/        u8 facingDirection:4;
-                    u8 movementDirection:4;
-                    u16 rangeX:4;
-                    u16 rangeY:4;
+    /*0x18*/        u8 facingDirection : 4;
+    u8 movementDirection : 4;
+    u16 rangeX : 4;
+    u16 rangeY : 4;
     /*0x1A*/        u8 fieldEffectSpriteId;
     /*0x1B*/        u8 warpArrowSpriteId;
     /*0x1C*/        u8 movementActionId;
@@ -275,16 +275,16 @@ struct ObjectEventGraphicsInfo
     /*0x06*/ u16 size;
     /*0x08*/ s16 width;
     /*0x0A*/ s16 height;
-    /*0x0C*/ u8 paletteSlot:4;
-             u8 shadowSize:2;
-             u8 inanimate:1;
-             u8 disableReflectionPaletteLoad:1;
+    /*0x0C*/ u8 paletteSlot : 4;
+    u8 shadowSize : 2;
+    u8 inanimate : 1;
+    u8 disableReflectionPaletteLoad : 1;
     /*0x0D*/ u8 tracks;
-    /*0x10*/ const struct OamData *oam;
-    /*0x14*/ const struct SubspriteTable *subspriteTables;
-    /*0x18*/ const union AnimCmd *const *anims;
-    /*0x1C*/ const struct SpriteFrameImage *images;
-    /*0x20*/ const union AffineAnimCmd *const *affineAnims;
+    /*0x10*/ const struct OamData* oam;
+    /*0x14*/ const struct SubspriteTable* subspriteTables;
+    /*0x18*/ const union AnimCmd* const* anims;
+    /*0x1C*/ const struct SpriteFrameImage* images;
+    /*0x20*/ const union AffineAnimCmd* const* affineAnims;
 };
 
 enum {
@@ -386,7 +386,7 @@ struct PlayerAvatar
 
 struct Camera
 {
-    bool8 active:1;
+    bool8 active : 1;
     s32 x;
     s32 y;
 };

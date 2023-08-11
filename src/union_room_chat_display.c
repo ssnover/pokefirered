@@ -25,7 +25,7 @@
 
 struct UnionRoomChat2Subtask
 {
-    bool32 (*callback)(u8 *);
+    bool32(*callback)(u8*);
     u8 active;
     u8 state;
 };
@@ -50,12 +50,12 @@ struct UnionRoomChat2
 struct SubtaskInfo
 {
     u16 idx;
-    bool32 (*callback)(u8 *);
+    bool32(*callback)(u8*);
 };
 
 struct MessageWindowInfo
 {
-    const u8 *text;
+    const u8* text;
     bool8 boxType;
     u8 x;
     u8 y;
@@ -65,32 +65,32 @@ struct MessageWindowInfo
     bool8 widerBox;
 };
 
-static EWRAM_DATA struct UnionRoomChat2 * sWork = NULL;
+static EWRAM_DATA struct UnionRoomChat2* sWork = NULL;
 
-static void InitWork(struct UnionRoomChat2 * ptr);
+static void InitWork(struct UnionRoomChat2* ptr);
 static void UnionRoomChat_ResetDisplaySubtasks(void);
-static bool32 DisplaySubtask_LoadGfx(u8 *state);
-static bool32 DisplaySubtask_PrintWin3(u8 *state);
-static bool32 DisplaySubtask_HideWin3(u8 *state);
-static bool32 DisplaySubtask_SwitchPages(u8 *state);
-static bool32 DisplaySubtask_MoveSelectorCursorObj(u8 *state);
-static bool32 DisplaySubtask_ShowQuitChattingDialog(u8 *state);
-static bool32 DisplaySubtask_HideQuitChattingDialog(u8 *state);
-static bool32 DisplaySubtask_UpdateMessageBuffer(u8 *state);
-static bool32 DisplaySubtask_PrintRegisterWhere(u8 *state);
-static bool32 DisplaySubtask_CancelRegister(u8 *state);
-static bool32 DisplaySubtask_ReturnToKeyboard(u8 *state);
-static bool32 DisplaySubtask_ScrollChat(u8 *state);
-static bool32 DisplaySubtask_AnimateSelectorCursorBlink(u8 *state);
-static bool32 DisplaySubtask_PrintInputText(u8 *state);
-static bool32 DisplaySubtask_PrintExitingChat(u8 *state);
-static bool32 DisplaySubtask_PrintLeaderLeft(u8 *state);
-static bool32 DisplaySubtask_AskSave(u8 *state);
-static bool32 DisplaySubtask_AskOverwriteSave(u8 *state);
-static bool32 DisplaySubtask_PrintSavingDontTurnOffPower(u8 *state);
-static bool32 DisplaySubtask_PrintSavedTheGame(u8 *state);
-static bool32 DisplaySubtask_ShowConfirmLeaderLeaveDialog(u8 *state);
-static bool32 DisplaySubtaskDummy(u8 *state);
+static bool32 DisplaySubtask_LoadGfx(u8* state);
+static bool32 DisplaySubtask_PrintWin3(u8* state);
+static bool32 DisplaySubtask_HideWin3(u8* state);
+static bool32 DisplaySubtask_SwitchPages(u8* state);
+static bool32 DisplaySubtask_MoveSelectorCursorObj(u8* state);
+static bool32 DisplaySubtask_ShowQuitChattingDialog(u8* state);
+static bool32 DisplaySubtask_HideQuitChattingDialog(u8* state);
+static bool32 DisplaySubtask_UpdateMessageBuffer(u8* state);
+static bool32 DisplaySubtask_PrintRegisterWhere(u8* state);
+static bool32 DisplaySubtask_CancelRegister(u8* state);
+static bool32 DisplaySubtask_ReturnToKeyboard(u8* state);
+static bool32 DisplaySubtask_ScrollChat(u8* state);
+static bool32 DisplaySubtask_AnimateSelectorCursorBlink(u8* state);
+static bool32 DisplaySubtask_PrintInputText(u8* state);
+static bool32 DisplaySubtask_PrintExitingChat(u8* state);
+static bool32 DisplaySubtask_PrintLeaderLeft(u8* state);
+static bool32 DisplaySubtask_AskSave(u8* state);
+static bool32 DisplaySubtask_AskOverwriteSave(u8* state);
+static bool32 DisplaySubtask_PrintSavingDontTurnOffPower(u8* state);
+static bool32 DisplaySubtask_PrintSavedTheGame(u8* state);
+static bool32 DisplaySubtask_ShowConfirmLeaderLeaveDialog(u8* state);
+static bool32 DisplaySubtaskDummy(u8* state);
 static void PlaceYesNoMenuAt(u8 a0, u8 a1, u8 a2);
 static void HideYesNoMenuWindow(void);
 static void DestroyYesNoMenuWindow(void);
@@ -98,13 +98,13 @@ static void PlaceStdMessageWindow(int id, u16 bg0vofs);
 static void HideStdMessageWindow(void);
 static void DestroyStdMessageWindow(void);
 static void FillWin1Rect(u16 x, u16 width, u8 fillValue);
-static void PrintOnWin1Parameterized(u16 x, u8 *str, u8 bgColor, u8 fgColor, u8 shadowColor);
+static void PrintOnWin1Parameterized(u16 x, u8* str, u8 bgColor, u8 fgColor, u8 shadowColor);
 static void PrintCurrentKeyboardPage(void);
 static bool32 AnimateMoveBg1Right(void);
 static bool32 AnimateMoveBg1Left(void);
 static void PrintKeyboardSwapTextsOnWin3(void);
 static void ClearWin3(void);
-static void PrintTextOnWin0Colorized(u16 row, u8 *str, u8 colorIdx);
+static void PrintTextOnWin0Colorized(u16 row, u8* str, u8 colorIdx);
 static void ResetGpuBgState(void);
 static void SetBgTilemapWorkBuffers(void);
 static void ClearBg0(void);
@@ -227,7 +227,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = FALSE
     },
@@ -237,7 +237,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = FALSE
     },
@@ -247,7 +247,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = FALSE
     },
@@ -257,7 +257,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = FALSE
     },
@@ -267,7 +267,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = FALSE
     },
@@ -277,7 +277,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 0,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = TRUE,
         .widerBox = FALSE
     },
@@ -287,7 +287,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = TRUE
     },
@@ -297,7 +297,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = TRUE
     },
@@ -307,7 +307,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = TRUE
     },
@@ -317,7 +317,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = TRUE,
         .widerBox = TRUE
     },
@@ -327,7 +327,7 @@ static const struct MessageWindowInfo sMessageWindowInfo[] = {
         .x = 0,
         .y = 0,
         .letterSpacing = 1,
-        .lineSpacing = 2, 
+        .lineSpacing = 2,
         .expandPlaceholders = FALSE,
         .widerBox = TRUE
     }
@@ -379,7 +379,7 @@ void UnionRoomChat_FreeGraphicsWork(void)
     gScanlineEffect.state = 3;
 }
 
-static void InitWork(struct UnionRoomChat2 *arg0)
+static void InitWork(struct UnionRoomChat2* arg0)
 {
     arg0->yesNoMenuWinId = 0xFF;
     arg0->messageWindowId = 0xFF;
@@ -437,7 +437,7 @@ bool8 RunDisplaySubtask(u8 arg0)
     return sWork->subtasks[arg0].active;
 }
 
-static bool32 DisplaySubtask_LoadGfx(u8 *state)
+static bool32 DisplaySubtask_LoadGfx(u8* state)
 {
     if (FreeTempTileDataBuffersIfPossible() == TRUE)
         return TRUE;
@@ -482,7 +482,7 @@ static bool32 DisplaySubtask_LoadGfx(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintWin3(u8 *state)
+static bool32 DisplaySubtask_PrintWin3(u8* state)
 {
     switch (*state)
     {
@@ -498,7 +498,7 @@ static bool32 DisplaySubtask_PrintWin3(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_HideWin3(u8 *state)
+static bool32 DisplaySubtask_HideWin3(u8* state)
 {
     switch (*state)
     {
@@ -514,7 +514,7 @@ static bool32 DisplaySubtask_HideWin3(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_SwitchPages(u8 *state)
+static bool32 DisplaySubtask_SwitchPages(u8* state)
 {
     switch (*state)
     {
@@ -544,13 +544,13 @@ static bool32 DisplaySubtask_SwitchPages(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_MoveSelectorCursorObj(u8 *state)
+static bool32 DisplaySubtask_MoveSelectorCursorObj(u8* state)
 {
     UnionRoomChat_MoveSelectorCursorObj();
     return FALSE;
 }
 
-static bool32 DisplaySubtask_ShowQuitChattingDialog(u8 *state)
+static bool32 DisplaySubtask_ShowQuitChattingDialog(u8* state)
 {
     switch (*state)
     {
@@ -567,7 +567,7 @@ static bool32 DisplaySubtask_ShowQuitChattingDialog(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_HideQuitChattingDialog(u8 *state)
+static bool32 DisplaySubtask_HideQuitChattingDialog(u8* state)
 {
     switch (*state)
     {
@@ -589,10 +589,10 @@ static bool32 DisplaySubtask_HideQuitChattingDialog(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_UpdateMessageBuffer(u8 *state)
+static bool32 DisplaySubtask_UpdateMessageBuffer(u8* state)
 {
     u32 start, length;
-    u8 *str;
+    u8* str;
 
     switch (*state)
     {
@@ -616,10 +616,10 @@ static bool32 DisplaySubtask_UpdateMessageBuffer(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintRegisterWhere(u8 *state)
+static bool32 DisplaySubtask_PrintRegisterWhere(u8* state)
 {
     u16 var0;
-    u8 *str;
+    u8* str;
     u16 length;
 
     switch (*state)
@@ -657,10 +657,10 @@ static bool32 DisplaySubtask_PrintRegisterWhere(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_CancelRegister(u8 *state)
+static bool32 DisplaySubtask_CancelRegister(u8* state)
 {
     u16 x;
-    u8 *str;
+    u8* str;
     u16 length;
 
     switch (*state)
@@ -703,7 +703,7 @@ static bool32 DisplaySubtask_CancelRegister(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_ReturnToKeyboard(u8 *state)
+static bool32 DisplaySubtask_ReturnToKeyboard(u8* state)
 {
     switch (*state)
     {
@@ -722,10 +722,10 @@ static bool32 DisplaySubtask_ReturnToKeyboard(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_ScrollChat(u8 *state)
+static bool32 DisplaySubtask_ScrollChat(u8* state)
 {
     u16 row;
-    u8 *str;
+    u8* str;
     u8 colorIdx;
 
     switch (*state)
@@ -779,7 +779,7 @@ static bool32 DisplaySubtask_ScrollChat(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_AnimateSelectorCursorBlink(u8 *state)
+static bool32 DisplaySubtask_AnimateSelectorCursorBlink(u8* state)
 {
     switch (*state)
     {
@@ -794,7 +794,7 @@ static bool32 DisplaySubtask_AnimateSelectorCursorBlink(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintInputText(u8 *state)
+static bool32 DisplaySubtask_PrintInputText(u8* state)
 {
     switch (*state)
     {
@@ -810,7 +810,7 @@ static bool32 DisplaySubtask_PrintInputText(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintExitingChat(u8 *state)
+static bool32 DisplaySubtask_PrintExitingChat(u8* state)
 {
     switch (*state)
     {
@@ -826,9 +826,9 @@ static bool32 DisplaySubtask_PrintExitingChat(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintLeaderLeft(u8 *state)
+static bool32 DisplaySubtask_PrintLeaderLeft(u8* state)
 {
-    u8 *str;
+    u8* str;
 
     switch (*state)
     {
@@ -847,7 +847,7 @@ static bool32 DisplaySubtask_PrintLeaderLeft(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_AskSave(u8 *state)
+static bool32 DisplaySubtask_AskSave(u8* state)
 {
     switch (*state)
     {
@@ -864,7 +864,7 @@ static bool32 DisplaySubtask_AskSave(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_AskOverwriteSave(u8 *state)
+static bool32 DisplaySubtask_AskOverwriteSave(u8* state)
 {
     switch (*state)
     {
@@ -881,7 +881,7 @@ static bool32 DisplaySubtask_AskOverwriteSave(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintSavingDontTurnOffPower(u8 *state)
+static bool32 DisplaySubtask_PrintSavingDontTurnOffPower(u8* state)
 {
     switch (*state)
     {
@@ -897,7 +897,7 @@ static bool32 DisplaySubtask_PrintSavingDontTurnOffPower(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_PrintSavedTheGame(u8 *state)
+static bool32 DisplaySubtask_PrintSavedTheGame(u8* state)
 {
     switch (*state)
     {
@@ -915,7 +915,7 @@ static bool32 DisplaySubtask_PrintSavedTheGame(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtask_ShowConfirmLeaderLeaveDialog(u8 *state)
+static bool32 DisplaySubtask_ShowConfirmLeaderLeaveDialog(u8* state)
 {
     switch (*state)
     {
@@ -932,7 +932,7 @@ static bool32 DisplaySubtask_ShowConfirmLeaderLeaveDialog(u8 *state)
     return TRUE;
 }
 
-static bool32 DisplaySubtaskDummy(u8 *arg0)
+static bool32 DisplaySubtaskDummy(u8* arg0)
 {
     return FALSE;
 }
@@ -984,7 +984,7 @@ s8 UnionRoomChat_ProcessInput(void)
 
 static void PlaceStdMessageWindow(int id, u16 bg0vofs)
 {
-    const u8 *str;
+    const u8* str;
     int windowId;
     struct WindowTemplate template;
     template.bg = 0;
@@ -1075,7 +1075,7 @@ static void FillWin1Rect(u16 x, u16 width, u8 fillValue)
     FillWindowPixelRect(1, fillValue, x * 8, 1, width * 8, 14);
 }
 
-static void PrintOnWin1Parameterized(u16 x, u8 *str, u8 bgColor, u8 fgColor, u8 shadowColor)
+static void PrintOnWin1Parameterized(u16 x, u8* str, u8 bgColor, u8 fgColor, u8 shadowColor)
 {
     u8 color[3];
     u8 strbuf[35];
@@ -1101,7 +1101,7 @@ static void PrintCurrentKeyboardPage(void)
     u16 top;
     u8 color[3];
     u8 str[45];
-    u8 *str2;
+    u8* str2;
 
     FillWindowPixelBuffer(2, PIXEL_FILL(15));
     page = GetCurrentKeyboardPage();
@@ -1206,7 +1206,7 @@ static void ClearWin3(void)
     ClearWindowTilemap(3);
 }
 
-static void PrintTextOnWin0Colorized(u16 row, u8 *str, u8 colorIdx)
+static void PrintTextOnWin0Colorized(u16 row, u8* str, u8 colorIdx)
 // colorIdx: 0 = grey, 1 = red, 2 = green, 3 = blue
 {
     u8 color[3];
@@ -1238,7 +1238,7 @@ static void ResetGpuBgState(void)
     SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(64, 240));
     SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, 144));
     SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_BG2 | WININ_WIN0_BG3
-                                | WININ_WIN0_OBJ | WININ_WIN0_CLR);
+        | WININ_WIN0_OBJ | WININ_WIN0_CLR);
     SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG_ALL | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
 }
 
@@ -1252,7 +1252,7 @@ static void SetBgTilemapWorkBuffers(void)
 
 static void ClearBg0(void)
 {
-    RequestDma3Fill(0, (void *)BG_CHAR_ADDR(0), 0x20, DMA3_32BIT);
+    RequestDma3Fill(0, (void*)BG_CHAR_ADDR(0), 0x20, DMA3_32BIT);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 32, 32);
     CopyBgTilemapBufferToVram(0);
 }
@@ -1268,7 +1268,7 @@ static void LoadUnionRoomChatPanelGfx(void)
 
 static void LoadLinkMiscMenuGfx(void)
 {
-    u8 *ptr;
+    u8* ptr;
 
     LoadPalette(gUnionRoomChat_Bg_Pal, BG_PLTT_ID(0), PLTT_SIZE_4BPP);
     ptr = DecompressAndCopyTileDataToVram(2, gUnionRoomChat_Bg_Gfx, 0, 0, 0);
@@ -1279,7 +1279,7 @@ static void LoadLinkMiscMenuGfx(void)
 static void LoadBg1Pal8(void)
 {
     LoadPalette(gUnionRoomChat_Unused_Pal, BG_PLTT_ID(8), PLTT_SIZE_4BPP);
-    RequestDma3Fill(0, (void *)BG_CHAR_ADDR(1) + 0x20, 0x20, DMA3_32BIT);
+    RequestDma3Fill(0, (void*)BG_CHAR_ADDR(1) + 0x20, 0x20, DMA3_32BIT);
 }
 
 static void LoadWin0(void)
@@ -1309,7 +1309,7 @@ static void LoadWin3(void)
     FillWindowPixelBuffer(3, PIXEL_FILL(1));
     LoadUserWindowGfx(3, 1, BG_PLTT_ID(13));
     LoadStdWindowGfx(3, 0xA, BG_PLTT_ID(2));
-    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(14),  PLTT_SIZE_4BPP);
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(14), PLTT_SIZE_4BPP);
 }
 
 static void InitScanlineEffect(void)
@@ -1332,8 +1332,8 @@ static void FillScanlineEffectWithValue1col(s16 arg0)
 
 static void FillScanlineEffectWithValue2col(s16 arg0)
 {
-    CpuFill16(arg0, gScanlineEffectRegBuffers[0],         0x120);
-    CpuFill16(0,    gScanlineEffectRegBuffers[0] +  0x90, 0x20);
+    CpuFill16(arg0, gScanlineEffectRegBuffers[0], 0x120);
+    CpuFill16(0, gScanlineEffectRegBuffers[0] + 0x90, 0x20);
     CpuFill16(arg0, gScanlineEffectRegBuffers[0] + 0x3C0, 0x120);
-    CpuFill16(0,    gScanlineEffectRegBuffers[0] + 0x450, 0x20);
+    CpuFill16(0, gScanlineEffectRegBuffers[0] + 0x450, 0x20);
 }

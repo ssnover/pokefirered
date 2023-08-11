@@ -18,7 +18,7 @@
 struct PAM_TaskData
 {
     struct SubspriteTable subsprites;
-    void *buffer;
+    void* buffer;
     u8 unused;
     u8 spriteId;
     u16 tilesTag;
@@ -88,103 +88,103 @@ static const struct Subsprite sSubsprite_LargeVertical = {
 };
 
 
-static const struct Subsprite *const sSubsprites[] = {
+static const struct Subsprite* const sSubsprites[] = {
     [MARKER_CIRCULAR] = &sSubsprite_Circular,
-    [MARKER_SMALL_H]  = &sSubsprite_SmallHorizontal,
-    [MARKER_SMALL_V]  = &sSubsprite_SmallVertical,
-    [MARKER_MED_H]    = &sSubsprite_MediumHorizontal,
-    [MARKER_MED_V]    = &sSubsprite_MediumVertical,
-    [MARKER_LARGE_H]  = &sSubsprite_LargeHorizontal,
-    [MARKER_LARGE_V]  = &sSubsprite_LargeVertical
+    [MARKER_SMALL_H] = &sSubsprite_SmallHorizontal,
+    [MARKER_SMALL_V] = &sSubsprite_SmallVertical,
+    [MARKER_MED_H] = &sSubsprite_MediumHorizontal,
+    [MARKER_MED_V] = &sSubsprite_MediumVertical,
+    [MARKER_LARGE_H] = &sSubsprite_LargeHorizontal,
+    [MARKER_LARGE_V] = &sSubsprite_LargeVertical
 };
 
 static const s8 sAreaMarkers[][4] = {
-                                  // Marker,          x,    y
-    [DEX_AREA_NONE]             = {},
-    [DEX_AREA_PALLET_TOWN]      = { MARKER_CIRCULAR,  54,  44 },
-    [DEX_AREA_VIRIDIAN_CITY]    = { MARKER_CIRCULAR,  54,  28 },
-    [DEX_AREA_PEWTER_CITY]      = { MARKER_CIRCULAR,  54,  12 },
-    [DEX_AREA_CERULEAN_CITY]    = { MARKER_CIRCULAR,  92,  12 },
-    [DEX_AREA_LAVENDER_TOWN]    = { MARKER_CIRCULAR, 110,  24 },
-    [DEX_AREA_VERMILION_CITY]   = { MARKER_CIRCULAR,  92,  36 },
-    [DEX_AREA_CELADON_CITY]     = { MARKER_CIRCULAR,  76,  24 },
-    [DEX_AREA_FUCHSIA_CITY]     = { MARKER_CIRCULAR,  78,  52 },
-    [DEX_AREA_CINNABAR_ISLAND]  = { MARKER_CIRCULAR,  54,  62 },
-    [DEX_AREA_INDIGO_PLATEAU]   = { MARKER_CIRCULAR,  42,   2 },
-    [DEX_AREA_SAFFRON_CITY]     = { MARKER_CIRCULAR,  92,  24 },
-    [DEX_AREA_ROUTE_1]          = { MARKER_SMALL_V,   54,  32 },
-    [DEX_AREA_ROUTE_2]          = { MARKER_SMALL_V,   54,  16 },
-    [DEX_AREA_ROUTE_3]          = { MARKER_SMALL_H,   61,  12 },
-    [DEX_AREA_ROUTE_4]          = { MARKER_SMALL_H,   77,  12 },
-    [DEX_AREA_ROUTE_5]          = { MARKER_CIRCULAR,  92,  18 },
-    [DEX_AREA_ROUTE_6]          = { MARKER_CIRCULAR,  92,  30 },
-    [DEX_AREA_ROUTE_7]          = { MARKER_CIRCULAR,  84,  24 },
-    [DEX_AREA_ROUTE_8]          = { MARKER_SMALL_H,   98,  24 },
-    [DEX_AREA_ROUTE_9]          = { MARKER_SMALL_H,   98,  12 },
-    [DEX_AREA_ROUTE_10]         = { MARKER_SMALL_V,  110,  12 },
-    [DEX_AREA_ROUTE_11]         = { MARKER_SMALL_H,   98,  36 },
-    [DEX_AREA_ROUTE_12]         = { MARKER_MED_V,    106,  25 },
-    [DEX_AREA_ROUTE_13]         = { MARKER_SMALL_H,  100,  46 },
-    [DEX_AREA_ROUTE_14]         = { MARKER_SMALL_V,   94,  45 },
-    [DEX_AREA_ROUTE_15]         = { MARKER_SMALL_H,   85,  52 },
-    [DEX_AREA_ROUTE_16]         = { MARKER_CIRCULAR,  68,  24 },
-    [DEX_AREA_ROUTE_17]         = { MARKER_MED_V,     62,  26 },
-    [DEX_AREA_ROUTE_18]         = { MARKER_SMALL_H,   64,  52 },
-    [DEX_AREA_ROUTE_19]         = { MARKER_CIRCULAR,  78,  60 },
-    [DEX_AREA_ROUTE_20]         = { MARKER_MED_H,     55,  58 },
-    [DEX_AREA_ROUTE_21]         = { MARKER_SMALL_V,   54,  50 },
-    [DEX_AREA_ROUTE_22]         = { MARKER_SMALL_H,   40,  28 },
-    [DEX_AREA_ROUTE_23]         = { MARKER_MED_V,     38,   4 },
-    [DEX_AREA_ROUTE_24]         = { MARKER_CIRCULAR,  92,   4 },
-    [DEX_AREA_ROUTE_25]         = { MARKER_MED_H,     90,  -2 },
-    [DEX_AREA_VIRIDIAN_FOREST]  = { MARKER_CIRCULAR,  51,  20 },
-    [DEX_AREA_DIGLETTS_CAVE]    = { MARKER_SMALL_H,   61,  18 },
-    [DEX_AREA_MT_MOON]          = { MARKER_CIRCULAR,  72,   8 },
-    [DEX_AREA_CERULEAN_CAVE]    = { MARKER_CIRCULAR,  87,   8 },
-    [DEX_AREA_ROCK_TUNNEL]      = { MARKER_CIRCULAR, 112,  14 },
-    [DEX_AREA_POWER_PLANT]      = { MARKER_CIRCULAR, 113,  20 },
-    [DEX_AREA_POKEMON_TOWER]    = { MARKER_CIRCULAR, 113,  25 },
-    [DEX_AREA_SAFARI_ZONE]      = { MARKER_SMALL_H,   78,  44 },
-    [DEX_AREA_SEAFOAM_ISLANDS]  = { MARKER_CIRCULAR,  65,  60 },
-    [DEX_AREA_POKEMON_MANSION]  = { MARKER_CIRCULAR,  52,  62 },
-    [DEX_AREA_VICTORY_ROAD]     = { MARKER_CIRCULAR,  45,   7 },
-    [DEX_AREA_ONE_ISLAND]       = { MARKER_CIRCULAR,  10,  10 },
-    [DEX_AREA_TWO_ISLAND]       = { MARKER_CIRCULAR,  12,  35 },
-    [DEX_AREA_THREE_ISLAND]     = { MARKER_CIRCULAR,  14,  52 },
-    [DEX_AREA_FOUR_ISLAND]      = { MARKER_CIRCULAR,  12,  84 },
-    [DEX_AREA_FIVE_ISLAND]      = { MARKER_CIRCULAR,  45,  81 },
-    [DEX_AREA_SIX_ISLAND]       = { MARKER_CIRCULAR,  76,  84 },
-    [DEX_AREA_SEVEN_ISLAND]     = { MARKER_CIRCULAR, 104,  82 },
-    [DEX_AREA_KINDLE_ROAD]      = { MARKER_SMALL_V,   14,   2 },
-    [DEX_AREA_TREASURE_BEACH]   = { MARKER_CIRCULAR,  10,  15 },
-    [DEX_AREA_CAPE_BRINK]       = { MARKER_CIRCULAR,  12,  29 },
-    [DEX_AREA_BOND_BRIDGE]      = { MARKER_SMALL_H,    2,  52 },
-    [DEX_AREA_THREE_ISLE_PATH]  = { MARKER_SMALL_H,   12,  56 },
-    [DEX_AREA_RESORT_GORGEOUS]  = { MARKER_SMALL_H,   44,  74 },
-    [DEX_AREA_WATER_LABYRINTH]  = { MARKER_SMALL_H,   36,  78 },
-    [DEX_AREA_FIVE_ISLE_MEADOW] = { MARKER_SMALL_V,   48,  80 },
-    [DEX_AREA_MEMORIAL_PILLAR]  = { MARKER_SMALL_V,   52,  86 },
-    [DEX_AREA_OUTCAST_ISLAND]   = { MARKER_CIRCULAR,  72,  74 },
-    [DEX_AREA_GREEN_PATH]       = { MARKER_SMALL_H,   72,  78 },
-    [DEX_AREA_WATER_PATH]       = { MARKER_SMALL_V,   81,  80 },
-    [DEX_AREA_RUIN_VALLEY]      = { MARKER_CIRCULAR,  76,  92 },
-    [DEX_AREA_TRAINER_TOWER]    = { MARKER_CIRCULAR, 104,  75 },
-    [DEX_AREA_CANYON_ENTRANCE]  = { MARKER_CIRCULAR, 104,  86 },
-    [DEX_AREA_SEVAULT_CANYON]   = { MARKER_SMALL_V,  108,  83 },
-    [DEX_AREA_TANOBY_RUINS]     = { MARKER_MED_H,     96,  90 },
-    [DEX_AREA_MT_EMBER]         = { MARKER_CIRCULAR,  14,   1 },
-    [DEX_AREA_BERRY_FOREST]     = { MARKER_CIRCULAR,   5,  52 },
-    [DEX_AREA_ICEFALL_CAVE]     = { MARKER_CIRCULAR,  13,  80 },
-    [DEX_AREA_LOST_CAVE]        = { MARKER_CIRCULAR,  54,  74 },
-    [DEX_AREA_ALTERING_CAVE]    = { MARKER_CIRCULAR,  69,  73 },
-    [DEX_AREA_PATTERN_BUSH]     = { MARKER_CIRCULAR,  76,  77 },
-    [DEX_AREA_DOTTED_HOLE]      = { MARKER_CIRCULAR,  73,  95 },
-    [DEX_AREA_TANOBY_CHAMBER]   = { MARKER_MED_H,     96,  90 },
+    // Marker,          x,    y
+[DEX_AREA_NONE] = {},
+[DEX_AREA_PALLET_TOWN] = { MARKER_CIRCULAR,  54,  44 },
+[DEX_AREA_VIRIDIAN_CITY] = { MARKER_CIRCULAR,  54,  28 },
+[DEX_AREA_PEWTER_CITY] = { MARKER_CIRCULAR,  54,  12 },
+[DEX_AREA_CERULEAN_CITY] = { MARKER_CIRCULAR,  92,  12 },
+[DEX_AREA_LAVENDER_TOWN] = { MARKER_CIRCULAR, 110,  24 },
+[DEX_AREA_VERMILION_CITY] = { MARKER_CIRCULAR,  92,  36 },
+[DEX_AREA_CELADON_CITY] = { MARKER_CIRCULAR,  76,  24 },
+[DEX_AREA_FUCHSIA_CITY] = { MARKER_CIRCULAR,  78,  52 },
+[DEX_AREA_CINNABAR_ISLAND] = { MARKER_CIRCULAR,  54,  62 },
+[DEX_AREA_INDIGO_PLATEAU] = { MARKER_CIRCULAR,  42,   2 },
+[DEX_AREA_SAFFRON_CITY] = { MARKER_CIRCULAR,  92,  24 },
+[DEX_AREA_ROUTE_1] = { MARKER_SMALL_V,   54,  32 },
+[DEX_AREA_ROUTE_2] = { MARKER_SMALL_V,   54,  16 },
+[DEX_AREA_ROUTE_3] = { MARKER_SMALL_H,   61,  12 },
+[DEX_AREA_ROUTE_4] = { MARKER_SMALL_H,   77,  12 },
+[DEX_AREA_ROUTE_5] = { MARKER_CIRCULAR,  92,  18 },
+[DEX_AREA_ROUTE_6] = { MARKER_CIRCULAR,  92,  30 },
+[DEX_AREA_ROUTE_7] = { MARKER_CIRCULAR,  84,  24 },
+[DEX_AREA_ROUTE_8] = { MARKER_SMALL_H,   98,  24 },
+[DEX_AREA_ROUTE_9] = { MARKER_SMALL_H,   98,  12 },
+[DEX_AREA_ROUTE_10] = { MARKER_SMALL_V,  110,  12 },
+[DEX_AREA_ROUTE_11] = { MARKER_SMALL_H,   98,  36 },
+[DEX_AREA_ROUTE_12] = { MARKER_MED_V,    106,  25 },
+[DEX_AREA_ROUTE_13] = { MARKER_SMALL_H,  100,  46 },
+[DEX_AREA_ROUTE_14] = { MARKER_SMALL_V,   94,  45 },
+[DEX_AREA_ROUTE_15] = { MARKER_SMALL_H,   85,  52 },
+[DEX_AREA_ROUTE_16] = { MARKER_CIRCULAR,  68,  24 },
+[DEX_AREA_ROUTE_17] = { MARKER_MED_V,     62,  26 },
+[DEX_AREA_ROUTE_18] = { MARKER_SMALL_H,   64,  52 },
+[DEX_AREA_ROUTE_19] = { MARKER_CIRCULAR,  78,  60 },
+[DEX_AREA_ROUTE_20] = { MARKER_MED_H,     55,  58 },
+[DEX_AREA_ROUTE_21] = { MARKER_SMALL_V,   54,  50 },
+[DEX_AREA_ROUTE_22] = { MARKER_SMALL_H,   40,  28 },
+[DEX_AREA_ROUTE_23] = { MARKER_MED_V,     38,   4 },
+[DEX_AREA_ROUTE_24] = { MARKER_CIRCULAR,  92,   4 },
+[DEX_AREA_ROUTE_25] = { MARKER_MED_H,     90,  -2 },
+[DEX_AREA_VIRIDIAN_FOREST] = { MARKER_CIRCULAR,  51,  20 },
+[DEX_AREA_DIGLETTS_CAVE] = { MARKER_SMALL_H,   61,  18 },
+[DEX_AREA_MT_MOON] = { MARKER_CIRCULAR,  72,   8 },
+[DEX_AREA_CERULEAN_CAVE] = { MARKER_CIRCULAR,  87,   8 },
+[DEX_AREA_ROCK_TUNNEL] = { MARKER_CIRCULAR, 112,  14 },
+[DEX_AREA_POWER_PLANT] = { MARKER_CIRCULAR, 113,  20 },
+[DEX_AREA_POKEMON_TOWER] = { MARKER_CIRCULAR, 113,  25 },
+[DEX_AREA_SAFARI_ZONE] = { MARKER_SMALL_H,   78,  44 },
+[DEX_AREA_SEAFOAM_ISLANDS] = { MARKER_CIRCULAR,  65,  60 },
+[DEX_AREA_POKEMON_MANSION] = { MARKER_CIRCULAR,  52,  62 },
+[DEX_AREA_VICTORY_ROAD] = { MARKER_CIRCULAR,  45,   7 },
+[DEX_AREA_ONE_ISLAND] = { MARKER_CIRCULAR,  10,  10 },
+[DEX_AREA_TWO_ISLAND] = { MARKER_CIRCULAR,  12,  35 },
+[DEX_AREA_THREE_ISLAND] = { MARKER_CIRCULAR,  14,  52 },
+[DEX_AREA_FOUR_ISLAND] = { MARKER_CIRCULAR,  12,  84 },
+[DEX_AREA_FIVE_ISLAND] = { MARKER_CIRCULAR,  45,  81 },
+[DEX_AREA_SIX_ISLAND] = { MARKER_CIRCULAR,  76,  84 },
+[DEX_AREA_SEVEN_ISLAND] = { MARKER_CIRCULAR, 104,  82 },
+[DEX_AREA_KINDLE_ROAD] = { MARKER_SMALL_V,   14,   2 },
+[DEX_AREA_TREASURE_BEACH] = { MARKER_CIRCULAR,  10,  15 },
+[DEX_AREA_CAPE_BRINK] = { MARKER_CIRCULAR,  12,  29 },
+[DEX_AREA_BOND_BRIDGE] = { MARKER_SMALL_H,    2,  52 },
+[DEX_AREA_THREE_ISLE_PATH] = { MARKER_SMALL_H,   12,  56 },
+[DEX_AREA_RESORT_GORGEOUS] = { MARKER_SMALL_H,   44,  74 },
+[DEX_AREA_WATER_LABYRINTH] = { MARKER_SMALL_H,   36,  78 },
+[DEX_AREA_FIVE_ISLE_MEADOW] = { MARKER_SMALL_V,   48,  80 },
+[DEX_AREA_MEMORIAL_PILLAR] = { MARKER_SMALL_V,   52,  86 },
+[DEX_AREA_OUTCAST_ISLAND] = { MARKER_CIRCULAR,  72,  74 },
+[DEX_AREA_GREEN_PATH] = { MARKER_SMALL_H,   72,  78 },
+[DEX_AREA_WATER_PATH] = { MARKER_SMALL_V,   81,  80 },
+[DEX_AREA_RUIN_VALLEY] = { MARKER_CIRCULAR,  76,  92 },
+[DEX_AREA_TRAINER_TOWER] = { MARKER_CIRCULAR, 104,  75 },
+[DEX_AREA_CANYON_ENTRANCE] = { MARKER_CIRCULAR, 104,  86 },
+[DEX_AREA_SEVAULT_CANYON] = { MARKER_SMALL_V,  108,  83 },
+[DEX_AREA_TANOBY_RUINS] = { MARKER_MED_H,     96,  90 },
+[DEX_AREA_MT_EMBER] = { MARKER_CIRCULAR,  14,   1 },
+[DEX_AREA_BERRY_FOREST] = { MARKER_CIRCULAR,   5,  52 },
+[DEX_AREA_ICEFALL_CAVE] = { MARKER_CIRCULAR,  13,  80 },
+[DEX_AREA_LOST_CAVE] = { MARKER_CIRCULAR,  54,  74 },
+[DEX_AREA_ALTERING_CAVE] = { MARKER_CIRCULAR,  69,  73 },
+[DEX_AREA_PATTERN_BUSH] = { MARKER_CIRCULAR,  76,  77 },
+[DEX_AREA_DOTTED_HOLE] = { MARKER_CIRCULAR,  73,  95 },
+[DEX_AREA_TANOBY_CHAMBER] = { MARKER_MED_H,     96,  90 },
 };
 
 static void Task_ShowAreaMarkers(u8 taskId)
 {
-    struct PAM_TaskData * data = (void *)gTasks[taskId].data;
+    struct PAM_TaskData* data = (void*)gTasks[taskId].data;
     gSprites[data->spriteId].invisible = FALSE;
 }
 
@@ -193,8 +193,8 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
     struct SpriteTemplate spriteTemplate;
     struct CompressedSpriteSheet spriteSheet;
     u8 taskId;
-    struct PAM_TaskData * data;
-    struct Subsprite * subsprites;
+    struct PAM_TaskData* data;
+    struct Subsprite* subsprites;
 
     // Load gfx
     spriteSheet.data = sMarkerTiles;
@@ -205,7 +205,7 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
 
     // Get marker subsprites
     taskId = CreateTask(Task_ShowAreaMarkers, 0);
-    data = (void *)gTasks[taskId].data;
+    data = (void*)gTasks[taskId].data;
     data->unused = 0;
     data->tilesTag = tilesTag;
     data->paletteTag = TAG_NONE;
@@ -242,7 +242,7 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
 
 void DestroyPokedexAreaMarkers(u8 taskId)
 {
-    struct PAM_TaskData * data = (void *)gTasks[taskId].data;
+    struct PAM_TaskData* data = (void*)gTasks[taskId].data;
     FreeSpriteTilesByTag(data->tilesTag);
     DestroySprite(&gSprites[data->spriteId]);
     Free(data->buffer);
@@ -260,7 +260,7 @@ void DestroyPokedexAreaMarkers(u8 taskId)
     DestroyTask(taskId);
 }
 
-void GetAreaMarkerSubsprite(s32 i, s32 dexArea, struct Subsprite * subsprites)
+void GetAreaMarkerSubsprite(s32 i, s32 dexArea, struct Subsprite* subsprites)
 {
     subsprites[i] = *sSubsprites[sAreaMarkers[dexArea][0]];
     subsprites[i].x = sAreaMarkers[dexArea][1];
@@ -269,6 +269,6 @@ void GetAreaMarkerSubsprite(s32 i, s32 dexArea, struct Subsprite * subsprites)
 
 u8 GetNumPokedexAreaMarkers(u8 taskId)
 {
-    struct PAM_TaskData * data = (void *)gTasks[taskId].data;
+    struct PAM_TaskData* data = (void*)gTasks[taskId].data;
     return data->subsprites.subspriteCount;
 }

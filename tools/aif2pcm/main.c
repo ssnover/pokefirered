@@ -26,8 +26,8 @@
 #include <limits.h>
 
 /* extended.c */
-void ieee754_write_extended (double, uint8_t*);
-double ieee754_read_extended (uint8_t*);
+void ieee754_write_extended(double, uint8_t*);
+double ieee754_read_extended(uint8_t*);
 
 #ifdef _MSC_VER
 
@@ -51,7 +51,7 @@ do                                          \
 
 typedef struct {
 	unsigned long num_samples;
-	uint8_t *samples;
+	uint8_t* samples;
 	uint8_t midi_note;
 	bool has_loop;
 	unsigned long loop_offset;
@@ -61,7 +61,7 @@ typedef struct {
 
 struct Bytes {
 	unsigned long length;
-	uint8_t *data;
+	uint8_t* data;
 };
 
 struct Marker {
@@ -70,10 +70,10 @@ struct Marker {
 	// don't care about the name
 };
 
-struct Bytes *read_bytearray(const char *filename)
+struct Bytes* read_bytearray(const char* filename)
 {
-	struct Bytes *bytes = malloc(sizeof(struct Bytes));
-	FILE *f = fopen(filename, "rb");
+	struct Bytes* bytes = malloc(sizeof(struct Bytes));
+	FILE* f = fopen(filename, "rb");
 	if (!f)
 	{
 		FATAL_ERROR("Failed to open '%s' for reading!\n", filename);
@@ -91,9 +91,9 @@ struct Bytes *read_bytearray(const char *filename)
 	return bytes;
 }
 
-void write_bytearray(const char *filename, struct Bytes *bytes)
+void write_bytearray(const char* filename, struct Bytes* bytes)
 {
-	FILE *f = fopen(filename, "wb");
+	FILE* f = fopen(filename, "wb");
 	if (!f)
 	{
 		FATAL_ERROR("Failed to open '%s' for writing!\n", filename);
@@ -102,15 +102,15 @@ void write_bytearray(const char *filename, struct Bytes *bytes)
 	fclose(f);
 }
 
-void free_bytearray(struct Bytes *bytes)
+void free_bytearray(struct Bytes* bytes)
 {
 	free(bytes->data);
 	free(bytes);
 }
 
-char *get_file_extension(char *filename)
+char* get_file_extension(char* filename)
 {
-	char *index = strrchr(filename, '.');
+	char* index = strrchr(filename, '.');
 	if (!index || index == filename)
 	{
 		return NULL;
@@ -118,15 +118,15 @@ char *get_file_extension(char *filename)
 	return index + 1;
 }
 
-char *new_file_extension(char *filename, char *ext)
+char* new_file_extension(char* filename, char* ext)
 {
-	char *index = strrchr(filename, '.');
+	char* index = strrchr(filename, '.');
 	if (!index || index == filename)
 	{
 		index = filename + strlen(filename);
 	}
 	int length = index - filename;
-	char *new_filename = malloc(length + 1 + strlen(ext) + 1);
+	char* new_filename = malloc(length + 1 + strlen(ext) + 1);
 	if (new_filename)
 	{
 		strcpy(new_filename, filename);
@@ -136,7 +136,7 @@ char *new_file_extension(char *filename, char *ext)
 	return new_filename;
 }
 
-void read_aif(struct Bytes *aif, AifData *aif_data)
+void read_aif(struct Bytes* aif, AifData* aif_data)
 {
 	aif_data->has_loop = false;
 	aif_data->num_samples = 0;
@@ -156,7 +156,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 	// Read size of whole file.
 	unsigned long whole_chunk_size = aif->data[pos++] << 24;
 	whole_chunk_size |= (aif->data[pos++] << 16);
-	whole_chunk_size |= (aif->data[pos++] <<  8);
+	whole_chunk_size |= (aif->data[pos++] << 8);
 	whole_chunk_size |= (uint8_t)aif->data[pos++];
 
 	unsigned long expected_whole_chunk_size = aif->length - 8;
@@ -173,7 +173,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 		FATAL_ERROR("FORM Type is '%s', but it must be AIFF!", chunk_type);
 	}
 
-	struct Marker *markers = NULL;
+	struct Marker* markers = NULL;
 	unsigned short num_markers = 0, loop_start = 0, loop_end = 0;
 	unsigned long num_sample_frames = 0;
 
@@ -186,8 +186,8 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 
 		unsigned long chunk_size = (aif->data[pos++] << 24);
 		chunk_size |= (aif->data[pos++] << 16);
-		chunk_size |= (aif->data[pos++] <<  8);
-		chunk_size |=  aif->data[pos++];
+		chunk_size |= (aif->data[pos++] << 8);
+		chunk_size |= aif->data[pos++];
 
 		if ((pos + chunk_size) > aif->length)
 		{
@@ -203,10 +203,10 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 				FATAL_ERROR("numChannels (%d) in the COMM Chunk must be 1!\n", num_channels);
 			}
 
-			num_sample_frames =  (aif->data[pos++] << 24);
+			num_sample_frames = (aif->data[pos++] << 24);
 			num_sample_frames |= (aif->data[pos++] << 16);
-			num_sample_frames |= (aif->data[pos++] <<  8);
-			num_sample_frames |=  (uint8_t)aif->data[pos++];
+			num_sample_frames |= (aif->data[pos++] << 8);
+			num_sample_frames |= (uint8_t)aif->data[pos++];
 
 			short sample_size = (aif->data[pos++] << 8);
 			sample_size |= (uint8_t)aif->data[pos++];
@@ -234,7 +234,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 			{
 				FATAL_ERROR("More than one MARK Chunk in file!\n");
 			}
-			
+
 			markers = calloc(num_markers, sizeof(struct Marker));
 
 			// Read each marker.
@@ -246,7 +246,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 				unsigned long marker_position = (aif->data[pos++] << 24);
 				marker_position |= (aif->data[pos++] << 16);
 				marker_position |= (aif->data[pos++] << 8);
-				marker_position |=  (uint8_t)aif->data[pos++];
+				marker_position |= (uint8_t)aif->data[pos++];
 
 				// Marker name is a Pascal-style string.
 				uint8_t marker_name_size = aif->data[pos++];
@@ -285,7 +285,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 				// Skip NoLooping sustain loop.
 				pos += 4;
 			}
-			
+
 			// Skip release loop, we don't need it.
 			pos += 6;
 		}
@@ -295,7 +295,7 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 			pos += 8;
 
 			unsigned long num_samples = chunk_size - 8;
-			uint8_t *sample_data = (uint8_t *)malloc(num_samples * sizeof(uint8_t));
+			uint8_t* sample_data = (uint8_t*)malloc(num_samples * sizeof(uint8_t));
 			memcpy(sample_data, &aif->data[pos], num_samples);
 
 			aif_data->samples = sample_data;
@@ -308,12 +308,12 @@ void read_aif(struct Bytes *aif, AifData *aif_data)
 			pos += chunk_size;
 		}
 	}
-	
+
 	if (markers)
 	{
 		// Resolve loop points.
-		struct Marker *cur_marker = markers;
-	
+		struct Marker* cur_marker = markers;
+
 		// Grab loop start point.
 		for (int i = 0; i < num_markers; i++, cur_marker++)
 		{
@@ -351,9 +351,9 @@ const int gDeltaEncodingTable[] = {
 	-64, -49, -36, -25, -16, -9, -4, -1,
 };
 
-struct Bytes *delta_decompress(struct Bytes *delta, unsigned int expected_length)
+struct Bytes* delta_decompress(struct Bytes* delta, unsigned int expected_length)
 {
-	struct Bytes *pcm = malloc(sizeof(struct Bytes));
+	struct Bytes* pcm = malloc(sizeof(struct Bytes));
 	pcm->length = expected_length;
 	pcm->data = malloc(pcm->length + 0x40);
 
@@ -438,9 +438,9 @@ int get_delta_index(uint8_t sample, uint8_t prev_sample)
 	return best_index;
 }
 
-struct Bytes *delta_compress(struct Bytes *pcm)
+struct Bytes* delta_compress(struct Bytes* pcm)
 {
-	struct Bytes *delta = malloc(sizeof(struct Bytes));
+	struct Bytes* delta = malloc(sizeof(struct Bytes));
 	// estimate the length so we can malloc
 	int num_blocks = pcm->length / 64;
 	delta->length = num_blocks * 33;
@@ -524,19 +524,19 @@ do { \
 } while (0)
 
 // Reads an .aif file and produces a .pcm file containing an array of 8-bit samples.
-void aif2pcm(const char *aif_filename, const char *pcm_filename, bool compress)
+void aif2pcm(const char* aif_filename, const char* pcm_filename, bool compress)
 {
-	struct Bytes *aif = read_bytearray(aif_filename);
-	AifData aif_data = {0,0,0,0,0,0,0};
+	struct Bytes* aif = read_bytearray(aif_filename);
+	AifData aif_data = { 0,0,0,0,0,0,0 };
 	read_aif(aif, &aif_data);
 
 	int header_size = 0x10;
-	struct Bytes *pcm;
-	struct Bytes output = {0,0};
+	struct Bytes* pcm;
+	struct Bytes output = { 0,0 };
 
 	if (compress)
 	{
-		struct Bytes *input = malloc(sizeof(struct Bytes));
+		struct Bytes* input = malloc(sizeof(struct Bytes));
 		input->data = aif_data.samples;
 		input->length = aif_data.real_num_samples;
 		pcm = delta_compress(input);
@@ -573,11 +573,11 @@ void aif2pcm(const char *aif_filename, const char *pcm_filename, bool compress)
 
 // Reads a .pcm file containing an array of 8-bit samples and produces an .aif file.
 // See http://www-mmsp.ece.mcgill.ca/documents/audioformats/aiff/Docs/AIFF-1.3.pdf for .aif file specification.
-void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_note)
+void pcm2aif(const char* pcm_filename, const char* aif_filename, uint32_t base_note)
 {
-	struct Bytes *pcm = read_bytearray(pcm_filename);
+	struct Bytes* pcm = read_bytearray(pcm_filename);
 
-	AifData *aif_data = malloc(sizeof(AifData));
+	AifData* aif_data = malloc(sizeof(AifData));
 
 	uint32_t flags;
 	LOAD_U32_LE(flags, pcm->data + 0);
@@ -594,8 +594,8 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 
 	if (compressed)
 	{
-		struct Bytes *delta = pcm;
-		uint8_t *pcm_data = pcm->data;
+		struct Bytes* delta = pcm;
+		uint8_t* pcm_data = pcm->data;
 		delta->length -= 0x10;
 		delta->data += 0x10;
 		pcm = delta_decompress(delta, aif_data->num_samples);
@@ -611,7 +611,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	aif_data->samples = malloc(pcm->length);
 	memcpy(aif_data->samples, pcm->data, pcm->length);
 
-	struct Bytes *aif = malloc(sizeof(struct Bytes));
+	struct Bytes* aif = malloc(sizeof(struct Bytes));
 	aif->length = 54 + 60 + pcm->length;
 	aif->data = malloc(aif->length);
 
@@ -629,7 +629,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	unsigned long data_size = aif->length - 8;
 	aif->data[pos++] = ((data_size >> 24) & 0xFF);
 	aif->data[pos++] = ((data_size >> 16) & 0xFF);
-	aif->data[pos++] = ((data_size >>  8) & 0xFF);
+	aif->data[pos++] = ((data_size >> 8) & 0xFF);
 	aif->data[pos++] = (data_size & 0xFF);
 
 	// FORM Chunk formType
@@ -658,7 +658,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	// Common Chunk numSampleFrames
 	aif->data[pos++] = ((aif_data->num_samples >> 24) & 0xFF);
 	aif->data[pos++] = ((aif_data->num_samples >> 16) & 0xFF);
-	aif->data[pos++] = ((aif_data->num_samples >> 8)  & 0xFF);
+	aif->data[pos++] = ((aif_data->num_samples >> 8) & 0xFF);
 	aif->data[pos++] = (aif_data->num_samples & 0xFF);
 
 	// Common Chunk sampleSize
@@ -700,7 +700,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 		long loop_start = aif_data->loop_offset;
 		aif->data[pos++] = ((loop_start >> 24) & 0xFF);
 		aif->data[pos++] = ((loop_start >> 16) & 0xFF);
-		aif->data[pos++] = ((loop_start >> 8)  & 0xFF);
+		aif->data[pos++] = ((loop_start >> 8) & 0xFF);
 		aif->data[pos++] = (loop_start & 0xFF);  // position
 
 		aif->data[pos++] = 5;  // pascal-style string length
@@ -717,7 +717,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 		long loop_end = aif_data->num_samples;
 		aif->data[pos++] = ((loop_end >> 24) & 0xFF);
 		aif->data[pos++] = ((loop_end >> 16) & 0xFF);
-		aif->data[pos++] = ((loop_end >> 8)  & 0xFF);
+		aif->data[pos++] = ((loop_end >> 8) & 0xFF);
 		aif->data[pos++] = (loop_end & 0xFF);  // position
 
 		aif->data[pos++] = 3;  // pascal-style string length
@@ -757,7 +757,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	aif->data[pos++] = 0;
 	aif->data[pos++] = 2;  // endLoop marker id
 
-		// Instrument Chunk releaseLoop
+	// Instrument Chunk releaseLoop
 	aif->data[pos++] = 0;
 	aif->data[pos++] = 1; // playMode = ForwardLooping
 
@@ -778,7 +778,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	unsigned long sound_data_size = pcm->length + 8;
 	aif->data[pos++] = ((sound_data_size >> 24) & 0xFF);
 	aif->data[pos++] = ((sound_data_size >> 16) & 0xFF);
-	aif->data[pos++] = ((sound_data_size >> 8)  & 0xFF);
+	aif->data[pos++] = ((sound_data_size >> 8) & 0xFF);
 	aif->data[pos++] = (sound_data_size & 0xFF);
 
 	// Sound Data Chunk offset
@@ -812,7 +812,7 @@ void pcm2aif(const char *pcm_filename, const char *aif_filename, uint32_t base_n
 	data_size = aif->length - 8;
 	aif->data[form_size + 0] = ((data_size >> 24) & 0xFF);
 	aif->data[form_size + 1] = ((data_size >> 16) & 0xFF);
-	aif->data[form_size + 2] = ((data_size >>  8) & 0xFF);
+	aif->data[form_size + 2] = ((data_size >> 8) & 0xFF);
 	aif->data[form_size + 3] = (data_size & 0xFF);
 
 	write_bytearray(aif_filename, aif);
@@ -827,7 +827,7 @@ void usage(void)
 	fprintf(stderr, "       aif2pcm aif_file [bin_file] [--compress]\n");
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	if (argc < 2)
 	{
@@ -835,9 +835,9 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	char *input_file = argv[1];
-	char *extension = get_file_extension(input_file);
-	char *output_file;
+	char* input_file = argv[1];
+	char* extension = get_file_extension(input_file);
+	char* output_file;
 	bool compressed = false;
 
 	if (argc > 3)

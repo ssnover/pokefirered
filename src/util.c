@@ -112,7 +112,7 @@ static const u16 gCrc16Table[] =
 
 const u8 gMiscBlank_Gfx[] = INCBIN_U8("graphics/interface/blank.4bpp");
 
-u8 CreateInvisibleSpriteWithCallback(void (*callback)(struct Sprite *))
+u8 CreateInvisibleSpriteWithCallback(void (*callback)(struct Sprite*))
 {
     u8 sprite = CreateSprite(&gInvisibleSpriteTemplate, 248, 168, 14);
     gSprites[sprite].invisible = TRUE;
@@ -120,18 +120,18 @@ u8 CreateInvisibleSpriteWithCallback(void (*callback)(struct Sprite *))
     return sprite;
 }
 
-void StoreWordInTwoHalfwords(u16 *h, unsigned w)
+void StoreWordInTwoHalfwords(u16* h, unsigned w)
 {
     h[0] = (u16)(w);
     h[1] = (u16)(w >> 16);
 }
 
-void LoadWordFromTwoHalfwords(u16 *h, unsigned *w)
+void LoadWordFromTwoHalfwords(u16* h, unsigned* w)
 {
     *w = h[0] | (s16)h[1] << 16;
 }
 
-void SetBgAffineStruct(struct BgAffineSrcData *src, u32 texX, u32 texY, s16 scrX, s16 scrY, s16 sx, s16 sy, u16 alpha)
+void SetBgAffineStruct(struct BgAffineSrcData* src, u32 texX, u32 texY, s16 scrX, s16 scrY, s16 sx, s16 sy, u16 alpha)
 {
     src->texX = texX;
     src->texY = texY;
@@ -142,7 +142,7 @@ void SetBgAffineStruct(struct BgAffineSrcData *src, u32 texX, u32 texY, s16 scrX
     src->alpha = alpha;
 }
 
-void DoBgAffineSet(struct BgAffineDstData *dest, u32 texX, u32 texY, s16 scrX, s16 scrY, s16 sx, s16 sy, u16 alpha)
+void DoBgAffineSet(struct BgAffineDstData* dest, u32 texX, u32 texY, s16 scrX, s16 scrY, s16 sx, s16 sy, u16 alpha)
 {
     struct BgAffineSrcData src;
 
@@ -150,7 +150,7 @@ void DoBgAffineSet(struct BgAffineDstData *dest, u32 texX, u32 texY, s16 scrX, s
     BgAffineSet(&src, dest, 1);
 }
 
-void CopySpriteTiles(u8 shape, u8 size, u8 *tiles, u16 *tilemap, u8 *output)
+void CopySpriteTiles(u8 shape, u8 size, u8* tiles, u16* tilemap, u8* output)
 {
     u8 x, y;
     s8 i, j;
@@ -228,7 +228,7 @@ int CountTrailingZeroBits(u32 value)
     return 0;
 }
 
-u16 CalcCRC16(const u8 *data, u32 length)
+u16 CalcCRC16(const u8* data, u32 length)
 {
     u16 i, j;
     u16 crc = 0x1121;
@@ -247,7 +247,7 @@ u16 CalcCRC16(const u8 *data, u32 length)
     return ~crc;
 }
 
-u16 CalcCRC16WithTable(const u8 *data, u32 length)
+u16 CalcCRC16WithTable(const u8* data, u32 length)
 {
     u16 i;
     u16 crc = 0x1121;
@@ -262,7 +262,7 @@ u16 CalcCRC16WithTable(const u8 *data, u32 length)
     return ~crc;
 }
 
-u32 CalcByteArraySum(const u8 * array, u32 size)
+u32 CalcByteArraySum(const u8* array, u32 size)
 {
     s32 i;
     u32 result = 0;

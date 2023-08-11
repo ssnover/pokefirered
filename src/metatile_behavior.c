@@ -3,17 +3,17 @@
 #include "constants/metatile_behaviors.h"
 
 static const bool8 sBehaviorSurfable[NUM_METATILE_BEHAVIORS] = {
-    [MB_POND_WATER]         = TRUE,
-    [MB_FAST_WATER]         = TRUE,
-    [MB_DEEP_WATER]         = TRUE,
-    [MB_WATERFALL]          = TRUE,
-    [MB_OCEAN_WATER]        = TRUE,
-    [MB_UNUSED_WATER]       = TRUE,
+    [MB_POND_WATER] = TRUE,
+    [MB_FAST_WATER] = TRUE,
+    [MB_DEEP_WATER] = TRUE,
+    [MB_WATERFALL] = TRUE,
+    [MB_OCEAN_WATER] = TRUE,
+    [MB_UNUSED_WATER] = TRUE,
     [MB_CYCLING_ROAD_WATER] = TRUE,
-    [MB_EASTWARD_CURRENT]   = TRUE,
-    [MB_WESTWARD_CURRENT]   = TRUE,
-    [MB_NORTHWARD_CURRENT]  = TRUE,
-    [MB_SOUTHWARD_CURRENT]  = TRUE
+    [MB_EASTWARD_CURRENT] = TRUE,
+    [MB_WESTWARD_CURRENT] = TRUE,
+    [MB_NORTHWARD_CURRENT] = TRUE,
+    [MB_SOUTHWARD_CURRENT] = TRUE
 };
 
 static const u8 sTileBitAttributes[32] = {
@@ -40,9 +40,9 @@ bool8 MetatileBehavior_IsJumpEast(u8 metatileBehavior)
 bool8 MetatileBehavior_IsJumpWest(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_JUMP_WEST)
-            return TRUE;
-        else
-            return FALSE;
+        return TRUE;
+    else
+        return FALSE;
 }
 
 bool8 MetatileBehavior_IsJumpNorth(u8 metatileBehavior)
@@ -90,10 +90,10 @@ bool8 MetatileBehavior_IsDeepSand(u8 metatileBehavior) { return FALSE; }
 bool8 MetatileBehavior_IsReflective(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_POND_WATER
-     || metatileBehavior == MB_PUDDLE
-     || metatileBehavior == MB_UNUSED_WATER
-     || metatileBehavior == MB_CYCLING_ROAD_WATER
-     || metatileBehavior == MB_ICE)
+        || metatileBehavior == MB_PUDDLE
+        || metatileBehavior == MB_UNUSED_WATER
+        || metatileBehavior == MB_CYCLING_ROAD_WATER
+        || metatileBehavior == MB_ICE)
         return TRUE;
     else
         return FALSE;
@@ -255,9 +255,9 @@ bool8 MetatileBehavior_IsArrowWarp(u8 metatileBehavior)
     u8 result = FALSE;
 
     if (MetatileBehavior_IsEastArrowWarp(metatileBehavior)
-     || MetatileBehavior_IsWestArrowWarp(metatileBehavior)
-     || MetatileBehavior_IsNorthArrowWarp(metatileBehavior)
-     || MetatileBehavior_IsSouthArrowWarp(metatileBehavior))
+        || MetatileBehavior_IsWestArrowWarp(metatileBehavior)
+        || MetatileBehavior_IsNorthArrowWarp(metatileBehavior)
+        || MetatileBehavior_IsSouthArrowWarp(metatileBehavior))
         result = TRUE;
 
     return result;
@@ -266,11 +266,11 @@ bool8 MetatileBehavior_IsArrowWarp(u8 metatileBehavior)
 bool8 MetatileBehavior_IsForcedMovementTile(u8 metatileBehavior)
 {
     if ((metatileBehavior >= MB_WALK_EAST && metatileBehavior <= MB_TRICK_HOUSE_PUZZLE_8_FLOOR)
-      || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT)
-      ||  metatileBehavior == MB_WATERFALL
-      ||  metatileBehavior == MB_ICE
-      || (metatileBehavior >= MB_SPIN_RIGHT && metatileBehavior <= MB_SPIN_DOWN))
-            return TRUE;
+        || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT)
+        || metatileBehavior == MB_WATERFALL
+        || metatileBehavior == MB_ICE
+        || (metatileBehavior >= MB_SPIN_RIGHT && metatileBehavior <= MB_SPIN_DOWN))
+        return TRUE;
     else
         return FALSE;
 }
@@ -518,7 +518,7 @@ bool8 MetatileBehavior_IsCrackedIce(u8 metatileBehavior)
 bool8 MetatileBehavior_IsDeepWaterTerrain(u8 metatileBehavior)
 {
     if ((metatileBehavior >= MB_FAST_WATER && metatileBehavior <= MB_DEEP_WATER)
-      || metatileBehavior == MB_OCEAN_WATER)
+        || metatileBehavior == MB_OCEAN_WATER)
         return TRUE;
     else
         return FALSE;
@@ -536,7 +536,7 @@ bool8 MetatileBehavior_IsSurfableAndNotWaterfall(u8 metatileBehavior)
 {
     if (MetatileBehavior_IsSurfable(metatileBehavior)
         && !MetatileBehavior_IsWaterfall(metatileBehavior))
-            return TRUE;
+        return TRUE;
     else
         return FALSE;
 }
@@ -544,9 +544,9 @@ bool8 MetatileBehavior_IsSurfableAndNotWaterfall(u8 metatileBehavior)
 bool8 MetatileBehavior_IsEastBlocked(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_IMPASSABLE_EAST
-     || metatileBehavior == MB_IMPASSABLE_NORTHEAST
-     || metatileBehavior == MB_IMPASSABLE_SOUTHEAST)
-            return TRUE;
+        || metatileBehavior == MB_IMPASSABLE_NORTHEAST
+        || metatileBehavior == MB_IMPASSABLE_SOUTHEAST)
+        return TRUE;
     else
         return FALSE;
 }
@@ -554,9 +554,9 @@ bool8 MetatileBehavior_IsEastBlocked(u8 metatileBehavior)
 bool8 MetatileBehavior_IsWestBlocked(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_IMPASSABLE_WEST
-     || metatileBehavior == MB_IMPASSABLE_NORTHWEST
-     || metatileBehavior == MB_IMPASSABLE_SOUTHWEST)
-            return TRUE;
+        || metatileBehavior == MB_IMPASSABLE_NORTHWEST
+        || metatileBehavior == MB_IMPASSABLE_SOUTHWEST)
+        return TRUE;
     else
         return FALSE;
 }
@@ -564,9 +564,9 @@ bool8 MetatileBehavior_IsWestBlocked(u8 metatileBehavior)
 bool8 MetatileBehavior_IsNorthBlocked(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_IMPASSABLE_NORTH
-     || metatileBehavior == MB_IMPASSABLE_NORTHEAST
-     || metatileBehavior == MB_IMPASSABLE_NORTHWEST)
-            return TRUE;
+        || metatileBehavior == MB_IMPASSABLE_NORTHEAST
+        || metatileBehavior == MB_IMPASSABLE_NORTHWEST)
+        return TRUE;
     else
         return FALSE;
 }
@@ -574,9 +574,9 @@ bool8 MetatileBehavior_IsNorthBlocked(u8 metatileBehavior)
 bool8 MetatileBehavior_IsSouthBlocked(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_IMPASSABLE_SOUTH
-     || metatileBehavior == MB_IMPASSABLE_SOUTHEAST
-     || metatileBehavior == MB_IMPASSABLE_SOUTHWEST)
-            return TRUE;
+        || metatileBehavior == MB_IMPASSABLE_SOUTHEAST
+        || metatileBehavior == MB_IMPASSABLE_SOUTHWEST)
+        return TRUE;
     else
         return FALSE;
 }
@@ -600,7 +600,7 @@ bool8 MetatileBehavior_IsWaterfall(u8 metatileBehavior)
 }
 
 bool8 MetatileBehavior_IsFortreeBridge(u8 metatileBehavior) { return FALSE; }
-bool8 MetatileBehavior_IsPacifidlogVerticalLogTop(u8 metatileBehavior){ return FALSE; }
+bool8 MetatileBehavior_IsPacifidlogVerticalLogTop(u8 metatileBehavior) { return FALSE; }
 bool8 MetatileBehavior_IsPacifidlogVerticalLogBottom(u8 metatileBehavior) { return FALSE; }
 bool8 MetatileBehavior_IsPacifidlogHorizontalLogLeft(u8 metatileBehavior) { return FALSE; }
 bool8 MetatileBehavior_IsPacifidlogHorizontalLogRight(u8 metatileBehavior) { return FALSE; }
@@ -648,9 +648,9 @@ bool8 MetatileBehavior_IsUnionRoomWarp(u8 metatileBehavior)
 bool8 MetatileBehavior_IsWater(u8 metatileBehavior)
 {
     if ((metatileBehavior >= MB_POND_WATER && metatileBehavior <= MB_DEEP_WATER)
-     ||  metatileBehavior == MB_OCEAN_WATER
-     || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT))
-            return TRUE;
+        || metatileBehavior == MB_OCEAN_WATER
+        || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT))
+        return TRUE;
     else
         return FALSE;
 }
@@ -663,7 +663,7 @@ bool8 MetatileBehavior_IsFallWarp(u8 metatileBehavior)
         return FALSE;
 }
 
-bool8 MetatileBehavior_IsCrackedFloor(u8 metatileBehavior){ return FALSE; }
+bool8 MetatileBehavior_IsCrackedFloor(u8 metatileBehavior) { return FALSE; }
 
 bool32 MetatileBehavior_IsCyclingRoadPullDownTile(u8 metatileBehavior)
 {

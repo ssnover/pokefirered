@@ -27,10 +27,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Courtey of https://github.com/mludvig/mini-printf
- * stripped to reduce file size for agb needs
- */
+ /*
+  * Courtey of https://github.com/mludvig/mini-printf
+  * stripped to reduce file size for agb needs
+  */
 
 #ifndef __MINI_PRINTF__
 #define __MINI_PRINTF__
@@ -45,8 +45,8 @@
 
 #else
 
-s32 mini_vsnprintf(char* buffer, u32 buffer_len, const char *fmt, va_list va);
-s32 mini_vpprintf(void* buf, const char *fmt, va_list va);
+s32 mini_vsnprintf(char* buffer, u32 buffer_len, const char* fmt, va_list va);
+s32 mini_vpprintf(void* buf, const char* fmt, va_list va);
 
 #endif
 #endif

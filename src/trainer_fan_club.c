@@ -7,8 +7,8 @@
 
 struct TrainerFanClub
 {
-    u8 timer:7;
-    u8 gotInitialFans:1;
+    u8 timer : 7;
+    u8 gotInitialFans : 1;
     u8 fanFlags;
 };
 
@@ -29,17 +29,17 @@ struct TrainerFanClub
 
 #define NUM_TRAINER_FAN_CLUB_MEMBERS  8
 
-static void TryLoseFansFromPlayTimeAfterLinkBattle(struct TrainerFanClub *);
-static void UpdateTrainerFanClubGameClear(struct TrainerFanClub *);
-static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub *);
-static u16 GetNumFansOfPlayerInTrainerFanClub(struct TrainerFanClub *);
-static void TryLoseFansFromPlayTime(struct TrainerFanClub *);
-static bool16 IsFanClubMemberFanOfPlayer(struct TrainerFanClub *);
-static void SetInitialFansOfPlayer(struct TrainerFanClub *);
-static void BufferFanClubTrainerName(struct LinkBattleRecords *, u8, u8);
-static void UpdateTrainerFansAfterLinkBattle(struct TrainerFanClub *);
-static bool8 DidPlayerGetFirstFans(struct TrainerFanClub * );
-static void SetPlayerGotFirstFans(struct TrainerFanClub *);
+static void TryLoseFansFromPlayTimeAfterLinkBattle(struct TrainerFanClub*);
+static void UpdateTrainerFanClubGameClear(struct TrainerFanClub*);
+static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub*);
+static u16 GetNumFansOfPlayerInTrainerFanClub(struct TrainerFanClub*);
+static void TryLoseFansFromPlayTime(struct TrainerFanClub*);
+static bool16 IsFanClubMemberFanOfPlayer(struct TrainerFanClub*);
+static void SetInitialFansOfPlayer(struct TrainerFanClub*);
+static void BufferFanClubTrainerName(struct LinkBattleRecords*, u8, u8);
+static void UpdateTrainerFansAfterLinkBattle(struct TrainerFanClub*);
+static bool8 DidPlayerGetFirstFans(struct TrainerFanClub*);
+static void SetPlayerGotFirstFans(struct TrainerFanClub*);
 
 void ResetTrainerFanClub(void)
 {
@@ -52,7 +52,7 @@ void Script_TryLoseFansFromPlayTimeAfterLinkBattle(void)
     TryLoseFansFromPlayTimeAfterLinkBattle(TRAINER_FAN_CLUB);
 }
 
-static void TryLoseFansFromPlayTimeAfterLinkBattle(struct TrainerFanClub *fanClub)
+static void TryLoseFansFromPlayTimeAfterLinkBattle(struct TrainerFanClub* fanClub)
 {
     if (DidPlayerGetFirstFans(fanClub))
     {
@@ -66,7 +66,7 @@ void Script_UpdateTrainerFanClubGameClear(void)
     UpdateTrainerFanClubGameClear(TRAINER_FAN_CLUB);
 }
 
-static void UpdateTrainerFanClubGameClear(struct TrainerFanClub *fanClub)
+static void UpdateTrainerFanClubGameClear(struct TrainerFanClub* fanClub)
 {
     if (!fanClub->gotInitialFans)
     {
@@ -81,9 +81,9 @@ static void UpdateTrainerFanClubGameClear(struct TrainerFanClub *fanClub)
     }
 }
 
-ALIGNED(4) const u8 sCounterIncrements[] = {2, 1, 2, 1};
+ALIGNED(4) const u8 sCounterIncrements[] = { 2, 1, 2, 1 };
 
-static u8 TryGainNewFanFromCounter(struct TrainerFanClub *fanClub, u8 a1)
+static u8 TryGainNewFanFromCounter(struct TrainerFanClub* fanClub, u8 a1)
 {
     if (VarGet(VAR_MAP_SCENE_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB) == 2)
     {
@@ -105,7 +105,7 @@ static u8 TryGainNewFanFromCounter(struct TrainerFanClub *fanClub, u8 a1)
 }
 
 
-static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub *fanClub)
+static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub* fanClub)
 {
     static const u8 sFanClubMemberIds[] = {
             FANCLUB_MEMBER2,
@@ -116,7 +116,7 @@ static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub *fanClub)
             FANCLUB_MEMBER7,
             FANCLUB_MEMBER5,
             FANCLUB_MEMBER3
-        };
+    };
 
     u8 i;
     u8 idx = 0;
@@ -138,19 +138,19 @@ static u8 PlayerGainRandomTrainerFan(struct TrainerFanClub *fanClub)
     return sFanClubMemberIds[idx];
 }
 
-static u8 PlayerLoseRandomTrainerFan(struct TrainerFanClub *fanClub)
+static u8 PlayerLoseRandomTrainerFan(struct TrainerFanClub* fanClub)
 {
     static const u8 sFanClubMemberIds[] =
-        {
-            FANCLUB_MEMBER6,
-            FANCLUB_MEMBER7,
-            FANCLUB_MEMBER4,
-            FANCLUB_MEMBER8,
-            FANCLUB_MEMBER5,
-            FANCLUB_MEMBER2,
-            FANCLUB_MEMBER1,
-            FANCLUB_MEMBER3
-        };
+    {
+        FANCLUB_MEMBER6,
+        FANCLUB_MEMBER7,
+        FANCLUB_MEMBER4,
+        FANCLUB_MEMBER8,
+        FANCLUB_MEMBER5,
+        FANCLUB_MEMBER2,
+        FANCLUB_MEMBER1,
+        FANCLUB_MEMBER3
+    };
 
     u8 i;
     u8 idx = 0;
@@ -182,7 +182,7 @@ u16 Script_GetNumFansOfPlayerInTrainerFanClub(void)
     return GetNumFansOfPlayerInTrainerFanClub(TRAINER_FAN_CLUB);
 }
 
-static u16 GetNumFansOfPlayerInTrainerFanClub(struct TrainerFanClub *fanClub)
+static u16 GetNumFansOfPlayerInTrainerFanClub(struct TrainerFanClub* fanClub)
 {
     u8 count = 0;
     u8 i;
@@ -201,7 +201,7 @@ void Script_TryLoseFansFromPlayTime(void)
     TryLoseFansFromPlayTime(TRAINER_FAN_CLUB);
 }
 
-static void TryLoseFansFromPlayTime(struct TrainerFanClub *fanClub)
+static void TryLoseFansFromPlayTime(struct TrainerFanClub* fanClub)
 {
     u8 i = 0;
     u16 timer;
@@ -235,12 +235,12 @@ bool16 Script_IsFanClubMemberFanOfPlayer(void)
     return IsFanClubMemberFanOfPlayer(TRAINER_FAN_CLUB);
 }
 
-static bool16 IsFanClubMemberFanOfPlayer(struct TrainerFanClub *fanClub)
+static bool16 IsFanClubMemberFanOfPlayer(struct TrainerFanClub* fanClub)
 {
     return GET_TRAINER_FAN_CLUB_FLAG(gSpecialVar_0x8004);
 }
 
-static void SetInitialFansOfPlayer(struct TrainerFanClub *fanClub)
+static void SetInitialFansOfPlayer(struct TrainerFanClub* fanClub)
 {
     SET_TRAINER_FAN_CLUB_FLAG(FANCLUB_MEMBER1);
     SET_TRAINER_FAN_CLUB_FLAG(FANCLUB_MEMBER2);
@@ -279,10 +279,10 @@ void Script_BufferFanClubTrainerName(void)
     BufferFanClubTrainerName(&gSaveBlock2Ptr->linkBattleRecords, whichLinkTrainer, whichNPCTrainer);
 }
 
-static void BufferFanClubTrainerName(struct LinkBattleRecords *linkRecords, u8 whichLinkTrainer, u8 whichNPCTrainer)
+static void BufferFanClubTrainerName(struct LinkBattleRecords* linkRecords, u8 whichLinkTrainer, u8 whichNPCTrainer)
 {
-    u8 *str;
-    const u8 *linkTrainerName = linkRecords->entries[whichLinkTrainer].name;
+    u8* str;
+    const u8* linkTrainerName = linkRecords->entries[whichLinkTrainer].name;
     if (linkTrainerName[0] == EOS)
     {
         switch (whichNPCTrainer)
@@ -306,8 +306,8 @@ static void BufferFanClubTrainerName(struct LinkBattleRecords *linkRecords, u8 w
         str = gStringVar1;
         StringCopyN(str, linkTrainerName, PLAYER_NAME_LENGTH);
         str[PLAYER_NAME_LENGTH] = EOS;
-        if (   str[0] == EXT_CTRL_CODE_BEGIN
-               && str[1] == EXT_CTRL_CODE_JPN)
+        if (str[0] == EXT_CTRL_CODE_BEGIN
+            && str[1] == EXT_CTRL_CODE_JPN)
         {
             str += 2;
             while (*str != EOS)
@@ -324,7 +324,7 @@ void Special_UpdateTrainerFansAfterLinkBattle(void)
     UpdateTrainerFansAfterLinkBattle(TRAINER_FAN_CLUB);
 }
 
-static void UpdateTrainerFansAfterLinkBattle(struct TrainerFanClub *fanClub)
+static void UpdateTrainerFansAfterLinkBattle(struct TrainerFanClub* fanClub)
 {
     if (VarGet(VAR_MAP_SCENE_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB) == 2)
     {
@@ -336,7 +336,7 @@ static void UpdateTrainerFansAfterLinkBattle(struct TrainerFanClub *fanClub)
     }
 }
 
-static bool8 DidPlayerGetFirstFans(struct TrainerFanClub *fanClub)
+static bool8 DidPlayerGetFirstFans(struct TrainerFanClub* fanClub)
 {
     return fanClub->gotInitialFans;
 }
@@ -346,7 +346,7 @@ void Script_SetPlayerGotFirstFans(void)
     SetPlayerGotFirstFans(TRAINER_FAN_CLUB);
 }
 
-static void SetPlayerGotFirstFans(struct TrainerFanClub *fanClub)
+static void SetPlayerGotFirstFans(struct TrainerFanClub* fanClub)
 {
     fanClub->gotInitialFans = TRUE;
 }

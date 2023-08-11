@@ -119,11 +119,11 @@ struct SlotMachineState
 struct SlotMachineGfxManager
 {
     u32 field_00[NUM_REELS]; // Never read
-    struct Sprite *reelIconSprites[NUM_REELS][REEL_LOAD_LENGTH];
-    struct Sprite *creditDigitSprites[NUM_DIGIT_SPRITES];
-    struct Sprite *payoutDigitSprites[NUM_DIGIT_SPRITES];
-    struct Sprite *clefairySprites[2];
-    vu16 * reelIconAffineParamPtr;
+    struct Sprite* reelIconSprites[NUM_REELS][REEL_LOAD_LENGTH];
+    struct Sprite* creditDigitSprites[NUM_DIGIT_SPRITES];
+    struct Sprite* payoutDigitSprites[NUM_DIGIT_SPRITES];
+    struct Sprite* clefairySprites[2];
+    vu16* reelIconAffineParamPtr;
 };
 
 struct SlotMachineSetupTaskDataSub_0000
@@ -151,14 +151,14 @@ struct SlotMachineSetupTaskData
 
 struct LineStateTileIdxList
 {
-    const u16 * tiles;
+    const u16* tiles;
     u32 count;
 };
 
-static EWRAM_DATA struct SlotMachineState * sSlotMachineState = NULL;
-static EWRAM_DATA struct SlotMachineGfxManager * sSlotMachineGfxManager = NULL;
+static EWRAM_DATA struct SlotMachineState* sSlotMachineState = NULL;
+static EWRAM_DATA struct SlotMachineGfxManager* sSlotMachineGfxManager = NULL;
 
-static void InitSlotMachineState(struct SlotMachineState * ptr);
+static void InitSlotMachineState(struct SlotMachineState* ptr);
 static void CB2_InitSlotMachine(void);
 static void CleanSupSlotMachineState(void);
 static void CB2_RunSlotMachine(void);
@@ -183,34 +183,34 @@ static bool32 TestReelIconAttribute(s32 attr, s32 icon);
 static void CalcSlotBias(void);
 static void ResetMachineBias(void);
 static u16 CalcPayout(void);
-static void InitGfxManager(struct SlotMachineGfxManager * manager);
-static void UpdateReelIconSprites(const s16 *, const s16 *);
+static void InitGfxManager(struct SlotMachineGfxManager* manager);
+static void UpdateReelIconSprites(const s16*, const s16*);
 static bool32 CreateSlotMachine(void);
 static void DestroySlotMachine(void);
-static struct SlotMachineSetupTaskData * GetSlotMachineSetupTaskDataPtr(void);
+static struct SlotMachineSetupTaskData* GetSlotMachineSetupTaskDataPtr(void);
 static void Task_SlotMachine(u8 taskId);
 static void SetSlotMachineSetupTask(u16 funcno, u8 taskId);
 static bool32 IsSlotMachineSetupTaskActive(u8 taskId);
-static bool8 SlotsTask_GraphicsInit(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_FadeOut(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_UpdateLineStates(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_ClefairyUpdateOnReelsStart(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_StartClefairyDanceAndWinningLineFlash(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_StopWinningLineFlashTask(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_ClefairyFainted(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_ClefairyNeutral(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_UpdateCoinsDisplay(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_MessageOutOfCoins(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_AskQuitPlaying(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_DestroyYesNoMenu(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_PressReelButton(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_ReleaseReelButtons(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_ShowHelp(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static bool8 SlotsTask_HideHelp(u8 *state, struct SlotMachineSetupTaskData * ptr);
-static void Slot_PrintOnWindow0(const u8 * str);
+static bool8 SlotsTask_GraphicsInit(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_FadeOut(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_UpdateLineStates(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_ClefairyUpdateOnReelsStart(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_StartClefairyDanceAndWinningLineFlash(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_StopWinningLineFlashTask(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_ClefairyFainted(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_ClefairyNeutral(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_UpdateCoinsDisplay(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_MessageOutOfCoins(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_AskQuitPlaying(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_DestroyYesNoMenu(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_PressReelButton(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_ReleaseReelButtons(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_ShowHelp(u8* state, struct SlotMachineSetupTaskData* ptr);
+static bool8 SlotsTask_HideHelp(u8* state, struct SlotMachineSetupTaskData* ptr);
+static void Slot_PrintOnWindow0(const u8* str);
 static void Slot_ClearWindow0(void);
-static void SetLineStatesByBet(u16 * bgTilemapBuffer);
-static void SetLineState(u16 * bgTilemapBuffer, u16 lineId, u16 paletteNo);
+static void SetLineStatesByBet(u16* bgTilemapBuffer);
+static void SetLineState(u16* bgTilemapBuffer, u16 lineId, u16 paletteNo);
 static void Task_FlashWinningLine(u8 taskId);
 static void SignalStopWinningLineFlashTask(void);
 static void Slot_CreateYesNoMenu(u8 cursorPos);
@@ -260,58 +260,58 @@ static const u8 sRowAttributes[NUM_MATCH_LINES][4] = {
 
 static const u16 sReelBiasChances[][NUM_PAYOUT_TYPES] = {
     {
-        [PAYOUT_NONE]      = 0x1fa1,
+        [PAYOUT_NONE] = 0x1fa1,
         [PAYOUT_CHERRIES2] = 0x2eab,
         [PAYOUT_CHERRIES3] = 0x3630,
-        [PAYOUT_MAGSHELL]  = 0x39f3,
-        [PAYOUT_PIKAPSY]   = 0x3bd4,
-        [PAYOUT_ROCKET]    = 0x3bfc,
-        [PAYOUT_7]         = 0x0049,
+        [PAYOUT_MAGSHELL] = 0x39f3,
+        [PAYOUT_PIKAPSY] = 0x3bd4,
+        [PAYOUT_ROCKET] = 0x3bfc,
+        [PAYOUT_7] = 0x0049,
     },
     {
-        [PAYOUT_NONE]      = 0x1f97,
+        [PAYOUT_NONE] = 0x1f97,
         [PAYOUT_CHERRIES2] = 0x2ea2,
         [PAYOUT_CHERRIES3] = 0x3627,
-        [PAYOUT_MAGSHELL]  = 0x39e9,
-        [PAYOUT_PIKAPSY]   = 0x3bca,
-        [PAYOUT_ROCKET]    = 0x3bf8,
-        [PAYOUT_7]         = 0x0049,
+        [PAYOUT_MAGSHELL] = 0x39e9,
+        [PAYOUT_PIKAPSY] = 0x3bca,
+        [PAYOUT_ROCKET] = 0x3bf8,
+        [PAYOUT_7] = 0x0049,
     },
     {
-        [PAYOUT_NONE]      = 0x1f91,
+        [PAYOUT_NONE] = 0x1f91,
         [PAYOUT_CHERRIES2] = 0x2e9b,
         [PAYOUT_CHERRIES3] = 0x3620,
-        [PAYOUT_MAGSHELL]  = 0x39e3,
-        [PAYOUT_PIKAPSY]   = 0x3bc4,
-        [PAYOUT_ROCKET]    = 0x3bf4,
-        [PAYOUT_7]         = 0x0049,
+        [PAYOUT_MAGSHELL] = 0x39e3,
+        [PAYOUT_PIKAPSY] = 0x3bc4,
+        [PAYOUT_ROCKET] = 0x3bf4,
+        [PAYOUT_7] = 0x0049,
     },
     {
-        [PAYOUT_NONE]      = 0x1f87,
+        [PAYOUT_NONE] = 0x1f87,
         [PAYOUT_CHERRIES2] = 0x2e92,
         [PAYOUT_CHERRIES3] = 0x3617,
-        [PAYOUT_MAGSHELL]  = 0x39d9,
-        [PAYOUT_PIKAPSY]   = 0x3bba,
-        [PAYOUT_ROCKET]    = 0x3bef,
-        [PAYOUT_7]         = 0x0050,
+        [PAYOUT_MAGSHELL] = 0x39d9,
+        [PAYOUT_PIKAPSY] = 0x3bba,
+        [PAYOUT_ROCKET] = 0x3bef,
+        [PAYOUT_7] = 0x0050,
     },
     {
-        [PAYOUT_NONE]      = 0x1f7f,
+        [PAYOUT_NONE] = 0x1f7f,
         [PAYOUT_CHERRIES2] = 0x2e89,
         [PAYOUT_CHERRIES3] = 0x360e,
-        [PAYOUT_MAGSHELL]  = 0x39d1,
-        [PAYOUT_PIKAPSY]   = 0x3bb2,
-        [PAYOUT_ROCKET]    = 0x3bea,
-        [PAYOUT_7]         = 0x0050,
+        [PAYOUT_MAGSHELL] = 0x39d1,
+        [PAYOUT_PIKAPSY] = 0x3bb2,
+        [PAYOUT_ROCKET] = 0x3bea,
+        [PAYOUT_7] = 0x0050,
     },
     {
-        [PAYOUT_NONE]      = 0x1fc9,
+        [PAYOUT_NONE] = 0x1fc9,
         [PAYOUT_CHERRIES2] = 0x2efc,
         [PAYOUT_CHERRIES3] = 0x3696,
-        [PAYOUT_MAGSHELL]  = 0x3a63,
-        [PAYOUT_PIKAPSY]   = 0x3c49,
-        [PAYOUT_ROCKET]    = 0x3c8b,
-        [PAYOUT_7]         = 0x0073,
+        [PAYOUT_MAGSHELL] = 0x3a63,
+        [PAYOUT_PIKAPSY] = 0x3c49,
+        [PAYOUT_ROCKET] = 0x3c8b,
+        [PAYOUT_7] = 0x0073,
     },
 };
 
@@ -386,28 +386,28 @@ static const u8 sReelIconAnimByReelAndPos[NUM_REELS][REEL_LENGTH] = {
 };
 
 static const u16 sPayoutTable[] = {
-    [PAYOUT_NONE]      =   0,
-    [PAYOUT_CHERRIES2] =   2,
-    [PAYOUT_CHERRIES3] =   6,
-    [PAYOUT_MAGSHELL]  =   8,
-    [PAYOUT_PIKAPSY]   =  15,
-    [PAYOUT_ROCKET]    = 100,
-    [PAYOUT_7]         = 300
+    [PAYOUT_NONE] = 0,
+    [PAYOUT_CHERRIES2] = 2,
+    [PAYOUT_CHERRIES3] = 6,
+    [PAYOUT_MAGSHELL] = 8,
+    [PAYOUT_PIKAPSY] = 15,
+    [PAYOUT_ROCKET] = 100,
+    [PAYOUT_7] = 300
 };
 
 #if defined(FIRERED)
 static const u16 sReelIcons_Pal[][16] = INCBIN_U16("graphics/slot_machine/firered/reel_icons.gbapal");
-static const u32 sReelIcons_Tiles[]   = INCBIN_U32("graphics/slot_machine/firered/reel_icons.4bpp.lz");
-static const u16 sClefairy_Pal[]      = INCBIN_U16("graphics/slot_machine/firered/clefairy.gbapal");
-static const u32 sClefairy_Tiles[]    = INCBIN_U32("graphics/slot_machine/firered/clefairy.4bpp.lz");
+static const u32 sReelIcons_Tiles[] = INCBIN_U32("graphics/slot_machine/firered/reel_icons.4bpp.lz");
+static const u16 sClefairy_Pal[] = INCBIN_U16("graphics/slot_machine/firered/clefairy.gbapal");
+static const u32 sClefairy_Tiles[] = INCBIN_U32("graphics/slot_machine/firered/clefairy.4bpp.lz");
 #elif defined(LEAFGREEN)
 static const u16 sReelIcons_Pal[][16] = INCBIN_U16("graphics/slot_machine/leafgreen/reel_icons.gbapal");
-static const u32 sReelIcons_Tiles[]   = INCBIN_U32("graphics/slot_machine/leafgreen/reel_icons.4bpp.lz");
-static const u16 sClefairy_Pal[]      = INCBIN_U16("graphics/slot_machine/leafgreen/clefairy.gbapal");
-static const u32 sClefairy_Tiles[]    = INCBIN_U32("graphics/slot_machine/leafgreen/clefairy.4bpp.lz");
+static const u32 sReelIcons_Tiles[] = INCBIN_U32("graphics/slot_machine/leafgreen/reel_icons.4bpp.lz");
+static const u16 sClefairy_Pal[] = INCBIN_U16("graphics/slot_machine/leafgreen/clefairy.gbapal");
+static const u32 sClefairy_Tiles[] = INCBIN_U32("graphics/slot_machine/leafgreen/clefairy.4bpp.lz");
 #endif
-static const u16 sDigits_Pal[]        = INCBIN_U16("graphics/slot_machine/digits.gbapal");
-static const u32 sDigits_Tiles[]      = INCBIN_U32("graphics/slot_machine/digits.4bpp.lz");
+static const u16 sDigits_Pal[] = INCBIN_U16("graphics/slot_machine/digits.gbapal");
+static const u32 sDigits_Tiles[] = INCBIN_U32("graphics/slot_machine/digits.4bpp.lz");
 
 static const struct CompressedSpriteSheet sSpriteSheets[] = {
     {.data = sReelIcons_Tiles, .size = 0xe00, .tag = GFXTAG_REEL_ICONS},
@@ -428,21 +428,21 @@ static const struct SpritePalette sSpritePalettes[] = {
 
 static const u16 sReelIconPaletteTags[] = {
 #if defined(FIRERED)
-    [ICON_7]         = PALTAG_REEL_ICONS_2,
-    [ICON_ROCKET]    = PALTAG_REEL_ICONS_2,
-    [ICON_PIKACHU]   = PALTAG_REEL_ICONS_0,
-    [ICON_PSYDUCK]   = PALTAG_REEL_ICONS_0,
-    [ICON_CHERRIES]  = PALTAG_REEL_ICONS_2,
+    [ICON_7] = PALTAG_REEL_ICONS_2,
+    [ICON_ROCKET] = PALTAG_REEL_ICONS_2,
+    [ICON_PIKACHU] = PALTAG_REEL_ICONS_0,
+    [ICON_PSYDUCK] = PALTAG_REEL_ICONS_0,
+    [ICON_CHERRIES] = PALTAG_REEL_ICONS_2,
     [ICON_MAGNEMITE] = PALTAG_REEL_ICONS_4,
-    [ICON_SHELLDER]  = PALTAG_REEL_ICONS_3,
+    [ICON_SHELLDER] = PALTAG_REEL_ICONS_3,
 #elif defined(LEAFGREEN)
-    [ICON_7]         = PALTAG_REEL_ICONS_2,
-    [ICON_ROCKET]    = PALTAG_REEL_ICONS_2,
-    [ICON_PIKACHU]   = PALTAG_REEL_ICONS_0,
-    [ICON_PSYDUCK]   = PALTAG_REEL_ICONS_3,
-    [ICON_CHERRIES]  = PALTAG_REEL_ICONS_2,
+    [ICON_7] = PALTAG_REEL_ICONS_2,
+    [ICON_ROCKET] = PALTAG_REEL_ICONS_2,
+    [ICON_PIKACHU] = PALTAG_REEL_ICONS_0,
+    [ICON_PSYDUCK] = PALTAG_REEL_ICONS_3,
+    [ICON_CHERRIES] = PALTAG_REEL_ICONS_2,
     [ICON_MAGNEMITE] = PALTAG_REEL_ICONS_1,
-    [ICON_SHELLDER]  = PALTAG_REEL_ICONS_1,
+    [ICON_SHELLDER] = PALTAG_REEL_ICONS_1,
 #endif
 };
 
@@ -537,14 +537,14 @@ static const union AnimCmd sAnimCmd_ReelIcon_Shellder_2[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_ReelIcons[] = {
-    [ICON_7]         = sAnimCmd_ReelIcon_7,
-    [ICON_ROCKET]    = sAnimCmd_ReelIcon_Rocket,
-    [ICON_PIKACHU]   = sAnimCmd_ReelIcon_Pikachu,
-    [ICON_PSYDUCK]   = sAnimCmd_ReelIcon_Psyduck,
-    [ICON_CHERRIES]  = sAnimCmd_ReelIcon_Cherries,
+static const union AnimCmd* const sAnimTable_ReelIcons[] = {
+    [ICON_7] = sAnimCmd_ReelIcon_7,
+    [ICON_ROCKET] = sAnimCmd_ReelIcon_Rocket,
+    [ICON_PIKACHU] = sAnimCmd_ReelIcon_Pikachu,
+    [ICON_PSYDUCK] = sAnimCmd_ReelIcon_Psyduck,
+    [ICON_CHERRIES] = sAnimCmd_ReelIcon_Cherries,
     [ICON_MAGNEMITE] = sAnimCmd_ReelIcon_Magnemite,
-    [ICON_SHELLDER]  = sAnimCmd_ReelIcon_Shellder,
+    [ICON_SHELLDER] = sAnimCmd_ReelIcon_Shellder,
     sAnimCmd_ReelIcon_Pikachu_2,
     sAnimCmd_ReelIcon_Psyduck_2,
     sAnimCmd_ReelIcon_Cherries_2,
@@ -557,7 +557,7 @@ static const union AffineAnimCmd sAffineAnimCmd_ReelIcons_Unused[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnimTable_ReelIcons_Unused[] = {
+static const union AffineAnimCmd* const sAffineAnimTable_ReelIcons_Unused[] = {
     sAffineAnimCmd_ReelIcons_Unused
 };
 
@@ -637,7 +637,7 @@ static const union AnimCmd sSpriteAnim_Digit9[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_Digits[] = {
+static const union AnimCmd* const sAnimTable_Digits[] = {
     sSpriteAnim_Digit0,
     sSpriteAnim_Digit1,
     sSpriteAnim_Digit2,
@@ -682,7 +682,7 @@ static const union AnimCmd sAnimCmd_Clefairy_Neutral[] = {
 };
 
 static const union AnimCmd sAnimCmd_Clefairy_Spinning[] = {
-    ANIMCMD_FRAME( 0, 24),
+    ANIMCMD_FRAME(0, 24),
     ANIMCMD_FRAME(16, 24),
     ANIMCMD_JUMP(0)
 };
@@ -699,7 +699,7 @@ static const union AnimCmd sAnimCmd_Clefairy_Lose[] = {
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnimTable_Clefairy[] = {
+static const union AnimCmd* const sAnimTable_Clefairy[] = {
     sAnimCmd_Clefairy_Neutral,
     sAnimCmd_Clefairy_Spinning,
     sAnimCmd_Clefairy_Payout,
@@ -716,7 +716,7 @@ static const struct SpriteTemplate sSpriteTemplate_Clefairy = {
     .callback = SpriteCallbackDummy
 };
 
-bool8 (*const sSlotMachineSetupTasks[])(u8 *, struct SlotMachineSetupTaskData *) = {
+bool8(* const sSlotMachineSetupTasks[])(u8*, struct SlotMachineSetupTaskData*) = {
     [SLOTTASK_GFX_INIT] = SlotsTask_GraphicsInit,
     [SLOTTASK_FADEOUT_EXIT] = SlotsTask_FadeOut,
     [SLOTTASK_UPDATE_LINE_LIGHTS] = SlotsTask_UpdateLineStates,
@@ -736,25 +736,25 @@ bool8 (*const sSlotMachineSetupTasks[])(u8 *, struct SlotMachineSetupTaskData *)
 };
 
 #if defined(FIRERED)
-static const u16 sBg_Pal[][16]             = INCBIN_U16("graphics/slot_machine/firered/bg.gbapal");
-static const u32 sBg_Tiles[]               = INCBIN_U32("graphics/slot_machine/firered/bg.4bpp.lz");
-static const u32 sBg_Tilemap[]             = INCBIN_U32("graphics/slot_machine/firered/bg.bin.lz");
-static const u16 sBgPal_MatchLines[]       = INCBIN_U16("graphics/slot_machine/firered/match_lines.gbapal");
-static const u16 sBgPal_PayoutLight[][16]  = INCBIN_U16("graphics/slot_machine/firered/payout_lights.gbapal");
-static const u32 sButtonPressed_Tiles[]    = INCBIN_U32("graphics/slot_machine/firered/button_pressed.4bpp.lz");
-static const u16 sCombosWindow_Pal[]       = INCBIN_U16("graphics/slot_machine/firered/combos_window.gbapal");
-static const u32 sCombosWindow_Tiles[]     = INCBIN_U32("graphics/slot_machine/firered/combos_window.4bpp.lz");
-static const u32 sCombosWindow_Tilemap[]   = INCBIN_U32("graphics/slot_machine/firered/combos_window.bin.lz");
+static const u16 sBg_Pal[][16] = INCBIN_U16("graphics/slot_machine/firered/bg.gbapal");
+static const u32 sBg_Tiles[] = INCBIN_U32("graphics/slot_machine/firered/bg.4bpp.lz");
+static const u32 sBg_Tilemap[] = INCBIN_U32("graphics/slot_machine/firered/bg.bin.lz");
+static const u16 sBgPal_MatchLines[] = INCBIN_U16("graphics/slot_machine/firered/match_lines.gbapal");
+static const u16 sBgPal_PayoutLight[][16] = INCBIN_U16("graphics/slot_machine/firered/payout_lights.gbapal");
+static const u32 sButtonPressed_Tiles[] = INCBIN_U32("graphics/slot_machine/firered/button_pressed.4bpp.lz");
+static const u16 sCombosWindow_Pal[] = INCBIN_U16("graphics/slot_machine/firered/combos_window.gbapal");
+static const u32 sCombosWindow_Tiles[] = INCBIN_U32("graphics/slot_machine/firered/combos_window.4bpp.lz");
+static const u32 sCombosWindow_Tilemap[] = INCBIN_U32("graphics/slot_machine/firered/combos_window.bin.lz");
 #elif defined(LEAFGREEN)
-static const u16 sBg_Pal[][16]             = INCBIN_U16("graphics/slot_machine/leafgreen/bg.gbapal");
-static const u32 sBg_Tiles[]               = INCBIN_U32("graphics/slot_machine/leafgreen/bg.4bpp.lz");
-static const u32 sBg_Tilemap[]             = INCBIN_U32("graphics/slot_machine/leafgreen/bg.bin.lz");
-static const u16 sBgPal_MatchLines[]       = INCBIN_U16("graphics/slot_machine/leafgreen/match_lines.gbapal");
-static const u16 sBgPal_PayoutLight[][16]  = INCBIN_U16("graphics/slot_machine/leafgreen/payout_lights.gbapal");
-static const u32 sButtonPressed_Tiles[]    = INCBIN_U32("graphics/slot_machine/leafgreen/button_pressed.4bpp.lz");
-static const u16 sCombosWindow_Pal[]       = INCBIN_U16("graphics/slot_machine/leafgreen/combos_window.gbapal");
-static const u32 sCombosWindow_Tiles[]     = INCBIN_U32("graphics/slot_machine/leafgreen/combos_window.4bpp.lz");
-static const u32 sCombosWindow_Tilemap[]   = INCBIN_U32("graphics/slot_machine/leafgreen/combos_window.bin.lz");
+static const u16 sBg_Pal[][16] = INCBIN_U16("graphics/slot_machine/leafgreen/bg.gbapal");
+static const u32 sBg_Tiles[] = INCBIN_U32("graphics/slot_machine/leafgreen/bg.4bpp.lz");
+static const u32 sBg_Tilemap[] = INCBIN_U32("graphics/slot_machine/leafgreen/bg.bin.lz");
+static const u16 sBgPal_MatchLines[] = INCBIN_U16("graphics/slot_machine/leafgreen/match_lines.gbapal");
+static const u16 sBgPal_PayoutLight[][16] = INCBIN_U16("graphics/slot_machine/leafgreen/payout_lights.gbapal");
+static const u32 sButtonPressed_Tiles[] = INCBIN_U32("graphics/slot_machine/leafgreen/button_pressed.4bpp.lz");
+static const u16 sCombosWindow_Pal[] = INCBIN_U16("graphics/slot_machine/leafgreen/combos_window.gbapal");
+static const u32 sCombosWindow_Tiles[] = INCBIN_U32("graphics/slot_machine/leafgreen/combos_window.4bpp.lz");
+static const u32 sCombosWindow_Tilemap[] = INCBIN_U32("graphics/slot_machine/leafgreen/combos_window.bin.lz");
 #endif
 
 static const struct BgTemplate sBgTemplates[] = {
@@ -842,7 +842,7 @@ static const struct LineStateTileIdxList sLineStateTileIdxs[NUM_MATCH_LINES] = {
     { sLineTiles_BLTR, ARRAY_COUNT(sLineTiles_BLTR) }
 };
 
-static const u8 sWinningLineFlashPalIdxs[2] = {2, 4};
+static const u8 sWinningLineFlashPalIdxs[2] = { 2, 4 };
 
 static const struct WindowTemplate sYesNoWindowTemplate = {
     .bg = 0,
@@ -877,7 +877,7 @@ void PlaySlotMachine(u16 machineIdx, MainCallback savedCallback)
     }
 }
 
-static void InitSlotMachineState(struct SlotMachineState * ptr)
+static void InitSlotMachineState(struct SlotMachineState* ptr)
 {
     s32 i;
 
@@ -945,7 +945,7 @@ static void CB2_RunSlotMachine(void)
 
 static void MainTask_SlotsGameLoop(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1052,7 +1052,7 @@ static void MainTask_SlotsGameLoop(u8 taskId)
 
 static void MainTask_NoCoinsGameOver(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1073,7 +1073,7 @@ static void MainTask_NoCoinsGameOver(u8 taskId)
 
 static void MainTask_ShowHelp(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1101,7 +1101,7 @@ static void MainTask_ShowHelp(u8 taskId)
 
 static void MainTask_ConfirmExitGame(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1141,7 +1141,7 @@ static void MainTask_ConfirmExitGame(u8 taskId)
 
 static void MainTask_DarnNoPayout(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1169,7 +1169,7 @@ static void MainTask_DarnNoPayout(u8 taskId)
 
 static void MainTask_WinHandlePayout(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1247,7 +1247,7 @@ static void MainTask_WinHandlePayout(u8 taskId)
 
 static void MainTask_ExitSlots(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -1681,7 +1681,7 @@ static void CalcSlotBias(void)
 {
     u16 rval = Random() / 4;
     s32 i;
-    const u16 * biasChances = sReelBiasChances[sSlotMachineState->machineIdx];
+    const u16* biasChances = sReelBiasChances[sSlotMachineState->machineIdx];
     for (i = 0; i < NUM_PAYOUT_TYPES - 1; i++)
     {
         if (rval < biasChances[i])
@@ -1801,7 +1801,7 @@ static void DestroyGfxManager(void)
     }
 }
 
-static void InitGfxManager(struct SlotMachineGfxManager * manager)
+static void InitGfxManager(struct SlotMachineGfxManager* manager)
 {
     s32 i, j;
 
@@ -1815,7 +1815,7 @@ static void InitGfxManager(struct SlotMachineGfxManager * manager)
 
 static void CreateReelIconSprites(void)
 {
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     s32 i, j;
     s32 spriteId;
     s32 animId;
@@ -1824,7 +1824,7 @@ static void CreateReelIconSprites(void)
         for (j = 0; j < REEL_LOAD_LENGTH; j++)
         {
             spriteId = CreateSprite(&sSpriteTemplate_ReelIcons, 80 + 40 * i, 44 + 24 * j, 2);
-            animId =  sReelIconAnimByReelAndPos[i][j];
+            animId = sReelIconAnimByReelAndPos[i][j];
             sprite = &gSprites[spriteId];
             StartSpriteAnim(sprite, animId);
             sprite->oam.paletteNum = IndexOfSpritePaletteTag(sReelIconPaletteTags[animId]);
@@ -1834,12 +1834,12 @@ static void CreateReelIconSprites(void)
             sprite->data[3] = 0;
             sprite->oam.matrixNum = 0;
             sSlotMachineGfxManager->reelIconSprites[i][j] = sprite;
-            sSlotMachineGfxManager->reelIconAffineParamPtr = (vu16 *)(OAM + 0 * sizeof(struct OamData) + offsetof(struct OamData, affineParam));
+            sSlotMachineGfxManager->reelIconAffineParamPtr = (vu16*)(OAM + 0 * sizeof(struct OamData) + offsetof(struct OamData, affineParam));
         }
     }
 }
 
-static void UpdateReelIconSprites(const s16 * reelPosPtr, const s16 * yposPtr)
+static void UpdateReelIconSprites(const s16* reelPosPtr, const s16* yposPtr)
 {
     s32 i, j;
     s32 reelPos, ypos;
@@ -1853,12 +1853,12 @@ static void UpdateReelIconSprites(const s16 * reelPosPtr, const s16 * yposPtr)
             sSlotMachineGfxManager->reelIconSprites[i][j]->y2 = ypos;
             {
                 s32 animId = sReelIconAnimByReelAndPos[i][reelPos];
-                struct Sprite *sprite = sSlotMachineGfxManager->reelIconSprites[i][j];
+                struct Sprite* sprite = sSlotMachineGfxManager->reelIconSprites[i][j];
                 StartSpriteAnim(sprite, animId);
             }
             {
                 s32 animId = sReelIconAnimByReelAndPos[i][reelPos];
-                struct Sprite *sprite = sSlotMachineGfxManager->reelIconSprites[i][j];
+                struct Sprite* sprite = sSlotMachineGfxManager->reelIconSprites[i][j];
                 StartSpriteAnim(sprite, animId);
             }
             sSlotMachineGfxManager->reelIconSprites[i][j]->oam.paletteNum = IndexOfSpritePaletteTag(sReelIconPaletteTags[sReelIconAnimByReelAndPos[i][reelPos]]);
@@ -1940,7 +1940,7 @@ static bool32 CreateSlotMachine(void)
 {
     s32 i;
 
-    struct SlotMachineSetupTaskData * ptr = Alloc(sizeof(struct SlotMachineSetupTaskData));
+    struct SlotMachineSetupTaskData* ptr = Alloc(sizeof(struct SlotMachineSetupTaskData));
     if (ptr == NULL)
         return FALSE;
     for (i = 0; i < (int)ARRAY_COUNT(ptr->tasks); i++)
@@ -1963,7 +1963,7 @@ static void DestroySlotMachine(void)
 
 static void Task_SlotMachine(u8 taskId)
 {
-    struct SlotMachineSetupTaskData * ptr = (void *)GetWordTaskArg(taskId, 0);
+    struct SlotMachineSetupTaskData* ptr = (void*)GetWordTaskArg(taskId, 0);
     s32 i;
 
     for (i = 0; i < (int)ARRAY_COUNT(ptr->tasks); i++)
@@ -1980,14 +1980,14 @@ static void VBlankCB_SlotMachine(void)
     ProcessSpriteCopyRequests();
 }
 
-static struct SlotMachineSetupTaskData * GetSlotMachineSetupTaskDataPtr(void)
+static struct SlotMachineSetupTaskData* GetSlotMachineSetupTaskDataPtr(void)
 {
-    return (void *)GetWordTaskArg(FindTaskIdByFunc(Task_SlotMachine), 0);
+    return (void*)GetWordTaskArg(FindTaskIdByFunc(Task_SlotMachine), 0);
 }
 
 static void SetSlotMachineSetupTask(u16 funcno, u8 taskId)
 {
-    struct SlotMachineSetupTaskData * ptr = GetSlotMachineSetupTaskDataPtr();
+    struct SlotMachineSetupTaskData* ptr = GetSlotMachineSetupTaskDataPtr();
     ptr->tasks[taskId].funcno = funcno;
     ptr->tasks[taskId].state = 0;
     ptr->tasks[taskId].active = sSlotMachineSetupTasks[funcno](&ptr->tasks[taskId].state, ptr);
@@ -1998,13 +1998,13 @@ static bool32 IsSlotMachineSetupTaskActive(u8 taskId)
     return GetSlotMachineSetupTaskDataPtr()->tasks[taskId].active;
 }
 
-static inline void SetBackdropColor(u16 color, u16 *pal)
+static inline void SetBackdropColor(u16 color, u16* pal)
 {
     *pal = color;
     SetBackdropFromPalette(pal);
 }
 
-static bool8 SlotsTask_GraphicsInit(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_GraphicsInit(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     u16 pal[2];
     u8 textColor[3];
@@ -2020,9 +2020,9 @@ static bool8 SlotsTask_GraphicsInit(u8 * state, struct SlotMachineSetupTaskData 
         SetVBlankCallback(NULL);
         ResetSpriteData();
         FreeAllSpritePalettes();
-        RequestDma3Fill(0, (void *)OAM, OAM_SIZE, DMA3_32BIT);
-        RequestDma3Fill(0, (void *)VRAM, 0x20, DMA3_32BIT);
-        RequestDma3Fill(0, (void *)(VRAM + 0xC000), 0x20, DMA3_32BIT);
+        RequestDma3Fill(0, (void*)OAM, OAM_SIZE, DMA3_32BIT);
+        RequestDma3Fill(0, (void*)VRAM, 0x20, DMA3_32BIT);
+        RequestDma3Fill(0, (void*)(VRAM + 0xC000), 0x20, DMA3_32BIT);
         SetGpuReg(REG_OFFSET_DISPCNT, 0);
         ResetBgPositions();
         ResetBgsAndClearDma3BusyFlags(FALSE);
@@ -2098,7 +2098,7 @@ static bool8 SlotsTask_GraphicsInit(u8 * state, struct SlotMachineSetupTaskData 
     return TRUE;
 }
 
-static bool8 SlotsTask_FadeOut(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_FadeOut(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2114,7 +2114,7 @@ static bool8 SlotsTask_FadeOut(u8 * state, struct SlotMachineSetupTaskData * ptr
     return TRUE;
 }
 
-static bool8 SlotsTask_UpdateLineStates(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_UpdateLineStates(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2131,20 +2131,20 @@ static bool8 SlotsTask_UpdateLineStates(u8 * state, struct SlotMachineSetupTaskD
     return TRUE;
 }
 
-static bool8 SlotsTask_ClefairyUpdateOnReelsStart(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_ClefairyUpdateOnReelsStart(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     SetClefairySpriteAnim(1);
     return FALSE;
 }
 
-static bool8 SlotsTask_StartClefairyDanceAndWinningLineFlash(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_StartClefairyDanceAndWinningLineFlash(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     SetClefairySpriteAnim(2);
     CreateTask(Task_FlashWinningLine, 3);
     return FALSE;
 }
 
-static bool8 SlotsTask_StopWinningLineFlashTask(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_StopWinningLineFlashTask(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2163,25 +2163,25 @@ static bool8 SlotsTask_StopWinningLineFlashTask(u8 * state, struct SlotMachineSe
     return TRUE;
 }
 
-static bool8 SlotsTask_ClefairyFainted(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_ClefairyFainted(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     SetClefairySpriteAnim(3);
     return FALSE;
 }
 
-static bool8 SlotsTask_ClefairyNeutral(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_ClefairyNeutral(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     SetClefairySpriteAnim(0);
     return FALSE;
 }
 
-static bool8 SlotsTask_UpdateCoinsDisplay(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_UpdateCoinsDisplay(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     UpdateCoinsDisplay();
     return FALSE;
 }
 
-static bool8 SlotsTask_MessageOutOfCoins(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_MessageOutOfCoins(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2198,7 +2198,7 @@ static bool8 SlotsTask_MessageOutOfCoins(u8 * state, struct SlotMachineSetupTask
     return TRUE;
 }
 
-static bool8 SlotsTask_AskQuitPlaying(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_AskQuitPlaying(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2216,7 +2216,7 @@ static bool8 SlotsTask_AskQuitPlaying(u8 * state, struct SlotMachineSetupTaskDat
     return TRUE;
 }
 
-static bool8 SlotsTask_DestroyYesNoMenu(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_DestroyYesNoMenu(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2234,7 +2234,7 @@ static bool8 SlotsTask_DestroyYesNoMenu(u8 * state, struct SlotMachineSetupTaskD
     return TRUE;
 }
 
-static bool8 SlotsTask_PressReelButton(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_PressReelButton(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2251,7 +2251,7 @@ static bool8 SlotsTask_PressReelButton(u8 * state, struct SlotMachineSetupTaskDa
     return TRUE;
 }
 
-static bool8 SlotsTask_ReleaseReelButtons(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_ReleaseReelButtons(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2268,7 +2268,7 @@ static bool8 SlotsTask_ReleaseReelButtons(u8 * state, struct SlotMachineSetupTas
     return TRUE;
 }
 
-static bool8 SlotsTask_ShowHelp(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_ShowHelp(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2276,7 +2276,7 @@ static bool8 SlotsTask_ShowHelp(u8 * state, struct SlotMachineSetupTaskData * pt
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN0_ON);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_BG1 | WININ_WIN0_BG2 | WININ_WIN0_BG3 | WININ_WIN0_OBJ | WININ_WIN0_CLR);
         SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG0 | WINOUT_WIN01_BG2 | WINOUT_WIN01_BG3 | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
-        SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0,   0));
+        SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, 0));
         SetGpuReg(REG_OFFSET_WIN1H, WIN_RANGE(0, 160));
         ShowBg(1);
         PlaySE(SE_WIN_OPEN);
@@ -2299,7 +2299,7 @@ static bool8 SlotsTask_ShowHelp(u8 * state, struct SlotMachineSetupTaskData * pt
     return TRUE;
 }
 
-static bool8 SlotsTask_HideHelp(u8 * state, struct SlotMachineSetupTaskData * ptr)
+static bool8 SlotsTask_HideHelp(u8* state, struct SlotMachineSetupTaskData* ptr)
 {
     switch (*state)
     {
@@ -2328,7 +2328,7 @@ static bool8 SlotsTask_HideHelp(u8 * state, struct SlotMachineSetupTaskData * pt
     return TRUE;
 }
 
-static void Slot_PrintOnWindow0(const u8 * str)
+static void Slot_PrintOnWindow0(const u8* str)
 {
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
     PutWindowTilemap(0);
@@ -2341,7 +2341,7 @@ static void Slot_ClearWindow0(void)
     rbox_fill_rectangle(0);
 }
 
-static void SetLineStatesByBet(u16 * bgTilemapBuffer)
+static void SetLineStatesByBet(u16* bgTilemapBuffer)
 {
     switch (GetPlayerBet())
     {
@@ -2364,10 +2364,10 @@ static void SetLineStatesByBet(u16 * bgTilemapBuffer)
     }
 }
 
-static void SetLineState(u16 * bgTilemapBuffer, u16 whichLine, u16 paletteNum)
+static void SetLineState(u16* bgTilemapBuffer, u16 whichLine, u16 paletteNum)
 {
     s32 i;
-    const u16 * tileIdxs = sLineStateTileIdxs[whichLine].tiles;
+    const u16* tileIdxs = sLineStateTileIdxs[whichLine].tiles;
     u16 palMask = (paletteNum & 0xF) << 12;
 
     for (i = 0; i < sLineStateTileIdxs[whichLine].count; i++)
@@ -2380,7 +2380,7 @@ static void SetLineState(u16 * bgTilemapBuffer, u16 whichLine, u16 paletteNum)
 
 static void Task_FlashWinningLine(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s32 i;
 
     switch (data[0])
@@ -2436,7 +2436,7 @@ static void Task_FlashWinningLine(u8 taskId)
             if (GetWinFlagByLine(i))
                 SetLineState(GetBgTilemapBuffer(2), i, PALSLOT_LINE_NORMAL);
         }
-        
+
         // Restore payout lights to normal color
         LoadPalette(&sBg_Pal[1], BG_PLTT_ID(1), sizeof(sBg_Pal[1]));
 
@@ -2464,7 +2464,7 @@ static void Slot_CreateYesNoMenu(u8 cursorPos)
 
 static void Slot_DestroyYesNoMenu(void)
 {
-    struct SlotMachineSetupTaskData * data = GetSlotMachineSetupTaskDataPtr();
+    struct SlotMachineSetupTaskData* data = GetSlotMachineSetupTaskDataPtr();
     if (data->yesNoMenuActive)
     {
         DestroyYesNoMenu();
@@ -2475,8 +2475,8 @@ static void Slot_DestroyYesNoMenu(void)
 static void InitReelButtonTileMem(void)
 {
     s32 i, j;
-    struct SlotMachineSetupTaskData * data = GetSlotMachineSetupTaskDataPtr();
-    u16 * buffer = GetBgTilemapBuffer(2);
+    struct SlotMachineSetupTaskData* data = GetSlotMachineSetupTaskDataPtr();
+    u16* buffer = GetBgTilemapBuffer(2);
 
     for (i = 0; i < NUM_REELS; i++)
     {
@@ -2494,8 +2494,8 @@ static void SetReelButtonPressed(u8 reel)
     if (reel < NUM_REELS)
     {
         s32 i;
-        struct SlotMachineSetupTaskData * data = GetSlotMachineSetupTaskDataPtr();
-        u16 * buffer = GetBgTilemapBuffer(2);
+        struct SlotMachineSetupTaskData* data = GetSlotMachineSetupTaskDataPtr();
+        u16* buffer = GetBgTilemapBuffer(2);
         for (i = 0; i < NUM_BUTTON_TILES; i++)
         {
             u16 idx = sReelButtonMapTileIdxs[reel][i];
@@ -2507,8 +2507,8 @@ static void SetReelButtonPressed(u8 reel)
 static void ReleaseReelButtons(void)
 {
     s32 i, j;
-    struct SlotMachineSetupTaskData * data = GetSlotMachineSetupTaskDataPtr();
-    u16 * buffer = GetBgTilemapBuffer(2);
+    struct SlotMachineSetupTaskData* data = GetSlotMachineSetupTaskDataPtr();
+    u16* buffer = GetBgTilemapBuffer(2);
 
     for (i = 0; i < NUM_REELS; i++)
     {

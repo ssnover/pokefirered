@@ -13,27 +13,27 @@
 
 EWRAM_DATA struct BagPocket gBagPockets[NUM_BAG_POCKETS] = {};
 
-void SortAndCompactBagPocket(struct BagPocket * pocket);
+void SortAndCompactBagPocket(struct BagPocket* pocket);
 
 // Item descriptions and data
 #include "data/items.h"
 
-u16 GetBagItemQuantity(u16 * ptr)
+u16 GetBagItemQuantity(u16* ptr)
 {
     return gSaveBlock2Ptr->encryptionKey ^ *ptr;
 }
 
-void SetBagItemQuantity(u16 * ptr, u16 value)
+void SetBagItemQuantity(u16* ptr, u16 value)
 {
     *ptr = value ^ gSaveBlock2Ptr->encryptionKey;
 }
 
-u16 GetPcItemQuantity(u16 * ptr)
+u16 GetPcItemQuantity(u16* ptr)
 {
     return 0 ^ *ptr;
 }
 
-void SetPcItemQuantity(u16 * ptr, u16 value)
+void SetPcItemQuantity(u16* ptr, u16 value)
 {
     *ptr = value ^ 0;
 }
@@ -70,7 +70,7 @@ void SetBagPocketsPointers(void)
     gBagPockets[POCKET_BERRY_POUCH - 1].capacity = BAG_BERRIES_COUNT;
 }
 
-void CopyItemName(u16 itemId, u8 * dest)
+void CopyItemName(u16 itemId, u8* dest)
 {
     if (itemId == ITEM_ENIGMA_BERRY)
     {
@@ -128,10 +128,10 @@ bool8 CheckBagHasItem(u16 itemId, u16 count)
             quantity = GetBagItemQuantity(&gBagPockets[pocket].itemSlots[i].quantity);
             if (quantity >= count)
                 return TRUE;
-                // RS and Emerald check whether there is enough of the
-                // item across all stacks.
-                // For whatever reason, FR/LG assume there's only one
-                // stack of the item.
+            // RS and Emerald check whether there is enough of the
+            // item across all stacks.
+            // For whatever reason, FR/LG assume there's only one
+            // stack of the item.
             else
                 return FALSE;
         }
@@ -305,7 +305,7 @@ u8 GetPocketByItemId(u16 itemId)
     return ItemId_GetPocket(itemId); // wow such important
 }
 
-void ClearItemSlots(struct ItemSlot * slots, u8 capacity)
+void ClearItemSlots(struct ItemSlot* slots, u8 capacity)
 {
     u16 i;
 
@@ -468,7 +468,7 @@ void RegisteredItemHandleBikeSwap(void)
     }
 }
 
-void SwapItemSlots(struct ItemSlot * a, struct ItemSlot * b)
+void SwapItemSlots(struct ItemSlot* a, struct ItemSlot* b)
 {
     struct ItemSlot c;
     c = *a;
@@ -476,7 +476,7 @@ void SwapItemSlots(struct ItemSlot * a, struct ItemSlot * b)
     *b = c;
 }
 
-void BagPocketCompaction(struct ItemSlot * slots, u8 capacity)
+void BagPocketCompaction(struct ItemSlot* slots, u8 capacity)
 {
     u16 i, j;
 
@@ -492,12 +492,12 @@ void BagPocketCompaction(struct ItemSlot * slots, u8 capacity)
     }
 }
 
-void SortPocketAndPlaceHMsFirst(struct BagPocket * pocket)
+void SortPocketAndPlaceHMsFirst(struct BagPocket* pocket)
 {
     u16 i;
     u16 j = 0;
     u16 k;
-    struct ItemSlot * buff;
+    struct ItemSlot* buff;
 
     SortAndCompactBagPocket(pocket);
 
@@ -527,7 +527,7 @@ void SortPocketAndPlaceHMsFirst(struct BagPocket * pocket)
     Free(buff);
 }
 
-void SortAndCompactBagPocket(struct BagPocket * pocket)
+void SortAndCompactBagPocket(struct BagPocket* pocket)
 {
     u16 i, j;
 
@@ -554,7 +554,7 @@ u16 BagGetQuantityByPocketPosition(u8 pocketId, u16 slotId)
 u16 BagGetQuantityByItemId(u16 itemId)
 {
     u16 i;
-    struct BagPocket * pocket = &gBagPockets[ItemId_GetPocket(itemId) - 1];
+    struct BagPocket* pocket = &gBagPockets[ItemId_GetPocket(itemId) - 1];
 
     for (i = 0; i < pocket->capacity; i++)
     {
@@ -571,39 +571,39 @@ void TrySetObtainedItemQuestLogEvent(u16 itemId)
     {
         u16 itemId;
         u8 mapSectionId;
-    } * ptr;
+    } *ptr;
 
     // Only some key items trigger this event
     if
-    (
-        itemId == ITEM_OAKS_PARCEL
-     || itemId == ITEM_POKE_FLUTE
-     || itemId == ITEM_SECRET_KEY
-     || itemId == ITEM_BIKE_VOUCHER
-     || itemId == ITEM_GOLD_TEETH
-     || itemId == ITEM_OLD_AMBER
-     || itemId == ITEM_CARD_KEY
-     || itemId == ITEM_LIFT_KEY
-     || itemId == ITEM_HELIX_FOSSIL
-     || itemId == ITEM_DOME_FOSSIL
-     || itemId == ITEM_SILPH_SCOPE
-     || itemId == ITEM_BICYCLE
-     || itemId == ITEM_TOWN_MAP
-     || itemId == ITEM_VS_SEEKER
-     || itemId == ITEM_TEACHY_TV
-     || itemId == ITEM_RAINBOW_PASS
-     || itemId == ITEM_TEA
-     || itemId == ITEM_POWDER_JAR
-     || itemId == ITEM_RUBY
-     || itemId == ITEM_SAPPHIRE
-    )
+        (
+            itemId == ITEM_OAKS_PARCEL
+            || itemId == ITEM_POKE_FLUTE
+            || itemId == ITEM_SECRET_KEY
+            || itemId == ITEM_BIKE_VOUCHER
+            || itemId == ITEM_GOLD_TEETH
+            || itemId == ITEM_OLD_AMBER
+            || itemId == ITEM_CARD_KEY
+            || itemId == ITEM_LIFT_KEY
+            || itemId == ITEM_HELIX_FOSSIL
+            || itemId == ITEM_DOME_FOSSIL
+            || itemId == ITEM_SILPH_SCOPE
+            || itemId == ITEM_BICYCLE
+            || itemId == ITEM_TOWN_MAP
+            || itemId == ITEM_VS_SEEKER
+            || itemId == ITEM_TEACHY_TV
+            || itemId == ITEM_RAINBOW_PASS
+            || itemId == ITEM_TEA
+            || itemId == ITEM_POWDER_JAR
+            || itemId == ITEM_RUBY
+            || itemId == ITEM_SAPPHIRE
+            )
     {
         if (itemId != ITEM_TOWN_MAP || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(PALLET_TOWN_RIVALS_HOUSE) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN_RIVALS_HOUSE)))
         {
             ptr = malloc(sizeof(*ptr));
             ptr->itemId = itemId;
             ptr->mapSectionId = gMapHeader.regionMapSectionId;
-            SetQuestLogEvent(QL_EVENT_OBTAINED_ITEM, (void *)ptr);
+            SetQuestLogEvent(QL_EVENT_OBTAINED_ITEM, (void*)ptr);
             free(ptr);
         }
     }
@@ -616,7 +616,7 @@ u16 SanitizeItemId(u16 itemId)
     return itemId;
 }
 
-const u8 * ItemId_GetName(u16 itemId)
+const u8* ItemId_GetName(u16 itemId)
 {
     return gItems[SanitizeItemId(itemId)].name;
 }
@@ -642,7 +642,7 @@ u8 ItemId_GetHoldEffectParam(u16 itemId)
     return gItems[SanitizeItemId(itemId)].holdEffectParam;
 }
 
-const u8 * ItemId_GetDescription(u16 itemId)
+const u8* ItemId_GetDescription(u16 itemId)
 {
     return gItems[SanitizeItemId(itemId)].description;
 }

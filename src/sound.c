@@ -48,20 +48,20 @@ static void Task_DuckBGMForPokemonCry(u8 taskId);
 static void RestoreBGMVolumeAfterPokemonCry(void);
 
 static const struct Fanfare sFanfares[] = {
-    [FANFARE_LEVEL_UP]      = { MUS_LEVEL_UP,         80 },
-    [FANFARE_OBTAIN_ITEM]   = { MUS_OBTAIN_ITEM,     160 },
-    [FANFARE_EVOLVED]       = { MUS_EVOLVED,         220 },
-    [FANFARE_OBTAIN_TMHM]   = { MUS_OBTAIN_TMHM,     220 },
-    [FANFARE_HEAL]          = { MUS_HEAL,            160 },
-    [FANFARE_OBTAIN_BADGE]  = { MUS_OBTAIN_BADGE,    340 },
-    [FANFARE_MOVE_DELETED]  = { MUS_MOVE_DELETED,    180 },
-    [FANFARE_OBTAIN_BERRY]  = { MUS_OBTAIN_BERRY,    120 },
+    [FANFARE_LEVEL_UP] = { MUS_LEVEL_UP,         80 },
+    [FANFARE_OBTAIN_ITEM] = { MUS_OBTAIN_ITEM,     160 },
+    [FANFARE_EVOLVED] = { MUS_EVOLVED,         220 },
+    [FANFARE_OBTAIN_TMHM] = { MUS_OBTAIN_TMHM,     220 },
+    [FANFARE_HEAL] = { MUS_HEAL,            160 },
+    [FANFARE_OBTAIN_BADGE] = { MUS_OBTAIN_BADGE,    340 },
+    [FANFARE_MOVE_DELETED] = { MUS_MOVE_DELETED,    180 },
+    [FANFARE_OBTAIN_BERRY] = { MUS_OBTAIN_BERRY,    120 },
     [FANFARE_SLOTS_JACKPOT] = { MUS_SLOTS_JACKPOT,   250 },
-    [FANFARE_SLOTS_WIN]     = { MUS_SLOTS_WIN,       150 },
-    [FANFARE_TOO_BAD]       = { MUS_TOO_BAD,         160 },
-    [FANFARE_POKE_FLUTE]    = { MUS_POKE_FLUTE,      450 },
-    [FANFARE_KEY_ITEM]      = { MUS_OBTAIN_KEY_ITEM, 170 },
-    [FANFARE_DEX_EVAL]      = { MUS_DEX_RATING,      196 }
+    [FANFARE_SLOTS_WIN] = { MUS_SLOTS_WIN,       150 },
+    [FANFARE_TOO_BAD] = { MUS_TOO_BAD,         160 },
+    [FANFARE_POKE_FLUTE] = { MUS_POKE_FLUTE,      450 },
+    [FANFARE_KEY_ITEM] = { MUS_OBTAIN_KEY_ITEM, 170 },
+    [FANFARE_DEX_EVAL] = { MUS_DEX_RATING,      196 }
 };
 
 void InitMapMusic(void)
@@ -190,7 +190,7 @@ bool8 IsNotWaitingForBGMStop(void)
 void PlayFanfareByFanfareNum(u8 fanfareNum)
 {
     u16 songNum;
-    if(gQuestLogState == QL_STATE_PLAYBACK)
+    if (gQuestLogState == QL_STATE_PLAYBACK)
     {
         sFanfareCounter = 0xFF;
     }
@@ -382,7 +382,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     u8 table;
 
     species--;
-    
+
     // Set default values
     // May be overridden depending on mode.
     length = 140;
@@ -477,7 +477,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     index = species % 128;
     table = species / 128;
 
-    #define GET_CRY(speciesIndex, tableId, reversed) \
+#define GET_CRY(speciesIndex, tableId, reversed) \
         ((reversed) ? &gCryTable_Reverse[(128 * (tableId)) + (speciesIndex)] : &gCryTable[(128 * (tableId)) + (speciesIndex)])
 
     switch (table)
@@ -496,7 +496,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
         break;
     }
 
-    #undef GET_CRY
+#undef GET_CRY
 }
 
 bool8 IsCryFinished(void)

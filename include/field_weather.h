@@ -24,18 +24,18 @@ struct Weather
     {
         struct
         {
-            struct Sprite *rainSprites[MAX_RAIN_SPRITES];
-            struct Sprite *snowflakeSprites[101];
-            struct Sprite *cloudSprites[NUM_CLOUD_SPRITES];
+            struct Sprite* rainSprites[MAX_RAIN_SPRITES];
+            struct Sprite* snowflakeSprites[101];
+            struct Sprite* cloudSprites[NUM_CLOUD_SPRITES];
         } s1;
         struct
         {
             u8 filler0[0xA0];
-            struct Sprite *fogHSprites[NUM_FOG_HORIZONTAL_SPRITES];
-            struct Sprite *ashSprites[NUM_ASH_SPRITES];
-            struct Sprite *fogDSprites[NUM_FOG_DIAGONAL_SPRITES];
-            struct Sprite *sandstormSprites1[NUM_SANDSTORM_SPRITES];
-            struct Sprite *sandstormSprites2[NUM_SWIRL_SANDSTORM_SPRITES];
+            struct Sprite* fogHSprites[NUM_FOG_HORIZONTAL_SPRITES];
+            struct Sprite* ashSprites[NUM_ASH_SPRITES];
+            struct Sprite* fogDSprites[NUM_FOG_DIAGONAL_SPRITES];
+            struct Sprite* sandstormSprites1[NUM_SANDSTORM_SPRITES];
+            struct Sprite* sandstormSprites2[NUM_SWIRL_SANDSTORM_SPRITES];
         } s2;
     } sprites;
     u8 gammaShifts[19][32];
@@ -118,12 +118,12 @@ struct Weather
     s16 droughtLastBrightnessStage;
     s16 droughtTimer;
     s16 droughtState;
-    u8 filler_744[0xD-4];
+    u8 filler_744[0xD - 4];
     s8 loadDroughtPalsIndex;
     u8 loadDroughtPalsOffset;
 };
 
-extern struct Weather *const gWeatherPtr;
+extern struct Weather* const gWeatherPtr;
 
 void FadeScreen(u8 mode, s8 delay);
 
@@ -132,7 +132,7 @@ u8 GetSav1Weather(void);
 
 void DoCurrentWeather(void);
 void SetSavedWeatherFromCurrMapHeader(void);
-void SlightlyDarkenPalsInWeather(u16 *, u16 *, u32);
+void SlightlyDarkenPalsInWeather(u16*, u16*, u32);
 void PlayRainStoppingSoundEffect(void);
 bool8 IsWeatherNotFadingIn(void);
 void SetWeatherScreenFadeOut(void);
@@ -148,7 +148,7 @@ void SetCurrentAndNextWeather(u8 weather);
 void Weather_SetBlendCoeffs(u8 eva, u8 evb);
 void Weather_SetTargetBlendCoeffs(u8 eva, u8 evb, int delay);
 bool8 Weather_UpdateBlend(void);
-void LoadCustomWeatherSpritePalette(const u16 *palette);
+void LoadCustomWeatherSpritePalette(const u16* palette);
 void ResetDroughtWeatherPaletteLoading(void);
 bool8 LoadDroughtWeatherPalettes(void);
 void DroughtStateInit(void);

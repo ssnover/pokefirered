@@ -98,7 +98,7 @@ void ClearRoamerData(void)
 
 void CreateInitialRoamerMon(void)
 {
-    struct Pokemon * mon = &gEnemyParty[0];
+    struct Pokemon* mon = &gEnemyParty[0];
     u16 species = GetRoamerSpecies();
     CreateMon(mon, species, 50, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
     ROAMER->species = species;
@@ -183,8 +183,8 @@ void RoamerMove(void)
                     // Also exclude a map if the roamer was there 2 moves ago
                     mapNum = sRoamerLocations[locSet][(Random() % (NUM_LOCATIONS_PER_SET - 1)) + 1];
                     if (!(sLocationHistory[2][MAP_GRP] == ROAMER_MAP_GROUP
-                       && sLocationHistory[2][MAP_NUM] == mapNum)
-                       && mapNum != MAP_NUM(UNDEFINED))
+                        && sLocationHistory[2][MAP_NUM] == mapNum)
+                        && mapNum != MAP_NUM(UNDEFINED))
                         break;
                 }
                 sRoamerLocation[MAP_NUM] = mapNum;
@@ -206,11 +206,11 @@ bool8 IsRoamerAt(u8 mapGroup, u8 mapNum)
 void CreateRoamerMonInstance(void)
 {
     u32 status;
-    struct Pokemon *mon = &gEnemyParty[0];
+    struct Pokemon* mon = &gEnemyParty[0];
     ZeroEnemyPartyMons();
     CreateMonWithIVsPersonality(mon, ROAMER->species, ROAMER->level, ROAMER->ivs, ROAMER->personality);
-// The roamer's status field is u8, but SetMonData expects status to be u32, so will set the roamer's status
-// using the status field and the following 3 bytes (cool, beauty, and cute).
+    // The roamer's status field is u8, but SetMonData expects status to be u32, so will set the roamer's status
+    // using the status field and the following 3 bytes (cool, beauty, and cute).
 #ifdef BUGFIX
     status = ROAMER->status;
     SetMonData(mon, MON_DATA_STATUS, &status);
@@ -237,7 +237,7 @@ bool8 TryStartRoamerEncounter(void)
         return FALSE;
     }
 }
-void UpdateRoamerHPStatus(struct Pokemon *mon)
+void UpdateRoamerHPStatus(struct Pokemon* mon)
 {
     ROAMER->hp = GetMonData(mon, MON_DATA_HP);
     ROAMER->status = GetMonData(mon, MON_DATA_STATUS);
@@ -250,7 +250,7 @@ void SetRoamerInactive(void)
     ROAMER->active = FALSE;
 }
 
-void GetRoamerLocation(u8 *mapGroup, u8 *mapNum)
+void GetRoamerLocation(u8* mapGroup, u8* mapNum)
 {
     *mapGroup = sRoamerLocation[MAP_GRP];
     *mapNum = sRoamerLocation[MAP_NUM];

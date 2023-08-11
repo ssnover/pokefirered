@@ -222,7 +222,7 @@ struct Link
 
 struct BlockRequest
 {
-    void *address;
+    void* address;
     u32 size;
 };
 
@@ -249,7 +249,7 @@ extern u16 gLinkPartnersHeldKeys[6];
 void Task_DestroySelf(u8);
 void OpenLink(void);
 void CloseLink(void);
-u16 LinkMain2(const u16 *);
+u16 LinkMain2(const u16*);
 void ClearLinkCallback(void);
 void ClearLinkCallback_2(void);
 u8 GetLinkPlayerCount(void);
@@ -260,7 +260,7 @@ u32 GetLinkPlayerTrainerId(u8);
 void ResetLinkPlayers(void);
 u8 GetMultiplayerId(void);
 u8 BitmaskAllOtherLinkPlayers(void);
-bool8 SendBlock(u8, const void *, u16);
+bool8 SendBlock(u8, const void*, u16);
 u8 GetBlockReceivedStatus(void);
 void ResetBlockReceivedFlags(void);
 void ResetBlockReceivedFlag(u8);
@@ -274,7 +274,7 @@ bool8 IsLinkConnectionEstablished(void);
 void SetSuppressLinkErrorMessage(bool8);
 bool8 HasLinkErrorOccurred(void);
 void ResetSerial(void);
-u32 LinkMain1(u8 *, u16 *, u16[MAX_RFU_PLAYERS][CMD_LENGTH]);
+u32 LinkMain1(u8*, u16*, u16[MAX_RFU_PLAYERS][CMD_LENGTH]);
 void RfuVSync(void);
 void Timer3Intr(void);
 void SerialCB(void);
@@ -298,7 +298,7 @@ void CreateWirelessStatusIndicatorSprite(u8, u8);
 void StartSendingKeysToLink(void);
 void ClearLinkCallback_2(void);
 void Rfu_SetLinkStandbyCallback(void);
-void ConvertLinkPlayerName(struct LinkPlayer * linkPlayer);
+void ConvertLinkPlayerName(struct LinkPlayer* linkPlayer);
 bool8 IsWirelessAdapterConnected(void);
 bool8 SendBlockRequest(u8 blockRequestType);
 void LinkVSync(void);

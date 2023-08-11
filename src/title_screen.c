@@ -40,14 +40,14 @@ static void CB2_TitleScreenRun(void);
 static void VBlankCB(void);
 static void Task_TitleScreenTimer(u8 taskId);
 static void Task_TitleScreenMain(u8 taskId);
-static void SetTitleScreenScene(s16 *data, u8 sceneNum);
-static void SetTitleScreenScene_Init(s16 *data);
-static void SetTitleScreenScene_FlashSprite(s16 *data);
-static void SetTitleScreenScene_FadeIn(s16 *data);
-static void SetTitleScreenScene_Run(s16 *data);
+static void SetTitleScreenScene(s16* data, u8 sceneNum);
+static void SetTitleScreenScene_Init(s16* data);
+static void SetTitleScreenScene_FlashSprite(s16* data);
+static void SetTitleScreenScene_FadeIn(s16* data);
+static void SetTitleScreenScene_Run(s16* data);
 static void SetGpuRegsForTitleScreenRun(void);
-static void SetTitleScreenScene_Restart(s16 *data);
-static void SetTitleScreenScene_Cry(s16 *data);
+static void SetTitleScreenScene_Restart(s16* data);
+static void SetTitleScreenScene_Cry(s16* data);
 static void Task_TitleScreen_SlideWin0(u8 taskId);
 static void Task_TitleScreen_BlinkPressStart(u8 taskId);
 static void SignalEndTitleScreenPaletteSomethingTask(void);
@@ -58,10 +58,10 @@ static void CB2_FadeOutTransitionToSaveClearScreen(void);
 static void CB2_FadeOutTransitionToBerryFix(void);
 static void LoadSpriteGfxAndPals(void);
 #if defined(FIRERED)
-static void SpriteCallback_TitleScreenFlame(struct Sprite *sprite);
+static void SpriteCallback_TitleScreenFlame(struct Sprite* sprite);
 static void Task_FlameSpawner(u8 taskId);
 #elif defined(LEAFGREEN)
-static void SpriteCallback_TitleScreenLeaf(struct Sprite *sprite);
+static void SpriteCallback_TitleScreenLeaf(struct Sprite* sprite);
 static void Task_LeafSpawner(u8 taskId);
 #endif
 static void TitleScreen_srand(u8 taskId, u8 field, u16 seed);
@@ -71,7 +71,7 @@ static void SetPalOnOrCreateBlankSprite(bool32 hasCreatedBlankSprite);
 static u8 CreateSlashSprite(void);
 static void DeactivateSlashSprite(u8 spriteId);
 static bool32 IsSlashSpriteDeactivated(u8 spriteId);
-static void SpriteCallback_Slash(struct Sprite *sprite);
+static void SpriteCallback_Slash(struct Sprite* sprite);
 
 static const u8 sBorderBgTiles[] = INCBIN_U8("graphics/title_screen/border_bg.4bpp.lz");
 
@@ -125,7 +125,7 @@ static const union AnimCmd sSpriteAnim_Flame_Unused[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnim_FlameOrLeaf[] = {
+static const union AnimCmd* const sSpriteAnim_FlameOrLeaf[] = {
     sSpriteAnim_Flame,
     sSpriteAnim_Flame_Unused,
 };
@@ -146,7 +146,7 @@ static const union AnimCmd sSpriteAnim_Leaf[] = {
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sSpriteAnim_FlameOrLeaf[] = {
+static const union AnimCmd* const sSpriteAnim_FlameOrLeaf[] = {
     sSpriteAnim_Leaf
 };
 #endif
@@ -277,13 +277,13 @@ static const struct BgTemplate sBgTemplates[] = {
     }
 };
 
-static void (*const sSceneFuncs[])(s16 *data) = {
-    [TITLESCREENSCENE_INIT]        = SetTitleScreenScene_Init,
+static void (* const sSceneFuncs[])(s16* data) = {
+    [TITLESCREENSCENE_INIT] = SetTitleScreenScene_Init,
     [TITLESCREENSCENE_FLASHSPRITE] = SetTitleScreenScene_FlashSprite,
-    [TITLESCREENSCENE_FADEIN]      = SetTitleScreenScene_FadeIn,
-    [TITLESCREENSCENE_RUN]         = SetTitleScreenScene_Run,
-    [TITLESCREENSCENE_RESTART]     = SetTitleScreenScene_Restart,
-    [TITLESCREENSCENE_CRY]         = SetTitleScreenScene_Cry
+    [TITLESCREENSCENE_FADEIN] = SetTitleScreenScene_FadeIn,
+    [TITLESCREENSCENE_RUN] = SetTitleScreenScene_Run,
+    [TITLESCREENSCENE_RESTART] = SetTitleScreenScene_Restart,
+    [TITLESCREENSCENE_CRY] = SetTitleScreenScene_Cry
 };
 
 #if defined(FIRERED)
@@ -330,7 +330,7 @@ static const u32 sUnused_Tilemap4[] = INCBIN_U32("graphics/title_screen/unused4.
 static const u32 sUnused_Tilemap5[] = INCBIN_U32("graphics/title_screen/unused5.bin.lz");
 static const u32 sUnused_Tilemap6[] = INCBIN_U32("graphics/title_screen/unused6.bin.lz");
 
-static const u32 *const sUnused_Tilemaps[] = {
+static const u32* const sUnused_Tilemaps[] = {
     sUnused_Tilemap1,
     sUnused_Tilemap2,
     sUnused_Tilemap3,
@@ -355,9 +355,9 @@ void CB2_InitTitleScreen(void)
         FreeAllSpritePalettes();
         ResetPaletteFade();
         ResetGpuRegs();
-        DmaFill16(3, 0, (void *)VRAM, VRAM_SIZE);
-        DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
-        DmaFill16(3, 0, (void *)PLTT, PLTT_SIZE);
+        DmaFill16(3, 0, (void*)VRAM, VRAM_SIZE);
+        DmaFill32(3, 0, (void*)OAM, OAM_SIZE);
+        DmaFill16(3, 0, (void*)PLTT, PLTT_SIZE);
         ResetBgsAndClearDma3BusyFlags(FALSE);
         InitBgsFromTemplates(0, sBgTemplates, NELEMS(sBgTemplates));
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
@@ -395,18 +395,18 @@ void CB2_InitTitleScreen(void)
 
 static void ResetGpuRegs(void)
 {
-    SetGpuReg(REG_OFFSET_DISPCNT,  0);
-    SetGpuReg(REG_OFFSET_BLDCNT,   0);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
-    SetGpuReg(REG_OFFSET_BLDY,     0);
-    SetGpuReg(REG_OFFSET_BG0HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG0VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG1HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG1VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG2HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG2VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG3HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG3VOFS,  0);
+    SetGpuReg(REG_OFFSET_BLDY, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3VOFS, 0);
 }
 
 static void CB2_TitleScreenRun(void)
@@ -430,7 +430,7 @@ static void VBlankCB(void)
 
 static void Task_TitleScreenTimer(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (data[0] >= 2700)
     {
@@ -447,7 +447,7 @@ static void Task_TitleScreenTimer(u8 taskId)
 
 static void Task_TitleScreenMain(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (JOY_NEW(A_BUTTON | B_BUTTON | START_BUTTON)
         && tSceneNum != TITLESCREENSCENE_RUN
@@ -463,13 +463,13 @@ static void Task_TitleScreenMain(u8 taskId)
         sSceneFuncs[tSceneNum](data);
 }
 
-static void SetTitleScreenScene(s16 *data, u8 sceneNum)
+static void SetTitleScreenScene(s16* data, u8 sceneNum)
 {
     tState = 0;
     tSceneNum = sceneNum;
 }
 
-static void SetTitleScreenScene_Init(s16 *data)
+static void SetTitleScreenScene_Init(s16* data)
 {
     struct ScanlineEffectParams params;
 
@@ -478,7 +478,7 @@ static void SetTitleScreenScene_Init(s16 *data)
     ShowBg(2);
     ShowBg(3);
 
-    params.dmaDest = (volatile void *)REG_ADDR_BLDY;
+    params.dmaDest = (volatile void*)REG_ADDR_BLDY;
     params.dmaControl = SCANLINE_EFFECT_DMACNT_16BIT;
     params.initState = 1;
     params.unused9 = 0;
@@ -491,7 +491,7 @@ static void SetTitleScreenScene_Init(s16 *data)
     SetTitleScreenScene(data, TITLESCREENSCENE_FLASHSPRITE);
 }
 
-static void SetTitleScreenScene_FlashSprite(s16 *data)
+static void SetTitleScreenScene_FlashSprite(s16* data)
 {
     switch (tState)
     {
@@ -518,7 +518,7 @@ static void SetTitleScreenScene_FlashSprite(s16 *data)
     }
 }
 
-static void SetTitleScreenScene_FadeIn(s16 *data)
+static void SetTitleScreenScene_FadeIn(s16* data)
 {
     switch (tState)
     {
@@ -610,7 +610,7 @@ static void SetTitleScreenScene_FadeIn(s16 *data)
 #define KEYSTROKE_DELSAVE (B_BUTTON | SELECT_BUTTON | DPAD_UP)
 #define KEYSTROKE_BERRY_FIX (B_BUTTON | SELECT_BUTTON)
 
-static void SetTitleScreenScene_Run(s16 *data)
+static void SetTitleScreenScene_Run(s16* data)
 {
     switch (tState)
     {
@@ -660,7 +660,7 @@ static void SetGpuRegsForTitleScreenRun(void)
     SetGpuReg(REG_OFFSET_BLDY, 13);
 }
 
-static void SetTitleScreenScene_Restart(s16 *data)
+static void SetTitleScreenScene_Restart(s16* data)
 {
     switch (tState)
     {
@@ -701,7 +701,7 @@ static void SetTitleScreenScene_Restart(s16 *data)
     }
 }
 
-static void SetTitleScreenScene_Cry(s16 *data)
+static void SetTitleScreenScene_Cry(s16* data)
 {
     switch (tState)
     {
@@ -751,7 +751,7 @@ static void SetTitleScreenScene_Cry(s16 *data)
 
 static void Task_TitleScreen_SlideWin0(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -810,7 +810,7 @@ static void Task_TitleScreen_SlideWin0(u8 taskId)
 
 static void Task_TitleScreen_BlinkPressStart(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s32 i;
 
     if (data[15] && gPaletteFade.active)
@@ -949,9 +949,9 @@ static void LoadSpriteGfxAndPals(void)
 #define sPosY      data[2]
 #define sSpeedY    data[3]
 
-static void SpriteCallback_TitleScreenFlame(struct Sprite *sprite)
+static void SpriteCallback_TitleScreenFlame(struct Sprite* sprite)
 {
-    s16 *data = sprite->data;
+    s16* data = sprite->data;
     sPosX -= sSpeedX;
     sprite->x = sPosX >> 4;
     if (sprite->x < -8)
@@ -1014,7 +1014,7 @@ static bool32 CreateFlameSprite(s32 x, s32 y, s32 xspeed, s32 yspeed, bool32 cre
 
 static void Task_FlameSpawner(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s32 x, y, xspeed, yspeed;
     s32 i;
 
@@ -1074,9 +1074,9 @@ static void Task_FlameSpawner(u8 taskId)
 #define sPosY        data[2]
 #define sSpeedY      data[3]
 
-static void SpriteCallback_TitleScreenLeaf(struct Sprite *sprite)
+static void SpriteCallback_TitleScreenLeaf(struct Sprite* sprite)
 {
-    s16 *data = sprite->data;
+    s16* data = sprite->data;
     sprite->sPosX -= sSpeedX;
     sprite->x = sprite->sPosX >> 4;
     if (sprite->x < -8)
@@ -1123,7 +1123,7 @@ static void CreateLeafSprite(s32 y, s32 xspeed, s32 yspeed)
 #undef sPosY
 #undef sSpeedY
 
-static void SpriteCallback_Streak(struct Sprite *sprite)
+static void SpriteCallback_Streak(struct Sprite* sprite)
 {
     sprite->x -= 7;
     if (sprite->x < -16)
@@ -1158,7 +1158,7 @@ static void CreateStreakSprites(void)
 
 static void Task_LeafSpawner(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s32 rval;
     s32 xspeed;
     s32 yspeed;
@@ -1263,7 +1263,7 @@ static bool32 IsSlashSpriteDeactivated(u8 spriteId)
         return FALSE;
 }
 
-static void SpriteCallback_Slash(struct Sprite *sprite)
+static void SpriteCallback_Slash(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {

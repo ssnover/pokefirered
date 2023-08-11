@@ -37,27 +37,27 @@ void IsDodrioInParty(void);
 // dodrio_berry_picking_comm.c
 void SendPacket_ReadyToStart(bool32 ready);
 bool8 RecvPacket_ReadyToStart(s32 playerId);
-void SendPacket_GameState(struct DodrioGame_Player *player,
-                          struct DodrioGame_PlayerCommData *player1,
-                          struct DodrioGame_PlayerCommData *player2,
-                          struct DodrioGame_PlayerCommData *player3,
-                          struct DodrioGame_PlayerCommData *player4,
-                          struct DodrioGame_PlayerCommData *player5,
-                          u8 numGraySquares,
-                          bool32 berriesFalling,
-                          bool32 allReadyToEnd);
+void SendPacket_GameState(struct DodrioGame_Player* player,
+    struct DodrioGame_PlayerCommData* player1,
+    struct DodrioGame_PlayerCommData* player2,
+    struct DodrioGame_PlayerCommData* player3,
+    struct DodrioGame_PlayerCommData* player4,
+    struct DodrioGame_PlayerCommData* player5,
+    u8 numGraySquares,
+    bool32 berriesFalling,
+    bool32 allReadyToEnd);
 bool32 RecvPacket_GameState(u32 playerId,
-                            struct DodrioGame_Player *player,
-                            struct DodrioGame_PlayerCommData *player1,
-                            struct DodrioGame_PlayerCommData *player2,
-                            struct DodrioGame_PlayerCommData *player3,
-                            struct DodrioGame_PlayerCommData *player4,
-                            struct DodrioGame_PlayerCommData *player5,
-                            u8 *numGraySquares,
-                            bool32 *berriesFalling,
-                            bool32 *allReadyToEnd);
+    struct DodrioGame_Player* player,
+    struct DodrioGame_PlayerCommData* player1,
+    struct DodrioGame_PlayerCommData* player2,
+    struct DodrioGame_PlayerCommData* player3,
+    struct DodrioGame_PlayerCommData* player4,
+    struct DodrioGame_PlayerCommData* player5,
+    u8* numGraySquares,
+    bool32* berriesFalling,
+    bool32* allReadyToEnd);
 void SendPacket_PickState(u8 pickState);
-bool32 RecvPacket_PickState(u32 playerId, u8 *pickState);
+bool32 RecvPacket_PickState(u32 playerId, u8* pickState);
 void SendPacket_ReadyToEnd(bool32 readyToEnd);
 bool32 RecvPacket_ReadyToEnd(u32 playerId);
 

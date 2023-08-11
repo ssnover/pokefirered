@@ -4,7 +4,7 @@
 #include "global.h"
 
 bool8 CheckForTrainersWantingBattle(void);
-void MovementAction_RevealTrainer_RunTrainerSeeFuncList(struct ObjectEvent *var);
+void MovementAction_RevealTrainer_RunTrainerSeeFuncList(struct ObjectEvent* var);
 u8 FldEff_ExclamationMarkIcon1(void);
 u8 FldEff_DoubleExclMarkIcon(void);
 u8 FldEff_XIcon(void);

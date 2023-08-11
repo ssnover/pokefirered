@@ -16,38 +16,38 @@
 
 static void LoadBgGfxByAnimType(u16 animType);
 static void Task_ZoomAnim(u8 taskId);
-static void SetSpriteWithCloseness(struct Sprite *sprite, u8 closeness);
-static bool8 IsZoomSpriteCBActive(struct Sprite *sprite);
-static void MonSpriteZoom_UpdateYPos(struct Sprite *sprite, u8 closeness);
-static void ItemSpriteZoom_UpdateYPos(struct Sprite *sprite, u8 closeness);
-static void StartMonWiggleAnim(struct PokemonSpecialAnimScene * scene, u8 frameLen, u8 niter, u8 amplitude);
-static void StopMonWiggleAnim(struct PokemonSpecialAnimScene * scene);
-static void SpriteCallback_MonSpriteWiggle(struct Sprite *sprite);
-static void LoadMonSpriteGraphics(u16 *tilees, u16 *palette);
-static struct Sprite *PSA_CreateItemIconObject(u16 itemId);
+static void SetSpriteWithCloseness(struct Sprite* sprite, u8 closeness);
+static bool8 IsZoomSpriteCBActive(struct Sprite* sprite);
+static void MonSpriteZoom_UpdateYPos(struct Sprite* sprite, u8 closeness);
+static void ItemSpriteZoom_UpdateYPos(struct Sprite* sprite, u8 closeness);
+static void StartMonWiggleAnim(struct PokemonSpecialAnimScene* scene, u8 frameLen, u8 niter, u8 amplitude);
+static void StopMonWiggleAnim(struct PokemonSpecialAnimScene* scene);
+static void SpriteCallback_MonSpriteWiggle(struct Sprite* sprite);
+static void LoadMonSpriteGraphics(u16* tilees, u16* palette);
+static struct Sprite* PSA_CreateItemIconObject(u16 itemId);
 static u16 GetBlendColorByItemId(u16 itemId);
 static void Task_ItemUseOnMonAnim(u8 taskId);
-static void CreateSprites_UseItem_OutwardSpiralDots(u8 taskId, s16 *data, struct Sprite *sprite);
-static void SpriteCB_OutwardSpiralDots(struct Sprite *sprite);
-static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, struct Sprite *sprite, u8 closeness);
+static void CreateSprites_UseItem_OutwardSpiralDots(u8 taskId, s16* data, struct Sprite* sprite);
+static void SpriteCB_OutwardSpiralDots(struct Sprite* sprite);
+static void InitItemIconSpriteState(struct PokemonSpecialAnimScene* scene, struct Sprite* sprite, u8 closeness);
 static void MachineSetWobbleInit(void);
-static void MachineSetWobble_SetCB(struct Sprite *sprite);
+static void MachineSetWobble_SetCB(struct Sprite* sprite);
 static bool8 MachineSetWobbleCBIsRunning(void);
-static void SpriteCB_MachineSetWobble(struct Sprite *sprite);
+static void SpriteCB_MachineSetWobble(struct Sprite* sprite);
 static void StartZoomOutAnimForUseTM(u8 closeness);
-static void CreateStarSprites(struct PokemonSpecialAnimScene * scene);
+static void CreateStarSprites(struct PokemonSpecialAnimScene* scene);
 static bool8 AnyStarSpritesActive(void);
-static void SpriteCB_Star(struct Sprite *sprite);
-static void PSAScene_SeedRandomInTask(struct PokemonSpecialAnimScene * scene);
+static void SpriteCB_Star(struct Sprite* sprite);
+static void PSAScene_SeedRandomInTask(struct PokemonSpecialAnimScene* scene);
 static void StopMakingOutwardSpiralDots(void);
 static void Task_UseItem_OutwardSpiralDots(u8 taskId);
 static u16 PSAScene_RandomFromTask(u8 taskId);
-static void SpriteCallback_UseItem_OutwardSpiralDots(struct Sprite *sprite);
+static void SpriteCallback_UseItem_OutwardSpiralDots(struct Sprite* sprite);
 static void LoadOutwardSpiralDotsGfx(void);
 static bool32 IsOutwardSpiralDotsTaskRunning(void);
 static void Task_LevelUpVerticalSprites(u8 taskId);
-static void CreateLevelUpVerticalSprite(u8 taskId, s16 *data);
-static void SpriteCB_LevelUpVertical(struct Sprite *sprite);
+static void CreateLevelUpVerticalSprite(u8 taskId, s16* data);
+static void SpriteCB_LevelUpVertical(struct Sprite* sprite);
 
 static const u16 sBg_Pal[] = INCBIN_U16("graphics/pokemon_special_anim/bg.gbapal");
 static const u16 sBg_TmHm_Pal[] = INCBIN_U16("graphics/pokemon_special_anim/bg_tm_hm.gbapal");
@@ -92,7 +92,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
     }, DUMMY_WIN_TEMPLATE
 };
 
-static const u8 *const s1_2_and_Poof_textPtrs[] = {
+static const u8* const s1_2_and_Poof_textPtrs[] = {
     gText_Counting_1,
     gText_Counting_2And,
     gText_Poof,
@@ -173,7 +173,7 @@ static const union AffineAnimCmd sAffineAnim_Zoom_3[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnimTable_Zoom[] = {
+static const union AffineAnimCmd* const sAffineAnimTable_Zoom[] = {
     sAffineAnim_Zoom_0,
     sAffineAnim_Zoom_1,
     sAffineAnim_Zoom_2,
@@ -214,7 +214,7 @@ static const union AffineAnimCmd sAffineAnim_ItemZoom_3[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnimTable_ItemZoom[] = {
+static const union AffineAnimCmd* const sAffineAnimTable_ItemZoom[] = {
     sAffineAnim_ItemZoom_0,
     sAffineAnim_ItemZoom_1,
     sAffineAnim_ItemZoom_2,
@@ -241,7 +241,7 @@ static const union AnimCmd sAnim_LevelUpVertical[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_LevelUpVertical[] = {
+static const union AnimCmd* const sAnimTable_LevelUpVertical[] = {
     sAnim_LevelUpVertical
 };
 
@@ -308,7 +308,7 @@ static const union AnimCmd sAnim_UseItem_OutwardSpiralDots_1[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_UseItem_OutwardSpiralDots[] = {
+static const union AnimCmd* const sAnimTable_UseItem_OutwardSpiralDots[] = {
     sAnim_UseItem_OutwardSpiralDots_0,
     sAnim_UseItem_OutwardSpiralDots_1
 };
@@ -323,7 +323,7 @@ static const struct SpriteTemplate sSpriteTemplate_UseItem_OutwardSpiralDots = {
     .callback = SpriteCallback_UseItem_OutwardSpiralDots
 };
 
-void InitPokemonSpecialAnimScene(struct PokemonSpecialAnimScene * buffer, u16 animType)
+void InitPokemonSpecialAnimScene(struct PokemonSpecialAnimScene* buffer, u16 animType)
 {
     FreeAllWindowBuffers();
     ResetTempTileDataBuffers();
@@ -337,7 +337,7 @@ void InitPokemonSpecialAnimScene(struct PokemonSpecialAnimScene * buffer, u16 an
     ChangeBgY(3, 0, 0);
     SetBgTilemapBuffer(0, buffer->field_0914);
     SetBgTilemapBuffer(3, buffer->field_1914);
-    RequestDma3Fill(0, (void *)BG_VRAM, 0x20, DMA3_32BIT);
+    RequestDma3Fill(0, (void*)BG_VRAM, 0x20, DMA3_32BIT);
     FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 0, 32, 32);
     LoadBgGfxByAnimType(animType);
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
@@ -383,13 +383,13 @@ void PSA_HideMessageWindow(void)
 
 void PSA_PrintMessage(u8 messageId)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     u16 itemId = PSA_GetItemId();
     u16 strWidth = 0;
     u8 textSpeed = GetTextSpeedSetting();
-    struct Pokemon * pokemon = PSA_GetPokemon();
+    struct Pokemon* pokemon = PSA_GetPokemon();
     u16 level;
-    u8 *str;
+    u8* str;
 
     switch (messageId)
     {
@@ -459,7 +459,7 @@ bool8 PSA_IsMessagePrintTaskActive(void)
 
 void PSA_DarkenMonSprite(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     scene->state = 0;
     BlendPalettes((0x10000 << IndexOfSpritePaletteTag(0)) | 4, 16, RGB_BLACK);
     CreateStarSprites(scene);
@@ -467,7 +467,7 @@ void PSA_DarkenMonSprite(void)
 
 bool8 PSA_RunPoofAnim(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
 
     switch (scene->state)
     {
@@ -488,7 +488,7 @@ bool8 PSA_RunPoofAnim(void)
 
 void PSA_UseTM_SetUpZoomOutAnim(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     scene->state = 0;
 }
 
@@ -500,7 +500,7 @@ void PSA_UseTM_CleanUpForCancel(void)
 
 bool8 PSA_UseTM_RunZoomOutAnim(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     switch (scene->state)
     {
     case 0:
@@ -573,13 +573,13 @@ bool8 PSA_UseTM_RunZoomOutAnim(void)
 
 void PSA_UseTM_SetUpMachineSetWobble(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     scene->state = 0;
 }
 
 bool8 PSA_UseTM_RunMachineSetWobble(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
 
     switch (scene->state)
     {
@@ -610,7 +610,7 @@ bool8 PSA_LevelUpVerticalSpritesTaskIsRunning(void)
 }
 
 // Unused
-void PSA_DrawLevelUpWindowPg1(u16 *statsBefore, u16 *statsAfter)
+void PSA_DrawLevelUpWindowPg1(u16* statsBefore, u16* statsAfter)
 {
     DrawTextBorderOuter(1, 0x001, 14);
     DrawLevelUpWindowPg1(1, statsBefore, statsAfter, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
@@ -619,7 +619,7 @@ void PSA_DrawLevelUpWindowPg1(u16 *statsBefore, u16 *statsAfter)
 }
 
 // Unused
-void PSA_DrawLevelUpWindowPg2(u16 *currStats)
+void PSA_DrawLevelUpWindowPg2(u16* currStats)
 {
     DrawLevelUpWindowPg2(1, currStats, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
     CopyWindowToVram(1, COPYWIN_GFX);
@@ -643,14 +643,14 @@ static void LoadBgGfxByAnimType(u16 animType)
 
 void PSA_CreateMonSpriteAtCloseness(u8 closeness)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
-    struct Pokemon * pokemon = PSA_GetPokemon();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
+    struct Pokemon* pokemon = PSA_GetPokemon();
     u16 species = GetMonData(pokemon, MON_DATA_SPECIES);
     u32 personality = GetMonData(pokemon, MON_DATA_PERSONALITY);
     u8 r1 = Menu2_GetMonSpriteAnchorCoord(species, personality, 2);
-    void *r6;
-    void *r9;
-    void *r4;
+    void* r6;
+    void* r9;
+    void* r4;
     u8 spriteId;
 
     if (r1 != 0xFF)
@@ -699,7 +699,7 @@ void PSA_CreateMonSpriteAtCloseness(u8 closeness)
 
 void PSA_SetUpZoomAnim(u8 closeness)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     u8 taskId;
     if (closeness != scene->lastCloseness)
     {
@@ -722,14 +722,14 @@ bool8 PSA_IsZoomTaskActive(void)
 
 static void Task_ZoomAnim(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-    struct Sprite *sprite = (void *)GetWordTaskArg(taskId, tOff_MonSprite);
+    s16* data = gTasks[taskId].data;
+    struct Sprite* sprite = (void*)GetWordTaskArg(taskId, tOff_MonSprite);
     switch (tState)
     {
     case 0:
         SetSpriteWithCloseness(sprite, tCurrCloseness);
         if (tHasItemSprite)
-            SetSpriteWithCloseness((void *)GetWordTaskArg(taskId, tOff_ItemSprite), tCurrCloseness);
+            SetSpriteWithCloseness((void*)GetWordTaskArg(taskId, tOff_ItemSprite), tCurrCloseness);
         tCurrCloseness += tDeltaCloseness;
         tState++;
         break;
@@ -739,7 +739,7 @@ static void Task_ZoomAnim(u8 taskId)
             PlaySE(SE_BALL_TRAY_EXIT);
             MonSpriteZoom_UpdateYPos(sprite, tCurrCloseness);
             if (tHasItemSprite)
-                ItemSpriteZoom_UpdateYPos((void *)GetWordTaskArg(taskId, tOff_ItemSprite), tCurrCloseness);
+                ItemSpriteZoom_UpdateYPos((void*)GetWordTaskArg(taskId, tOff_ItemSprite), tCurrCloseness);
             if (tCurrCloseness == tFinalCloseness)
             {
                 PSA_GetSceneWork()->lastCloseness = tFinalCloseness;
@@ -760,14 +760,14 @@ static void Task_ZoomAnim(u8 taskId)
     }
 }
 
-static void SetSpriteWithCloseness(struct Sprite *sprite, u8 closeness)
+static void SetSpriteWithCloseness(struct Sprite* sprite, u8 closeness)
 {
     sprite->data[0] = 0;
     sprite->data[1] = 0;
     sprite->data[2] = closeness;
 }
 
-static bool8 IsZoomSpriteCBActive(struct Sprite *sprite)
+static bool8 IsZoomSpriteCBActive(struct Sprite* sprite)
 {
     return sprite->callback != SpriteCallbackDummy;
 }
@@ -780,12 +780,12 @@ static s16 GetSpriteOffsetByScale(s16 pos, u8 closeness)
 // FIXME: better math
 static u16 GetYPosByScale(u16 pos)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     s32 v = ((((((scene->monSpriteY2 - scene->monSpriteY1) << 16) >> 8) / 256 * (pos - 256)) << 8) >> 16);
     return v += scene->monSpriteY1;
 }
 
-static void MonSpriteZoom_UpdateYPos(struct Sprite *sprite, u8 closeness)
+static void MonSpriteZoom_UpdateYPos(struct Sprite* sprite, u8 closeness)
 {
     if (closeness > 3)
         closeness = 3;
@@ -794,14 +794,14 @@ static void MonSpriteZoom_UpdateYPos(struct Sprite *sprite, u8 closeness)
     sprite->y = GetYPosByScale(sAffineScales[closeness]);
 }
 
-static void ItemSpriteZoom_UpdateYPos(struct Sprite *sprite, u8 closeness)
+static void ItemSpriteZoom_UpdateYPos(struct Sprite* sprite, u8 closeness)
 {
     MonSpriteZoom_UpdateYPos(sprite, closeness);
     sprite->x2 = GetSpriteOffsetByScale(sprite->data[6] - 32, closeness);
     sprite->y2 = GetSpriteOffsetByScale(sprite->data[7] - 32, closeness);
 }
 
-static void StartMonWiggleAnim(struct PokemonSpecialAnimScene * scene, u8 frameLen, u8 niter, u8 amplitude)
+static void StartMonWiggleAnim(struct PokemonSpecialAnimScene* scene, u8 frameLen, u8 niter, u8 amplitude)
 {
     // frameLen: frame duration
     // niter = 0: iterate ad infinitum
@@ -811,13 +811,13 @@ static void StartMonWiggleAnim(struct PokemonSpecialAnimScene * scene, u8 frameL
     scene->monSprite->callback = SpriteCallback_MonSpriteWiggle;
 }
 
-static void StopMonWiggleAnim(struct PokemonSpecialAnimScene * scene)
+static void StopMonWiggleAnim(struct PokemonSpecialAnimScene* scene)
 {
     scene->monSprite->x2 = 0;
     scene->monSprite->callback = SpriteCallbackDummy;
 }
 
-static void SpriteCallback_MonSpriteWiggle(struct Sprite *sprite)
+static void SpriteCallback_MonSpriteWiggle(struct Sprite* sprite)
 {
     sprite->data[7]++;
     if (sprite->data[7] > sprite->data[0])
@@ -836,7 +836,7 @@ static void SpriteCallback_MonSpriteWiggle(struct Sprite *sprite)
     }
 }
 
-static void LoadMonSpriteGraphics(u16 *tiles, u16 *palette)
+static void LoadMonSpriteGraphics(u16* tiles, u16* palette)
 {
     struct SpriteSheet spriteSheet;
     struct SpritePalette spritePalette;
@@ -874,7 +874,7 @@ static void LoadMonSpriteGraphics(u16 *tiles, u16 *palette)
 
 void PSA_SetUpItemUseOnMonAnim(u16 itemId, u8 closeness, bool32 a2)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     u8 taskId;
     scene->itemIconSprite = PSA_CreateItemIconObject(itemId);
     if (scene->itemIconSprite != NULL)
@@ -898,7 +898,7 @@ static u16 GetBlendColorByItemId(u16 itemId)
 
 void CreateItemIconSpriteAtMaxCloseness(u16 itemId)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     scene->itemIconSprite = PSA_CreateItemIconObject(itemId);
     if (scene->itemIconSprite != NULL)
     {
@@ -907,10 +907,10 @@ void CreateItemIconSpriteAtMaxCloseness(u16 itemId)
     }
 }
 
-static struct Sprite *PSA_CreateItemIconObject(u16 itemId)
+static struct Sprite* PSA_CreateItemIconObject(u16 itemId)
 {
     u8 spriteId;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     spriteId = AddItemIconObject(1, 1, itemId);
     if (spriteId == MAX_SPRITES)
         return NULL;
@@ -930,8 +930,8 @@ bool8 PSA_IsItemUseOnMonAnimActive(void)
 
 static void Task_ItemUseOnMonAnim(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-    struct Sprite *sprite = (void *)GetWordTaskArg(taskId, tOff_ItemSprite);
+    s16* data = gTasks[taskId].data;
+    struct Sprite* sprite = (void*)GetWordTaskArg(taskId, tOff_ItemSprite);
     switch (tState)
     {
     case 0:
@@ -993,7 +993,7 @@ static void Task_ItemUseOnMonAnim(u8 taskId)
     }
 }
 
-static void CreateSprites_UseItem_OutwardSpiralDots(u8 taskId, s16 *data, struct Sprite *sprite)
+static void CreateSprites_UseItem_OutwardSpiralDots(u8 taskId, s16* data, struct Sprite* sprite)
 {
     int x = sprite->x + sprite->x2 - 4;
     int y = sprite->y + sprite->y2 - 4;
@@ -1014,9 +1014,9 @@ static void CreateSprites_UseItem_OutwardSpiralDots(u8 taskId, s16 *data, struct
     }
 }
 
-static void SpriteCB_OutwardSpiralDots(struct Sprite *sprite)
+static void SpriteCB_OutwardSpiralDots(struct Sprite* sprite)
 {
-    s16 *data = sprite->data;
+    s16* data = sprite->data;
     if (data[0] < 16)
     {
         data[0]++;
@@ -1024,7 +1024,7 @@ static void SpriteCB_OutwardSpiralDots(struct Sprite *sprite)
         data[1] &= 0xFF;
         data[2] += 4;
         sprite->x2 = (data[2] * gSineTable[data[1] + 0x40]) >> 8;
-        sprite->y2 = (data[2] * gSineTable[data[1]])        >> 8;
+        sprite->y2 = (data[2] * gSineTable[data[1]]) >> 8;
     }
     else
     {
@@ -1042,7 +1042,7 @@ void PSA_UseItem_CleanUpForCancel(void)
     }
 }
 
-static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, struct Sprite *sprite, u8 closeness)
+static void InitItemIconSpriteState(struct PokemonSpecialAnimScene* scene, struct Sprite* sprite, u8 closeness)
 {
     u16 species, x, y;
     u32 personality;
@@ -1062,30 +1062,30 @@ static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, stru
     personality = PSA_GetMonPersonality();
     switch (PSA_GetAnimType())
     {
-        case 4:
-        {
-            x = Menu2_GetMonSpriteAnchorCoord(species, personality, 0);
-            y = Menu2_GetMonSpriteAnchorCoord(species, personality, 1);
-            if (x == 0xFF)
-                x = 0;
-            if (y == 0xFF)
-                y = 0;
-            sprite->data[6] = x;
-            sprite->data[7] = y;
-            break;
-        }
-        default:
-        {
-            x = Menu2_GetMonSpriteAnchorCoord(species, personality, 3);
-            y = Menu2_GetMonSpriteAnchorCoord(species, personality, 4);
-            if (x == 0xFF)
-                x = 0;
-            if (y == 0xFF)
-                y = 0;
-            sprite->data[6] = x;
-            sprite->data[7] = y;
-            break;
-        }
+    case 4:
+    {
+        x = Menu2_GetMonSpriteAnchorCoord(species, personality, 0);
+        y = Menu2_GetMonSpriteAnchorCoord(species, personality, 1);
+        if (x == 0xFF)
+            x = 0;
+        if (y == 0xFF)
+            y = 0;
+        sprite->data[6] = x;
+        sprite->data[7] = y;
+        break;
+    }
+    default:
+    {
+        x = Menu2_GetMonSpriteAnchorCoord(species, personality, 3);
+        y = Menu2_GetMonSpriteAnchorCoord(species, personality, 4);
+        if (x == 0xFF)
+            x = 0;
+        if (y == 0xFF)
+            y = 0;
+        sprite->data[6] = x;
+        sprite->data[7] = y;
+        break;
+    }
     }
     ItemSpriteZoom_UpdateYPos(sprite, closeness);
 }
@@ -1104,12 +1104,12 @@ static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, stru
 
 static void MachineSetWobbleInit(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     MachineSetWobble_SetCB(scene->monSprite);
     MachineSetWobble_SetCB(scene->itemIconSprite);
 }
 
-static void MachineSetWobble_SetCB(struct Sprite *sprite)
+static void MachineSetWobble_SetCB(struct Sprite* sprite)
 {
     sprite->data[0] = 0;
     sprite->data[1] = 0;
@@ -1118,11 +1118,11 @@ static void MachineSetWobble_SetCB(struct Sprite *sprite)
 
 static bool8 MachineSetWobbleCBIsRunning(void)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     return scene->monSprite->callback != SpriteCallbackDummy;
 }
 
-static void SpriteCB_MachineSetWobble(struct Sprite *sprite)
+static void SpriteCB_MachineSetWobble(struct Sprite* sprite)
 {
     switch (sprite->data[0])
     {
@@ -1154,7 +1154,7 @@ static void SpriteCB_MachineSetWobble(struct Sprite *sprite)
 
 static void StartZoomOutAnimForUseTM(u8 closeness)
 {
-    struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
+    struct PokemonSpecialAnimScene* scene = PSA_GetSceneWork();
     u8 taskId;
     if (closeness != scene->lastCloseness)
     {
@@ -1182,7 +1182,7 @@ static void StartZoomOutAnimForUseTM(u8 closeness)
 #undef tCurrCloseness
 #undef tState
 
-static void CreateStarSprites(struct PokemonSpecialAnimScene * scene)
+static void CreateStarSprites(struct PokemonSpecialAnimScene* scene)
 {
     int i;
     u8 spriteId;
@@ -1193,7 +1193,7 @@ static void CreateStarSprites(struct PokemonSpecialAnimScene * scene)
     scene->field_0002 = 0;
     for (i = 0; i < 3; i++)
     {
-        spriteId = CreateSprite(&sSpriteTemplate_Star, 120 + sStarCoordOffsets[i][0],  scene->monSpriteY2 + sStarCoordOffsets[i][1], 2);
+        spriteId = CreateSprite(&sSpriteTemplate_Star, 120 + sStarCoordOffsets[i][0], scene->monSpriteY2 + sStarCoordOffsets[i][1], 2);
         if (spriteId != MAX_SPRITES)
         {
             species = PSA_GetMonSpecies();
@@ -1212,7 +1212,7 @@ static u8 AnyStarSpritesActive(void)
     return PSA_GetSceneWork()->field_0002;
 }
 
-static void SpriteCB_Star(struct Sprite *sprite)
+static void SpriteCB_Star(struct Sprite* sprite)
 {
     sprite->data[0]++;
     if (sprite->data[0] < 10)
@@ -1246,7 +1246,7 @@ static void SpriteCB_Star(struct Sprite *sprite)
 #define tsYorig    data[5]
 #define tsTaskId   data[6]
 
-static void PSAScene_SeedRandomInTask(struct PokemonSpecialAnimScene * scene)
+static void PSAScene_SeedRandomInTask(struct PokemonSpecialAnimScene* scene)
 {
     u8 taskId;
     LoadOutwardSpiralDotsGfx();
@@ -1264,7 +1264,7 @@ static void StopMakingOutwardSpiralDots(void)
 
 static void Task_UseItem_OutwardSpiralDots(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -1272,12 +1272,12 @@ static void Task_UseItem_OutwardSpiralDots(u8 taskId)
         if (tTimer == 0)
         {
             u32 spriteId, x, y, x2, y2, ampl;
-            struct Sprite *sprite = PSA_GetSceneWork()->itemIconSprite;
+            struct Sprite* sprite = PSA_GetSceneWork()->itemIconSprite;
             x = sprite->x + sprite->x2;
             y = sprite->y + sprite->y2;
             ampl = (PSAScene_RandomFromTask(taskId) % 21) + 70;
             x2 = x + ((u32)(gSineTable[tAngle + 0x40] * ampl) >> 8);
-            y2 = y + ((u32)(gSineTable[tAngle       ] * ampl) >> 8);
+            y2 = y + ((u32)(gSineTable[tAngle] * ampl) >> 8);
             tAngle += 0x4C;
             tAngle &= 0xFF;
             spriteId = CreateSprite(&sSpriteTemplate_UseItem_OutwardSpiralDots, x2, y2, 0);
@@ -1314,7 +1314,7 @@ static u16 PSAScene_RandomFromTask(u8 taskId)
     return state >> 16;
 }
 
-static void SpriteCallback_UseItem_OutwardSpiralDots(struct Sprite *sprite)
+static void SpriteCallback_UseItem_OutwardSpiralDots(struct Sprite* sprite)
 {
     int x;
     int y;
@@ -1395,7 +1395,7 @@ void CreateLevelUpVerticalSpritesTask(u16 x, u16 y, u16 tileTag, u16 paletteTag,
     gTasks[taskId].tPaletteTag = paletteTag;
     gTasks[taskId].tPriority = priority;
     gTasks[taskId].tSubpriority = subpriority;
-    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_NONE  | BLDCNT_TGT2_ALL);
+    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_NONE | BLDCNT_TGT2_ALL);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(12, 6));
 }
 
@@ -1406,7 +1406,7 @@ bool8 LevelUpVerticalSpritesTaskIsRunning(void)
 
 static void Task_LevelUpVerticalSprites(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     switch (tState)
     {
     case 0:
@@ -1435,7 +1435,7 @@ static void Task_LevelUpVerticalSprites(u8 taskId)
     }
 }
 
-static void CreateLevelUpVerticalSprite(u8 taskId, s16 *data)
+static void CreateLevelUpVerticalSprite(u8 taskId, s16* data)
 {
     u8 spriteId;
     struct SpriteTemplate template = sSpriteTemplate_LevelUpVertical;
@@ -1453,7 +1453,7 @@ static void CreateLevelUpVerticalSprite(u8 taskId, s16 *data)
     }
 }
 
-static void SpriteCB_LevelUpVertical(struct Sprite *sprite)
+static void SpriteCB_LevelUpVertical(struct Sprite* sprite)
 {
     sprite->tsYsubpixel -= sprite->tsSpeed;
     sprite->y2 = sprite->tsYsubpixel >> 4;
@@ -1481,7 +1481,7 @@ static void SpriteCB_LevelUpVertical(struct Sprite *sprite)
 
 // ========================================================
 
-static const u8 *const sLevelUpWindowStatNames[] = {
+static const u8* const sLevelUpWindowStatNames[] = {
     gText_LevelUp_MaxHP,
     gText_LevelUp_Attack,
     gText_LevelUp_Defense,
@@ -1490,7 +1490,7 @@ static const u8 *const sLevelUpWindowStatNames[] = {
     gText_LevelUp_Speed
 };
 
-void DrawLevelUpWindowPg1(u16 windowId, u16 *beforeStats, u16 *afterStats, u8 bgColor, u8 fgColor, u8 shadowColor)
+void DrawLevelUpWindowPg1(u16 windowId, u16* beforeStats, u16* afterStats, u8 bgColor, u8 fgColor, u8 shadowColor)
 {
     s16 diffStats[6];
     u8 textbuf[12];
@@ -1523,7 +1523,7 @@ void DrawLevelUpWindowPg1(u16 windowId, u16 *beforeStats, u16 *afterStats, u8 bg
     }
 }
 
-void DrawLevelUpWindowPg2(u16 windowId, u16 *currStats, u8 bgColor, u8 fgColor, u8 shadowColor)
+void DrawLevelUpWindowPg2(u16 windowId, u16* currStats, u8 bgColor, u8 fgColor, u8 shadowColor)
 {
     s16 statsRearrange[6];
     u8 textbuf[12];

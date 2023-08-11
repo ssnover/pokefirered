@@ -12,35 +12,35 @@
  * - check if field names make sense
  */
 
-// --------------------------------------------------------------------------
-//
-// Restrictions When Using RFU
-//
-// --------------------------------------------------------------------------
-/*
-  The following restrictions apply when using RFU.
+ // --------------------------------------------------------------------------
+ //
+ // Restrictions When Using RFU
+ //
+ // --------------------------------------------------------------------------
+ /*
+   The following restrictions apply when using RFU.
 
-  <Restrictions for Direct Sound>
-    (a) The timer for Sound DMA uses only 0
-    (b) The prescaler for the timer count for the Sound DMA uses 59.5 ns.
-    (c) The sound sampling rate is Max36.314KHz.
+   <Restrictions for Direct Sound>
+     (a) The timer for Sound DMA uses only 0
+     (b) The prescaler for the timer count for the Sound DMA uses 59.5 ns.
+     (c) The sound sampling rate is Max36.314KHz.
 
-  <Restrictions for H-DMA or DMA started with V-Blank>
-    These types of DMA can be operated on a maximum CPU cycle of 42 cycles.
-    Calculate the number of the transferable DMA count based on this 42 cycles and the access cycles of the destination and source.
-    For example, if both the CPU internal RAM --> VRAM have a one cycle access, then a 21 count DMA can occur.
+   <Restrictions for H-DMA or DMA started with V-Blank>
+     These types of DMA can be operated on a maximum CPU cycle of 42 cycles.
+     Calculate the number of the transferable DMA count based on this 42 cycles and the access cycles of the destination and source.
+     For example, if both the CPU internal RAM --> VRAM have a one cycle access, then a 21 count DMA can occur.
 
-  
-  If RFU is used outside of these restrictions, problems, such as the loss of data caused by the failure of the AGB, as a clock slave, 
-  to notify that data has been received from the RFU, will occur.
-  When this problem occurs, the REQ callback will send a REQ_commandID=ID_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA_REQ notification.
-   (When using Link Manager, the LMAN call back will send a LMAN_msg=LMAN_MSG_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA notification.)
-  
-*/
 
-// REQ-COMMAND (STWI) ID CODE LIST
+   If RFU is used outside of these restrictions, problems, such as the loss of data caused by the failure of the AGB, as a clock slave,
+   to notify that data has been received from the RFU, will occur.
+   When this problem occurs, the REQ callback will send a REQ_commandID=ID_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA_REQ notification.
+    (When using Link Manager, the LMAN call back will send a LMAN_msg=LMAN_MSG_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA notification.)
 
-// REQ Command ID returned by the REQ callback
+ */
+
+ // REQ-COMMAND (STWI) ID CODE LIST
+
+ // REQ Command ID returned by the REQ callback
 #define ID_RESET_REQ                                0x0010
 #define ID_LINK_STATUS_REQ                          0x0011
 #define ID_VERSION_STATUS_REQ                       0x0012    // not defined in SDK header
@@ -319,8 +319,8 @@ struct STWIStatus
     void (*callbackM)();
     void (*callbackS)(u16);
     void (*callbackID)(void);
-    union RfuPacket *txPacket;
-    union RfuPacket *rxPacket;
+    union RfuPacket* txPacket;
+    union RfuPacket* rxPacket;
     vu8 sending;
 };
 
@@ -338,10 +338,10 @@ struct UNISend
 {
     u16 state;         // Slot communication state (SLOT_STATE_READY, SLOT_STATE_SEND_UNI)
     u8 dataReadyFlag;  // Flag indicating transmission data is prepared (0: data sent; 1: transmission data ready)
-                       //   Set with rfu_UNI_re_setSendData or rfu_UNI_readySendData, cleared when data is sent with rfu_REQ_sendData.
+    //   Set with rfu_UNI_re_setSendData or rfu_UNI_readySendData, cleared when data is sent with rfu_REQ_sendData.
     u8 bmSlot;         // Expresses transmission destination slot as bits
     u16 payloadSize;   // Payload size of 1 transmission. "size" specified by rfu_UNI_setSendData or rfu_UNI_re_setSendData is used.
-    const void *src;   // Beginning address of transmission data
+    const void* src;   // Beginning address of transmission data
 };
 
 // Data Structure for Receiving UNI Data
@@ -351,7 +351,7 @@ struct UNIRecv
     u16 errorCode;     // Error code during reception
     u16 dataSize;      // Size of receive data
     u8 newDataFlag;    // Flag indicating whether receive data has newly arrived (0: no newly arrived data; 1: newly arrived data)
-                       //   The flag is cleared with rfu_UNI_clearRecvNewDataFlag; it is set when data is received with rfu_REQ_recvData.
+    //   The flag is cleared with rfu_UNI_clearRecvNewDataFlag; it is set when data is received with rfu_REQ_recvData.
     u8 dataBlockFlag;  // Flag for unreferenced receive data overwrite block (default is 0 Note: not used)
 };
 
@@ -360,7 +360,7 @@ struct RfuSlotStatusUNI
 {
     struct UNISend send;    // Transmission Status
     struct UNIRecv recv;    // Reception Status
-    void *recvBuffer;       // Reception Buffer Address
+    void* recvBuffer;       // Reception Buffer Address
     u32 recvBufferSize;     // Reception Buffer Size
 };
 
@@ -370,30 +370,30 @@ struct NIComm
 {
     u16 state;                     // Communication state of slot
     u16 failCounter;               // Count of failed transmissions/receptions (Count is increased when transmission/reception of data does not succeed within 1PF=16.7 ms)
-    const u8 *now_p[WINDOW_COUNT]; // Address of current send/receive (The data is divided into WINDOW_COUNT blocks and sent in payloadSize units.)
+    const u8* now_p[WINDOW_COUNT]; // Address of current send/receive (The data is divided into WINDOW_COUNT blocks and sent in payloadSize units.)
     u32 remainSize;                // Size of remaining communication data
     u16 errorCode;                 // Error code
     u8 bmSlot;                     // Expresses the current communication slot in bits
-                                   //   (When sending from the Master, because multiple slaves can be specified with bmSlot, communications are terminated based on the failCounter for each child device)
-    // Parameters used inside the Library
+    //   (When sending from the Master, because multiple slaves can be specified with bmSlot, communications are terminated based on the failCounter for each child device)
+// Parameters used inside the Library
     u8 recvAckFlag[WINDOW_COUNT];
     u8 ack;
     u8 phase;
     u8 n[WINDOW_COUNT];
     // Parameters indicating the current communication content
-    const void *src;               // Start address transmission data (valid only for transmitting device)
+    const void* src;               // Start address transmission data (valid only for transmitting device)
     u8 bmSlotOrg;                  // Expresses the communication source slot at the beginning of the transmission in bits (valid only for transmitting device)
     u8 dataType;                   // Transmission/reception data type (0: User data; 1: Game identification information)
     u16 payloadSize;               // Payload size for one transmission
     u32 dataSize;                  // Size of transmission/reception data
-                                   //   Calculated by subtracting link layer header size from subFrameSize specified by the rfu_NI_setSendData function
+    //   Calculated by subtracting link layer header size from subFrameSize specified by the rfu_NI_setSendData function
 };
 
 struct RfuSlotStatusNI
 {
     struct NIComm send;              // Transmission Status
     struct NIComm recv;              // Reception Status
-    void *recvBuffer;                // Reception Buffer Address
+    void* recvBuffer;                // Reception Buffer Address
     u32 recvBufferSize;              // Reception Buffer Size
 };
 
@@ -403,7 +403,7 @@ struct RfuTgtData
     u16 id;                                    // ID of parent candidate                                 ID of connection partner
     u8  slot;                                  // Slot number where parent candidate can enter           Connection slot number
     u8  mbootFlag;                             // Flag to indicate whether or not the parent candidate   Flag to indicate whether or not the connection partner
-                                               //   is multiboot program for download                      is multiboot program for download
+    //   is multiboot program for download                      is multiboot program for download
     u16 serialNo;                              // Game serial number of parent candidate                 Game serial number of connection partner
     u8  gname[RFU_GAME_NAME_LENGTH + 2];       // Game name of parent candidate                          Game name of connection partner
     u8  uname[RFU_USER_NAME_LENGTH + 1];       // User name for parent candidate                         User name for connection partner
@@ -419,7 +419,7 @@ struct RfuLinkStatus
     u8  recvSlotNIFlag;                         // Flag to indicate in bits the slot where NI-type receive is occurring (")
     u8  sendSlotUNIFlag;                        // Flag to indicate in bits the slot where UNI-type send is occurring (")
     u8  getNameFlag;                            // Parent: Flag to indicate whether or not game identification information was obtained from the child connected to this slot (")
-                                                // Child: Flag to indicate whether or not game identification information was sent to the parent connected to this slot (")
+    // Child: Flag to indicate whether or not game identification information was sent to the parent connected to this slot (")
     u8  findParentCount;                        // Number of parent candidates discovered with rfu_REQ_xxxSearchParent, valid only with a child device
     u8  watchInterval;                          // Link monitor execution interval (16.7 ms unit AGB picture frame)
     u8  strength[RFU_CHILD_MAX];                // Link strength value (0x00 - 0xff; 0x00 is link loss. Updates with rfu_REQBN_watchLink)
@@ -427,8 +427,8 @@ struct RfuLinkStatus
     u8  remainLLFrameSizeParent;                // Remaining size of the link layer communication frame for the parent device
     u8  remainLLFrameSizeChild[RFU_CHILD_MAX];  // Remaining size of the link layer communication frame for each slot for child device
     struct RfuTgtData partner[RFU_CHILD_MAX];   // Parent, Child: When there is a connection, the matrix element corresponding to the number of the connected slot
-                                                //   stores the game identification information for the connection partner.
-                                                // Child: Stores the game identification information for the parent candidate discovered when executing rfu_REQ_xxxxSearchParent.
+    //   stores the game identification information for the connection partner.
+    // Child: Stores the game identification information for the parent candidate discovered when executing rfu_REQ_xxxxSearchParent.
     struct RfuTgtData my;                       // The device's own game identification information (unrelated to the element slot value)
 };
 
@@ -436,11 +436,11 @@ struct RfuLinkStatus
 struct RfuFixed
 {
     void (*reqCallback)(u16, u16);
-    void (*fastCopyPtr)(const u8 **, u8 **, s32);
+    void (*fastCopyPtr)(const u8**, u8**, s32);
     u16 fastCopyBuffer[24];
     u32 fastCopyBuffer2[12];
     u32 LLFBuffer[29];
-    struct RfuIntrStruct *STWIBuffer;
+    struct RfuIntrStruct* STWIBuffer;
 };
 
 struct RfuStatic
@@ -465,12 +465,12 @@ struct RfuStatic
     u32 totalPacketSize;
 };
 
-extern struct STWIStatus *gSTWIStatus;
-extern struct RfuLinkStatus *gRfuLinkStatus;
-extern struct RfuStatic *gRfuStatic;
-extern struct RfuFixed *gRfuFixed;
-extern struct RfuSlotStatusNI *gRfuSlotStatusNI[RFU_CHILD_MAX];
-extern struct RfuSlotStatusUNI *gRfuSlotStatusUNI[RFU_CHILD_MAX];
+extern struct STWIStatus* gSTWIStatus;
+extern struct RfuLinkStatus* gRfuLinkStatus;
+extern struct RfuStatic* gRfuStatic;
+extern struct RfuFixed* gRfuFixed;
+extern struct RfuSlotStatusNI* gRfuSlotStatusNI[RFU_CHILD_MAX];
+extern struct RfuSlotStatusUNI* gRfuSlotStatusUNI[RFU_CHILD_MAX];
 
 // librfu_sio32id
 s32 AgbRFU_checkID(u8 maxTries);
@@ -480,99 +480,99 @@ s32 AgbRFU_checkID(u8 maxTries);
 // librfu_rfu
 // API Initialization and Initial Settings
     // API Initialization
-u16 rfu_initializeAPI(u32 *APIBuffer, u16 buffByteSize, IntrFunc *sioIntrTable_p, bool8 copyInterruptToRam);
-    // Set Timer Interrupt
-void rfu_setTimerInterrupt(u8 timerNo, IntrFunc *timerIntrTable_p);
-    // Resident Function called from within a V-Blank Interrupt
+u16 rfu_initializeAPI(u32* APIBuffer, u16 buffByteSize, IntrFunc* sioIntrTable_p, bool8 copyInterruptToRam);
+// Set Timer Interrupt
+void rfu_setTimerInterrupt(u8 timerNo, IntrFunc* timerIntrTable_p);
+// Resident Function called from within a V-Blank Interrupt
 u16 rfu_syncVBlank(void);
-    // Specify REQ Callback function
+// Specify REQ Callback function
 void rfu_setREQCallback(void (*callback)(u16 reqCommandId, u16 reqResult));
-    // REQ-API Execution Completion Wait
+// REQ-API Execution Completion Wait
 u16 rfu_waitREQComplete(void);
 
 // RFU Initialization and Initial Settings
     // RFU Startup and ID Check (Forced RFU reset occurs simultaneously)
 u32 rfu_REQBN_softReset_and_checkID(void);
-    // RFU Reset
+// RFU Reset
 void rfu_REQ_reset(void);
-    // Set RFU to Stop Mode (Power Down)
+// Set RFU to Stop Mode (Power Down)
 void rfu_REQ_stopMode(void);
-    // RFU Hardware Settings
+// RFU Hardware Settings
 void rfu_REQ_configSystem(u16 availSlotFlag, u8 maxMFrame, u8 mcTimer);
-    // Game Identification Information Configuration
-void rfu_REQ_configGameData(u8 mbootFlag, u16 serialNo, const u8 *gname, const u8 *uname);
+// Game Identification Information Configuration
+void rfu_REQ_configGameData(u8 mbootFlag, u16 serialNo, const u8* gname, const u8* uname);
 
 // RFU Connection Process
     // Operate as parent device; search for and connect to child device
 void rfu_REQ_startSearchChild(void);
 void rfu_REQ_pollSearchChild(void);
 void rfu_REQ_endSearchChild(void);
-    // Operate as child device; search for parent device
+// Operate as child device; search for parent device
 void rfu_REQ_startSearchParent(void);
 void rfu_REQ_pollSearchParent(void);
 void rfu_REQ_endSearchParent(void);
-    // Operate as child device; connect to specified parent device
+// Operate as child device; connect to specified parent device
 void rfu_REQ_startConnectParent(u16 pid);
 void rfu_REQ_pollConnectParent(void);
 void rfu_REQ_endConnectParent(void);
-u16 rfu_getConnectParentStatus(u8 *status,u8 *connectSlotNo);
-    // Restore link from child device
+u16 rfu_getConnectParentStatus(u8* status, u8* connectSlotNo);
+// Restore link from child device
 void rfu_REQ_CHILD_startConnectRecovery(u8 bmRecoverySlot);
 void rfu_REQ_CHILD_pollConnectRecovery(void);
 void rfu_REQ_CHILD_endConnectRecovery(void);
-u16 rfu_CHILD_getConnectRecoveryStatus(u8 *status);
+u16 rfu_CHILD_getConnectRecoveryStatus(u8* status);
 
 // RFU Link Management
     // Link Monitoring
-u16 rfu_REQBN_watchLink(u16 reqCommandId, u8 *bmLinkLossSlot, u8 *linkLossReason, u8 *parentBmLinkRecoverySlot);
-    // Link Disconnect
+u16 rfu_REQBN_watchLink(u16 reqCommandId, u8* bmLinkLossSlot, u8* linkLossReason, u8* parentBmLinkRecoverySlot);
+// Link Disconnect
 void rfu_REQ_disconnect(u8 bmDisconnectSlot);
 
 // Relation of clock between AGB and RFU
     // Switch to AGB clock slave
 void rfu_REQ_changeMasterSlave(void);
-    // Acquire either the master or slave clock from the current AGB-RFU
+// Acquire either the master or slave clock from the current AGB-RFU
 bool8 rfu_getMasterSlave(void);
 
 // Communication Configuration
     // MSC Callback Configuration
 void rfu_setMSCCallback(void (*callback)(u16 reqCommandId));
-    // Shared by NI- and UNI-type communications
-        // Clear Communication Status
+// Shared by NI- and UNI-type communications
+    // Clear Communication Status
 void rfu_clearAllSlot(void);
 u16 rfu_clearSlot(u8 connTypeFlag, u8 slotStatusIndex);
-        // Set Receive Buffer
-u16 rfu_setRecvBuffer(u8 connType, u8 slotNo, void *buffer, u32 buffSize);
+// Set Receive Buffer
+u16 rfu_setRecvBuffer(u8 connType, u8 slotNo, void* buffer, u32 buffSize);
 
 // Receive/Send Data
     // UNI-type communication
         // Set transmission data
-u16 rfu_UNI_setSendData(u8 bmSendSlot, const void *src, u8 size);
-        // Enable transmission data
+u16 rfu_UNI_setSendData(u8 bmSendSlot, const void* src, u8 size);
+// Enable transmission data
 void rfu_UNI_readySendData(u8 slotStatusIndex);
-        // Change address or size of transmission data and enable transmission data
-u16 rfu_UNI_changeAndReadySendData(u8 slotStatusIndex, const void *src, u8 size);
-        // Used only by parent device. At the beginning of a MSC Callback that received notification that the data transmission completed, an ACK flag is obtained.
-u16 rfu_UNI_PARENT_getDRAC_ACK(u8 *ackFlag);
-        // Clear the flag that indicates newly arrived reception data
+// Change address or size of transmission data and enable transmission data
+u16 rfu_UNI_changeAndReadySendData(u8 slotStatusIndex, const void* src, u8 size);
+// Used only by parent device. At the beginning of a MSC Callback that received notification that the data transmission completed, an ACK flag is obtained.
+u16 rfu_UNI_PARENT_getDRAC_ACK(u8* ackFlag);
+// Clear the flag that indicates newly arrived reception data
 void rfu_UNI_clearRecvNewDataFlag(u8 slotStatusIndex);
-    // NI-type Communication
-        // Set transmission data
-u16 rfu_NI_setSendData(u8 bmSendSlot, u8 subFrameSize, const void *src, u32 size);
-        // Used only by child device. After establishing connection at the RFU level, configure transmission of child device game identification information in order to authenticate connection
+// NI-type Communication
+    // Set transmission data
+u16 rfu_NI_setSendData(u8 bmSendSlot, u8 subFrameSize, const void* src, u32 size);
+// Used only by child device. After establishing connection at the RFU level, configure transmission of child device game identification information in order to authenticate connection
 u16 rfu_NI_CHILD_setSendGameName(u8 slotNo, u8 subFrameSize);
-        // Stop the NI data currently being received
+// Stop the NI data currently being received
 u16 rfu_NI_stopReceivingData(u8 slotStatusIndex);
-    // Shared by NI- and UNI-type communications
-        // Narrow transmission targets for transmission data.
+// Shared by NI- and UNI-type communications
+    // Narrow transmission targets for transmission data.
 u16 rfu_changeSendTarget(u8 connType, u8 slotStatusIndex, u8 bmNewTgtSlot);
 
-    // Functions for sending/receiving data to RFU
-        // Data transmission
+// Functions for sending/receiving data to RFU
+    // Data transmission
 void rfu_REQ_sendData(bool8 clockChangeFlag);
-        // Used only by parent device. Resend previous sent data (packet)
+// Used only by parent device. Resend previous sent data (packet)
 void rfu_REQ_PARENT_resumeRetransmitAndChange(void);
-        // Read receive data
+// Read receive data
 void rfu_REQ_recvData(void);
 
 // For Multi-boot
@@ -581,24 +581,24 @@ u16 rfu_MBOOT_CHILD_inheritanceLinkStatus(void);
 
 // For Debug
     // Obtain address of the SWTI-layer receive buffer
-u8 *rfu_getSTWIRecvBuffer(void);
-    // Obtain RFU state
+u8* rfu_getSTWIRecvBuffer(void);
+// Obtain RFU state
 void rfu_REQ_RFUStatus(void);
-u16 rfu_getRFUStatus(u8 *rfuState);
-    // Using RFU, generate noise (jamming radio waves) for other RFUs
+u16 rfu_getRFUStatus(u8* rfuState);
+// Using RFU, generate noise (jamming radio waves) for other RFUs
 void rfu_REQ_noise(void);
 
 // librfu_intr
 void IntrSIO32(void);
 
 // librfu_stwi
-void STWI_init_all(struct RfuIntrStruct *interruptStruct, IntrFunc *interrupt, bool8 copyInterruptToRam);
+void STWI_init_all(struct RfuIntrStruct* interruptStruct, IntrFunc* interrupt, bool8 copyInterruptToRam);
 void STWI_set_MS_mode(u8 mode);
 void STWI_init_Callback_M(void);
 void STWI_init_Callback_S(void);
-void STWI_set_Callback_M(void *callbackM);
+void STWI_set_Callback_M(void* callbackM);
 void STWI_set_Callback_S(void (*callbackS)(u16));
-void STWI_init_timer(IntrFunc *interrupt, s32 timerSelect);
+void STWI_init_timer(IntrFunc* interrupt, s32 timerSelect);
 void AgbRFU_SoftReset(void);
 void STWI_set_Callback_ID(void (*func)(void));
 u16 STWI_read_status(u8 index);
@@ -607,7 +607,7 @@ void STWI_send_DataRxREQ(void);
 void STWI_send_MS_ChangeREQ(void);
 void STWI_send_StopModeREQ(void);
 void STWI_send_SystemStatusREQ(void);
-void STWI_send_GameConfigREQ(const u8 *serial_uname, const u8 *gname);
+void STWI_send_GameConfigREQ(const u8* serial_uname, const u8* gname);
 void STWI_send_ResetREQ(void);
 void STWI_send_LinkStatusREQ(void);
 void STWI_send_VersionStatusREQ(void);
@@ -624,8 +624,8 @@ void STWI_send_SP_EndREQ(void);
 void STWI_send_CP_StartREQ(u16 unk1);
 void STWI_send_CP_PollingREQ(void);
 void STWI_send_CP_EndREQ(void);
-void STWI_send_DataTxREQ(const void *in, u8 size);
-void STWI_send_DataTxAndChangeREQ(const void *in, u8 size);
+void STWI_send_DataTxREQ(const void* in, u8 size);
+void STWI_send_DataTxAndChangeREQ(const void* in, u8 size);
 void STWI_send_DataReadyAndChangeREQ(u8 unk);
 void STWI_send_DisconnectedAndChangeREQ(u8 unk0, u8 unk1);
 void STWI_send_DisconnectREQ(u8 unk);

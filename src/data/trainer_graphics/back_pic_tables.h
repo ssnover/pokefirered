@@ -8,12 +8,12 @@ const struct MonCoords gTrainerBackPicCoords[] = {
 };
 
 const struct CompressedSpriteSheet gTrainerBackPicTable[] = {
-    { (const u32 *)gTrainerBackPic_Red, 0x2800, 0 },
-    { (const u32 *)gTrainerBackPic_Leaf, 0x2800, 1 },
-    { (const u32 *)gTrainerBackPic_RSBrendan, 0x2000, 2 },
-    { (const u32 *)gTrainerBackPic_RSMay, 0x2000, 3 },
-    { (const u32 *)gTrainerBackPic_Pokedude, 0x2000, 4 },
-    { (const u32 *)gTrainerBackPic_OldMan, 0x2000, 5 }
+    { (const u32*)gTrainerBackPic_Red, 0x2800, 0 },
+    { (const u32*)gTrainerBackPic_Leaf, 0x2800, 1 },
+    { (const u32*)gTrainerBackPic_RSBrendan, 0x2000, 2 },
+    { (const u32*)gTrainerBackPic_RSMay, 0x2000, 3 },
+    { (const u32*)gTrainerBackPic_Pokedude, 0x2000, 4 },
+    { (const u32*)gTrainerBackPic_OldMan, 0x2000, 5 }
 };
 
 const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] = {

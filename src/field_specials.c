@@ -45,7 +45,7 @@
 static EWRAM_DATA u8 sElevatorCurrentFloorWindowId = 0;
 static EWRAM_DATA u16 sElevatorScroll = 0;
 static EWRAM_DATA u16 sElevatorCursorPos = 0;
-static EWRAM_DATA struct ListMenuItem * sListMenuItems = NULL;
+static EWRAM_DATA struct ListMenuItem* sListMenuItems = NULL;
 static EWRAM_DATA u16 sListMenuLastScrollPosition = 0;
 static EWRAM_DATA u8 sPCBoxToSendMon = 0;
 static EWRAM_DATA u8 sBrailleTextCursorSpriteID = 0;
@@ -64,7 +64,7 @@ static void AnimateElevatorWindowView(u16 nfloors, bool8 direction);
 static void Task_AnimateElevatorWindowView(u8 taskId);
 static void Task_CreateScriptListMenu(u8 taskId);
 static void CreateScriptListMenu(void);
-static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu * used);
+static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu* used);
 static void Task_ListMenuHandleInput(u8 taskId);
 static void Task_DestroyListMenu(u8 taskId);
 static void Task_SuspendListMenu(u8 taskId);
@@ -81,7 +81,7 @@ static void MoveDeoxysObject(u8 num);
 static void Task_WaitDeoxysFieldEffect(u8 taskId);
 static void Task_WingFlapSound(u8 taskId);
 
-static u8 *const sStringVarPtrs[] = {
+static u8* const sStringVarPtrs[] = {
     gStringVar1,
     gStringVar2,
     gStringVar3
@@ -162,7 +162,7 @@ void SetHiddenItemFlag(void)
 
 u8 GetLeadMonFriendship(void)
 {
-    struct Pokemon * pokemon = &gPlayerParty[GetLeadMonIndex()];
+    struct Pokemon* pokemon = &gPlayerParty[GetLeadMonIndex()];
     if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) == 255)
         return 6;
     else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 200)
@@ -188,15 +188,15 @@ void ShowTownMap(void)
 bool8 PlayerHasGrassPokemonInParty(void)
 {
     u8 i;
-    struct Pokemon * pokemon;
+    struct Pokemon* pokemon;
     u16 species;
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
         pokemon = &gPlayerParty[i];
         if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES)
-         && !GetMonData(pokemon, MON_DATA_IS_EGG)
-        )
+            && !GetMonData(pokemon, MON_DATA_IS_EGG)
+            )
         {
             species = GetMonData(pokemon, MON_DATA_SPECIES);
             if (gSpeciesInfo[species].types[0] == TYPE_GRASS || gSpeciesInfo[species].types[1] == TYPE_GRASS)
@@ -224,7 +224,7 @@ void AnimatePcTurnOn(void)
 // PC flickers on and off while turning on
 static void Task_AnimatePcTurnOn(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (tTimer == 6)
     {
         PcTurnOnUpdateMetatileId(tState & 1);
@@ -478,7 +478,7 @@ void ShakeScreen(void)
 
 static void Task_ShakeScreen(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     tTimer++;
     if (tTimer % tDuration == 0)
     {
@@ -511,7 +511,7 @@ u8 GetLeadMonIndex(void)
 {
     u8 partyCount = CalculatePlayerPartyCount();
     u8 i;
-    struct Pokemon * pokemon;
+    struct Pokemon* pokemon;
     for (i = 0; i < partyCount; i++)
     {
         pokemon = &gPlayerParty[i];
@@ -529,7 +529,7 @@ u16 GetPartyMonSpecies(void)
 bool8 IsMonOTNameNotPlayers(void)
 {
     GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_OT_NAME, gStringVar1);
-    
+
     if (!StringCompare(gSaveBlock2Ptr->playerName, gStringVar1))
         return FALSE;
     else
@@ -734,7 +734,7 @@ static const struct WindowTemplate sElevatorCurrentFloorWindowTemplate = {
     .baseBlock = 0x008
 };
 
-static const u8 *const sFloorNamePointers[] = {
+static const u8* const sFloorNamePointers[] = {
     gText_B4F,
     gText_B3F,
     gText_B2F,
@@ -775,36 +775,36 @@ static const u8 sFloorNameWidthPadding[] = {
 
 static const u16 sElevatorWindowMetatilesGoingUp[][3] = {
     {
-        METATILE_SilphCo_ElevatorWindow_Top0, 
-        METATILE_SilphCo_ElevatorWindow_Top1, 
+        METATILE_SilphCo_ElevatorWindow_Top0,
+        METATILE_SilphCo_ElevatorWindow_Top1,
         METATILE_SilphCo_ElevatorWindow_Top2
     },
     {
-        METATILE_SilphCo_ElevatorWindow_Mid0, 
-        METATILE_SilphCo_ElevatorWindow_Mid1, 
+        METATILE_SilphCo_ElevatorWindow_Mid0,
+        METATILE_SilphCo_ElevatorWindow_Mid1,
         METATILE_SilphCo_ElevatorWindow_Mid2
     },
     {
-        METATILE_SilphCo_ElevatorWindow_Bottom0, 
-        METATILE_SilphCo_ElevatorWindow_Bottom1, 
+        METATILE_SilphCo_ElevatorWindow_Bottom0,
+        METATILE_SilphCo_ElevatorWindow_Bottom1,
         METATILE_SilphCo_ElevatorWindow_Bottom2
     }
 };
 
 static const u16 sElevatorWindowMetatilesGoingDown[][3] = {
     {
-        METATILE_SilphCo_ElevatorWindow_Top0, 
-        METATILE_SilphCo_ElevatorWindow_Top2, 
+        METATILE_SilphCo_ElevatorWindow_Top0,
+        METATILE_SilphCo_ElevatorWindow_Top2,
         METATILE_SilphCo_ElevatorWindow_Top1
     },
     {
-        METATILE_SilphCo_ElevatorWindow_Mid0, 
-        METATILE_SilphCo_ElevatorWindow_Mid2, 
+        METATILE_SilphCo_ElevatorWindow_Mid0,
+        METATILE_SilphCo_ElevatorWindow_Mid2,
         METATILE_SilphCo_ElevatorWindow_Mid1
     },
     {
-        METATILE_SilphCo_ElevatorWindow_Bottom0, 
-        METATILE_SilphCo_ElevatorWindow_Bottom2, 
+        METATILE_SilphCo_ElevatorWindow_Bottom0,
+        METATILE_SilphCo_ElevatorWindow_Bottom2,
         METATILE_SilphCo_ElevatorWindow_Bottom1
     }
 };
@@ -1049,7 +1049,7 @@ u16 InitElevatorFloorSelectMenuPos(void)
 void AnimateElevator(void)
 {
     u16 nfloors;
-    s16 *data = gTasks[CreateTask(Task_ElevatorShake, 9)].data;
+    s16* data = gTasks[CreateTask(Task_ElevatorShake, 9)].data;
     data[1] = 0;
     data[2] = 0;
     data[4] = 1;
@@ -1073,7 +1073,7 @@ void AnimateElevator(void)
 
 static void Task_ElevatorShake(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     data[1]++;
     if ((data[1] % 3) == 0)
     {
@@ -1093,7 +1093,7 @@ static void Task_ElevatorShake(u8 taskId)
 
 void DrawElevatorCurrentFloorWindow(void)
 {
-    const u8 *floorname;
+    const u8* floorname;
     u32 strwidth;
     if (QuestLog_SchedulePlaybackCB(QLPlaybackCB_DestroyScriptMenuMonPicSprites) != TRUE)
     {
@@ -1132,7 +1132,7 @@ static void Task_AnimateElevatorWindowView(u8 taskId)
 {
     u8 i;
     u8 j;
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (data[1] == 6)
     {
         data[0]++;
@@ -1163,7 +1163,7 @@ static void Task_AnimateElevatorWindowView(u8 taskId)
 void ListMenu(void)
 {
     u8 taskId;
-    struct Task *task;
+    struct Task* task;
     if (QuestLog_SchedulePlaybackCB(QLPlaybackCB_DestroyScriptMenuMonPicSprites) != TRUE)
     {
         taskId = CreateTask(Task_CreateScriptListMenu, 8);
@@ -1252,8 +1252,8 @@ void ListMenu(void)
     }
 }
 
-static const u8 *const sListMenuLabels[][12] = {
-    [LISTMENU_BADGES] = 
+static const u8* const sListMenuLabels[][12] = {
+    [LISTMENU_BADGES] =
     {
         gText_BoulderBadge,
         gText_CascadeBadge,
@@ -1264,8 +1264,8 @@ static const u8 *const sListMenuLabels[][12] = {
         gText_VolcanoBadge,
         gText_EarthBadge,
         gOtherText_Exit,
-    }, 
-    [LISTMENU_SILPHCO_FLOORS] = 
+    },
+    [LISTMENU_SILPHCO_FLOORS] =
     {
         gText_11F,
         gText_10F,
@@ -1279,14 +1279,14 @@ static const u8 *const sListMenuLabels[][12] = {
         gText_2F,
         gText_1F,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_ROCKET_HIDEOUT_FLOORS] = // Unncessary, MULTICHOICE_ROCKET_HIDEOUT_ELEVATOR is used instead
     {
         gText_B1F,
         gText_B2F,
         gText_B4F,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_DEPT_STORE_FLOORS] = // Unncessary, MULTICHOICE_DEPT_STORE_ELEVATOR is used instead
     {
         gText_5F,
@@ -1295,15 +1295,15 @@ static const u8 *const sListMenuLabels[][12] = {
         gText_2F,
         gText_1F,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_WIRELESS_LECTURE_HEADERS] = // Unnecessary, MULTICHOICE_LINKED_DIRECT_UNION is used instead
     {
         gText_LinkedGamePlay,
         gText_DirectCorner,
         gText_UnionRoom,
         gOtherText_Quit,
-    }, 
-    [LISTMENU_BERRY_POWDER] = 
+    },
+    [LISTMENU_BERRY_POWDER] =
     {
         gText_Energypowder_50,
         gText_EnergyRoot_80,
@@ -1317,7 +1317,7 @@ static const u8 *const sListMenuLabels[][12] = {
         gText_HpUp_1000,
         gText_PpUp_3000,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_TRAINER_TOWER_FLOORS] = // Unnecessary, MULTICHOICE_ROOFTOP_B1F is used instead
     {
         gText_Rooftop,
@@ -1332,7 +1332,7 @@ static void Task_CreateScriptListMenu(u8 taskId)
     u8 i;
     s32 width;
     s32 mwidth;
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     u8 windowId;
     LockPlayerFieldControls();
     if (gSpecialVar_0x8004 == LISTMENU_SILPHCO_FLOORS)
@@ -1388,10 +1388,10 @@ static void CreateScriptListMenu(void)
     sFieldSpecialsListMenuTemplate.cursorKind = 0;
 }
 
-static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu * used)
+static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu* used)
 {
     u8 taskId;
-    struct Task *task;
+    struct Task* task;
     PlaySE(SE_SELECT);
     taskId = FindTaskIdByFunc(Task_ListMenuHandleInput);
     if (taskId != 0xFF)
@@ -1405,7 +1405,7 @@ static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListM
 static void Task_ListMenuHandleInput(u8 taskId)
 {
     s32 input;
-    struct Task *task;
+    struct Task* task;
 
     task = &gTasks[taskId];
     task++;task--;
@@ -1438,7 +1438,7 @@ static void Task_ListMenuHandleInput(u8 taskId)
 
 static void Task_DestroyListMenu(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     Task_ListMenuRemoveScrollIndicatorArrowPair(taskId);
     DestroyListMenuTask(task->data[14], NULL, NULL);
     Free(sListMenuItems);
@@ -1482,7 +1482,7 @@ static void Task_RedrawScrollArrowsAndWaitInput(u8 taskId)
 
 static void Task_CreateMenuRemoveScrollIndicatorArrowPair(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     struct ScrollArrowsTemplate template = {
         .firstArrowType = 2,
         .secondArrowType = 3,
@@ -1503,7 +1503,7 @@ static void Task_CreateMenuRemoveScrollIndicatorArrowPair(u8 taskId)
 
 static void Task_ListMenuRemoveScrollIndicatorArrowPair(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     if (task->data[0] != task->data[1])
         RemoveScrollIndicatorArrowPair(task->data[12]);
 }
@@ -1569,7 +1569,7 @@ u8 ContextNpcGetTextColor(void)
 
 static bool8 HasMonBeenRenamed(u8 idx)
 {
-    struct Pokemon * pokemon = &gPlayerParty[idx];
+    struct Pokemon* pokemon = &gPlayerParty[idx];
     u8 language;
     GetMonData(pokemon, MON_DATA_NICKNAME, gStringVar1);
     language = GetMonData(pokemon, MON_DATA_LANGUAGE, &language);
@@ -1616,7 +1616,7 @@ s32 CountDigits(s32 number)
 
 bool8 NameRaterWasNicknameChanged(void)
 {
-    struct Pokemon * pokemon = &gPlayerParty[gSpecialVar_0x8004];
+    struct Pokemon* pokemon = &gPlayerParty[gSpecialVar_0x8004];
     GetMonData(pokemon, MON_DATA_NICKNAME, gStringVar1);
     if (StringCompare(gStringVar3, gStringVar1) == 0)
         return FALSE;
@@ -1626,7 +1626,7 @@ bool8 NameRaterWasNicknameChanged(void)
 
 void ChangeBoxPokemonNickname(void)
 {
-    struct BoxPokemon * pokemon = GetBoxedMonPtr(gSpecialVar_MonBoxId, gSpecialVar_MonBoxPos);
+    struct BoxPokemon* pokemon = GetBoxedMonPtr(gSpecialVar_MonBoxId, gSpecialVar_MonBoxPos);
     u16 species;
     u8 gender;
     u32 personality;
@@ -1811,57 +1811,57 @@ static const struct {
     u16 outside_grp;
     u16 outside_num;
 } sInsideOutsidePairs[51] = {
-    [QL_LOCATION_HOME]               = {MAP(PALLET_TOWN_PLAYERS_HOUSE_1F),          MAP(PALLET_TOWN)},
-    [QL_LOCATION_OAKS_LAB]           = {MAP(PALLET_TOWN_PROFESSOR_OAKS_LAB),        MAP(PALLET_TOWN)},
-    [QL_LOCATION_VIRIDIAN_GYM]       = {MAP(VIRIDIAN_CITY_GYM),                     MAP(VIRIDIAN_CITY)},
-    [QL_LOCATION_LEAGUE_GATE_1]      = {MAP(ROUTE22_NORTH_ENTRANCE),                MAP(ROUTE22)},
-    [QL_LOCATION_LEAGUE_GATE_2]      = {MAP(ROUTE22_NORTH_ENTRANCE),                MAP(ROUTE23)},
-    [QL_LOCATION_VIRIDIAN_FOREST_1]  = {MAP(VIRIDIAN_FOREST),                       MAP(ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)},
-    [QL_LOCATION_VIRIDIAN_FOREST_2]  = {MAP(VIRIDIAN_FOREST),                       MAP(ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)},
-    [QL_LOCATION_PEWTER_MUSEUM]      = {MAP(PEWTER_CITY_MUSEUM_1F),                 MAP(PEWTER_CITY)},
-    [QL_LOCATION_PEWTER_GYM]         = {MAP(PEWTER_CITY_GYM),                       MAP(PEWTER_CITY)},
-    [QL_LOCATION_MT_MOON_1]          = {MAP(MT_MOON_1F),                            MAP(ROUTE4)},
-    [QL_LOCATION_MT_MOON_2]          = {MAP(MT_MOON_B1F),                           MAP(ROUTE4)},
-    [QL_LOCATION_CERULEAN_GYM]       = {MAP(CERULEAN_CITY_GYM),                     MAP(CERULEAN_CITY)},
-    [QL_LOCATION_BIKE_SHOP]          = {MAP(CERULEAN_CITY_BIKE_SHOP),               MAP(CERULEAN_CITY)},
-    [QL_LOCATION_BILLS_HOUSE]        = {MAP(ROUTE25_SEA_COTTAGE),                   MAP(ROUTE25)},
-    [QL_LOCATION_DAY_CARE]           = {MAP(ROUTE5_POKEMON_DAY_CARE),               MAP(ROUTE5)},
+    [QL_LOCATION_HOME] = {MAP(PALLET_TOWN_PLAYERS_HOUSE_1F),          MAP(PALLET_TOWN)},
+    [QL_LOCATION_OAKS_LAB] = {MAP(PALLET_TOWN_PROFESSOR_OAKS_LAB),        MAP(PALLET_TOWN)},
+    [QL_LOCATION_VIRIDIAN_GYM] = {MAP(VIRIDIAN_CITY_GYM),                     MAP(VIRIDIAN_CITY)},
+    [QL_LOCATION_LEAGUE_GATE_1] = {MAP(ROUTE22_NORTH_ENTRANCE),                MAP(ROUTE22)},
+    [QL_LOCATION_LEAGUE_GATE_2] = {MAP(ROUTE22_NORTH_ENTRANCE),                MAP(ROUTE23)},
+    [QL_LOCATION_VIRIDIAN_FOREST_1] = {MAP(VIRIDIAN_FOREST),                       MAP(ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)},
+    [QL_LOCATION_VIRIDIAN_FOREST_2] = {MAP(VIRIDIAN_FOREST),                       MAP(ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)},
+    [QL_LOCATION_PEWTER_MUSEUM] = {MAP(PEWTER_CITY_MUSEUM_1F),                 MAP(PEWTER_CITY)},
+    [QL_LOCATION_PEWTER_GYM] = {MAP(PEWTER_CITY_GYM),                       MAP(PEWTER_CITY)},
+    [QL_LOCATION_MT_MOON_1] = {MAP(MT_MOON_1F),                            MAP(ROUTE4)},
+    [QL_LOCATION_MT_MOON_2] = {MAP(MT_MOON_B1F),                           MAP(ROUTE4)},
+    [QL_LOCATION_CERULEAN_GYM] = {MAP(CERULEAN_CITY_GYM),                     MAP(CERULEAN_CITY)},
+    [QL_LOCATION_BIKE_SHOP] = {MAP(CERULEAN_CITY_BIKE_SHOP),               MAP(CERULEAN_CITY)},
+    [QL_LOCATION_BILLS_HOUSE] = {MAP(ROUTE25_SEA_COTTAGE),                   MAP(ROUTE25)},
+    [QL_LOCATION_DAY_CARE] = {MAP(ROUTE5_POKEMON_DAY_CARE),               MAP(ROUTE5)},
     [QL_LOCATION_UNDERGROUND_PATH_1] = {MAP(UNDERGROUND_PATH_NORTH_ENTRANCE),       MAP(ROUTE5)},
     [QL_LOCATION_UNDERGROUND_PATH_2] = {MAP(UNDERGROUND_PATH_SOUTH_ENTRANCE),       MAP(ROUTE6)},
-    [QL_LOCATION_PKMN_FAN_CLUB]      = {MAP(VERMILION_CITY_POKEMON_FAN_CLUB),       MAP(VERMILION_CITY)},
-    [QL_LOCATION_VERMILION_GYM]      = {MAP(VERMILION_CITY_GYM),                    MAP(VERMILION_CITY)},
-    [QL_LOCATION_SS_ANNE]            = {MAP(SSANNE_1F_CORRIDOR),                    MAP(VERMILION_CITY)},
-    [QL_LOCATION_DIGLETTS_CAVE_1]    = {MAP(DIGLETTS_CAVE_NORTH_ENTRANCE),          MAP(ROUTE2)},
-    [QL_LOCATION_DIGLETTS_CAVE_2]    = {MAP(DIGLETTS_CAVE_SOUTH_ENTRANCE),          MAP(ROUTE11)},
-    [QL_LOCATION_ROCK_TUNNEL_1]      = {MAP(ROCK_TUNNEL_1F),                        MAP(ROUTE10)},
-    [QL_LOCATION_ROCK_TUNNEL_2]      = {MAP(ROCK_TUNNEL_1F),                        MAP(ROUTE10)},
-    [QL_LOCATION_POWER_PLANT]        = {MAP(POWER_PLANT),                           MAP(ROUTE10)},
-    [QL_LOCATION_PKMN_TOWER]         = {MAP(POKEMON_TOWER_1F),                      MAP(LAVENDER_TOWN)},
-    [QL_LOCATION_VOLUNTEER_HOUSE]    = {MAP(LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE), MAP(LAVENDER_TOWN)},
-    [QL_LOCATION_NAME_RATERS_HOUSE]  = {MAP(LAVENDER_TOWN_HOUSE2),                  MAP(LAVENDER_TOWN)},
+    [QL_LOCATION_PKMN_FAN_CLUB] = {MAP(VERMILION_CITY_POKEMON_FAN_CLUB),       MAP(VERMILION_CITY)},
+    [QL_LOCATION_VERMILION_GYM] = {MAP(VERMILION_CITY_GYM),                    MAP(VERMILION_CITY)},
+    [QL_LOCATION_SS_ANNE] = {MAP(SSANNE_1F_CORRIDOR),                    MAP(VERMILION_CITY)},
+    [QL_LOCATION_DIGLETTS_CAVE_1] = {MAP(DIGLETTS_CAVE_NORTH_ENTRANCE),          MAP(ROUTE2)},
+    [QL_LOCATION_DIGLETTS_CAVE_2] = {MAP(DIGLETTS_CAVE_SOUTH_ENTRANCE),          MAP(ROUTE11)},
+    [QL_LOCATION_ROCK_TUNNEL_1] = {MAP(ROCK_TUNNEL_1F),                        MAP(ROUTE10)},
+    [QL_LOCATION_ROCK_TUNNEL_2] = {MAP(ROCK_TUNNEL_1F),                        MAP(ROUTE10)},
+    [QL_LOCATION_POWER_PLANT] = {MAP(POWER_PLANT),                           MAP(ROUTE10)},
+    [QL_LOCATION_PKMN_TOWER] = {MAP(POKEMON_TOWER_1F),                      MAP(LAVENDER_TOWN)},
+    [QL_LOCATION_VOLUNTEER_HOUSE] = {MAP(LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE), MAP(LAVENDER_TOWN)},
+    [QL_LOCATION_NAME_RATERS_HOUSE] = {MAP(LAVENDER_TOWN_HOUSE2),                  MAP(LAVENDER_TOWN)},
     [QL_LOCATION_UNDERGROUND_PATH_3] = {MAP(UNDERGROUND_PATH_EAST_ENTRANCE),        MAP(ROUTE8)},
     [QL_LOCATION_UNDERGROUND_PATH_4] = {MAP(UNDERGROUND_PATH_WEST_ENTRANCE),        MAP(ROUTE7)},
     [QL_LOCATION_CELADON_DEPT_STORE] = {MAP(CELADON_CITY_DEPARTMENT_STORE_1F),      MAP(CELADON_CITY)},
-    [QL_LOCATION_CELADON_MANSION]    = {MAP(CELADON_CITY_CONDOMINIUMS_1F),          MAP(CELADON_CITY)},
-    [QL_LOCATION_GAME_CORNER]        = {MAP(CELADON_CITY_GAME_CORNER),              MAP(CELADON_CITY)},
-    [QL_LOCATION_CELADON_GYM]        = {MAP(CELADON_CITY_GYM),                      MAP(CELADON_CITY)},
+    [QL_LOCATION_CELADON_MANSION] = {MAP(CELADON_CITY_CONDOMINIUMS_1F),          MAP(CELADON_CITY)},
+    [QL_LOCATION_GAME_CORNER] = {MAP(CELADON_CITY_GAME_CORNER),              MAP(CELADON_CITY)},
+    [QL_LOCATION_CELADON_GYM] = {MAP(CELADON_CITY_GYM),                      MAP(CELADON_CITY)},
     [QL_LOCATION_CELADON_RESTAURANT] = {MAP(CELADON_CITY_RESTAURANT),               MAP(CELADON_CITY)},
-    [QL_LOCATION_ROCKET_HIDEOUT]     = {MAP(ROCKET_HIDEOUT_B1F),                    MAP(CELADON_CITY_GAME_CORNER)},
-    [QL_LOCATION_SAFARI_ZONE]        = {MAP(SAFARI_ZONE_CENTER),                    MAP(FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE)},
-    [QL_LOCATION_FUCHSIA_GYM]        = {MAP(FUCHSIA_CITY_GYM),                      MAP(FUCHSIA_CITY)},
-    [QL_LOCATION_WARDENS_HOME]       = {MAP(FUCHSIA_CITY_WARDENS_HOUSE),            MAP(FUCHSIA_CITY)},
-    [QL_LOCATION_FIGHTING_DOJO]      = {MAP(SAFFRON_CITY_DOJO),                     MAP(SAFFRON_CITY)},
-    [QL_LOCATION_SAFFRON_GYM]        = {MAP(SAFFRON_CITY_GYM),                      MAP(SAFFRON_CITY)},
-    [QL_LOCATION_SILPH_CO]           = {MAP(SILPH_CO_1F),                           MAP(SAFFRON_CITY)},
-    [QL_LOCATION_SEAFOAM_ISLANDS_1]  = {MAP(SEAFOAM_ISLANDS_1F),                    MAP(ROUTE20)},
-    [QL_LOCATION_SEAFOAM_ISLANDS_2]  = {MAP(SEAFOAM_ISLANDS_1F),                    MAP(ROUTE20)},
-    [QL_LOCATION_PKMN_MANSION]       = {MAP(POKEMON_MANSION_1F),                    MAP(CINNABAR_ISLAND)},
-    [QL_LOCATION_CINNABAR_GYM]       = {MAP(CINNABAR_ISLAND_GYM),                   MAP(CINNABAR_ISLAND)},
-    [QL_LOCATION_CINNABAR_LAB]       = {MAP(CINNABAR_ISLAND_POKEMON_LAB_ENTRANCE),  MAP(CINNABAR_ISLAND)},
-    [QL_LOCATION_VICTORY_ROAD_1]     = {MAP(VICTORY_ROAD_1F),                       MAP(ROUTE23)},
-    [QL_LOCATION_VICTORY_ROAD_2]     = {MAP(VICTORY_ROAD_2F),                       MAP(ROUTE23)},
-    [QL_LOCATION_PKMN_LEAGUE]        = {MAP(INDIGO_PLATEAU_POKEMON_CENTER_1F),      MAP(INDIGO_PLATEAU_EXTERIOR)},
-    [QL_LOCATION_CERULEAN_CAVE]      = {MAP(CERULEAN_CAVE_1F),                      MAP(CERULEAN_CITY)}
+    [QL_LOCATION_ROCKET_HIDEOUT] = {MAP(ROCKET_HIDEOUT_B1F),                    MAP(CELADON_CITY_GAME_CORNER)},
+    [QL_LOCATION_SAFARI_ZONE] = {MAP(SAFARI_ZONE_CENTER),                    MAP(FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE)},
+    [QL_LOCATION_FUCHSIA_GYM] = {MAP(FUCHSIA_CITY_GYM),                      MAP(FUCHSIA_CITY)},
+    [QL_LOCATION_WARDENS_HOME] = {MAP(FUCHSIA_CITY_WARDENS_HOUSE),            MAP(FUCHSIA_CITY)},
+    [QL_LOCATION_FIGHTING_DOJO] = {MAP(SAFFRON_CITY_DOJO),                     MAP(SAFFRON_CITY)},
+    [QL_LOCATION_SAFFRON_GYM] = {MAP(SAFFRON_CITY_GYM),                      MAP(SAFFRON_CITY)},
+    [QL_LOCATION_SILPH_CO] = {MAP(SILPH_CO_1F),                           MAP(SAFFRON_CITY)},
+    [QL_LOCATION_SEAFOAM_ISLANDS_1] = {MAP(SEAFOAM_ISLANDS_1F),                    MAP(ROUTE20)},
+    [QL_LOCATION_SEAFOAM_ISLANDS_2] = {MAP(SEAFOAM_ISLANDS_1F),                    MAP(ROUTE20)},
+    [QL_LOCATION_PKMN_MANSION] = {MAP(POKEMON_MANSION_1F),                    MAP(CINNABAR_ISLAND)},
+    [QL_LOCATION_CINNABAR_GYM] = {MAP(CINNABAR_ISLAND_GYM),                   MAP(CINNABAR_ISLAND)},
+    [QL_LOCATION_CINNABAR_LAB] = {MAP(CINNABAR_ISLAND_POKEMON_LAB_ENTRANCE),  MAP(CINNABAR_ISLAND)},
+    [QL_LOCATION_VICTORY_ROAD_1] = {MAP(VICTORY_ROAD_1F),                       MAP(ROUTE23)},
+    [QL_LOCATION_VICTORY_ROAD_2] = {MAP(VICTORY_ROAD_2F),                       MAP(ROUTE23)},
+    [QL_LOCATION_PKMN_LEAGUE] = {MAP(INDIGO_PLATEAU_POKEMON_CENTER_1F),      MAP(INDIGO_PLATEAU_EXTERIOR)},
+    [QL_LOCATION_CERULEAN_CAVE] = {MAP(CERULEAN_CAVE_1F),                      MAP(CERULEAN_CITY)}
 };
 
 void QuestLog_CheckDepartingIndoorsMap(void)
@@ -1904,7 +1904,7 @@ void QuestLog_TryRecordDepartedLocation(void)
                     event_buffer.entrance_id = ql_entrance_id;
                 else
                     event_buffer.entrance_id = ql_entrance_id + 1;
-                SetQuestLogEvent(QL_EVENT_DEPARTED, (void *)&event_buffer);
+                SetQuestLogEvent(QL_EVENT_DEPARTED, (void*)&event_buffer);
                 FlagClear(FLAG_SYS_QL_DEPARTED);
                 return;
             }
@@ -1918,7 +1918,7 @@ void QuestLog_TryRecordDepartedLocation(void)
                     event_buffer.entrance_id = ql_entrance_id;
                 else
                     event_buffer.entrance_id = ql_entrance_id + 1;
-                SetQuestLogEvent(QL_EVENT_DEPARTED, (void *)&event_buffer);
+                SetQuestLogEvent(QL_EVENT_DEPARTED, (void*)&event_buffer);
                 FlagClear(FLAG_SYS_QL_DEPARTED);
                 return;
             }
@@ -1939,7 +1939,7 @@ void QuestLog_TryRecordDepartedLocation(void)
                 if (x != 67 || y != 15)
                     event_buffer.entrance_id++;
             }
-            SetQuestLogEvent(QL_EVENT_DEPARTED, (void *)&event_buffer);
+            SetQuestLogEvent(QL_EVENT_DEPARTED, (void*)&event_buffer);
             FlagClear(FLAG_SYS_QL_DEPARTED);
             if (ql_entrance_id == QL_LOCATION_ROCKET_HIDEOUT)
             {
@@ -2131,7 +2131,7 @@ static const u8 sChampionRoomLightingTimers[] = {
 void DoPokemonLeagueLightingEffect(void)
 {
     u8 taskId = CreateTask(Task_RunPokemonLeagueLightingEffect, 8);
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (FlagGet(FLAG_TEMP_3) == TRUE)
     {
         gTasks[taskId].func = Task_CancelPokemonLeagueLightingEffect;
@@ -2157,13 +2157,13 @@ void DoPokemonLeagueLightingEffect(void)
 
 static void Task_RunPokemonLeagueLightingEffect(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (!gPaletteFade.active
-     && FlagGet(FLAG_TEMP_2) != FALSE
-     && FlagGet(FLAG_TEMP_5) != TRUE
-     && gGlobalFieldTintMode != QL_TINT_BACKUP_GRAYSCALE
-     && --data[0] == 0
-    )
+        && FlagGet(FLAG_TEMP_2) != FALSE
+        && FlagGet(FLAG_TEMP_5) != TRUE
+        && gGlobalFieldTintMode != QL_TINT_BACKUP_GRAYSCALE
+        && --data[0] == 0
+        )
     {
         if (++data[1] == data[2])
             data[1] = 0;
@@ -2184,7 +2184,7 @@ static void Task_RunPokemonLeagueLightingEffect(u8 taskId)
 
 static void Task_CancelPokemonLeagueLightingEffect(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (FlagGet(FLAG_TEMP_4) != FALSE)
     {
         if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(POKEMON_LEAGUE_CHAMPIONS_ROOM) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(POKEMON_LEAGUE_CHAMPIONS_ROOM))
@@ -2294,12 +2294,12 @@ bool8 HasLearnedAllMovesFromCapeBrinkTutor(void)
 bool8 CutMoveRuinValleyCheck(void)
 {
     if (FlagGet(FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE) != TRUE
-     && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SIX_ISLAND_RUIN_VALLEY)
-     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SIX_ISLAND_RUIN_VALLEY)
-     && gSaveBlock1Ptr->pos.x == 24
-     && gSaveBlock1Ptr->pos.y == 25
-     && GetPlayerFacingDirection() == DIR_NORTH
-    )
+        && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SIX_ISLAND_RUIN_VALLEY)
+        && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SIX_ISLAND_RUIN_VALLEY)
+        && gSaveBlock1Ptr->pos.x == 24
+        && gSaveBlock1Ptr->pos.y == 25
+        && GetPlayerFacingDirection() == DIR_NORTH
+        )
         return TRUE;
     else
         return FALSE;
@@ -2496,7 +2496,7 @@ bool8 PlayerPartyContainsSpeciesWithPlayerID(void)
     u8 i;
     for (i = 0; i < playerCount; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL) == gSpecialVar_0x8004 
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL) == gSpecialVar_0x8004
             && GetPlayerTrainerId() == GetMonData(&gPlayerParty[i], MON_DATA_OT_ID, NULL))
             return TRUE;
     }
@@ -2540,7 +2540,7 @@ void LoopWingFlapSound(void)
 
 static void Task_WingFlapSound(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     data[1]++;
     if (data[1] == gSpecialVar_0x8005)
     {

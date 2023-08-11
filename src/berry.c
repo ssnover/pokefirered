@@ -868,48 +868,48 @@ const struct Berry gBerries[] = {
 };
 
 const struct BerryCrushStats gBerryCrush_BerryData[] = {
-    [ITEM_CHERI_BERRY  - FIRST_BERRY_INDEX] = { 50,  20},
+    [ITEM_CHERI_BERRY - FIRST_BERRY_INDEX] = { 50,  20},
     [ITEM_CHESTO_BERRY - FIRST_BERRY_INDEX] = { 50,  20},
-    [ITEM_PECHA_BERRY  - FIRST_BERRY_INDEX] = { 50,  20},
-    [ITEM_RAWST_BERRY  - FIRST_BERRY_INDEX] = { 50,  20},
+    [ITEM_PECHA_BERRY - FIRST_BERRY_INDEX] = { 50,  20},
+    [ITEM_RAWST_BERRY - FIRST_BERRY_INDEX] = { 50,  20},
     [ITEM_ASPEAR_BERRY - FIRST_BERRY_INDEX] = { 50,  20},
-    [ITEM_LEPPA_BERRY  - FIRST_BERRY_INDEX] = { 50,  30},
-    [ITEM_ORAN_BERRY   - FIRST_BERRY_INDEX] = { 50,  30},
+    [ITEM_LEPPA_BERRY - FIRST_BERRY_INDEX] = { 50,  30},
+    [ITEM_ORAN_BERRY - FIRST_BERRY_INDEX] = { 50,  30},
     [ITEM_PERSIM_BERRY - FIRST_BERRY_INDEX] = { 50,  30},
-    [ITEM_LUM_BERRY    - FIRST_BERRY_INDEX] = { 50,  30},
+    [ITEM_LUM_BERRY - FIRST_BERRY_INDEX] = { 50,  30},
     [ITEM_SITRUS_BERRY - FIRST_BERRY_INDEX] = { 50,  30},
-    [ITEM_FIGY_BERRY   - FIRST_BERRY_INDEX] = { 60,  50},
-    [ITEM_WIKI_BERRY   - FIRST_BERRY_INDEX] = { 60,  50},
-    [ITEM_MAGO_BERRY   - FIRST_BERRY_INDEX] = { 60,  50},
-    [ITEM_AGUAV_BERRY  - FIRST_BERRY_INDEX] = { 60,  50},
+    [ITEM_FIGY_BERRY - FIRST_BERRY_INDEX] = { 60,  50},
+    [ITEM_WIKI_BERRY - FIRST_BERRY_INDEX] = { 60,  50},
+    [ITEM_MAGO_BERRY - FIRST_BERRY_INDEX] = { 60,  50},
+    [ITEM_AGUAV_BERRY - FIRST_BERRY_INDEX] = { 60,  50},
     [ITEM_IAPAPA_BERRY - FIRST_BERRY_INDEX] = { 60,  50},
-    [ITEM_RAZZ_BERRY   - FIRST_BERRY_INDEX] = { 80,  70},
-    [ITEM_BLUK_BERRY   - FIRST_BERRY_INDEX] = { 80,  70},
-    [ITEM_NANAB_BERRY  - FIRST_BERRY_INDEX] = { 80,  70},
+    [ITEM_RAZZ_BERRY - FIRST_BERRY_INDEX] = { 80,  70},
+    [ITEM_BLUK_BERRY - FIRST_BERRY_INDEX] = { 80,  70},
+    [ITEM_NANAB_BERRY - FIRST_BERRY_INDEX] = { 80,  70},
     [ITEM_WEPEAR_BERRY - FIRST_BERRY_INDEX] = { 80,  70},
-    [ITEM_PINAP_BERRY  - FIRST_BERRY_INDEX] = { 80,  70},
-    [ITEM_POMEG_BERRY  - FIRST_BERRY_INDEX] = {100, 100},
+    [ITEM_PINAP_BERRY - FIRST_BERRY_INDEX] = { 80,  70},
+    [ITEM_POMEG_BERRY - FIRST_BERRY_INDEX] = {100, 100},
     [ITEM_KELPSY_BERRY - FIRST_BERRY_INDEX] = {100, 100},
     [ITEM_QUALOT_BERRY - FIRST_BERRY_INDEX] = {100, 100},
     [ITEM_HONDEW_BERRY - FIRST_BERRY_INDEX] = {100, 100},
-    [ITEM_GREPA_BERRY  - FIRST_BERRY_INDEX] = {100, 100},
+    [ITEM_GREPA_BERRY - FIRST_BERRY_INDEX] = {100, 100},
     [ITEM_TAMATO_BERRY - FIRST_BERRY_INDEX] = {130, 150},
-    [ITEM_CORNN_BERRY  - FIRST_BERRY_INDEX] = {130, 150},
+    [ITEM_CORNN_BERRY - FIRST_BERRY_INDEX] = {130, 150},
     [ITEM_MAGOST_BERRY - FIRST_BERRY_INDEX] = {130, 150},
     [ITEM_RABUTA_BERRY - FIRST_BERRY_INDEX] = {130, 150},
-    [ITEM_NOMEL_BERRY  - FIRST_BERRY_INDEX] = {130, 150},
+    [ITEM_NOMEL_BERRY - FIRST_BERRY_INDEX] = {130, 150},
     [ITEM_SPELON_BERRY - FIRST_BERRY_INDEX] = {160, 250},
     [ITEM_PAMTRE_BERRY - FIRST_BERRY_INDEX] = {160, 250},
     [ITEM_WATMEL_BERRY - FIRST_BERRY_INDEX] = {160, 250},
-    [ITEM_DURIN_BERRY  - FIRST_BERRY_INDEX] = {160, 250},
-    [ITEM_BELUE_BERRY  - FIRST_BERRY_INDEX] = {160, 250},
+    [ITEM_DURIN_BERRY - FIRST_BERRY_INDEX] = {160, 250},
+    [ITEM_BELUE_BERRY - FIRST_BERRY_INDEX] = {160, 250},
     [ITEM_LIECHI_BERRY - FIRST_BERRY_INDEX] = {180, 500},
     [ITEM_GANLON_BERRY - FIRST_BERRY_INDEX] = {180, 500},
-    [ITEM_SALAC_BERRY  - FIRST_BERRY_INDEX] = {180, 500},
+    [ITEM_SALAC_BERRY - FIRST_BERRY_INDEX] = {180, 500},
     [ITEM_PETAYA_BERRY - FIRST_BERRY_INDEX] = {180, 500},
     [ITEM_APICOT_BERRY - FIRST_BERRY_INDEX] = {180, 500},
     [ITEM_LANSAT_BERRY - FIRST_BERRY_INDEX] = {200, 750},
-    [ITEM_STARF_BERRY  - FIRST_BERRY_INDEX] = {200, 750},
+    [ITEM_STARF_BERRY - FIRST_BERRY_INDEX] = {200, 750},
     [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX] = {150, 200}
 };
 
@@ -921,7 +921,7 @@ const struct BerryTree gBlankBerryTree = {};
     berries[ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX]; \
 })
 
-static u32 GetEnigmaBerryChecksum(struct EnigmaBerry *);
+static u32 GetEnigmaBerryChecksum(struct EnigmaBerry*);
 
 void InitEnigmaBerry(void)
 {
@@ -950,15 +950,15 @@ struct ReceivedEnigmaBerry
     u8 holdEffectParam;
 };
 
-void SetEnigmaBerry(u8 * berry)
+void SetEnigmaBerry(u8* berry)
 {
-    struct EnigmaBerry * enigmaBerry;
-    struct ReceivedEnigmaBerry * src2;
+    struct EnigmaBerry* enigmaBerry;
+    struct ReceivedEnigmaBerry* src2;
     s32 i;
 
     ClearEnigmaBerries();
 
-    src2 = (struct ReceivedEnigmaBerry *)berry;
+    src2 = (struct ReceivedEnigmaBerry*)berry;
     enigmaBerry = &gSaveBlock1Ptr->enigmaBerry;
 
     enigmaBerry->berry = src2->berry;
@@ -969,9 +969,9 @@ void SetEnigmaBerry(u8 * berry)
     enigmaBerry->checksum = GetEnigmaBerryChecksum(enigmaBerry);
 }
 
-static u32 GetEnigmaBerryChecksum(struct EnigmaBerry * enigmaBerry)
+static u32 GetEnigmaBerryChecksum(struct EnigmaBerry* enigmaBerry)
 {
-    const u8 * src = (const u8 *)enigmaBerry;
+    const u8* src = (const u8*)enigmaBerry;
     u32 result = 0;
     u32 i;
 
@@ -993,10 +993,10 @@ bool32 IsEnigmaBerryValid(void)
     return TRUE;
 }
 
-const struct Berry * GetBerryInfo(u8 berryIdx)
+const struct Berry* GetBerryInfo(u8 berryIdx)
 {
     if (berryIdx == ITEM_TO_BERRY(ITEM_ENIGMA_BERRY) && IsEnigmaBerryValid())
-        return (struct Berry *)&gSaveBlock1Ptr->enigmaBerry.berry;
+        return (struct Berry*)&gSaveBlock1Ptr->enigmaBerry.berry;
 
     if (berryIdx == 0 || berryIdx > ITEM_TO_BERRY(ITEM_ENIGMA_BERRY))
         berryIdx = 1;
@@ -1020,9 +1020,9 @@ u16 BerryTypeToItemId(u16 berryType)
     return berryType + FIRST_BERRY_INDEX - 1;
 }
 
-void GetBerryNameByBerryType(u8 berryType, u8 * dest)
+void GetBerryNameByBerryType(u8 berryType, u8* dest)
 {
-    const struct Berry * berry = GetBerryInfo(berryType);
+    const struct Berry* berry = GetBerryInfo(berryType);
     memcpy(dest, berry->name, 6);
     dest[6] = EOS;
 }

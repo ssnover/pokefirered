@@ -50,7 +50,7 @@ static void Task_FieldEffectShowMon_Init(u8 taskId)
     gPlayerAvatar.preventStep = TRUE;
     mapObjId = gPlayerAvatar.objectEventId;
     if (!ObjectEventIsMovementOverridden(&gObjectEvents[mapObjId])
-     || ObjectEventClearHeldMovementIfFinished(&gObjectEvents[mapObjId]))
+        || ObjectEventClearHeldMovementIfFinished(&gObjectEvents[mapObjId]))
     {
         if (gMapHeader.mapType == MAP_TYPE_UNDERWATER)
         {

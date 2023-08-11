@@ -189,7 +189,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
     }
 };
 
-static const u8 sUnused[] = {16, 8, 4};
+static const u8 sUnused[] = { 16, 8, 4 };
 
 static EWRAM_DATA u8 sOpenWindows[11] = {};
 
@@ -218,12 +218,12 @@ void InitBagWindows(void)
     }
 }
 
-void BagPrintTextOnWindow(u8 windowId, u8 fontId, const u8 * str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx)
+void BagPrintTextOnWindow(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx)
 {
     AddTextPrinterParameterized4(windowId, fontId, x, y, letterSpacing, lineSpacing, sTextColors[colorIdx], speed, str);
 }
 
-void BagPrintTextOnWin1CenteredColor0(const u8 * str, u8 unused)
+void BagPrintTextOnWin1CenteredColor0(const u8* str, u8 unused)
 {
     u32 x = 0x48 - GetStringWidth(FONT_NORMAL_COPY_1, str, 0);
     AddTextPrinterParameterized3(2, FONT_NORMAL_COPY_1, x / 2, 1, sTextColors[0], 0, str);
@@ -291,12 +291,12 @@ u8 GetBagWindow(u8 whichWindow)
     return sOpenWindows[whichWindow];
 }
 
-void BagCreateYesNoMenuBottomRight(u8 taskId, const struct YesNoFuncTable * ptrs)
+void BagCreateYesNoMenuBottomRight(u8 taskId, const struct YesNoFuncTable* ptrs)
 {
     CreateYesNoMenuWithCallbacks(taskId, &sWindowTemplates[3], FONT_NORMAL, 0, 2, 0x064, 14, ptrs);
 }
 
-void BagCreateYesNoMenuTopRight(u8 taskId, const struct YesNoFuncTable * ptrs)
+void BagCreateYesNoMenuTopRight(u8 taskId, const struct YesNoFuncTable* ptrs)
 {
     CreateYesNoMenuWithCallbacks(taskId, &sWindowTemplates[4], FONT_NORMAL, 0, 2, 0x064, 14, ptrs);
 }

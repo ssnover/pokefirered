@@ -6,23 +6,23 @@
 #include "trig.h"
 #include "constants/songs.h"
 
-static void AnimFallingRock(struct Sprite *sprite);
-static void AnimRockFragment(struct Sprite *sprite);
-static void AnimFlyingSandCrescent(struct Sprite *sprite);
-static void AnimRaiseSprite(struct Sprite *sprite);
+static void AnimFallingRock(struct Sprite* sprite);
+static void AnimRockFragment(struct Sprite* sprite);
+static void AnimFlyingSandCrescent(struct Sprite* sprite);
+static void AnimRaiseSprite(struct Sprite* sprite);
 static void AnimTask_Rollout_Step(u8 taskId);
-static void AnimRolloutParticle(struct Sprite *sprite);
-static void AnimRockTomb(struct Sprite *sprite);
-static void AnimRockBlastRock(struct Sprite *sprite);
-static void AnimRockScatter(struct Sprite *sprite);
-static void AnimParticleInVortex(struct Sprite *sprite);
-static void AnimFallingRock_Step(struct Sprite *sprite);
-static void AnimParticleInVortex_Step(struct Sprite *sprite);
+static void AnimRolloutParticle(struct Sprite* sprite);
+static void AnimRockTomb(struct Sprite* sprite);
+static void AnimRockBlastRock(struct Sprite* sprite);
+static void AnimRockScatter(struct Sprite* sprite);
+static void AnimParticleInVortex(struct Sprite* sprite);
+static void AnimFallingRock_Step(struct Sprite* sprite);
+static void AnimParticleInVortex_Step(struct Sprite* sprite);
 static void AnimTask_LoadSandstormBackground_Step(u8 taskId);
-static void CreateRolloutDirtSprite(struct Task *task);
+static void CreateRolloutDirtSprite(struct Task* task);
 static u8 GetRolloutCounter(void);
-static void AnimRockTomb_Step(struct Sprite *sprite);
-static void AnimRockScatter_Step(struct Sprite *sprite);
+static void AnimRockTomb_Step(struct Sprite* sprite);
+static void AnimRockScatter_Step(struct Sprite* sprite);
 
 static const union AnimCmd sAnim_FlyingRock_0[] =
 {
@@ -42,7 +42,7 @@ static const union AnimCmd sAnim_FlyingRock_2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_FlyingRock[] =
+static const union AnimCmd* const sAnims_FlyingRock[] =
 {
     sAnim_FlyingRock_0,
     sAnim_FlyingRock_1,
@@ -90,7 +90,7 @@ static const union AffineAnimCmd sAffineAnim_Whirlpool[] =
     AFFINEANIMCMD_JUMP(1),
 };
 
-static const union AffineAnimCmd *const sAffineAnims_Whirlpool[] =
+static const union AffineAnimCmd* const sAffineAnims_Whirlpool[] =
 {
     sAffineAnim_Whirlpool,
 };
@@ -138,7 +138,7 @@ static const struct Subsprite sFlyingSandSubsprites[] =
         .tileOffset = 0,
         .priority = 1,
     },
-    {   
+    {
         .x = 16,
         .y = 0,
         .shape = SPRITE_SHAPE(32x16),
@@ -189,7 +189,7 @@ static const union AnimCmd sAnim_Rock_Smallest[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_BasicRock[] =
+static const union AnimCmd* const sAnims_BasicRock[] =
 {
     sAnim_Rock_Biggest,
     sAnim_Rock_Bigger,
@@ -255,7 +255,7 @@ static const union AffineAnimCmd sAffineAnim_BasicRock_1[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sAffineAnims_BasicRock[] =
+static const union AffineAnimCmd* const sAffineAnims_BasicRock[] =
 {
     sAffineAnim_BasicRock_0,
     sAffineAnim_BasicRock_1,
@@ -305,7 +305,7 @@ const struct SpriteTemplate gWeatherBallRockDownSpriteTemplate =
     .callback = AnimWeatherBallDown,
 };
 
-static void AnimFallingRock(struct Sprite *sprite)
+static void AnimFallingRock(struct Sprite* sprite)
 {
     if (gBattleAnimArgs[3] != 0)
         SetAverageBattlerPositions(gBattleAnimTarget, 0, &sprite->x, &sprite->y);
@@ -324,7 +324,7 @@ static void AnimFallingRock(struct Sprite *sprite)
     sprite->callback(sprite);
 }
 
-static void AnimFallingRock_Step(struct Sprite *sprite)
+static void AnimFallingRock_Step(struct Sprite* sprite)
 {
     sprite->x += sprite->data[5];
     sprite->data[0] = 192;
@@ -338,7 +338,7 @@ static void AnimFallingRock_Step(struct Sprite *sprite)
 }
 
 // Animates the rock particles that are shown on the impact for Rock Blast / Rock Smash
-static void AnimRockFragment(struct Sprite *sprite)
+static void AnimRockFragment(struct Sprite* sprite)
 {
     StartSpriteAnim(sprite, gBattleAnimArgs[5]);
     AnimateSprite(sprite);
@@ -360,7 +360,7 @@ static void AnimRockFragment(struct Sprite *sprite)
 }
 
 // Swirls particle in vortex. Used for moves like Fire Spin or Sand Tomb
-static void AnimParticleInVortex(struct Sprite *sprite)
+static void AnimParticleInVortex(struct Sprite* sprite)
 {
     if (gBattleAnimArgs[6] == 0)
         InitSpritePosToAnimAttacker(sprite, 0);
@@ -373,7 +373,7 @@ static void AnimParticleInVortex(struct Sprite *sprite)
     sprite->callback = AnimParticleInVortex_Step;
 }
 
-static void AnimParticleInVortex_Step(struct Sprite *sprite)
+static void AnimParticleInVortex_Step(struct Sprite* sprite)
 {
     sprite->data[4] += sprite->data[1];
     sprite->y2 = -(sprite->data[4] >> 8);
@@ -481,7 +481,7 @@ static void AnimTask_LoadSandstormBackground_Step(u8 taskId)
 // arg 1: projectile speed
 // arg 2: y pixel drop
 // arg 3: ??? unknown (possibly a color bit)
-static void AnimFlyingSandCrescent(struct Sprite *sprite)
+static void AnimFlyingSandCrescent(struct Sprite* sprite)
 {
     if (sprite->data[0] == 0)
     {
@@ -530,7 +530,7 @@ static void AnimFlyingSandCrescent(struct Sprite *sprite)
 // arg 2: terminal y offset
 // arg 3: duration
 // arg 4: sprite size [1,5]
-static void AnimRaiseSprite(struct Sprite *sprite)
+static void AnimRaiseSprite(struct Sprite* sprite)
 {
     StartSpriteAnim(sprite, gBattleAnimArgs[4]);
     InitSpritePosToAnimAttacker(sprite, 0);
@@ -547,7 +547,7 @@ void AnimTask_Rollout(u8 taskId)
     u8 rolloutCounter;
     s32 var5;
     s16 pan1, pan2;
-    struct Task *task;
+    struct Task* task;
 
     task = &gTasks[taskId];
     var0 = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
@@ -586,7 +586,7 @@ void AnimTask_Rollout(u8 taskId)
 
 static void AnimTask_Rollout_Step(u8 taskId)
 {
-    struct Task *task;
+    struct Task* task;
 
     task = &gTasks[taskId];
     switch (task->data[0])
@@ -644,9 +644,9 @@ static void AnimTask_Rollout_Step(u8 taskId)
     }
 }
 
-static void CreateRolloutDirtSprite(struct Task *task)
+static void CreateRolloutDirtSprite(struct Task* task)
 {
-    const struct SpriteTemplate *spriteTemplate;
+    const struct SpriteTemplate* spriteTemplate;
     s32 tileOffset;
     u16 x, y;
     u8 spriteId;
@@ -690,7 +690,7 @@ static void CreateRolloutDirtSprite(struct Task *task)
     task->data[12] *= -1;
 }
 
-static void AnimRolloutParticle(struct Sprite *sprite)
+static void AnimRolloutParticle(struct Sprite* sprite)
 {
     if (TranslateAnimHorizontalArc(sprite))
     {
@@ -712,7 +712,7 @@ static u8 GetRolloutCounter(void)
     return retVal;
 }
 
-static void AnimRockTomb(struct Sprite *sprite)
+static void AnimRockTomb(struct Sprite* sprite)
 {
     StartSpriteAnim(sprite, gBattleAnimArgs[4]);
     sprite->x2 = gBattleAnimArgs[0];
@@ -724,7 +724,7 @@ static void AnimRockTomb(struct Sprite *sprite)
     sprite->invisible = TRUE;
 }
 
-static void AnimRockTomb_Step(struct Sprite *sprite)
+static void AnimRockTomb_Step(struct Sprite* sprite)
 {
     sprite->invisible = FALSE;
     if (sprite->data[3] != 0)
@@ -743,14 +743,14 @@ static void AnimRockTomb_Step(struct Sprite *sprite)
     }
 }
 
-static void AnimRockBlastRock(struct Sprite *sprite)
+static void AnimRockBlastRock(struct Sprite* sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
         StartSpriteAffineAnim(sprite, 1);
     TranslateAnimSpriteToTargetMonLocation(sprite);
 }
 
-static void AnimRockScatter(struct Sprite *sprite)
+static void AnimRockScatter(struct Sprite* sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y);
@@ -763,7 +763,7 @@ static void AnimRockScatter(struct Sprite *sprite)
     sprite->callback = AnimRockScatter_Step;
 }
 
-static void AnimRockScatter_Step(struct Sprite *sprite)
+static void AnimRockScatter_Step(struct Sprite* sprite)
 {
     sprite->data[0] += 8;
     sprite->data[3] += sprite->data[1];

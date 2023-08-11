@@ -22,11 +22,11 @@ struct EasyChatScreenTemplate
     u8 numColumns;
     u8 numRows;
     u8 frameId;
-    const u8 *titleText;
-    const u8 *instructionsText1;
-    const u8 *instructionsText2;
-    const u8 *confirmText1;
-    const u8 *confirmText2;
+    const u8* titleText;
+    const u8* instructionsText1;
+    const u8* instructionsText2;
+    const u8* confirmText1;
+    const u8* confirmText2;
 };
 
 struct EasyChatScreen
@@ -49,11 +49,11 @@ struct EasyChatScreen
     /*0x0F*/ u8 selectWordNumRows;
     /*0x10*/ s8 selectWordCursorX;
     /*0x11*/ s8 selectWordCursorY;
-    /*0x14*/ u16 *words;
+    /*0x14*/ u16* words;
     /*0x18*/ u16 ecWordBuffer[9];
 };
 
-static EWRAM_DATA struct EasyChatScreen * sEasyChatScreen = NULL;
+static EWRAM_DATA struct EasyChatScreen* sEasyChatScreen = NULL;
 
 static void CB2_EasyChatScreen(void);
 static void Task_InitEasyChat(u8 taskId);
@@ -62,7 +62,7 @@ static bool8 Task_InitEasyChatInternal(u8 taskId);
 static void DismantleEasyChat(MainCallback cb);
 static void CompareProfileResponseWithPassphrase(void);
 static void CompareQuestionnaireResponseWithPassphrase(void);
-static bool8 EasyChat_AllocateResources(u8 type, u16 *words);
+static bool8 EasyChat_AllocateResources(u8 type, u16* words);
 static void EasyChat_FreeResources(void);
 static u16 EasyChatScreen_HandleJoypad(void);
 static u16 HandleJoypad_SelectField(void);
@@ -101,11 +101,11 @@ static void MoveGroupCursorXToMaxCol(void);
 static void MoveWordCursorXToMaxCol(void);
 static bool8 GroupSelectCursorXPosTooFarRight(void);
 static bool8 WordSelectCursorXPosTooFarRight(void);
-static bool8 IsPhraseDifferentThanPlayerInput(const u16 *wordsToCompare, u8 numWords);
+static bool8 IsPhraseDifferentThanPlayerInput(const u16* wordsToCompare, u8 numWords);
 static u8 GetEasyChatScreenTemplateId(u8 type);
 static bool32 IsEcWordBufferUninitialized(void);
 
-void DoEasyChatScreen(u8 type, u16 *words, MainCallback callback)
+void DoEasyChatScreen(u8 type, u16* words, MainCallback callback)
 {
     u8 taskId;
     ResetTasks();
@@ -155,7 +155,7 @@ static void Task_InitEasyChat(u8 taskId)
 static void Task_RunEasyChat(u8 taskId)
 {
     u16 action;
-    s16 *data;
+    s16* data;
 
     data = gTasks[taskId].data;
     switch (data[EZCHAT_TASK_STATE])
@@ -202,7 +202,7 @@ static void Task_RunEasyChat(u8 taskId)
 
 static bool8 Task_InitEasyChatInternal(u8 taskId)
 {
-    s16 *data;
+    s16* data;
 
     data = gTasks[taskId].data;
     switch (data[EZCHAT_TASK_STATE])
@@ -220,7 +220,7 @@ static bool8 Task_InitEasyChatInternal(u8 taskId)
         }
         break;
     case 2:
-        if (!EasyChat_AllocateResources(data[EZCHAT_TASK_TYPE], (u16 *)GetWordTaskArg(taskId, EZCHAT_TASK_WORDS)))
+        if (!EasyChat_AllocateResources(data[EZCHAT_TASK_TYPE], (u16*)GetWordTaskArg(taskId, EZCHAT_TASK_WORDS)))
         {
             DismantleEasyChat((MainCallback)GetWordTaskArg(taskId, EZCHAT_TASK_MAINCALLBACK));
         }
@@ -255,7 +255,7 @@ static void DismantleEasyChat(MainCallback callback)
 
 void ShowEasyChatScreen(void)
 {
-    u16 *words;
+    u16* words;
     switch (gSpecialVar_0x8004)
     {
     case EASY_CHAT_TYPE_PROFILE:
@@ -312,7 +312,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 2,
         .frameId = 0,
-        .titleText =  gText_Profile,
+        .titleText = gText_Profile,
         .instructionsText1 = gText_CombineFourWordsOrPhrases,
         .instructionsText2 = gText_AndMakeYourProfile,
         .confirmText1 = gText_YourProfile,
@@ -322,7 +322,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 3,
         .frameId = 1,
-        .titleText =  gText_AtTheBattlesStart,
+        .titleText = gText_AtTheBattlesStart,
         .instructionsText1 = gText_MakeMessageSixPhrases,
         .instructionsText2 = gText_MaxTwoTwelveLetterPhrases,
         .confirmText1 = gText_YourFeelingAtTheBattlesStart,
@@ -332,7 +332,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 3,
         .frameId = 1,
-        .titleText =  gText_UponWinningABattle,
+        .titleText = gText_UponWinningABattle,
         .instructionsText1 = gText_MakeMessageSixPhrases,
         .instructionsText2 = gText_MaxTwoTwelveLetterPhrases,
         .confirmText1 = gText_WhatYouSayIfYouWin,
@@ -342,7 +342,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 3,
         .frameId = 1,
-        .titleText =  gText_UponLosingABattle,
+        .titleText = gText_UponLosingABattle,
         .instructionsText1 = gText_MakeMessageSixPhrases,
         .instructionsText2 = gText_MaxTwoTwelveLetterPhrases,
         .confirmText1 = gText_WhatYouSayIfYouLose,
@@ -352,7 +352,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 5,
         .frameId = 2,
-        .titleText =  NULL,
+        .titleText = NULL,
         .instructionsText1 = gText_CombineNineWordsOrPhrases,
         .instructionsText2 = gText_AndMakeAMessage,
         .confirmText1 = gText_TheMailMessage,
@@ -369,7 +369,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 3,
         .frameId = 1,
-        .titleText =  gText_TheBardsSong,
+        .titleText = gText_TheBardsSong,
         .instructionsText1 = gText_ChangeJustOneWordOrPhrase,
         .instructionsText2 = gText_AndImproveTheBardsSong,
         .confirmText1 = gText_TheNewSong,
@@ -379,7 +379,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 3,
         .frameId = 1,
-        .titleText =  gText_Interview,
+        .titleText = gText_Interview,
         .instructionsText1 = gText_FindWordsThatDescribeYour,
         .instructionsText2 = gText_FeelingsRightNow,
         .confirmText1 = gText_TheAnswer,
@@ -389,7 +389,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 1,
         .frameId = 3,
-        .titleText =  gText_WhatsHipAndHappening,
+        .titleText = gText_WhatsHipAndHappening,
         .instructionsText1 = gText_CombineTwoWordsOrPhrases,
         .instructionsText2 = gText_AndMakeATrendySaying,
         .confirmText1 = gText_TheTrendySaying,
@@ -399,7 +399,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .numColumns = 2,
         .numRows = 2,
         .frameId = 0,
-        .titleText =  gText_Questionnaire,
+        .titleText = gText_Questionnaire,
         .instructionsText1 = gText_CombineFourWordsOrPhrases,
         .instructionsText2 = gText_AndFillOutTheQuestionnaire,
         .confirmText1 = gText_TheAnswer,
@@ -407,7 +407,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
     }
 };
 
-static bool8 EasyChat_AllocateResources(u8 type, u16 *words)
+static bool8 EasyChat_AllocateResources(u8 type, u16* words)
 {
     u8 templateId;
     int i;
@@ -1133,7 +1133,7 @@ static int GetSelectedLetter(void)
 
 static u16 GetSelectWordCursorPos(void)
 {
-    return 2 * (sEasyChatScreen->selectWordCursorY + sEasyChatScreen->selectWordRowsAbove)  + sEasyChatScreen->selectWordCursorX;
+    return 2 * (sEasyChatScreen->selectWordCursorY + sEasyChatScreen->selectWordRowsAbove) + sEasyChatScreen->selectWordCursorX;
 }
 
 static u8 GetMaxGroupCursorXinAlphaMode(u8 arg0)
@@ -1188,12 +1188,12 @@ u8 GetEasyChatScreenFrameId(void)
     return sEasyChatScreenTemplates[sEasyChatScreen->templateId].frameId;
 }
 
-const u8 *GetTitleText(void)
+const u8* GetTitleText(void)
 {
     return sEasyChatScreenTemplates[sEasyChatScreen->templateId].titleText;
 }
 
-u16 *GetEasyChatWordBuffer(void)
+u16* GetEasyChatWordBuffer(void)
 {
     return sEasyChatScreen->ecWordBuffer;
 }
@@ -1218,19 +1218,19 @@ u8 GetMainCursorRow(void)
     return sEasyChatScreen->mainCursorRow;
 }
 
-void GetEasyChatInstructionsText(const u8 **str1, const u8 **str2)
+void GetEasyChatInstructionsText(const u8** str1, const u8** str2)
 {
     *str1 = sEasyChatScreenTemplates[sEasyChatScreen->templateId].instructionsText1;
     *str2 = sEasyChatScreenTemplates[sEasyChatScreen->templateId].instructionsText2;
 }
 
-void GetEasyChatConfirmText(const u8 **str1, const u8 **str2)
+void GetEasyChatConfirmText(const u8** str1, const u8** str2)
 {
     *str1 = sEasyChatScreenTemplates[sEasyChatScreen->templateId].confirmText1;
     *str2 = sEasyChatScreenTemplates[sEasyChatScreen->templateId].confirmText2;
 }
 
-void GetEasyChatConfirmCancelText(const u8 **str1, const u8 **str2)
+void GetEasyChatConfirmCancelText(const u8** str1, const u8** str2)
 {
     switch (sEasyChatScreen->type)
     {
@@ -1246,13 +1246,13 @@ void GetEasyChatConfirmCancelText(const u8 **str1, const u8 **str2)
 
 }
 
-void GetEasyChatConfirmDeletionText(const u8 **str1, const u8 **str2)
+void GetEasyChatConfirmDeletionText(const u8** str1, const u8** str2)
 {
     *str1 = gText_AllTextBeingEditedWill;
     *str2 = gText_BeDeletedThatOkay;
 }
 
-void GetECSelectGroupCursorCoords(u8 *Xp, u8 *Yp)
+void GetECSelectGroupCursorCoords(u8* Xp, u8* Yp)
 {
     *Xp = sEasyChatScreen->selectGroupCursorX;
     *Yp = sEasyChatScreen->selectGroupCursorY;
@@ -1268,7 +1268,7 @@ u8 GetECSelectGroupRowsAbove(void)
     return sEasyChatScreen->selectGroupRowsAbove;
 }
 
-void GetECSelectWordCursorCoords(s8 *Xp, s8 *Yp)
+void GetECSelectWordCursorCoords(s8* Xp, s8* Yp)
 {
     *Xp = sEasyChatScreen->selectWordCursorX;
     *Yp = sEasyChatScreen->selectWordCursorY;
@@ -1323,7 +1323,7 @@ bool32 ShouldDrawECDownArrow(void)
     return FALSE;
 }
 
-static bool8 IsPhraseDifferentThanPlayerInput(const u16 *phrase, u8 phraseLength)
+static bool8 IsPhraseDifferentThanPlayerInput(const u16* phrase, u8 phraseLength)
 {
     u8 i;
 

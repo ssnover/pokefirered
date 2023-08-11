@@ -16,7 +16,7 @@ unsigned char gFontPalette[][3] = {
 	{0xFF, 0xFF, 0xFF}  // box (white)
 };
 
-static void ConvertFromLatinFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertFromLatinFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	unsigned int srcPixelsOffset = 0;
 
@@ -26,7 +26,7 @@ static void ConvertFromLatinFont(unsigned char *src, unsigned char *dest, unsign
 				unsigned int pixelsX = (column * 16) + ((glyphTile & 1) * 8);
 
 				for (unsigned int i = 0; i < 8; i++) {
-					unsigned int pixelsY = (row * 16) + ((glyphTile >> 1) * 8) + i;				
+					unsigned int pixelsY = (row * 16) + ((glyphTile >> 1) * 8) + i;
 					unsigned int destPixelsOffset = (pixelsY * 64) + (pixelsX / 4);
 
 					dest[destPixelsOffset] = src[srcPixelsOffset + 1];
@@ -39,7 +39,7 @@ static void ConvertFromLatinFont(unsigned char *src, unsigned char *dest, unsign
 	}
 }
 
-static void ConvertToLatinFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertToLatinFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	unsigned int destPixelsOffset = 0;
 
@@ -62,7 +62,7 @@ static void ConvertToLatinFont(unsigned char *src, unsigned char *dest, unsigned
 	}
 }
 
-static void ConvertFromHalfwidthJapaneseFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertFromHalfwidthJapaneseFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	for (unsigned int row = 0; row < numRows; row++) {
 		for (unsigned int column = 0; column < 16; column++) {
@@ -75,7 +75,7 @@ static void ConvertFromHalfwidthJapaneseFont(unsigned char *src, unsigned char *
 				for (unsigned int i = 0; i < 8; i++) {
 					unsigned int pixelsY = (row * 16) + (glyphTile * 8) + i;
 					unsigned int destPixelsOffset = (pixelsY * 32) + (pixelsX / 4);
-					
+
 					dest[destPixelsOffset] = src[srcPixelsOffset + 1];
 					dest[destPixelsOffset + 1] = src[srcPixelsOffset];
 
@@ -86,7 +86,7 @@ static void ConvertFromHalfwidthJapaneseFont(unsigned char *src, unsigned char *
 	}
 }
 
-static void ConvertToHalfwidthJapaneseFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertToHalfwidthJapaneseFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	for (unsigned int row = 0; row < numRows; row++) {
 		for (unsigned int column = 0; column < 16; column++) {
@@ -110,7 +110,7 @@ static void ConvertToHalfwidthJapaneseFont(unsigned char *src, unsigned char *de
 	}
 }
 
-static void ConvertFromFullwidthJapaneseFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertFromFullwidthJapaneseFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	for (unsigned int row = 0; row < numRows; row++) {
 		for (unsigned int column = 0; column < 16; column++) {
@@ -134,7 +134,7 @@ static void ConvertFromFullwidthJapaneseFont(unsigned char *src, unsigned char *
 	}
 }
 
-static void ConvertToFullwidthJapaneseFont(unsigned char *src, unsigned char *dest, unsigned int numRows)
+static void ConvertToFullwidthJapaneseFont(unsigned char* src, unsigned char* dest, unsigned int numRows)
 {
 	for (unsigned int row = 0; row < numRows; row++) {
 		for (unsigned int column = 0; column < 16; column++) {
@@ -158,7 +158,7 @@ static void ConvertToFullwidthJapaneseFont(unsigned char *src, unsigned char *de
 	}
 }
 
-static void SetFontPalette(struct Image *image)
+static void SetFontPalette(struct Image* image)
 {
 	image->hasPalette = true;
 
@@ -173,10 +173,10 @@ static void SetFontPalette(struct Image *image)
 	image->hasTransparency = false;
 }
 
-void ReadLatinFont(char *path, struct Image *image)
+void ReadLatinFont(char* path, struct Image* image)
 {
 	int fileSize;
-	unsigned char *buffer = ReadWholeFile(path, &fileSize);
+	unsigned char* buffer = ReadWholeFile(path, &fileSize);
 
 	int numGlyphs = fileSize / 64;
 
@@ -200,7 +200,7 @@ void ReadLatinFont(char *path, struct Image *image)
 	SetFontPalette(image);
 }
 
-void WriteLatinFont(char *path, struct Image *image)
+void WriteLatinFont(char* path, struct Image* image)
 {
 	if (image->width != 256)
 		FATAL_ERROR("The width of the font image (%d) is not 256.\n", image->width);
@@ -210,7 +210,7 @@ void WriteLatinFont(char *path, struct Image *image)
 
 	int numRows = image->height / 16;
 	int bufferSize = numRows * 16 * 64;
-	unsigned char *buffer = malloc(bufferSize);
+	unsigned char* buffer = malloc(bufferSize);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for font.\n");
@@ -222,10 +222,10 @@ void WriteLatinFont(char *path, struct Image *image)
 	free(buffer);
 }
 
-void ReadHalfwidthJapaneseFont(char *path, struct Image *image)
+void ReadHalfwidthJapaneseFont(char* path, struct Image* image)
 {
 	int fileSize;
-	unsigned char *buffer = ReadWholeFile(path, &fileSize);
+	unsigned char* buffer = ReadWholeFile(path, &fileSize);
 
 	int glyphSize = 32;
 
@@ -233,7 +233,7 @@ void ReadHalfwidthJapaneseFont(char *path, struct Image *image)
 		FATAL_ERROR("The file size (%d) is not a multiple of %d.\n", fileSize, glyphSize);
 
 	int numGlyphs = fileSize / glyphSize;
-	
+
 	if (numGlyphs % 16 != 0)
 		FATAL_ERROR("The number of glyphs (%d) is not a multiple of 16.\n", numGlyphs);
 
@@ -254,7 +254,7 @@ void ReadHalfwidthJapaneseFont(char *path, struct Image *image)
 	SetFontPalette(image);
 }
 
-void WriteHalfwidthJapaneseFont(char *path, struct Image *image)
+void WriteHalfwidthJapaneseFont(char* path, struct Image* image)
 {
 	if (image->width != 128)
 		FATAL_ERROR("The width of the font image (%d) is not 128.\n", image->width);
@@ -264,7 +264,7 @@ void WriteHalfwidthJapaneseFont(char *path, struct Image *image)
 
 	int numRows = image->height / 16;
 	int bufferSize = numRows * 16 * 32;
-	unsigned char *buffer = malloc(bufferSize);
+	unsigned char* buffer = malloc(bufferSize);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for font.\n");
@@ -276,10 +276,10 @@ void WriteHalfwidthJapaneseFont(char *path, struct Image *image)
 	free(buffer);
 }
 
-void ReadFullwidthJapaneseFont(char *path, struct Image *image)
+void ReadFullwidthJapaneseFont(char* path, struct Image* image)
 {
 	int fileSize;
-	unsigned char *buffer = ReadWholeFile(path, &fileSize);
+	unsigned char* buffer = ReadWholeFile(path, &fileSize);
 
 	int numGlyphs = fileSize / 64;
 
@@ -303,7 +303,7 @@ void ReadFullwidthJapaneseFont(char *path, struct Image *image)
 	SetFontPalette(image);
 }
 
-void WriteFullwidthJapaneseFont(char *path, struct Image *image)
+void WriteFullwidthJapaneseFont(char* path, struct Image* image)
 {
 	if (image->width != 256)
 		FATAL_ERROR("The width of the font image (%d) is not 256.\n", image->width);
@@ -313,7 +313,7 @@ void WriteFullwidthJapaneseFont(char *path, struct Image *image)
 
 	int numRows = image->height / 16;
 	int bufferSize = numRows * 16 * 64;
-	unsigned char *buffer = malloc(bufferSize);
+	unsigned char* buffer = malloc(bufferSize);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for font.\n");

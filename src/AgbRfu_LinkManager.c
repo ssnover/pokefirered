@@ -84,7 +84,7 @@ static void rfu_LMAN_endManager(void)
     lman.parent_child = MODE_NEUTRAL;
 }
 
-void rfu_LMAN_initializeRFU(INIT_PARAM *init_parameters)
+void rfu_LMAN_initializeRFU(INIT_PARAM* init_parameters)
 {
     rfu_LMAN_clearVariables();
     lman.state = LMAN_STATE_SOFT_RESET_AND_CHECK_ID;
@@ -122,10 +122,10 @@ void rfu_LMAN_powerDownRFU(void)
     lman.state = LMAN_STATE_STOP_MODE;
 }
 
-u8 rfu_LMAN_establishConnection(u8 parent_child, u16 connect_period, u16 name_accept_period, u16 *acceptable_serialNo_list)
+u8 rfu_LMAN_establishConnection(u8 parent_child, u16 connect_period, u16 name_accept_period, u16* acceptable_serialNo_list)
 {
     u8 i;
-    u16 *serial_list;
+    u16* serial_list;
 
     if (lman.state != LMAN_STATE_READY && (lman.state != LMAN_STATE_WAIT_RECV_CHILD_NAME || parent_child != MODE_PARENT))
     {
@@ -451,11 +451,11 @@ void rfu_LMAN_manager_entity(u32 rand)
             case LMAN_FORCED_STOP_AND_RFU_RESET:
                 if (rfu_LMAN_REQBN_softReset_and_checkID() == RFU_ID)
                 {
-                    msg=LMAN_MSG_MANAGER_FORCED_STOPPED_AND_RFU_RESET;
+                    msg = LMAN_MSG_MANAGER_FORCED_STOPPED_AND_RFU_RESET;
                 }
                 else
                 {
-                    msg=LMAN_MSG_RFU_FATAL_ERROR;
+                    msg = LMAN_MSG_RFU_FATAL_ERROR;
                 }
                 lman.state = lman.next_state = LMAN_STATE_READY;
                 rfu_LMAN_occureCallback(msg, 0);
@@ -479,7 +479,7 @@ void rfu_LMAN_manager_entity(u32 rand)
                 rfu_REQ_configSystem(lman.init_param->availSlot_flag, lman.init_param->maxMFrame, lman.init_param->MC_TimerCount);
                 break;
             case LMAN_STATE_CONFIG_GAME_DATA:
-                rfu_REQ_configGameData(lman.init_param->mboot_flag, lman.init_param->serialNo, (const u8 *)lman.init_param->gameName, lman.init_param->userName);
+                rfu_REQ_configGameData(lman.init_param->mboot_flag, lman.init_param->serialNo, (const u8*)lman.init_param->gameName, lman.init_param->userName);
                 break;
             case LMAN_STATE_START_SEARCH_CHILD:
                 rfu_REQ_startSearchChild();
@@ -596,7 +596,7 @@ static void rfu_LMAN_settingPCSWITCH(u32 rand)
 static void rfu_LMAN_REQ_callback(u16 reqCommandId, u16 reqResult)
 {
     u8 status;
-    u8 *stwiRecvBuffer;
+    u8* stwiRecvBuffer;
     u8 i;
 
     if (lman.active != 0)
@@ -1003,7 +1003,7 @@ static void rfu_LMAN_PARENT_checkRecvChildName(void)
     u8 i;
     u8 flags;
     u8 tgtSlot;
-    const u16 *ptr;
+    const u16* ptr;
 
     if (lman.state == LMAN_STATE_START_SEARCH_CHILD || lman.state == LMAN_STATE_POLL_SEARCH_CHILD || lman.state == LMAN_STATE_END_SEARCH_CHILD || lman.state == LMAN_STATE_WAIT_RECV_CHILD_NAME)
     {
@@ -1176,7 +1176,7 @@ static void rfu_LMAN_CHILD_linkRecoveryProcess(void)
 static u8 rfu_LMAN_CHILD_checkEnableParentCandidate(void)
 {
     u8 i;
-    u16 *serialNo;
+    u16* serialNo;
     u8 flags = 0x00;
 
     for (i = 0; i < gRfuLinkStatus->findParentCount; i++)

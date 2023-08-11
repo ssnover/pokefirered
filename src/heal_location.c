@@ -40,7 +40,7 @@ static u32 GetHealLocationIndexFromMapGroupAndNum(u16 mapGroup, u16 mapNum)
     return 0;
 }
 
-static const struct HealLocation * GetHealLocationPointerFromMapGroupAndNum(u16 mapGroup, u16 mapNum)
+static const struct HealLocation* GetHealLocationPointerFromMapGroupAndNum(u16 mapGroup, u16 mapNum)
 {
     u32 i = GetHealLocationIndexFromMapGroupAndNum(mapGroup, mapNum);
     if (i == 0)
@@ -49,7 +49,7 @@ static const struct HealLocation * GetHealLocationPointerFromMapGroupAndNum(u16 
     return &sSpawnPoints[i - 1];
 }
 
-const struct HealLocation * GetHealLocation(u32 idx)
+const struct HealLocation* GetHealLocation(u32 idx)
 {
     if (idx == 0)
         return NULL;
@@ -58,7 +58,7 @@ const struct HealLocation * GetHealLocation(u32 idx)
     return &sSpawnPoints[idx - 1];
 }
 
-void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
+void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData* warp)
 {
     u32 healLocationIdx;
 

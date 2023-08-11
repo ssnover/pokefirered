@@ -50,37 +50,37 @@ static const union AnimCmd sAnimCmd_RSMay_1[] = {
     ANIMCMD_END
 };
 
-const union AnimCmd *const sBackAnims_Red[] = {
+const union AnimCmd* const sBackAnims_Red[] = {
     sAnim_GeneralFrame0,
     sAnimCmd_Red_1
 };
 
-const union AnimCmd *const sBackAnims_Leaf[] = {
+const union AnimCmd* const sBackAnims_Leaf[] = {
     sAnim_GeneralFrame0,
     sAnimCmd_Leaf_1
 };
 
-const union AnimCmd *const sBackAnims_Pokedude[] = {
+const union AnimCmd* const sBackAnims_Pokedude[] = {
     sAnim_GeneralFrame0,
     sAnimCmd_Pokedude_1
 };
 
-const union AnimCmd *const sBackAnims_OldMan[] = {
+const union AnimCmd* const sBackAnims_OldMan[] = {
     sAnim_GeneralFrame0,
     sAnimCmd_OldMan_1
 };
 
-const union AnimCmd *const sBackAnims_RSBrendan[] = {
+const union AnimCmd* const sBackAnims_RSBrendan[] = {
     sAnim_GeneralFrame3,
     sAnimCmd_RSBrendan_1
 };
 
-const union AnimCmd *const sBackAnims_RSMay[] = {
+const union AnimCmd* const sBackAnims_RSMay[] = {
     sAnim_GeneralFrame3,
     sAnimCmd_RSMay_1
 };
 
-const union AnimCmd *const *const gTrainerBackAnimsPtrTable[] = {
+const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] = {
     sBackAnims_Red,
     sBackAnims_Leaf,
     sBackAnims_RSBrendan,

@@ -9,10 +9,10 @@ static void Task_MinigameCountdown(u8 taskId);
 static bool32 RunMinigameCountdownDigitsAnim(u8 spriteId);
 static void StartStartGraphic(u8 spriteId1, u8 spriteId2, u8 spriteId3);
 static bool32 IsStartGraphicAnimRunning(u8 spriteId);
-static void SpriteCB_Start(struct Sprite *sprite);
+static void SpriteCB_Start(struct Sprite* sprite);
 static void Load321StartGfx(u16 tilesTag, u16 palTag);
 static u8 CreateNumberSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subpriority);
-static void CreateStartSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subpriority, s16 * spriteId2_p, s16 * spriteId3_p);
+static void CreateStartSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subpriority, s16* spriteId2_p, s16* spriteId3_p);
 
 #define tState       data[0]
 #define tTilesTag    data[2]
@@ -41,7 +41,7 @@ bool32 IsMinigameCountdownRunning(void)
 
 static void Task_MinigameCountdown(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -75,7 +75,7 @@ static void Task_MinigameCountdown(u8 taskId)
 
 static bool32 RunMinigameCountdownDigitsAnim(u8 spriteId)
 {
-    struct Sprite *sprite = &gSprites[spriteId];
+    struct Sprite* sprite = &gSprites[spriteId];
 
     switch (sprite->data[0])
     {
@@ -159,9 +159,9 @@ static bool32 IsStartGraphicAnimRunning(u8 spriteId)
     return gSprites[spriteId].callback == SpriteCB_Start;
 }
 
-static void SpriteCB_Start(struct Sprite *sprite)
+static void SpriteCB_Start(struct Sprite* sprite)
 {
-    s16 * data = sprite->data;
+    s16* data = sprite->data;
     s32 y;
 
     switch (sprite->data[0])
@@ -215,8 +215,8 @@ static const u16 sSpriteSheet_321Start[] = INCBIN_U16("graphics/misc/minigame_co
 
 static void Load321StartGfx(u16 tilesTag, u16 palTag)
 {
-    struct CompressedSpriteSheet spriteSheet = {(const void *)sSpriteSheet_321Start, 0xE00};
-    struct SpritePalette spritePalette = {sSpritePal_321Start};
+    struct CompressedSpriteSheet spriteSheet = { (const void*)sSpriteSheet_321Start, 0xE00 };
+    struct SpritePalette spritePalette = { sSpritePal_321Start };
     spriteSheet.tag = tilesTag;
     spritePalette.tag = palTag;
     LoadCompressedSpriteSheet(&spriteSheet);
@@ -236,21 +236,21 @@ static const struct OamData sOamData_Start = {
 };
 
 static const union AnimCmd sAnim_Numbers_Three[] = {
-    ANIMCMD_FRAME( 0, 1),
-	ANIMCMD_END
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_Numbers_Two[] = {
     ANIMCMD_FRAME(16, 1),
-	ANIMCMD_END
+    ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_Numbers_One[] = {
     ANIMCMD_FRAME(32, 1),
-	ANIMCMD_END
+    ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_Numbers[] = {
+static const union AnimCmd* const sAnimTable_Numbers[] = {
     sAnim_Numbers_Three,
     sAnim_Numbers_Two,
     sAnim_Numbers_One
@@ -266,35 +266,35 @@ static const union AnimCmd sAnim_StartRight[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnimTable_Start[] = {
+static const union AnimCmd* const sAnimTable_Start[] = {
     sAnim_StartLeft,
     sAnim_StartRight
 };
 
 static const union AffineAnimCmd sAffineAnim_Numbers_0[] = {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),
-	AFFINEANIMCMD_END
+    AFFINEANIMCMD_END
 };
 
 static const union AffineAnimCmd sAffineAnim_Numbers_1[] = {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),
-	AFFINEANIMCMD_FRAME( 0x10, -0x10, 0, 8),
-	AFFINEANIMCMD_END
+    AFFINEANIMCMD_FRAME(0x10, -0x10, 0, 8),
+    AFFINEANIMCMD_END
 };
 
 static const union AffineAnimCmd sAffineAnim_Numbers_2[] = {
     AFFINEANIMCMD_FRAME(-0x12,  0x12, 0, 8),
-	AFFINEANIMCMD_END
+    AFFINEANIMCMD_END
 };
 
 static const union AffineAnimCmd sAffineAnim_Numbers_3[] = {
-    AFFINEANIMCMD_FRAME(  0x6,  -0x6, 0, 8),
-	AFFINEANIMCMD_FRAME( -0x4,   0x4, 0, 8),
-	AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),
-	AFFINEANIMCMD_END
+    AFFINEANIMCMD_FRAME(0x6,  -0x6, 0, 8),
+    AFFINEANIMCMD_FRAME(-0x4,   0x4, 0, 8),
+    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),
+    AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnimTable_Numbers[] = {
+static const union AffineAnimCmd* const sAffineAnimTable_Numbers[] = {
     sAffineAnim_Numbers_0,
     sAffineAnim_Numbers_1,
     sAffineAnim_Numbers_2,
@@ -314,7 +314,7 @@ static u8 CreateNumberSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subprior
     return CreateSprite(&spriteTemplate, x, y, subpriority);
 }
 
-static void CreateStartSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subpriority, s16 * spriteId2_p, s16 * spriteId3_p)
+static void CreateStartSprite(u16 tilesTag, u16 palTag, s16 x, s16 y, u8 subpriority, s16* spriteId2_p, s16* spriteId3_p)
 {
     struct SpriteTemplate spriteTemplate = {
         .oam = &sOamData_Start,

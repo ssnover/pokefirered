@@ -3326,7 +3326,7 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
         break;
     case MON_DATA_SPECIES_OR_EGG:
         break;
-    // why did FRLG go out of its way to specify all of these for default?
+        // why did FRLG go out of its way to specify all of these for default?
     case MON_DATA_IVS:
     case MON_DATA_CHAMPION_RIBBON:
     case MON_DATA_WINNING_RIBBON:
@@ -4018,7 +4018,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
         switch (cmdIndex)
         {
 
-        // Handle ITEM0 effects (infatuation, Dire Hit, X Attack). ITEM0_SACRED_ASH is handled in party_menu.c
+            // Handle ITEM0 effects (infatuation, Dire Hit, X Attack). ITEM0_SACRED_ASH is handled in party_menu.c
         case 0:
             // Cure infatuation
             if ((itemEffect[cmdIndex] & ITEM0_INFATUATION) && gMain.inBattle && battleMonId != MAX_BATTLERS_COUNT && (gBattleMons[battleMonId].status2 & STATUS2_INFATUATION))
@@ -4044,7 +4044,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             }
             break;
 
-        // Handle ITEM1 effects (in-battle stat boosting effects)
+            // Handle ITEM1 effects (in-battle stat boosting effects)
         case 1:
             // X Defend
             if ((itemEffect[cmdIndex] & ITEM1_X_DEFEND) && gBattleMons[gActiveBattler].statStages[STAT_DEF] < MAX_STAT_STAGE)
@@ -4065,7 +4065,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             }
             break;
 
-        // Handle ITEM2 effects (more stat boosting effects)
+            // Handle ITEM2 effects (more stat boosting effects)
         case 2:
             // X Accuracy
             if ((itemEffect[cmdIndex] & ITEM2_X_ACCURACY) && gBattleMons[gActiveBattler].statStages[STAT_ACC] < MAX_STAT_STAGE)
@@ -4086,7 +4086,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             }
             break;
 
-        // Handle ITEM3 effects (Guard Spec, Rare Candy, cure status)
+            // Handle ITEM3 effects (Guard Spec, Rare Candy, cure status)
         case 3:
             // Guard Spec
             if ((itemEffect[cmdIndex] & ITEM3_GUARD_SPEC) && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
@@ -4127,7 +4127,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             }
             break;
 
-        // Handle ITEM4 effects (Change HP/Atk EVs, HP heal, PP heal, PP up, Revive, and evolution stones)
+            // Handle ITEM4 effects (Change HP/Atk EVs, HP heal, PP heal, PP up, Revive, and evolution stones)
         case 4:
             val = itemEffect[cmdIndex];
 
@@ -4351,7 +4351,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             }
             break;
 
-        // Handle ITEM5 effects (Change Def/SpDef/SpAtk/Speed EVs, PP Max, and friendship changes)
+            // Handle ITEM5 effects (Change Def/SpDef/SpAtk/Speed EVs, PP Max, and friendship changes)
         case 5:
             val = itemEffect[cmdIndex];
             i = 0;
@@ -4534,7 +4534,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
     {
         switch (cmdIndex)
         {
-        // status healing effects
+            // status healing effects
         case 0:
             // Cure infatuation
             if (itemEffect[cmdIndex] & ITEM0_INFATUATION && gMain.inBattle && battlerId != MAX_BATTLERS_COUNT && gBattleMons[battlerId].status2 & STATUS2_INFATUATION)
@@ -4549,7 +4549,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                 retVal = FALSE;
             break;
 
-        // Handle ITEM1 effects (in-battle stat boosting effects)
+            // Handle ITEM1 effects (in-battle stat boosting effects)
         case 1:
             // X Defend
             if ((itemEffect[cmdIndex] & ITEM1_X_DEFEND) && gBattleMons[gActiveBattler].statStages[STAT_DEF] < MAX_STAT_STAGE)
@@ -4560,7 +4560,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                 retVal = FALSE;
             break;
 
-        // Handle ITEM2 effects (more stat boosting effects)
+            // Handle ITEM2 effects (more stat boosting effects)
         case 2:
             // X Accuracy
             if ((itemEffect[cmdIndex] & ITEM2_X_ACCURACY) && gBattleMons[gActiveBattler].statStages[STAT_ACC] < MAX_STAT_STAGE)
@@ -4571,7 +4571,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                 retVal = FALSE;
             break;
 
-        // Handle ITEM3 effects (Guard Spec, Rare Candy, cure status
+            // Handle ITEM3 effects (Guard Spec, Rare Candy, cure status
         case 3:
             // Guard Spec
             if ((itemEffect[cmdIndex] & ITEM3_GUARD_SPEC) && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
@@ -4597,7 +4597,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                 retVal = FALSE;
             break;
 
-        // Handle ITEM4 effects (Change HP/Atk EVs, HP heal, PP heal, PP up, Revive, and evolution stones)
+            // Handle ITEM4 effects (Change HP/Atk EVs, HP heal, PP heal, PP up, Revive, and evolution stones)
         case 4:
             curEffect = itemEffect[cmdIndex];
 
@@ -4691,7 +4691,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
             }
             break;
 
-        // Handle ITEM5 effects (Change Def/SpDef/SpAtk/Speed EVs, PP Max, and friendship changes)
+            // Handle ITEM5 effects (Change Def/SpDef/SpAtk/Speed EVs, PP Max, and friendship changes)
         case 5:
             curEffect = itemEffect[cmdIndex];
             i = 0;
@@ -4976,7 +4976,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 if (friendship >= 220)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
-            // FR/LG removed the time of day evolutions due to having no RTC.
+                // FR/LG removed the time of day evolutions due to having no RTC.
             case EVO_FRIENDSHIP_DAY:
                 /*
                 RtcCalcLocalTime();
@@ -5311,12 +5311,12 @@ u8 GetTrainerEncounterMusicId(u16 trainerId)
 
 static u16 ModifyStatByNature(u8 nature, u16 stat, u8 statIndex)
 {
-// Because this is a u16 it will be unable to store the
-// result of the multiplication for any stat > 595 for a
-// positive nature and > 728 for a negative nature.
-// Neither occur in the base game, but this can happen if
-// any Nature-affected base stat is increased to a value
-// above 248. The closest by default is Shuckle at 230.
+    // Because this is a u16 it will be unable to store the
+    // result of the multiplication for any stat > 595 for a
+    // positive nature and > 728 for a negative nature.
+    // Neither occur in the base game, but this can happen if
+    // any Nature-affected base stat is increased to a value
+    // above 248. The closest by default is Shuckle at 230.
 #ifdef BUGFIX
     u32 retVal;
 #else

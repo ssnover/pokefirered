@@ -28,9 +28,9 @@ enum MailIconParam
 
 struct MailEcWordLayout
 {
-    u32 numWordsInLine:2;
-    u32 lineXoffset:6;
-    u32 lineHeight:8;
+    u32 numWordsInLine : 2;
+    u32 lineXoffset : 6;
+    u32 lineHeight : 8;
 };
 
 struct MailAttrStruct
@@ -40,14 +40,14 @@ struct MailAttrStruct
     u8 nameX;
     u8 messageTop;
     u8 messageLeft;
-    const struct MailEcWordLayout * linesLayout;
+    const struct MailEcWordLayout* linesLayout;
 };
 
 struct MailGfxData
 {
-    const void *pal;
-    const void *tiles;
-    const void *map;
+    const void* pal;
+    const void* tiles;
+    const void* map;
     u32 size;
     u16 textpals[2];
 };
@@ -57,7 +57,7 @@ struct MailViewResources {
     u8 authorNameBuffer[12];
     void (*savedCallback)(void);
     void (*showMailCallback)(void);
-    struct Mail * mail;
+    struct Mail* mail;
     bool8 messageExists;
     u8 nameX;
     u8 mailType;
@@ -65,14 +65,14 @@ struct MailViewResources {
     u8 monIconSpriteId;
     u8 unused;
     u8 mailArrangementType;
-    u8 *(*copyEasyChatWord)(u8 *dest, u16 word);
-    u8 *(*convertEasyChatWordsToString)(u8 *dest, const u16 *src, u16 length1, u16 length2);
-    const struct MailAttrStruct * messageLayout;
+    u8* (*copyEasyChatWord)(u8* dest, u16 word);
+    u8* (*convertEasyChatWordsToString)(u8* dest, const u16* src, u16 length1, u16 length2);
+    const struct MailAttrStruct* messageLayout;
     u16 bg1TilemapBuffer[BG_SCREEN_SIZE];
     u16 bg2TilemapBuffer[BG_SCREEN_SIZE];
 };
 
-static EWRAM_DATA struct MailViewResources * sMailViewResources = NULL;
+static EWRAM_DATA struct MailViewResources* sMailViewResources = NULL;
 
 static void CB2_InitMailView(void);
 static void BufferMailMessage(void);
@@ -139,14 +139,14 @@ static const u16 sGenderPals[][2] = {
 };
 
 static const struct MailGfxData sGfxHeaders[] = {
-    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)]  = {
+    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)] = {
         .pal = gFile_graphics_mail_orange_palette_pal,
         .tiles = gFile_graphics_mail_orange_tiles_sheet,
         .map = gFile_graphics_mail_orange_map_tilemap,
         .size = 0x2c0,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)]  = {
+    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)] = {
         .pal = gFile_graphics_mail_harbor_palette_pal,
         .tiles = gFile_graphics_mail_harbor_tiles_sheet,
         .map = gFile_graphics_mail_harbor_map_tilemap,
@@ -160,63 +160,63 @@ static const struct MailGfxData sGfxHeaders[] = {
         .size = 0x400,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_MECH_MAIL)]    = {
+    [ITEM_TO_MAIL(ITEM_MECH_MAIL)] = {
         .pal = gFile_graphics_mail_mech_palette_pal,
         .tiles = gFile_graphics_mail_mech_tiles_sheet,
         .map = gFile_graphics_mail_mech_map_tilemap,
         .size = 0x1e0,
         .textpals = { RGB(31, 31, 31), RGB(17, 17, 17) }
     },
-    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)]    = {
+    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)] = {
         .pal = gFile_graphics_mail_wood_palette_pal,
         .tiles = gFile_graphics_mail_wood_tiles_sheet,
         .map = gFile_graphics_mail_wood_map_tilemap,
         .size = 0x2e0,
         .textpals = { RGB(31, 31, 31), RGB(17, 17, 17) }
     },
-    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)]    = {
+    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)] = {
         .pal = gFile_graphics_mail_wave_palette_pal,
         .tiles = gFile_graphics_mail_wave_tiles_sheet,
         .map = gFile_graphics_mail_wave_map_tilemap,
         .size = 0x300,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)]    = {
+    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)] = {
         .pal = gFile_graphics_mail_bead_palette_pal,
         .tiles = gFile_graphics_mail_bead_tiles_sheet,
         .map = gFile_graphics_mail_bead_map_tilemap,
         .size = 0x140,
         .textpals = { RGB(31, 31, 31), RGB(17, 17, 17) }
     },
-    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)]  = {
+    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)] = {
         .pal = gFile_graphics_mail_shadow_palette_pal,
         .tiles = gFile_graphics_mail_shadow_tiles_sheet,
         .map = gFile_graphics_mail_shadow_map_tilemap,
         .size = 0x300,
         .textpals = { RGB(31, 31, 31), RGB(17, 17, 17) }
     },
-    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)]  = {
+    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)] = {
         .pal = gFile_graphics_mail_tropic_palette_pal,
         .tiles = gFile_graphics_mail_tropic_tiles_sheet,
         .map = gFile_graphics_mail_tropic_map_tilemap,
         .size = 0x220,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)]   = {
+    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)] = {
         .pal = gFile_graphics_mail_dream_palette_pal,
         .tiles = gFile_graphics_mail_dream_tiles_sheet,
         .map = gFile_graphics_mail_dream_map_tilemap,
         .size = 0x340,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_FAB_MAIL)]     = {
+    [ITEM_TO_MAIL(ITEM_FAB_MAIL)] = {
         .pal = gFile_graphics_mail_fab_palette_pal,
         .tiles = gFile_graphics_mail_fab_tiles_sheet,
         .map = gFile_graphics_mail_fab_map_tilemap,
         .size = 0x2a0,
         .textpals = { RGB(10, 10, 10), RGB(25, 25, 25) }
     },
-    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)]   = {
+    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)] = {
         .pal = gFile_graphics_mail_retro_palette_pal,
         .tiles = gFile_graphics_mail_retro_tiles_sheet,
         .map = gFile_graphics_mail_retro_map_tilemap,
@@ -226,218 +226,218 @@ static const struct MailGfxData sGfxHeaders[] = {
 };
 
 static const struct MailEcWordLayout sLayout_3x3[] = {
-    { .numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 }
+    {.numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 3, .lineXoffset = 0, .lineHeight = 16 }
 };
 
 static const struct MailAttrStruct sMessageLayouts_3x3[] = {
-    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)]  = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)]  = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
     [ITEM_TO_MAIL(ITEM_GLITTER_MAIL)] = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_MECH_MAIL)]    = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_MECH_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)]    = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)]    = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)]    = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)]  = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)]  = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)]   = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_FAB_MAIL)]     = {
-    	.numRows = 3,
-    	.nameY = 8,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 4,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_FAB_MAIL)] = {
+        .numRows = 3,
+        .nameY = 8,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 4,
+        .linesLayout = sLayout_3x3
     },
-    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)]   = {
-    	.numRows = 3,
-    	.nameY = 0,
-    	.nameX = 0,
-    	.messageTop = 2,
-    	.messageLeft = 0,
-    	.linesLayout = sLayout_3x3
+    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)] = {
+        .numRows = 3,
+        .nameY = 0,
+        .nameX = 0,
+        .messageTop = 2,
+        .messageLeft = 0,
+        .linesLayout = sLayout_3x3
     },
 };
 
 static const struct MailEcWordLayout sLayout_5x2[] = {
-    { .numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
-    { .numWordsInLine = 1, .lineXoffset = 0, .lineHeight = 16 }
+    {.numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 2, .lineXoffset = 0, .lineHeight = 16 },
+    {.numWordsInLine = 1, .lineXoffset = 0, .lineHeight = 16 }
 };
 
 static const struct MailAttrStruct sMessageLayouts_5x2[] = {
-    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)]  = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 8,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_ORANGE_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 8,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)]  = {
-      	.numRows = 5,
-      	.nameY = 3,
-      	.nameX = 14,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_HARBOR_MAIL)] = {
+        .numRows = 5,
+        .nameY = 3,
+        .nameX = 14,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
     [ITEM_TO_MAIL(ITEM_GLITTER_MAIL)] = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 16,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 16,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_MECH_MAIL)]    = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 14,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_MECH_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 14,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)]    = {
-      	.numRows = 5,
-      	.nameY = 3,
-      	.nameX = 12,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_WOOD_MAIL)] = {
+        .numRows = 5,
+        .nameY = 3,
+        .nameX = 12,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)]    = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 18,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_WAVE_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 18,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)]    = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 20,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_BEAD_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 20,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)]  = {
-      	.numRows = 5,
-      	.nameY = 6,
-      	.nameX = 20,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_SHADOW_MAIL)] = {
+        .numRows = 5,
+        .nameY = 6,
+        .nameX = 20,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)]  = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 16,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_TROPIC_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 16,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)]   = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 14,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_DREAM_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 14,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_FAB_MAIL)]     = {
-      	.numRows = 5,
-      	.nameY = 8,
-      	.nameX = 16,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_FAB_MAIL)] = {
+        .numRows = 5,
+        .nameY = 8,
+        .nameX = 16,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
-    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)]   = {
-      	.numRows = 5,
-      	.nameY = 0,
-      	.nameX = 16,
-      	.messageTop = 3,
-      	.messageLeft = 8,
-      	.linesLayout = sLayout_5x2
+    [ITEM_TO_MAIL(ITEM_RETRO_MAIL)] = {
+        .numRows = 5,
+        .nameY = 0,
+        .nameX = 16,
+        .messageTop = 3,
+        .messageLeft = 8,
+        .linesLayout = sLayout_5x2
     },
 };
 
-void ReadMail(struct Mail * mail, void (*savedCallback)(void), bool8 messageExists)
+void ReadMail(struct Mail* mail, void (*savedCallback)(void), bool8 messageExists)
 {
     u16 sp0;
     u16 species;
@@ -507,7 +507,7 @@ static bool8 DoInitMailView(void)
             SetHelpContext(HELPCONTEXT_PLAYERS_PC_MAILBOX);
         break;
     case 1:
-        CpuFill16(0, (void *)OAM, OAM_SIZE);
+        CpuFill16(0, (void*)OAM, OAM_SIZE);
         break;
     case 2:
         ResetPaletteFade();

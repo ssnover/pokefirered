@@ -29,14 +29,14 @@ struct EReaderTaskData
     u8 unused6;
     u8 unused7;
     u8 status;
-    u8 *unusedBuffer;
+    u8* unusedBuffer;
 };
 
 struct EReaderData
 {
     u16 status;
     size_t size;
-    const void *data;
+    const void* data;
 };
 
 static void Task_EReader(u8);
@@ -46,7 +46,7 @@ struct EReaderData gEReaderData;
 extern const u8 gMultiBootProgram_EReader_Start[];
 extern const u8 gMultiBootProgram_EReader_End[];
 
-static void EReader_Load(struct EReaderData *eReader, size_t size, const void *data)
+static void EReader_Load(struct EReaderData* eReader, size_t size, const void* data)
 {
     vu16 imeBak = REG_IME;
     REG_IME = 0;
@@ -61,7 +61,7 @@ static void EReader_Load(struct EReaderData *eReader, size_t size, const void *d
     eReader->data = data;
 }
 
-static void EReader_Reset(struct EReaderData *eReader)
+static void EReader_Reset(struct EReaderData* eReader)
 {
     vu16 imeBak = REG_IME;
     REG_IME = 0;
@@ -79,7 +79,7 @@ enum {
     TRANSFER_TIMEOUT,
 };
 
-static u8 EReader_Transfer(struct EReaderData *eReader)
+static u8 EReader_Transfer(struct EReaderData* eReader)
 {
     u8 transferStatus = TRANSFER_ACTIVE;
     eReader->status = EReaderHandleTransfer(TRUE, eReader->size, eReader->data, NULL);
@@ -111,15 +111,15 @@ static bool32 ValidateEReaderConnection(void)
     u16 handshakes[MAX_LINK_PLAYERS];
 
     REG_IME = 0;
-    *(u64 *)handshakes = *(u64 *)gLink.tempRecvBuffer;
+    *(u64*)handshakes = *(u64*)gLink.tempRecvBuffer;
     REG_IME = imeBak;
 
     // Validate that we are player 1, the EReader is player 2,
     // and that players 3 and 4 are empty.
     if (handshakes[0] == SLAVE_HANDSHAKE
-     && handshakes[1] == EREADER_HANDSHAKE
-     && handshakes[2] == 0xFFFF
-     && handshakes[3] == 0xFFFF)
+        && handshakes[1] == EREADER_HANDSHAKE
+        && handshakes[2] == 0xFFFF
+        && handshakes[3] == 0xFFFF)
         return TRUE;
     return FALSE;
 }
@@ -151,11 +151,11 @@ enum {
     RECV_TIMEOUT,
 };
 
-static u32 TryReceiveCard(u8 * state, u16 * timer)
+static u32 TryReceiveCard(u8* state, u16* timer)
 {
     if ((*state == RECV_STATE_EXCHANGE
-      || *state == RECV_STATE_START_DISCONNECT
-      || *state == RECV_STATE_WAIT_DISCONNECT)
+        || *state == RECV_STATE_START_DISCONNECT
+        || *state == RECV_STATE_WAIT_DISCONNECT)
         && HasLinkErrorOccurred())
     {
         // Return error status if an error occurs
@@ -204,7 +204,7 @@ static u32 TryReceiveCard(u8 * state, u16 * timer)
             *state = 0;
             return RECV_TIMEOUT;
         }
-        
+
         if (IsLinkConnectionEstablished())
         {
             if (gReceivedRemoteLinkPlayers)
@@ -239,7 +239,7 @@ static u32 TryReceiveCard(u8 * state, u16 * timer)
 void CreateEReaderTask(void)
 {
     u8 taskId = CreateTask(Task_EReader, 0);
-    struct EReaderTaskData *data = (struct EReaderTaskData *)gTasks[taskId].data;
+    struct EReaderTaskData* data = (struct EReaderTaskData*)gTasks[taskId].data;
     data->state = 0;
     data->textState = 0;
     data->unused4 = 0;
@@ -254,12 +254,12 @@ void CreateEReaderTask(void)
     data->unusedBuffer = AllocZeroed(CLIENT_MAX_MSG_SIZE);
 }
 
-static void ResetTimer(u16 *timer)
+static void ResetTimer(u16* timer)
 {
     *timer = 0;
 }
 
-static bool32 UpdateTimer(u16 * timer, u16 time)
+static bool32 UpdateTimer(u16* timer, u16 time)
 {
     if (++(*timer) > time)
     {
@@ -303,7 +303,7 @@ enum {
 
 static void Task_EReader(u8 taskId)
 {
-    struct EReaderTaskData *data = (struct EReaderTaskData *)gTasks[taskId].data;
+    struct EReaderTaskData* data = (struct EReaderTaskData*)gTasks[taskId].data;
     switch (data->state)
     {
     case ER_STATE_START:
@@ -459,7 +459,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_VALIDATE_CARD:
-        data->status = ValidateTrainerTowerData((struct EReaderTrainerTowerSet *)gDecompressionBuffer);
+        data->status = ValidateTrainerTowerData((struct EReaderTrainerTowerSet*)gDecompressionBuffer);
         SetCloseLinkCallbackAndType(data->status);
         data->state = ER_STATE_WAIT_DISCONNECT;
         break;
@@ -473,7 +473,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_SAVE:
-        if (CEReaderTool_SaveTrainerTower((struct EReaderTrainerTowerSet *)gDecompressionBuffer))
+        if (CEReaderTool_SaveTrainerTower((struct EReaderTrainerTowerSet*)gDecompressionBuffer))
         {
             AddTextPrinterToWindow1(gJPText_ConnectionComplete);
             ResetTimer(&data->timer);

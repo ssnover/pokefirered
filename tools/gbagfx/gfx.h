@@ -18,25 +18,25 @@ struct Palette {
 };
 
 struct NonAffineTile {
-    unsigned short index:10;
-    unsigned short hflip:1;
-    unsigned short vflip:1;
-    unsigned short palno:4;
+	unsigned short index : 10;
+	unsigned short hflip : 1;
+	unsigned short vflip : 1;
+	unsigned short palno : 4;
 } __attribute__((packed));
 
 struct Tilemap {
-    union {
-        struct NonAffineTile *non_affine;
-        unsigned char *affine;
-    } data;
-    int size;
+	union {
+		struct NonAffineTile* non_affine;
+		unsigned char* affine;
+	} data;
+	int size;
 };
 
 struct Image {
 	int width;
 	int height;
 	int bitDepth;
-	unsigned char *pixels;
+	unsigned char* pixels;
 	bool hasPalette;
 	struct Palette palette;
 	bool hasTransparency;
@@ -45,15 +45,15 @@ struct Image {
 };
 
 enum NumTilesMode {
-    NUM_TILES_IGNORE,
-    NUM_TILES_WARN,
-    NUM_TILES_ERROR,
+	NUM_TILES_IGNORE,
+	NUM_TILES_WARN,
+	NUM_TILES_ERROR,
 };
 
-void ReadImage(char *path, int tilesWidth, int bitDepth, int metatileWidth, int metatileHeight, struct Image *image, bool invertColors);
-void WriteImage(char *path, enum NumTilesMode numTilesMode, int numTiles, int bitDepth, int metatileWidth, int metatileHeight, struct Image *image, bool invertColors);
-void FreeImage(struct Image *image);
-void ReadGbaPalette(char *path, struct Palette *palette);
-void WriteGbaPalette(char *path, struct Palette *palette);
+void ReadImage(char* path, int tilesWidth, int bitDepth, int metatileWidth, int metatileHeight, struct Image* image, bool invertColors);
+void WriteImage(char* path, enum NumTilesMode numTilesMode, int numTiles, int bitDepth, int metatileWidth, int metatileHeight, struct Image* image, bool invertColors);
+void FreeImage(struct Image* image);
+void ReadGbaPalette(char* path, struct Palette* palette);
+void WriteGbaPalette(char* path, struct Palette* palette);
 
 #endif // GFX_H

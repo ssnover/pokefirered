@@ -25,8 +25,8 @@ struct TilemapUtil
 {
     struct TilemapUtil_RectData prev; // Only read in unused function
     struct TilemapUtil_RectData cur;
-    const void *savedTilemap; // Only written in unused function
-    const void *tilemap;
+    const void* savedTilemap; // Only written in unused function
+    const void* tilemap;
     u16 altWidth; // Never read
     u16 altHeight; // Never read
     u16 width;
@@ -37,7 +37,7 @@ struct TilemapUtil
     bool8 active; // Only read in unused function
 };
 
-static EWRAM_DATA struct TilemapUtil *sTilemapUtil = NULL;
+static EWRAM_DATA struct TilemapUtil* sTilemapUtil = NULL;
 static EWRAM_DATA u16 sNumTilemapUtilIds = 0;
 
 static void TilemapUtil_DrawPrev(u8 tilemapId);
@@ -89,7 +89,7 @@ void TilemapUtil_UpdateAll(void)
     }
 }
 
-void TilemapUtil_SetTilemap(u8 tilemapId, u8 bg, const void *tilemap, u16 width, u16 height)
+void TilemapUtil_SetTilemap(u8 tilemapId, u8 bg, const void* tilemap, u16 width, u16 height)
 {
     u16 screenSize;
     u16 bgType;
@@ -123,7 +123,7 @@ void TilemapUtil_SetTilemap(u8 tilemapId, u8 bg, const void *tilemap, u16 width,
 }
 
 // Unused
-void TilemapUtil_SetSavedMap(u8 tilemapId, const void *tilemap)
+void TilemapUtil_SetSavedMap(u8 tilemapId, const void* tilemap)
 {
     if (tilemapId < sNumTilemapUtilIds)
     {
@@ -203,17 +203,17 @@ static void TilemapUtil_DrawPrev(u8 tilemapId)
 {
     int i;
     int rowSize = sTilemapUtil[tilemapId].tileSize * sTilemapUtil[tilemapId].altWidth;
-    const void *tiles = sTilemapUtil[tilemapId].savedTilemap
-                        + rowSize * sTilemapUtil[tilemapId].prev.destY
-                        + sTilemapUtil[tilemapId].prev.destX * sTilemapUtil[tilemapId].tileSize;
+    const void* tiles = sTilemapUtil[tilemapId].savedTilemap
+        + rowSize * sTilemapUtil[tilemapId].prev.destY
+        + sTilemapUtil[tilemapId].prev.destX * sTilemapUtil[tilemapId].tileSize;
     for (i = 0; i < sTilemapUtil[tilemapId].prev.height; i++)
     {
         CopyToBgTilemapBufferRect(sTilemapUtil[tilemapId].bg,
-                                  tiles,
-                                  sTilemapUtil[tilemapId].prev.destX,
-                                  sTilemapUtil[tilemapId].prev.destY + i,
-                                  sTilemapUtil[tilemapId].prev.width,
-                                  1);
+            tiles,
+            sTilemapUtil[tilemapId].prev.destX,
+            sTilemapUtil[tilemapId].prev.destY + i,
+            sTilemapUtil[tilemapId].prev.width,
+            1);
         tiles += rowSize;
     }
 }
@@ -222,17 +222,17 @@ static void TilemapUtil_Draw(u8 tilemapId)
 {
     int i;
     int rowSize = sTilemapUtil[tilemapId].tileSize * sTilemapUtil[tilemapId].width;
-    const void *tiles = sTilemapUtil[tilemapId].tilemap
-                        + rowSize * sTilemapUtil[tilemapId].cur.y
-                        + sTilemapUtil[tilemapId].cur.x * sTilemapUtil[tilemapId].tileSize;
+    const void* tiles = sTilemapUtil[tilemapId].tilemap
+        + rowSize * sTilemapUtil[tilemapId].cur.y
+        + sTilemapUtil[tilemapId].cur.x * sTilemapUtil[tilemapId].tileSize;
     for (i = 0; i < sTilemapUtil[tilemapId].cur.height; i++)
     {
         CopyToBgTilemapBufferRect(sTilemapUtil[tilemapId].bg,
-                                  tiles,
-                                  sTilemapUtil[tilemapId].cur.destX,
-                                  sTilemapUtil[tilemapId].cur.destY + i,
-                                  sTilemapUtil[tilemapId].cur.width,
-                                  1);
+            tiles,
+            sTilemapUtil[tilemapId].cur.destX,
+            sTilemapUtil[tilemapId].cur.destY + i,
+            sTilemapUtil[tilemapId].cur.width,
+            1);
         tiles += rowSize;
     }
 }

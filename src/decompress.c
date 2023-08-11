@@ -6,19 +6,19 @@
 extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 extern const struct CompressedSpriteSheet gMonBackPicTable[];
 
-static void DuplicateDeoxysTiles(void *pointer, s32 species);
+static void DuplicateDeoxysTiles(void* pointer, s32 species);
 
-void LZDecompressWram(const void *src, void *dest)
+void LZDecompressWram(const void* src, void* dest)
 {
     LZ77UnCompWram(src, dest);
 }
 
-void LZDecompressVram(const void *src, void *dest)
+void LZDecompressVram(const void* src, void* dest)
 {
     LZ77UnCompVram(src, dest);
 }
 
-u16 LoadCompressedSpriteSheet(const struct CompressedSpriteSheet *src)
+u16 LoadCompressedSpriteSheet(const struct CompressedSpriteSheet* src)
 {
     struct SpriteSheet dest;
 
@@ -29,7 +29,7 @@ u16 LoadCompressedSpriteSheet(const struct CompressedSpriteSheet *src)
     return LoadSpriteSheet(&dest);
 }
 
-void LoadCompressedSpriteSheetOverrideBuffer(const struct CompressedSpriteSheet *src, void *buffer)
+void LoadCompressedSpriteSheetOverrideBuffer(const struct CompressedSpriteSheet* src, void* buffer)
 {
     struct SpriteSheet dest;
 
@@ -40,17 +40,17 @@ void LoadCompressedSpriteSheetOverrideBuffer(const struct CompressedSpriteSheet 
     LoadSpriteSheet(&dest);
 }
 
-void LoadCompressedSpritePalette(const struct CompressedSpritePalette *src)
+void LoadCompressedSpritePalette(const struct CompressedSpritePalette* src)
 {
     struct SpritePalette dest;
 
     LZ77UnCompWram(src->data, gDecompressionBuffer);
-    dest.data = (void *) gDecompressionBuffer;
+    dest.data = (void*)gDecompressionBuffer;
     dest.tag = src->tag;
     LoadSpritePalette(&dest);
 }
 
-void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePalette *a, void *buffer)
+void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePalette* a, void* buffer)
 {
     struct SpritePalette dest;
 
@@ -60,7 +60,7 @@ void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePale
     LoadSpritePalette(&dest);
 }
 
-void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void *buffer, s32 species)
+void DecompressPicFromTable(const struct CompressedSpriteSheet* src, void* buffer, s32 species)
 {
     if (species > NUM_SPECIES)
         LZ77UnCompWram(gMonFrontPicTable[0].data, buffer);
@@ -69,7 +69,7 @@ void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void *buffe
     DuplicateDeoxysTiles(buffer, species);
 }
 
-void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality)
+void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet* src, void* dest, s32 species, u32 personality)
 {
     bool8 isFrontPic;
 
@@ -80,7 +80,7 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
     LoadSpecialPokePic(src, dest, species, personality, isFrontPic);
 }
 
-void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality, bool8 isFrontPic)
+void LoadSpecialPokePic(const struct CompressedSpriteSheet* src, void* dest, s32 species, u32 personality, bool8 isFrontPic)
 {
     if (species == SPECIES_UNOWN)
     {
@@ -105,18 +105,18 @@ void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32
     DrawSpindaSpots(species, personality, dest, isFrontPic);
 }
 
-static void DuplicateDeoxysTiles(void *pointer, s32 species)
+static void DuplicateDeoxysTiles(void* pointer, s32 species)
 {
     if (species == SPECIES_DEOXYS)
         CpuCopy32(pointer + 0x800, pointer, 0x800);
 }
 
-static void Unused_LZDecompressWramIndirect(const void **src, void *dest)
+static void Unused_LZDecompressWramIndirect(const void** src, void* dest)
 {
     LZ77UnCompWram(*src, dest);
 }
 
-static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_tiles, u8 *dest_tiles)
+static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8* src_tiles, u8* dest_tiles)
 {
     /*
       This function appears to emulate behaviour found in the GB(C) versions regarding how the Pokemon images
@@ -125,7 +125,7 @@ static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_
       that the result will have each object centered in a 8x8 tile canvas.
     */
     s32 i, j, k, l;
-    u8 *src = src_tiles, *dest = dest_tiles;
+    u8* src = src_tiles, * dest = dest_tiles;
     u8 bottom_off;
 
     if (object_size & 1)
@@ -135,7 +135,7 @@ static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_
         for (l = 0; l < object_count; l++)
         {
             // Clear all unused rows of tiles plus the half-tile required due to centering
-            for (j = 0; j < 8-object_size; j++)
+            for (j = 0; j < 8 - object_size; j++)
             {
                 for (k = 0; k < 8; k++)
                 {
@@ -144,14 +144,14 @@ static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_
                         if (j % 2 == 0)
                         {
                             // Clear top half of top tile and bottom half of bottom tile when on even j
-                            ((dest+i) + (k << 5))[((j >> 1) << 8)] = 0;
-                            ((bottom_off << 8) + (dest+i) + (k << 5) + 16)[((j >> 1) << 8)] = 0;
+                            ((dest + i) + (k << 5))[((j >> 1) << 8)] = 0;
+                            ((bottom_off << 8) + (dest + i) + (k << 5) + 16)[((j >> 1) << 8)] = 0;
                         }
                         else
                         {
                             // Clear bottom half of top tile and top half of tile following bottom tile when on odd j
-                            ((dest+i) + (k << 5) + 16)[((j >> 1) << 8)] = 0;
-                            ((bottom_off << 8) + (dest+i) + (k << 5) + 256)[((j >> 1) << 8)] = 0;
+                            ((dest + i) + (k << 5) + 16)[((j >> 1) << 8)] = 0;
+                            ((bottom_off << 8) + (dest + i) + (k << 5) + 256)[((j >> 1) << 8)] = 0;
                         }
                     }
                 }
@@ -166,9 +166,9 @@ static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_
                     for (k = 0; k < 32; k++)
                     {
                         // Left side
-                        ((dest+k) + (i << 8))[(j << 5)] = 0;
+                        ((dest + k) + (i << 8))[(j << 5)] = 0;
                         // Right side
-                        ((dest+k) + (i << 8))[(j << 5)+192] = 0;
+                        ((dest + k) + (i << 8))[(j << 5) + 192] = 0;
                     }
                 }
             }
@@ -263,9 +263,9 @@ static void StitchObjectsOn8x8Canvas(s32 object_size, s32 object_count, u8 *src_
 bool8 LoadCompressedSpriteSheetUsingHeap(const struct CompressedSpriteSheet* src)
 {
     struct SpriteSheet dest;
-    void *buffer;
+    void* buffer;
 
-    buffer = AllocZeroed(*((u32 *)src->data) >> 8);
+    buffer = AllocZeroed(*((u32*)src->data) >> 8);
     if (!buffer)
         return TRUE;
     LZ77UnCompWram(src->data, buffer);
@@ -277,12 +277,12 @@ bool8 LoadCompressedSpriteSheetUsingHeap(const struct CompressedSpriteSheet* src
     return FALSE;
 }
 
-bool8 LoadCompressedSpritePaletteUsingHeap(const struct CompressedSpritePalette *src)
+bool8 LoadCompressedSpritePaletteUsingHeap(const struct CompressedSpritePalette* src)
 {
     struct SpritePalette dest;
-    void *buffer;
+    void* buffer;
 
-    buffer = AllocZeroed(*((u32 *)src->data) >> 8);
+    buffer = AllocZeroed(*((u32*)src->data) >> 8);
     if (!buffer)
         return TRUE;
     LZ77UnCompWram(src->data, buffer);
@@ -293,10 +293,10 @@ bool8 LoadCompressedSpritePaletteUsingHeap(const struct CompressedSpritePalette 
     return FALSE;
 }
 
-u32 GetDecompressedDataSize(const u8 *ptr)
+u32 GetDecompressedDataSize(const u8* ptr)
 {
     u32 ptr32[1];
-    u8 *ptr8 = (u8 *)ptr32;
+    u8* ptr8 = (u8*)ptr32;
 
     ptr8[0] = ptr[1];
     ptr8[1] = ptr[2];
@@ -305,7 +305,7 @@ u32 GetDecompressedDataSize(const u8 *ptr)
     return ptr32[0];
 }
 
-void DecompressPicFromTable_DontHandleDeoxys(const struct CompressedSpriteSheet *src, void *buffer, s32 species)
+void DecompressPicFromTable_DontHandleDeoxys(const struct CompressedSpriteSheet* src, void* buffer, s32 species)
 {
     if (species > NUM_SPECIES)
         LZ77UnCompWram(gMonFrontPicTable[0].data, buffer);
@@ -313,7 +313,7 @@ void DecompressPicFromTable_DontHandleDeoxys(const struct CompressedSpriteSheet 
         LZ77UnCompWram(src->data, buffer);
 }
 
-void HandleLoadSpecialPokePic_DontHandleDeoxys(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality)
+void HandleLoadSpecialPokePic_DontHandleDeoxys(const struct CompressedSpriteSheet* src, void* dest, s32 species, u32 personality)
 {
     bool8 isFrontPic;
 
@@ -324,7 +324,7 @@ void HandleLoadSpecialPokePic_DontHandleDeoxys(const struct CompressedSpriteShee
     LoadSpecialPokePic_DontHandleDeoxys(src, dest, species, personality, isFrontPic);
 }
 
-void LoadSpecialPokePic_DontHandleDeoxys(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality, bool8 isFrontPic)
+void LoadSpecialPokePic_DontHandleDeoxys(const struct CompressedSpriteSheet* src, void* dest, s32 species, u32 personality, bool8 isFrontPic)
 {
     if (species == SPECIES_UNOWN)
     {

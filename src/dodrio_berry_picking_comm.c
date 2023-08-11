@@ -19,44 +19,44 @@ struct ReadyToStartPacket
 struct GameStatePacket
 {
     u8 id;
-    u8 fallDist_Col0:4;
-    u8 fallDist_Col1:4;
-    u16 fallDist_Col2:4;
-    u16 fallDist_Col3:4;
-    u16 fallDist_Col4:4;
-    u16 fallDist_Col5:4;
-    u16 fallDist_Col6:4;
-    u16 fallDist_Col7:4;
-    u16 fallDist_Col8:4;
-    u16 fallDist_Col9:4;
-    u16 berryId_Col0:2;
-    u16 berryId_Col1:2;
-    u16 berryId_Col2:2;
-    u16 berryId_Col3:2;
-    u16 berryId_Col4:2;
-    u16 berryId_Col5:2;
-    u16 berryId_Col6:2;
-    u16 berryId_Col7:2;
-    u8 berryId_Col8:2;
-    u8 berryId_Col9:2;
-    u8 pickState_Player1:2;
-    u8 pickState_Player2:2;
-    u8 pickState_Player3:2;
-    u8 pickState_Player4:2;
-    u8 pickState_Player5:2;
-    bool8 ateBerry_Player1:1;
-    bool8 ateBerry_Player2:1;
-    bool8 ateBerry_Player3:1;
-    bool8 ateBerry_Player4:1;
-    bool8 ateBerry_Player5:1;
-    u8 numGraySquares:5;
-    bool8 allReadyToEnd:1;
-    bool8 berriesFalling:1;
-    bool8 missedBerry_Player1:1;
-    bool8 missedBerry_Player2:1;
-    bool8 missedBerry_Player3:1;
-    bool8 missedBerry_Player4:1;
-    bool8 missedBerry_Player5:1;
+    u8 fallDist_Col0 : 4;
+    u8 fallDist_Col1 : 4;
+    u16 fallDist_Col2 : 4;
+    u16 fallDist_Col3 : 4;
+    u16 fallDist_Col4 : 4;
+    u16 fallDist_Col5 : 4;
+    u16 fallDist_Col6 : 4;
+    u16 fallDist_Col7 : 4;
+    u16 fallDist_Col8 : 4;
+    u16 fallDist_Col9 : 4;
+    u16 berryId_Col0 : 2;
+    u16 berryId_Col1 : 2;
+    u16 berryId_Col2 : 2;
+    u16 berryId_Col3 : 2;
+    u16 berryId_Col4 : 2;
+    u16 berryId_Col5 : 2;
+    u16 berryId_Col6 : 2;
+    u16 berryId_Col7 : 2;
+    u8 berryId_Col8 : 2;
+    u8 berryId_Col9 : 2;
+    u8 pickState_Player1 : 2;
+    u8 pickState_Player2 : 2;
+    u8 pickState_Player3 : 2;
+    u8 pickState_Player4 : 2;
+    u8 pickState_Player5 : 2;
+    bool8 ateBerry_Player1 : 1;
+    bool8 ateBerry_Player2 : 1;
+    bool8 ateBerry_Player3 : 1;
+    bool8 ateBerry_Player4 : 1;
+    bool8 ateBerry_Player5 : 1;
+    u8 numGraySquares : 5;
+    bool8 allReadyToEnd : 1;
+    bool8 berriesFalling : 1;
+    bool8 missedBerry_Player1 : 1;
+    bool8 missedBerry_Player2 : 1;
+    bool8 missedBerry_Player3 : 1;
+    bool8 missedBerry_Player4 : 1;
+    bool8 missedBerry_Player5 : 1;
 };
 
 struct PickStatePacket
@@ -81,30 +81,30 @@ void SendPacket_ReadyToStart(bool32 ready)
 
 bool8 RecvPacket_ReadyToStart(s32 playerId)
 {
-    struct ReadyToStartPacket *packet;
+    struct ReadyToStartPacket* packet;
 
     if ((gRecvCmds[0][0] & RFUCMD_MASK) != RFUCMD_SEND_PACKET)
         return FALSE;
 
-    packet = (void *)&gRecvCmds[playerId][1];
+    packet = (void*)&gRecvCmds[playerId][1];
     if (packet->id == PACKET_READY_START)
         return packet->ready;
 
     return FALSE;
 }
 
-void SendPacket_GameState(struct DodrioGame_Player *player,
-                          struct DodrioGame_PlayerCommData *player1,
-                          struct DodrioGame_PlayerCommData *player2,
-                          struct DodrioGame_PlayerCommData *player3,
-                          struct DodrioGame_PlayerCommData *player4,
-                          struct DodrioGame_PlayerCommData *player5,
-                          u8 numGraySquares,
-                          bool32 berriesFalling,
-                          bool32 allReadyToEnd)
+void SendPacket_GameState(struct DodrioGame_Player* player,
+    struct DodrioGame_PlayerCommData* player1,
+    struct DodrioGame_PlayerCommData* player2,
+    struct DodrioGame_PlayerCommData* player3,
+    struct DodrioGame_PlayerCommData* player4,
+    struct DodrioGame_PlayerCommData* player5,
+    u8 numGraySquares,
+    bool32 berriesFalling,
+    bool32 allReadyToEnd)
 {
     struct GameStatePacket packet;
-    struct DodrioGame_Berries *berries = &player->berries;
+    struct DodrioGame_Berries* berries = &player->berries;
 
     packet.id = PACKET_GAME_STATE;
     packet.fallDist_Col0 = berries->fallDist[0];
@@ -154,23 +154,23 @@ void SendPacket_GameState(struct DodrioGame_Player *player,
 }
 
 bool32 RecvPacket_GameState(u32 playerId,
-                            struct DodrioGame_Player *player,
-                            struct DodrioGame_PlayerCommData *player1,
-                            struct DodrioGame_PlayerCommData *player2,
-                            struct DodrioGame_PlayerCommData *player3,
-                            struct DodrioGame_PlayerCommData *player4,
-                            struct DodrioGame_PlayerCommData *player5,
-                            u8 *numGraySquares,
-                            bool32 *berriesFalling,
-                            bool32 *allReadyToEnd)
+    struct DodrioGame_Player* player,
+    struct DodrioGame_PlayerCommData* player1,
+    struct DodrioGame_PlayerCommData* player2,
+    struct DodrioGame_PlayerCommData* player3,
+    struct DodrioGame_PlayerCommData* player4,
+    struct DodrioGame_PlayerCommData* player5,
+    u8* numGraySquares,
+    bool32* berriesFalling,
+    bool32* allReadyToEnd)
 {
-    struct GameStatePacket *packet;
-    struct DodrioGame_Berries *berries = &player->berries;
+    struct GameStatePacket* packet;
+    struct DodrioGame_Berries* berries = &player->berries;
 
     if ((gRecvCmds[0][0] & RFUCMD_MASK) != RFUCMD_SEND_PACKET)
         return FALSE;
 
-    packet = (void *)&gRecvCmds[0][1];
+    packet = (void*)&gRecvCmds[0][1];
     if (packet->id == PACKET_GAME_STATE)
     {
         berries->fallDist[0] = packet->fallDist_Col0;
@@ -234,14 +234,14 @@ void SendPacket_PickState(u8 pickState)
     Rfu_SendPacket(&packet);
 }
 
-bool32 RecvPacket_PickState(u32 playerId, u8 *pickState)
+bool32 RecvPacket_PickState(u32 playerId, u8* pickState)
 {
-    struct PickStatePacket * packet;
+    struct PickStatePacket* packet;
 
     if ((gRecvCmds[0][0] & RFUCMD_MASK) != RFUCMD_SEND_PACKET)
         return FALSE;
 
-    packet = (void *)&gRecvCmds[playerId][1];
+    packet = (void*)&gRecvCmds[playerId][1];
     if (packet->id == PACKET_PICK_STATE)
     {
         *pickState = packet->pickState;
@@ -261,12 +261,12 @@ void SendPacket_ReadyToEnd(bool32 ready)
 
 bool32 RecvPacket_ReadyToEnd(u32 playerId)
 {
-    struct ReadyToEndPacket * packet;
+    struct ReadyToEndPacket* packet;
 
     if ((gRecvCmds[0][0] & RFUCMD_MASK) != RFUCMD_SEND_PACKET)
         return FALSE;
 
-    packet = (void *)&gRecvCmds[playerId][1];
+    packet = (void*)&gRecvCmds[playerId][1];
     if (packet->id == PACKET_READY_END)
         return packet->ready;
 

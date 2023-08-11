@@ -23,7 +23,7 @@ struct Main
 
     /*0x01C*/ vu16 intrCheck;
 
-    /*0x020*/ u32 *vblankCounter1;
+    /*0x020*/ u32* vblankCounter1;
     /*0x024*/ u32 vblankCounter2;
 
     /*0x028*/ u16 heldKeysRaw;           // held keys without L=A remapping
@@ -39,9 +39,9 @@ struct Main
 
     /*0x438*/ u8 state;
 
-    /*0x439*/ u8 oamLoadDisabled:1;
-    /*0x439*/ u8 inBattle:1;
-    /*0x439*/ u8 field_439_x4:1;
+    /*0x439*/ u8 oamLoadDisabled : 1;
+    /*0x439*/ u8 inBattle : 1;
+    /*0x439*/ u8 field_439_x4 : 1;
 };
 
 extern struct Main gMain;
@@ -62,7 +62,7 @@ void InitFlashTimer(void);
 void DoSoftReset(void);
 void ClearPokemonCrySongs(void);
 void RestoreSerialTimer3IntrHandlers(void);
-void SetVBlankCounter1Ptr(u32 *ptr);
+void SetVBlankCounter1Ptr(u32* ptr);
 void DisableVBlankCounter1(void);
 void StartTimer1(void);
 void SeedRngAndSetTrainerId(void);

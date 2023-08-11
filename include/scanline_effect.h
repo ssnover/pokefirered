@@ -16,7 +16,7 @@
 
 struct ScanlineEffectParams
 {
-    volatile void *dmaDest;
+    volatile void* dmaDest;
     u32 dmaControl;
     u8 initState;
     u8 unused9;
@@ -24,8 +24,8 @@ struct ScanlineEffectParams
 
 struct ScanlineEffect
 {
-    void *dmaSrcBuffers[2];
-    volatile void *dmaDest;
+    void* dmaSrcBuffers[2];
+    volatile void* dmaDest;
     u32 dmaControl;
     void (*setFirstScanlineReg)(void);
     u8 srcBuffer;

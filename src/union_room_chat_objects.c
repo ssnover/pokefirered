@@ -14,18 +14,18 @@ enum {
 
 struct UnionRoomChat3
 {
-    struct Sprite *selectorCursorSprite;
-    struct Sprite *characterSelectCursorSprite;
-    struct Sprite *textEntryCursorSprite;
-    struct Sprite *rButtonSprite;
-    struct Sprite *chatIconsSprite;
+    struct Sprite* selectorCursorSprite;
+    struct Sprite* characterSelectCursorSprite;
+    struct Sprite* textEntryCursorSprite;
+    struct Sprite* rButtonSprite;
+    struct Sprite* chatIconsSprite;
     u16 cursorBlinkTimer;
 };
 
-static EWRAM_DATA struct UnionRoomChat3 *sWork = NULL;
+static EWRAM_DATA struct UnionRoomChat3* sWork = NULL;
 
-static void SpriteCB_TextEntryCursor(struct Sprite *sprite);
-static void SpriteCB_CharacterSelectCursor(struct Sprite *sprite);
+static void SpriteCB_TextEntryCursor(struct Sprite* sprite);
+static void SpriteCB_CharacterSelectCursor(struct Sprite* sprite);
 
 static const u16 sUnionRoomChatInterfacePal[] = INCBIN_U16("graphics/union_room_chat/objects.gbapal");
 static const u32 sSelectorCursor_Gfx[] = INCBIN_U32("graphics/union_room_chat/selector_cursor.4bpp.lz");
@@ -91,7 +91,7 @@ static const union AnimCmd sAnim_CursorLargeClosed[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnims_SelectorCursor[] = {
+static const union AnimCmd* const sSpriteAnims_SelectorCursor[] = {
     sAnim_CursorSmallOpen,
     sAnim_CursorSmallClosed,
     sAnim_CursorLargeOpen,
@@ -163,7 +163,7 @@ static const union AnimCmd sAnim_UnionRoomChatIcons_Register[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnimTable_UnionRoomChatIcons[] = {
+static const union AnimCmd* const sSpriteAnimTable_UnionRoomChatIcons[] = {
     sAnim_UnionRoomChatIcons_ToggleCase,
     sAnim_UnionRoomChatIcons_Dummy1,
     sAnim_UnionRoomChatIcons_Dummy2,
@@ -240,7 +240,7 @@ void UnionRoomChat_MoveSelectorCursorObj(void)
 
 void UnionRoomChat_UpdateObjPalCycle(int arg0)
 {
-    const u16 *palette = &sUnionRoomChatInterfacePal[arg0 * 2 + 1];
+    const u16* palette = &sUnionRoomChatInterfacePal[arg0 * 2 + 1];
     u8 index = IndexOfSpritePaletteTag(0);
     LoadPalette(palette, OBJ_PLTT_ID(index) + 1, PLTT_SIZEOF(2));
 }
@@ -281,7 +281,7 @@ void UnionRoomChat_SpawnTextEntryPointerSprites(void)
     sWork->characterSelectCursorSprite = &gSprites[spriteId];
 }
 
-static void SpriteCB_TextEntryCursor(struct Sprite *sprite)
+static void SpriteCB_TextEntryCursor(struct Sprite* sprite)
 {
     int var0 = UnionRoomChat_GetMessageEntryCursorPosition();
     if (var0 == 15)
@@ -295,7 +295,7 @@ static void SpriteCB_TextEntryCursor(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_CharacterSelectCursor(struct Sprite *sprite)
+static void SpriteCB_CharacterSelectCursor(struct Sprite* sprite)
 {
     if (++sprite->data[0] > 4)
     {

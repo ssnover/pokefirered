@@ -59,7 +59,7 @@
 typedef struct
 {
     uint32_t    start_code;            // B instruction
-    uint8_t        logo[0xA0-0x04];    // logo data
+    uint8_t        logo[0xA0 - 0x04];    // logo data
     uint8_t        title[0xC];            // game title name
     uint32_t    game_code;            //
     uint16_t    maker_code;            //
@@ -122,26 +122,26 @@ char HeaderComplement()
 {
     int n;
     char c = 0;
-    char *p = (char *)&header + 0xA0;
-    for (n=0; n<0xBD-0xA0; n++)
+    char* p = (char*)&header + 0xA0;
+    for (n = 0; n < 0xBD - 0xA0; n++)
     {
         c += *p++;
     }
-    return -(0x19+c);
+    return -(0x19 + c);
 }
 
 
 //---------------------------------------------------------------------------------
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 //---------------------------------------------------------------------------------
 {
     int arg;
-    char *argfile = 0;
-    FILE *infile;
+    char* argfile = 0;
+    FILE* infile;
     int silent = 0;
     int schedule_pad = 0;
 
-    int size,bit;
+    int size, bit;
 
     // show syntax
     if (argc <= 1)
@@ -161,9 +161,9 @@ int main(int argc, char *argv[])
     }
 
     // get filename
-    for (arg=1; arg<argc; arg++)
+    for (arg = 1; arg < argc; arg++)
     {
-        if (ARGV[0] != '-') { argfile=ARGV; }
+        if (ARGV[0] != '-') { argfile = ARGV; }
         if (strncmp("--silent", &ARGV[0], 7) == 0) { silent = 1; }
     }
 
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     // elf check
     Elf32_Shdr secHeader;
     if (memcmp(&header, ELFMAG, 4) == 0) {
-        Elf32_Ehdr *elfHeader = (Elf32_Ehdr *)&header;
+        Elf32_Ehdr* elfHeader = (Elf32_Ehdr*)&header;
         fseek(infile, elfHeader->e_shoff, SEEK_SET);
         int i;
         for (i = 0; i < elfHeader->e_shnum; i++) {
@@ -204,84 +204,84 @@ int main(int argc, char *argv[])
     memcpy(&header.device_type, &good_header.device_type, sizeof(header.device_type));
 
     // parse command line
-    for (arg=1; arg<argc; arg++)
+    for (arg = 1; arg < argc; arg++)
     {
         if (ARGV[0] == '-')
         {
             switch (ARGV[1])
             {
-                case 'p':    // pad
-                {
-                    schedule_pad = 1;
-                    break;
-                }
+            case 'p':    // pad
+            {
+                schedule_pad = 1;
+                break;
+            }
 
-                case 't':    // title
+            case 't':    // title
+            {
+                char title[256];
+                memset(title, 0, sizeof(title));
+                if (VALUE[0])
                 {
-                    char title[256];
-                    memset(title, 0, sizeof(title));
-                    if (VALUE[0])
-                    {
-                        strncpy(title, VALUE, sizeof(header.title));
-                    }
-                    else
-                    {
-                        // use filename
-                        char s[256], *begin=s, *t; strcpy(s, argfile);
-                        t = strrchr(s, '\\'); if (t) begin = t+1;
-                        t = strrchr(s, '/'); if (t) begin = t+1;
-                        t = strrchr(s, '.'); if (t) *t = 0;
-                        strncpy(title, begin, sizeof(header.title));
-                        if (!silent) printf("%s\n",begin);
-                    }
-                    memcpy(header.title, title, sizeof(header.title));    // copy
-                    break;
+                    strncpy(title, VALUE, sizeof(header.title));
                 }
+                else
+                {
+                    // use filename
+                    char s[256], * begin = s, * t; strcpy(s, argfile);
+                    t = strrchr(s, '\\'); if (t) begin = t + 1;
+                    t = strrchr(s, '/'); if (t) begin = t + 1;
+                    t = strrchr(s, '.'); if (t) *t = 0;
+                    strncpy(title, begin, sizeof(header.title));
+                    if (!silent) printf("%s\n", begin);
+                }
+                memcpy(header.title, title, sizeof(header.title));    // copy
+                break;
+            }
 
-                case 'c':    // game code
-                {
-                    //if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
-                    //header.game_code = NUMBER;
-                    header.game_code = VALUE[0] | VALUE[1]<<8 | VALUE[2]<<16 | VALUE[3]<<24;
-                    break;
-                }
+            case 'c':    // game code
+            {
+                //if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
+                //header.game_code = NUMBER;
+                header.game_code = VALUE[0] | VALUE[1] << 8 | VALUE[2] << 16 | VALUE[3] << 24;
+                break;
+            }
 
-                case 'm':    // maker code
-                {
-                    //if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
-                    //header.maker_code = (unsigned short)NUMBER;
-                    header.maker_code = VALUE[0] | VALUE[1]<<8;
-                    break;
-                }
+            case 'm':    // maker code
+            {
+                //if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
+                //header.maker_code = (unsigned short)NUMBER;
+                header.maker_code = VALUE[0] | VALUE[1] << 8;
+                break;
+            }
 
-                case 'v':    // ignored, compatability with other gbafix
-                {
-                    break;
-                }
+            case 'v':    // ignored, compatability with other gbafix
+            {
+                break;
+            }
 
-                case 'r':    // version
-                {
-                    if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
-                    header.game_version = (unsigned char)NUMBER;
-                    break;
-                }
+            case 'r':    // version
+            {
+                if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
+                header.game_version = (unsigned char)NUMBER;
+                break;
+            }
 
-                case 'd':    // debug
-                {
-                    if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
-                    header.logo[0x9C-0x04] = 0xA5;    // debug enable
-                    header.device_type = (unsigned char)((NUMBER & 1) << 7);    // debug handler entry point
-                    break;
-                }
-                case '-':    // long arguments
-                {
-                    if (strncmp("silent", &ARGV[2], 6) == 0) { continue; }
-                    break;
-                }
+            case 'd':    // debug
+            {
+                if (!VALUE[0]) { fprintf(stderr, "Need value for %s\n", ARGV); break; }
+                header.logo[0x9C - 0x04] = 0xA5;    // debug enable
+                header.device_type = (unsigned char)((NUMBER & 1) << 7);    // debug handler entry point
+                break;
+            }
+            case '-':    // long arguments
+            {
+                if (strncmp("silent", &ARGV[2], 6) == 0) { continue; }
+                break;
+            }
             default:
-                {
-                    printf("Invalid option: %s\n", ARGV);
-                }
+            {
+                printf("Invalid option: %s\n", ARGV);
+            }
             }
         }
     }
@@ -295,13 +295,14 @@ int main(int argc, char *argv[])
     if (schedule_pad) {
         if (sh_offset != 0) {
             fprintf(stderr, "Warning: Cannot safely pad an ELF\n");
-        } else {
+        }
+        else {
             fseek(infile, 0, SEEK_END);
             size = ftell(infile);
-            for (bit=31; bit>=0; bit--) if (size & (1<<bit)) break;
-            if (size != (1<<bit))
+            for (bit = 31; bit >= 0; bit--) if (size & (1 << bit)) break;
+            if (size != (1 << bit))
             {
-                int todo = (1<<(bit+1)) - size;
+                int todo = (1 << (bit + 1)) - size;
                 while (todo--) fputc(0xFF, infile);
             }
         }

@@ -128,11 +128,11 @@ static const u8 sUnused[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-static void (*const sExitCallbackByItemType[])(void) = {
+static void (* const sExitCallbackByItemType[])(void) = {
     [ITEM_TYPE_PARTY_MENU - 1] = CB2_ShowPartyMenuForItemUse,
-    [ITEM_TYPE_FIELD      - 1] = CB2_ReturnToField,
-    [ITEM_TYPE_UNUSED     - 1] = NULL,
-    [ITEM_TYPE_BAG_MENU   - 1] = NULL,
+    [ITEM_TYPE_FIELD - 1] = CB2_ReturnToField,
+    [ITEM_TYPE_UNUSED - 1] = NULL,
+    [ITEM_TYPE_BAG_MENU - 1] = NULL,
 };
 
 static void SetUpItemUseCallback(u8 taskId)
@@ -179,7 +179,7 @@ static void Task_WaitFadeIn_CallItemUseOnFieldCB(u8 taskId)
         sItemUseOnFieldCB(taskId);
 }
 
-static void DisplayItemMessageInCurrentContext(u8 taskId, bool8 inField, u8 fontId, const u8 *str)
+static void DisplayItemMessageInCurrentContext(u8 taskId, bool8 inField, u8 fontId, const u8* str)
 {
     StringExpandPlaceholders(gStringVar4, str);
     if (inField == FALSE)
@@ -259,10 +259,10 @@ void FieldUseFunc_Bike(u8 taskId)
     behavior = MapGridGetMetatileBehaviorAt(x, y);
 
     if (FlagGet(FLAG_SYS_ON_CYCLING_ROAD) == TRUE
-     || MetatileBehavior_IsVerticalRail(behavior) == TRUE
-     || MetatileBehavior_IsHorizontalRail(behavior) == TRUE
-     || MetatileBehavior_IsIsolatedVerticalRail(behavior) == TRUE
-     || MetatileBehavior_IsIsolatedHorizontalRail(behavior) == TRUE)
+        || MetatileBehavior_IsVerticalRail(behavior) == TRUE
+        || MetatileBehavior_IsHorizontalRail(behavior) == TRUE
+        || MetatileBehavior_IsIsolatedVerticalRail(behavior) == TRUE
+        || MetatileBehavior_IsIsolatedHorizontalRail(behavior) == TRUE)
         DisplayItemMessageInCurrentContext(taskId, gTasks[taskId].data[3], FONT_NORMAL, gText_CantDismountBike);
     else if (Overworld_IsBikingAllowed() == TRUE && !IsBikingDisallowedByPlayer())
     {
@@ -712,13 +712,13 @@ static void Task_UseFameCheckerFromField(u8 taskId)
 void FieldUseFunc_VsSeeker(u8 taskId)
 {
     if ((gMapHeader.mapType != MAP_TYPE_ROUTE
-      && gMapHeader.mapType != MAP_TYPE_TOWN
-      && gMapHeader.mapType != MAP_TYPE_CITY)
-     || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(VIRIDIAN_FOREST)
-      && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VIRIDIAN_FOREST)
-       || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MT_EMBER_EXTERIOR)
-       || gSaveBlock1Ptr->location.mapNum == MAP_NUM(THREE_ISLAND_BERRY_FOREST)
-       || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SIX_ISLAND_PATTERN_BUSH))))
+        && gMapHeader.mapType != MAP_TYPE_TOWN
+        && gMapHeader.mapType != MAP_TYPE_CITY)
+        || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(VIRIDIAN_FOREST)
+            && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VIRIDIAN_FOREST)
+                || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MT_EMBER_EXTERIOR)
+                || gSaveBlock1Ptr->location.mapNum == MAP_NUM(THREE_ISLAND_BERRY_FOREST)
+                || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SIX_ISLAND_PATTERN_BUSH))))
     {
         PrintNotTheTimeToUseThat(taskId, gTasks[taskId].data[3]);
     }
@@ -765,7 +765,7 @@ void BattleUseFunc_StatBooster(u8 taskId)
 
 static void Task_BattleUse_StatBooster_DelayAndPrint(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (++data[8] > 7)
     {
@@ -910,7 +910,7 @@ void FieldUseFunc_OakStopsYou(u8 taskId)
         PrintNotTheTimeToUseThat(taskId, gTasks[taskId].data[3]);
 }
 
-void ItemUse_SetQuestLogEvent(u8 eventId, struct Pokemon *pokemon, u16 itemId, u16 param)
+void ItemUse_SetQuestLogEvent(u8 eventId, struct Pokemon* pokemon, u16 itemId, u16 param)
 {
     struct UnkStruct_ItemUseQuestLog
     {
@@ -926,6 +926,6 @@ void ItemUse_SetQuestLogEvent(u8 eventId, struct Pokemon *pokemon, u16 itemId, u
         questLog->species = GetMonData(pokemon, MON_DATA_SPECIES_OR_EGG);
     else
         questLog->species = 0xFFFF;
-    SetQuestLogEvent(eventId, (void *)questLog);
+    SetQuestLogEvent(eventId, (void*)questLog);
     Free(questLog);
 }

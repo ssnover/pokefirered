@@ -20,9 +20,9 @@ static void CopyValue32Bit(void);
 // Per-scanline register values.
 // This is double buffered so that it can be safely written to at any time
 // without overwriting the buffer that the DMA is currently reading
-EWRAM_DATA u16 gScanlineEffectRegBuffers[2][0x3C0] = {0};
+EWRAM_DATA u16 gScanlineEffectRegBuffers[2][0x3C0] = { 0 };
 
-EWRAM_DATA struct ScanlineEffect gScanlineEffect = {0};
+EWRAM_DATA struct ScanlineEffect gScanlineEffect = { 0 };
 EWRAM_DATA static bool8 sShouldStopWaveTask = FALSE;
 
 void ScanlineEffect_Stop(void)
@@ -56,24 +56,24 @@ void ScanlineEffect_SetParams(struct ScanlineEffectParams params)
     {
         // Set the DMA src to the value for the second scanline because the
         // first DMA transfer occurs in HBlank *after* the first scanline is drawn
-        gScanlineEffect.dmaSrcBuffers[0] = (u16 *)gScanlineEffectRegBuffers[0] + 1;
-        gScanlineEffect.dmaSrcBuffers[1] = (u16 *)gScanlineEffectRegBuffers[1] + 1;
+        gScanlineEffect.dmaSrcBuffers[0] = (u16*)gScanlineEffectRegBuffers[0] + 1;
+        gScanlineEffect.dmaSrcBuffers[1] = (u16*)gScanlineEffectRegBuffers[1] + 1;
         gScanlineEffect.setFirstScanlineReg = CopyValue16Bit;
     }
     else  // assume 32-bit
     {
         // Set the DMA src to the value for the second scanline because the
         // first DMA transfer occurs in HBlank *after* the first scanline is drawn
-        gScanlineEffect.dmaSrcBuffers[0] = (u32 *)gScanlineEffectRegBuffers[0] + 1;
-        gScanlineEffect.dmaSrcBuffers[1] = (u32 *)gScanlineEffectRegBuffers[1] + 1;
+        gScanlineEffect.dmaSrcBuffers[0] = (u32*)gScanlineEffectRegBuffers[0] + 1;
+        gScanlineEffect.dmaSrcBuffers[1] = (u32*)gScanlineEffectRegBuffers[1] + 1;
         gScanlineEffect.setFirstScanlineReg = CopyValue32Bit;
     }
 
     gScanlineEffect.dmaControl = params.dmaControl;
-    gScanlineEffect.dmaDest    = params.dmaDest;
-    gScanlineEffect.state      = params.initState;
-    gScanlineEffect.unused16   = params.unused9;
-    gScanlineEffect.unused17   = params.unused9;
+    gScanlineEffect.dmaDest = params.dmaDest;
+    gScanlineEffect.state = params.initState;
+    gScanlineEffect.unused16 = params.unused9;
+    gScanlineEffect.unused17 = params.unused9;
 }
 
 void ScanlineEffect_InitHBlankDmaTransfer(void)
@@ -107,16 +107,16 @@ void ScanlineEffect_InitHBlankDmaTransfer(void)
 
 static void CopyValue16Bit(void)
 {
-    u16 *dest = (u16 *)gScanlineEffect.dmaDest;
-    u16 *src = (u16 *)&gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer];
+    u16* dest = (u16*)gScanlineEffect.dmaDest;
+    u16* src = (u16*)&gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer];
 
     *dest = *src;
 }
 
 static void CopyValue32Bit(void)
 {
-    u32 *dest = (u32 *)gScanlineEffect.dmaDest;
-    u32 *src = (u32 *)&gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer];
+    u32* dest = (u32*)gScanlineEffect.dmaDest;
+    u32* src = (u32*)&gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer];
 
     *dest = *src;
 }
@@ -201,7 +201,7 @@ static void TaskFunc_UpdateWavePerFrame(u8 taskId)
     }
 }
 
-static void GenerateWave(u16 *buffer, u8 frequency, u8 amplitude, u8 unused)
+static void GenerateWave(u16* buffer, u8 frequency, u8 amplitude, u8 unused)
 {
     u16 i = 0;
     u8 theta = 0;
@@ -227,7 +227,7 @@ u8 ScanlineEffect_InitWave(u8 startLine, u8 endLine, u8 frequency, u8 amplitude,
 
     ScanlineEffect_Clear();
 
-    params.dmaDest = (void *)(REG_ADDR_BG0HOFS + regOffset);
+    params.dmaDest = (void*)(REG_ADDR_BG0HOFS + regOffset);
     params.dmaControl = SCANLINE_EFFECT_DMACNT_16BIT;
     params.initState = 1;
     params.unused9 = 0;
@@ -235,13 +235,13 @@ u8 ScanlineEffect_InitWave(u8 startLine, u8 endLine, u8 frequency, u8 amplitude,
 
     taskId = CreateTask(TaskFunc_UpdateWavePerFrame, 0);
 
-    gTasks[taskId].tStartLine            = startLine;
-    gTasks[taskId].tEndLine              = endLine;
-    gTasks[taskId].tWaveLength           = 256 / frequency;
-    gTasks[taskId].tSrcBufferOffset      = 0;
-    gTasks[taskId].tFramesUntilMove      = delayInterval;
-    gTasks[taskId].tDelayInterval        = delayInterval;
-    gTasks[taskId].tRegOffset            = regOffset;
+    gTasks[taskId].tStartLine = startLine;
+    gTasks[taskId].tEndLine = endLine;
+    gTasks[taskId].tWaveLength = 256 / frequency;
+    gTasks[taskId].tSrcBufferOffset = 0;
+    gTasks[taskId].tFramesUntilMove = delayInterval;
+    gTasks[taskId].tDelayInterval = delayInterval;
+    gTasks[taskId].tRegOffset = regOffset;
     gTasks[taskId].tApplyBattleBgOffsets = applyBattleBgOffsets;
 
     gScanlineEffect.waveTaskId = taskId;

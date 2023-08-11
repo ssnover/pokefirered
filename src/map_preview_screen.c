@@ -385,20 +385,20 @@ void MapPreview_LoadGfx(u8 mapsec)
     idx = GetMapPreviewScreenIdx(mapsec);
     if (idx != MPS_COUNT)
     {
-       ResetTempTileDataBuffers();
-       LoadPalette(sMapPreviewScreenData[idx].palptr, BG_PLTT_ID(13), 3 * PLTT_SIZE_4BPP);
-       DecompressAndCopyTileDataToVram(0, sMapPreviewScreenData[idx].tilesptr, 0, 0, 0);
-       if (GetBgTilemapBuffer(0) == NULL)
-       {
-           SetBgTilemapBuffer(0, Alloc(BG_SCREEN_SIZE));
-           sAllocedBg0TilemapBuffer = TRUE;
-       }
-       else
-       {
-           sAllocedBg0TilemapBuffer = FALSE;
-       }
-       CopyToBgTilemapBuffer(0, sMapPreviewScreenData[idx].tilemapptr, 0, 0x000);
-       CopyBgTilemapBufferToVram(0);
+        ResetTempTileDataBuffers();
+        LoadPalette(sMapPreviewScreenData[idx].palptr, BG_PLTT_ID(13), 3 * PLTT_SIZE_4BPP);
+        DecompressAndCopyTileDataToVram(0, sMapPreviewScreenData[idx].tilesptr, 0, 0, 0);
+        if (GetBgTilemapBuffer(0) == NULL)
+        {
+            SetBgTilemapBuffer(0, Alloc(BG_SCREEN_SIZE));
+            sAllocedBg0TilemapBuffer = TRUE;
+        }
+        else
+        {
+            sAllocedBg0TilemapBuffer = FALSE;
+        }
+        CopyToBgTilemapBuffer(0, sMapPreviewScreenData[idx].tilemapptr, 0, 0x000);
+        CopyBgTilemapBufferToVram(0);
     }
 }
 
@@ -443,12 +443,12 @@ u16 MapPreview_CreateMapNameWindow(u8 mapsec)
 {
     u16 windowId;
     u32 xctr;
-    #ifdef BUGFIX
+#ifdef BUGFIX
     // Fixes access violations indicated below.
     u8 color[3];
-    #else
+#else
     u8 color[0];
-    #endif
+#endif
 
     windowId = AddWindow(&sMapNameWindow);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
@@ -476,7 +476,7 @@ bool32 ForestMapPreviewScreenIsRunning(void)
 
 static void Task_RunMapPreviewScreenForest(u8 taskId)
 {
-    s16 * data;
+    s16* data;
 
     data = gTasks[taskId].data;
     switch (data[0])
@@ -553,7 +553,7 @@ static void Task_RunMapPreviewScreenForest(u8 taskId)
     }
 }
 
-const struct MapPreviewScreen * GetDungeonMapPreviewScreenInfo(u8 mapsec)
+const struct MapPreviewScreen* GetDungeonMapPreviewScreenInfo(u8 mapsec)
 {
     u8 idx;
 

@@ -45,8 +45,8 @@
     ptr[index] = tile | (15 << 12);     \
 }
 
-typedef bool8 (*TransitionStateFunc)(struct Task *task);
-typedef bool8 (*TransitionSpriteCallback)(struct Sprite *sprite);
+typedef bool8(*TransitionStateFunc)(struct Task* task);
+typedef bool8(*TransitionSpriteCallback)(struct Sprite* sprite);
 
 struct TransitionData
 {
@@ -71,70 +71,70 @@ struct TransitionData
     s16 data[11]; // for multiple purposes
 };
 
-static EWRAM_DATA struct TransitionData *sTransitionData = NULL;
+static EWRAM_DATA struct TransitionData* sTransitionData = NULL;
 
-static bool8 TransitionIntro_FadeToGray(struct Task *task);
-static bool8 TransitionIntro_FadeFromGray(struct Task *task);
-static bool8 AngledWipes_Init(struct Task *task);
-static bool8 AngledWipes_SetWipeData(struct Task *task);
-static bool8 AngledWipes_DoWipe(struct Task *task);
-static bool8 AngledWipes_TryEnd(struct Task *task);
-static bool8 AngledWipes_StartNext(struct Task *task);
-static bool8 GridSquares_Init(struct Task *task);
-static bool8 GridSquares_Main(struct Task *task);
-static bool8 GridSquares_End(struct Task *task);
-static bool8 WhiteBarsFade_Init(struct Task *task);
-static bool8 WhiteBarsFade_StartBars(struct Task *task);
-static bool8 WhiteBarsFade_WaitBars(struct Task *task);
-static bool8 WhiteBarsFade_BlendToBlack(struct Task *task);
-static bool8 WhiteBarsFade_End(struct Task *task);
-static bool8 Slice_Init(struct Task *task);
-static bool8 Slice_Main(struct Task *task);
-static bool8 Slice_End(struct Task *task);
-static bool8 Mugshot_Init(struct Task *task);
-static bool8 Mugshot_SetGfx(struct Task *task);
-static bool8 Mugshot_ShowBanner(struct Task *task);
-static bool8 Mugshot_StartOpponentSlide(struct Task *task);
-static bool8 Mugshot_WaitStartPlayerSlide(struct Task *task);
-static bool8 Mugshot_WaitPlayerSlide(struct Task *task);
-static bool8 Mugshot_GradualWhiteFade(struct Task *task);
-static bool8 Mugshot_InitFadeWhiteToBlack(struct Task *task);
-static bool8 Mugshot_FadeToBlack(struct Task *task);
-static bool8 Mugshot_End(struct Task *task);
-static bool8 Spiral_Init(struct Task *task);
-static bool8 Spiral_End(struct Task *task);
-static bool8 Wave_Init(struct Task *task);
-static bool8 Wave_Main(struct Task *task);
-static bool8 Wave_End(struct Task *task);
-static bool8 Ripple_Init(struct Task *task);
-static bool8 Ripple_Main(struct Task *task);
-static bool8 ClockwiseWipe_Init(struct Task *task);
-static bool8 ClockwiseWipe_TopRight(struct Task *task);
-static bool8 ClockwiseWipe_Right(struct Task *task);
-static bool8 ClockwiseWipe_Bottom(struct Task *task);
-static bool8 ClockwiseWipe_Left(struct Task *task);
-static bool8 ClockwiseWipe_TopLeft(struct Task *task);
-static bool8 ClockwiseWipe_End(struct Task *task);
-static bool8 PokeballsTrail_Init(struct Task *task);
-static bool8 PokeballsTrail_Main(struct Task *task);
-static bool8 PokeballsTrail_End(struct Task *task);
-static bool8 BigPokeball_Init(struct Task *task);
-static bool8 BigPokeball_SetGfx(struct Task *task);
-static bool8 PatternWeave_Blend1(struct Task *task);
-static bool8 PatternWeave_Blend2(struct Task *task);
-static bool8 PatternWeave_FinishAppear(struct Task *task);
-static bool8 PatternWeave_CircularMask(struct Task *task);
-static bool8 Shuffle_Init(struct Task *task);
-static bool8 Shuffle_End(struct Task *task);
-static bool8 Swirl_Init(struct Task *task);
-static bool8 Swirl_End(struct Task *task);
-static bool8 Blur_Init(struct Task *task);
-static bool8 Blur_Main(struct Task *task);
-static bool8 Blur_End(struct Task *task);
-static bool8 Transition_StartIntro(struct Task *task);
-static bool8 Transition_WaitForIntro(struct Task *task);
-static bool8 Transition_StartMain(struct Task *task);
-static bool8 Transition_WaitForMain(struct Task *task);
+static bool8 TransitionIntro_FadeToGray(struct Task* task);
+static bool8 TransitionIntro_FadeFromGray(struct Task* task);
+static bool8 AngledWipes_Init(struct Task* task);
+static bool8 AngledWipes_SetWipeData(struct Task* task);
+static bool8 AngledWipes_DoWipe(struct Task* task);
+static bool8 AngledWipes_TryEnd(struct Task* task);
+static bool8 AngledWipes_StartNext(struct Task* task);
+static bool8 GridSquares_Init(struct Task* task);
+static bool8 GridSquares_Main(struct Task* task);
+static bool8 GridSquares_End(struct Task* task);
+static bool8 WhiteBarsFade_Init(struct Task* task);
+static bool8 WhiteBarsFade_StartBars(struct Task* task);
+static bool8 WhiteBarsFade_WaitBars(struct Task* task);
+static bool8 WhiteBarsFade_BlendToBlack(struct Task* task);
+static bool8 WhiteBarsFade_End(struct Task* task);
+static bool8 Slice_Init(struct Task* task);
+static bool8 Slice_Main(struct Task* task);
+static bool8 Slice_End(struct Task* task);
+static bool8 Mugshot_Init(struct Task* task);
+static bool8 Mugshot_SetGfx(struct Task* task);
+static bool8 Mugshot_ShowBanner(struct Task* task);
+static bool8 Mugshot_StartOpponentSlide(struct Task* task);
+static bool8 Mugshot_WaitStartPlayerSlide(struct Task* task);
+static bool8 Mugshot_WaitPlayerSlide(struct Task* task);
+static bool8 Mugshot_GradualWhiteFade(struct Task* task);
+static bool8 Mugshot_InitFadeWhiteToBlack(struct Task* task);
+static bool8 Mugshot_FadeToBlack(struct Task* task);
+static bool8 Mugshot_End(struct Task* task);
+static bool8 Spiral_Init(struct Task* task);
+static bool8 Spiral_End(struct Task* task);
+static bool8 Wave_Init(struct Task* task);
+static bool8 Wave_Main(struct Task* task);
+static bool8 Wave_End(struct Task* task);
+static bool8 Ripple_Init(struct Task* task);
+static bool8 Ripple_Main(struct Task* task);
+static bool8 ClockwiseWipe_Init(struct Task* task);
+static bool8 ClockwiseWipe_TopRight(struct Task* task);
+static bool8 ClockwiseWipe_Right(struct Task* task);
+static bool8 ClockwiseWipe_Bottom(struct Task* task);
+static bool8 ClockwiseWipe_Left(struct Task* task);
+static bool8 ClockwiseWipe_TopLeft(struct Task* task);
+static bool8 ClockwiseWipe_End(struct Task* task);
+static bool8 PokeballsTrail_Init(struct Task* task);
+static bool8 PokeballsTrail_Main(struct Task* task);
+static bool8 PokeballsTrail_End(struct Task* task);
+static bool8 BigPokeball_Init(struct Task* task);
+static bool8 BigPokeball_SetGfx(struct Task* task);
+static bool8 PatternWeave_Blend1(struct Task* task);
+static bool8 PatternWeave_Blend2(struct Task* task);
+static bool8 PatternWeave_FinishAppear(struct Task* task);
+static bool8 PatternWeave_CircularMask(struct Task* task);
+static bool8 Shuffle_Init(struct Task* task);
+static bool8 Shuffle_End(struct Task* task);
+static bool8 Swirl_Init(struct Task* task);
+static bool8 Swirl_End(struct Task* task);
+static bool8 Blur_Init(struct Task* task);
+static bool8 Blur_Main(struct Task* task);
+static bool8 Blur_End(struct Task* task);
+static bool8 Transition_StartIntro(struct Task* task);
+static bool8 Transition_WaitForIntro(struct Task* task);
+static bool8 Transition_StartMain(struct Task* task);
+static bool8 Transition_WaitForMain(struct Task* task);
 
 static void Task_Blur(u8 taskId);
 static void Task_Swirl(u8 taskId);
@@ -158,15 +158,15 @@ static void Task_Intro(u8 taskId);
 static void DoMugshotTransition(u8 taskId);
 static void Task_BattleTransition_Intro(u8 taskId);
 
-static void SpriteCB_MugshotTrainerPic(struct Sprite *sprite);
-static void SpriteCB_FldEffPokeballTrail(struct Sprite *sprite);
-static void SpriteCB_WhiteBarFade(struct Sprite *sprite);
+static void SpriteCB_MugshotTrainerPic(struct Sprite* sprite);
+static void SpriteCB_FldEffPokeballTrail(struct Sprite* sprite);
+static void SpriteCB_WhiteBarFade(struct Sprite* sprite);
 
-static bool8 MugshotTrainerPic_Pause(struct Sprite *sprite);
-static bool8 MugshotTrainerPic_Init(struct Sprite *sprite);
-static bool8 MugshotTrainerPic_Slide(struct Sprite *sprite);
-static bool8 MugshotTrainerPic_SlideSlow(struct Sprite *sprite);
-static bool8 MugshotTrainerPic_SlideOffscreen(struct Sprite *sprite);
+static bool8 MugshotTrainerPic_Pause(struct Sprite* sprite);
+static bool8 MugshotTrainerPic_Init(struct Sprite* sprite);
+static bool8 MugshotTrainerPic_Slide(struct Sprite* sprite);
+static bool8 MugshotTrainerPic_SlideSlow(struct Sprite* sprite);
+static bool8 MugshotTrainerPic_SlideOffscreen(struct Sprite* sprite);
 
 static void VBlankCB_Swirl(void);
 static void HBlankCB_Swirl(void);
@@ -195,17 +195,17 @@ static void InitTransitionData(void);
 static void CreateIntroTask(s16 fadeOutDelay, s16 fadeInDelay, s16 blinkTimes, s16 fadeOutSpeed, s16 fadeInSpeed);
 static bool8 IsIntroTaskDone(void);
 static void VBlankCB_BattleTransition(void);
-static void GetBg0TilemapDst(u16 **tilesetPtr);
-static void GetBg0TilesDst(u16 **tilemapPtr, u16 **tilesetPtr);
-static void SetSinWave(s16 *buffer, s16 offset, s16 sinIndex, s16 frequency, s16 amplitude, s16 bufSize);
-static void SetCircularMask(s16 *buffer, s16 x, s16 y, s16 radius);
+static void GetBg0TilemapDst(u16** tilesetPtr);
+static void GetBg0TilesDst(u16** tilemapPtr, u16** tilesetPtr);
+static void SetSinWave(s16* buffer, s16 offset, s16 sinIndex, s16 frequency, s16 amplitude, s16 bufSize);
+static void SetCircularMask(s16* buffer, s16 x, s16 y, s16 radius);
 static void FadeScreenBlack(void);
-static void InitBlackWipe(s16 *data, s16 startX, s16 startY, s16 endX, s16 endY, s16 stepX, s16 stepY);
-static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact);
+static void InitBlackWipe(s16* data, s16 startX, s16 startY, s16 endX, s16 endY, s16 stepX, s16 stepY);
+static bool8 UpdateBlackWipe(s16* data, bool8 xExact, bool8 yExact);
 static void SetTrainerPicSlideDirection(s16 spriteId, bool16 value);
 static void IncrementTrainerPicState(s16 spriteId);
 static s16 IsTrainerPicSlideDone(s16 spriteId);
-static void Mugshots_CreateTrainerPics(struct Task *task);
+static void Mugshots_CreateTrainerPics(struct Task* task);
 
 static const u32 sBigPokeball_Gfx[] = INCBIN_U32("graphics/battle_transitions/big_pokeball.4bpp");
 static const u32 sSlidingPokeball_Tilemap[] = INCBIN_U32("graphics/battle_transitions/sliding_pokeball.bin");
@@ -225,24 +225,24 @@ static const TaskFunc sTasks_Intro[] =
 // This task will call the functions that do the transition effects.
 static const TaskFunc sTasks_Main[] =
 {
-    [B_TRANSITION_BLUR]            = Task_Blur,
-    [B_TRANSITION_SWIRL]           = Task_Swirl,
-    [B_TRANSITION_SHUFFLE]         = Task_Shuffle,
-    [B_TRANSITION_BIG_POKEBALL]    = Task_BigPokeball,
+    [B_TRANSITION_BLUR] = Task_Blur,
+    [B_TRANSITION_SWIRL] = Task_Swirl,
+    [B_TRANSITION_SHUFFLE] = Task_Shuffle,
+    [B_TRANSITION_BIG_POKEBALL] = Task_BigPokeball,
     [B_TRANSITION_POKEBALLS_TRAIL] = Task_PokeballsTrail,
-    [B_TRANSITION_CLOCKWISE_WIPE]  = Task_ClockwiseWipe,
-    [B_TRANSITION_RIPPLE]          = Task_Ripple,
-    [B_TRANSITION_WAVE]            = Task_Wave,
-    [B_TRANSITION_SLICE]           = Task_Slice,
+    [B_TRANSITION_CLOCKWISE_WIPE] = Task_ClockwiseWipe,
+    [B_TRANSITION_RIPPLE] = Task_Ripple,
+    [B_TRANSITION_WAVE] = Task_Wave,
+    [B_TRANSITION_SLICE] = Task_Slice,
     [B_TRANSITION_WHITE_BARS_FADE] = Task_WhiteBarsFade,
-    [B_TRANSITION_GRID_SQUARES]    = Task_GridSquares,
-    [B_TRANSITION_ANGLED_WIPES]    = Task_AngledWipes,
-    [B_TRANSITION_LORELEI]         = Task_Lorelei,
-    [B_TRANSITION_BRUNO]           = Task_Bruno,
-    [B_TRANSITION_AGATHA]          = Task_Agatha,
-    [B_TRANSITION_LANCE]           = Task_Lance,
-    [B_TRANSITION_BLUE]            = Task_Blue,
-    [B_TRANSITION_SPIRAL]          = Task_Spiral,
+    [B_TRANSITION_GRID_SQUARES] = Task_GridSquares,
+    [B_TRANSITION_ANGLED_WIPES] = Task_AngledWipes,
+    [B_TRANSITION_LORELEI] = Task_Lorelei,
+    [B_TRANSITION_BRUNO] = Task_Bruno,
+    [B_TRANSITION_AGATHA] = Task_Agatha,
+    [B_TRANSITION_LANCE] = Task_Lance,
+    [B_TRANSITION_BLUE] = Task_Blue,
+    [B_TRANSITION_SPIRAL] = Task_Spiral,
 };
 
 static const TransitionStateFunc sTaskHandlers[] =
@@ -360,28 +360,28 @@ static const TransitionStateFunc sMugshot_Funcs[] =
 static const u8 sMugshotsTrainerPicIDsTable[MUGSHOTS_COUNT] =
 {
     [MUGSHOT_LORELEI] = TRAINER_PIC_ELITE_FOUR_LORELEI,
-    [MUGSHOT_BRUNO]   = TRAINER_PIC_ELITE_FOUR_BRUNO,
-    [MUGSHOT_AGATHA]  = TRAINER_PIC_ELITE_FOUR_AGATHA,
-    [MUGSHOT_LANCE]   = TRAINER_PIC_ELITE_FOUR_LANCE,
-    [MUGSHOT_BLUE]    = TRAINER_PIC_CHAMPION_RIVAL,
+    [MUGSHOT_BRUNO] = TRAINER_PIC_ELITE_FOUR_BRUNO,
+    [MUGSHOT_AGATHA] = TRAINER_PIC_ELITE_FOUR_AGATHA,
+    [MUGSHOT_LANCE] = TRAINER_PIC_ELITE_FOUR_LANCE,
+    [MUGSHOT_BLUE] = TRAINER_PIC_CHAMPION_RIVAL,
 };
 
 static const s16 sMugshotsOpponentRotationScales[MUGSHOTS_COUNT][2] =
 {
     [MUGSHOT_LORELEI] = {0x200, 0x200},
-    [MUGSHOT_BRUNO]   = {0x200, 0x200},
-    [MUGSHOT_AGATHA]  = {0x200, 0x200},
-    [MUGSHOT_LANCE]   = {0x200, 0x200},
-    [MUGSHOT_BLUE]    = {0x200, 0x200},
+    [MUGSHOT_BRUNO] = {0x200, 0x200},
+    [MUGSHOT_AGATHA] = {0x200, 0x200},
+    [MUGSHOT_LANCE] = {0x200, 0x200},
+    [MUGSHOT_BLUE] = {0x200, 0x200},
 };
 
 static const s16 sMugshotsOpponentCoords[MUGSHOTS_COUNT][2] =
 {
     [MUGSHOT_LORELEI] = {  -8,  0 },
-    [MUGSHOT_BRUNO]   = { -10,  0 },
-    [MUGSHOT_AGATHA]  = {   0,  0 },
-    [MUGSHOT_LANCE]   = { -32,  0 },
-    [MUGSHOT_BLUE]    = {   0,  0 },
+    [MUGSHOT_BRUNO] = { -10,  0 },
+    [MUGSHOT_AGATHA] = {   0,  0 },
+    [MUGSHOT_LANCE] = { -32,  0 },
+    [MUGSHOT_BLUE] = {   0,  0 },
 };
 
 static const TransitionSpriteCallback sMugshotTrainerPicFuncs[] =
@@ -397,8 +397,8 @@ static const TransitionSpriteCallback sMugshotTrainerPicFuncs[] =
 
 // One element per slide direction.
 // Sign of acceleration is opposite speed, so slide decelerates.
-static const s16 sTrainerPicSlideSpeeds[] = {12, -12};
-static const s16 sTrainerPicSlideAccels[] = {-1,   1};
+static const s16 sTrainerPicSlideSpeeds[] = { 12, -12 };
+static const s16 sTrainerPicSlideAccels[] = { -1,   1 };
 
 static const TransitionStateFunc sSlice_Funcs[] =
 {
@@ -418,7 +418,7 @@ static const TransitionStateFunc sWhiteBarsFade_Funcs[] =
 
 #define NUM_WHITE_BARS 6
 #define WHITE_BAR_HEIGHT (1 + DISPLAY_HEIGHT / NUM_WHITE_BARS)
-static const u16 sWhiteBarsFade_StartDelays[NUM_WHITE_BARS] = {0, 9, 15, 6, 12, 3};
+static const u16 sWhiteBarsFade_StartDelays[NUM_WHITE_BARS] = { 0, 9, 15, 6, 12, 3 };
 
 static const TransitionStateFunc sGridSquares_Funcs[] =
 {
@@ -440,14 +440,14 @@ static const TransitionStateFunc sAngledWipes_Funcs[] =
 
 static const s16 sAngledWipes_MoveData[NUM_ANGLED_WIPES][5] =
 {
-// startX          startY          endX            endY            yDirection
-    {56,            0,              0,              DISPLAY_HEIGHT, 0},
-    {104,           DISPLAY_HEIGHT, DISPLAY_WIDTH,  88,             1},
-    {DISPLAY_WIDTH, 72,             56,             0,              1},
-    {0,             32,             144,            DISPLAY_HEIGHT, 0},
-    {144,           DISPLAY_HEIGHT, 184,            0,              1},
-    {56,            0,              168,            DISPLAY_HEIGHT, 0},
-    {168,           DISPLAY_HEIGHT, 48,             0,              1},
+    // startX          startY          endX            endY            yDirection
+        {56,            0,              0,              DISPLAY_HEIGHT, 0},
+        {104,           DISPLAY_HEIGHT, DISPLAY_WIDTH,  88,             1},
+        {DISPLAY_WIDTH, 72,             56,             0,              1},
+        {0,             32,             144,            DISPLAY_HEIGHT, 0},
+        {144,           DISPLAY_HEIGHT, 184,            0,              1},
+        {56,            0,              168,            DISPLAY_HEIGHT, 0},
+        {168,           DISPLAY_HEIGHT, 48,             0,              1},
 };
 
 static const s16 sAngledWipes_EndDelays[NUM_ANGLED_WIPES] = { 1, 1, 1, 1, 1, 1, 0 };
@@ -461,7 +461,7 @@ static const TransitionStateFunc sTransitionIntroFuncs[] =
 static const struct SpriteFrameImage sSpriteImage_Pokeball[] =
 {
     {
-        .data = sSlidingPokeball_Gfx, 
+        .data = sSlidingPokeball_Gfx,
         .size = sizeof(sSlidingPokeball_Gfx),
     },
 };
@@ -472,7 +472,7 @@ static const union AnimCmd sSpriteAnim_Pokeball[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sSpriteAnimTable_Pokeball[] = { sSpriteAnim_Pokeball };
+static const union AnimCmd* const sSpriteAnimTable_Pokeball[] = { sSpriteAnim_Pokeball };
 
 static const union AffineAnimCmd sSpriteAffineAnim_Pokeball1[] =
 {
@@ -486,7 +486,7 @@ static const union AffineAnimCmd sSpriteAffineAnim_Pokeball2[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sSpriteAffineAnimTable_Pokeball[] =
+static const union AffineAnimCmd* const sSpriteAffineAnimTable_Pokeball[] =
 {
     sSpriteAffineAnim_Pokeball1,
     sSpriteAffineAnim_Pokeball2,
@@ -542,7 +542,7 @@ static const union AnimCmd sSpriteAnim_UnusedBrendanLass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sSpriteAnimTable_UnusedBrendanLass[] = { sSpriteAnim_UnusedBrendanLass };
+static const union AnimCmd* const sSpriteAnimTable_UnusedBrendanLass[] = { sSpriteAnim_UnusedBrendanLass };
 
 static const struct SpriteTemplate sSpriteTemplate_UnusedBrendanLass[] =
 {
@@ -583,18 +583,18 @@ static const u16 sMugshotPal_Blue[] = INCBIN_U16("graphics/battle_transitions/bl
 static const u16 sMugshotPal_Red[] = INCBIN_U16("graphics/battle_transitions/red_bg.gbapal");
 static const u16 sMugshotPal_Green[] = INCBIN_U16("graphics/battle_transitions/green_bg.gbapal");
 
-static const u16 *const sOpponentMugshotsPals[MUGSHOTS_COUNT] =
+static const u16* const sOpponentMugshotsPals[MUGSHOTS_COUNT] =
 {
     [MUGSHOT_LORELEI] = sMugshotPal_Lorelei,
-    [MUGSHOT_BRUNO]   = sMugshotPal_Bruno,
-    [MUGSHOT_AGATHA]  = sMugshotPal_Agatha,
-    [MUGSHOT_LANCE]   = sMugshotPal_Lance,
-    [MUGSHOT_BLUE]    = sMugshotPal_Blue,
+    [MUGSHOT_BRUNO] = sMugshotPal_Bruno,
+    [MUGSHOT_AGATHA] = sMugshotPal_Agatha,
+    [MUGSHOT_LANCE] = sMugshotPal_Lance,
+    [MUGSHOT_BLUE] = sMugshotPal_Blue,
 };
 
-static const u16 *const sPlayerMugshotsPals[GENDER_COUNT] =
+static const u16* const sPlayerMugshotsPals[GENDER_COUNT] =
 {
-    [MALE]   = sMugshotPal_Red,
+    [MALE] = sMugshotPal_Red,
     [FEMALE] = sMugshotPal_Green,
 };
 
@@ -602,7 +602,7 @@ static const u16 sUnusedTrainerPalette[] = INCBIN_U16("graphics/battle_transitio
 
 static const struct SpritePalette sSpritePalette_UnusedTrainer =
 {
-    .data = sUnusedTrainerPalette, 
+    .data = sUnusedTrainerPalette,
     .tag = PALTAG_UNUSED_MUGSHOT,
 };
 
@@ -652,7 +652,7 @@ static void Task_BattleTransition(u8 taskId)
     while (sTaskHandlers[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Transition_StartIntro(struct Task *task)
+static bool8 Transition_StartIntro(struct Task* task)
 {
     SetWeatherScreenFadeOut();
     CpuCopy32(gPlttBufferFaded, gPlttBufferUnfaded, PLTT_SIZE);
@@ -669,7 +669,7 @@ static bool8 Transition_StartIntro(struct Task *task)
     }
 }
 
-static bool8 Transition_WaitForIntro(struct Task *task)
+static bool8 Transition_WaitForIntro(struct Task* task)
 {
     if (FindTaskIdByFunc(sTasks_Intro[task->tTransitionId]) == TASK_NONE)
     {
@@ -682,14 +682,14 @@ static bool8 Transition_WaitForIntro(struct Task *task)
     }
 }
 
-static bool8 Transition_StartMain(struct Task *task)
+static bool8 Transition_StartMain(struct Task* task)
 {
     CreateTask(sTasks_Main[task->tTransitionId], 0);
     task->tState++;
     return FALSE;
 }
 
-static bool8 Transition_WaitForMain(struct Task *task)
+static bool8 Transition_WaitForMain(struct Task* task)
 {
     task->tTransitionDone = FALSE;
     if (FindTaskIdByFunc(sTasks_Main[task->tTransitionId]) == TASK_NONE)
@@ -725,7 +725,7 @@ static void Task_Blur(u8 taskId)
     while (sBlur_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Blur_Init(struct Task *task)
+static bool8 Blur_Init(struct Task* task)
 {
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     SetGpuRegBits(REG_OFFSET_BG1CNT, BGCNT_MOSAIC);
@@ -735,7 +735,7 @@ static bool8 Blur_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 Blur_Main(struct Task *task)
+static bool8 Blur_Main(struct Task* task)
 {
     if (task->tDelay != 0)
     {
@@ -753,7 +753,7 @@ static bool8 Blur_Main(struct Task *task)
     return FALSE;
 }
 
-static bool8 Blur_End(struct Task *task)
+static bool8 Blur_End(struct Task* task)
 {
     if (!gPaletteFade.active)
         DestroyTask(FindTaskIdByFunc(Task_Blur));
@@ -775,7 +775,7 @@ static void Task_Swirl(u8 taskId)
     while (sSwirl_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Swirl_Init(struct Task *task)
+static bool8 Swirl_Init(struct Task* task)
 {
     InitTransitionData();
     ScanlineEffect_Clear();
@@ -788,7 +788,7 @@ static bool8 Swirl_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 Swirl_End(struct Task *task)
+static bool8 Swirl_End(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     task->tSinIndex += 4;
@@ -810,7 +810,7 @@ static void VBlankCB_Swirl(void)
 static void HBlankCB_Swirl(void)
 {
     s16 offset = gScanlineEffectRegBuffers[1][REG_VCOUNT];
-    
+
     REG_BG1HOFS = offset;
     REG_BG2HOFS = offset;
     REG_BG3HOFS = offset;
@@ -831,7 +831,7 @@ static void Task_Shuffle(u8 taskId)
     while (sShuffle_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Shuffle_Init(struct Task *task)
+static bool8 Shuffle_Init(struct Task* task)
 {
     InitTransitionData();
     ScanlineEffect_Clear();
@@ -844,7 +844,7 @@ static bool8 Shuffle_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 Shuffle_End(struct Task *task)
+static bool8 Shuffle_End(struct Task* task)
 {
     u8 i;
     u16 sinVal, amplitude;
@@ -874,7 +874,7 @@ static void VBlankCB_Shuffle(void)
 static void HBlankCB_Shuffle(void)
 {
     s16 offset = gScanlineEffectRegBuffers[1][REG_VCOUNT];
-    
+
     REG_BG1VOFS = offset;
     REG_BG2VOFS = offset;
     REG_BG3VOFS = offset;
@@ -929,9 +929,9 @@ static void Task_BigPokeball(u8 taskId)
     SetVBlankCallback(VBlankCB_PatternWeave); \
 }
 
-static bool8 BigPokeball_Init(struct Task *task)
+static bool8 BigPokeball_Init(struct Task* task)
 {
-    u16 *tilemap, *tileset;
+    u16* tilemap, * tileset;
 
     InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
@@ -942,11 +942,11 @@ static bool8 BigPokeball_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 BigPokeball_SetGfx(struct Task *task)
+static bool8 BigPokeball_SetGfx(struct Task* task)
 {
     s16 i, j;
-    u16 *tilemap, *tileset;
-    const u16 *bigPokeballMap = sBigPokeball_Tilemap;
+    u16* tilemap, * tileset;
+    const u16* bigPokeballMap = sBigPokeball_Tilemap;
 
     GetBg0TilesDst(&tilemap, &tileset);
     for (i = 0; i < 20; i++)
@@ -958,7 +958,7 @@ static bool8 BigPokeball_SetGfx(struct Task *task)
     return TRUE;
 }
 
-static bool8 PatternWeave_Blend1(struct Task *task)
+static bool8 PatternWeave_Blend1(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     if (task->tBlendDelay == 0 || --task->tBlendDelay == 0)
@@ -978,7 +978,7 @@ static bool8 PatternWeave_Blend1(struct Task *task)
     return FALSE;
 }
 
-static bool8 PatternWeave_Blend2(struct Task *task)
+static bool8 PatternWeave_Blend2(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     if (task->tBlendDelay == 0 || --task->tBlendDelay == 0)
@@ -1003,7 +1003,7 @@ static bool8 PatternWeave_Blend2(struct Task *task)
     return FALSE;
 }
 
-static bool8 PatternWeave_FinishAppear(struct Task *task)
+static bool8 PatternWeave_FinishAppear(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     if (task->tAmplitude > 0)
@@ -1028,7 +1028,7 @@ static bool8 PatternWeave_FinishAppear(struct Task *task)
 }
 
 // Do a shrinking circular mask to go to a black screen after the pattern appears.
-static bool8 PatternWeave_CircularMask(struct Task *task)
+static bool8 PatternWeave_CircularMask(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     if (task->tRadiusDelta < (8 << 8))
@@ -1101,9 +1101,9 @@ static void Task_PokeballsTrail(u8 taskId)
     while (sPokeballsTrail_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 PokeballsTrail_Init(struct Task *task)
+static bool8 PokeballsTrail_Init(struct Task* task)
 {
-    u16 *tilemap, *tileset;
+    u16* tilemap, * tileset;
 
     GetBg0TilesDst(&tilemap, &tileset);
     CpuCopy16(sSlidingPokeball_Tilemap, tileset, sizeof(sSlidingPokeball_Tilemap));
@@ -1113,7 +1113,7 @@ static bool8 PokeballsTrail_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 PokeballsTrail_Main(struct Task *task)
+static bool8 PokeballsTrail_Main(struct Task* task)
 {
     s16 i, side;
     s16 startX[ARRAY_COUNT(sPokeballsTrail_StartXCoords)];
@@ -1136,7 +1136,7 @@ static bool8 PokeballsTrail_Main(struct Task *task)
     return FALSE;
 }
 
-static bool8 PokeballsTrail_End(struct Task *task)
+static bool8 PokeballsTrail_End(struct Task* task)
 {
     if (!FieldEffectActiveListContains(FLDEFF_POKEBALL))
     {
@@ -1149,7 +1149,7 @@ static bool8 PokeballsTrail_End(struct Task *task)
 bool8 FldEff_PokeballTrail(void)
 {
     u8 spriteId = CreateSpriteAtEnd(&sSpriteTemplate_Pokeball, gFieldEffectArguments[0], gFieldEffectArguments[1], 0);
-    
+
     gSprites[spriteId].oam.priority = 0;
     gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
     gSprites[spriteId].sSide = gFieldEffectArguments[2];
@@ -1160,7 +1160,7 @@ bool8 FldEff_PokeballTrail(void)
     return FALSE;
 }
 
-static void SpriteCB_FldEffPokeballTrail(struct Sprite *sprite)
+static void SpriteCB_FldEffPokeballTrail(struct Sprite* sprite)
 {
     s16 speeds[ARRAY_COUNT(sPokeballsTrail_Speeds)];
     memcpy(speeds, sPokeballsTrail_Speeds, sizeof(sPokeballsTrail_Speeds));
@@ -1180,10 +1180,10 @@ static void SpriteCB_FldEffPokeballTrail(struct Sprite *sprite)
             // If Pokéball moved forward clear trail behind it
             if (posX != sprite->sPrevX)
             {
-                u16 *ptr;
+                u16* ptr;
 
                 sprite->sPrevX = posX;
-                ptr = (u16 *)BG_SCREEN_ADDR((GetGpuReg(REG_OFFSET_BG0CNT) >> 8) & 0x1F);
+                ptr = (u16*)BG_SCREEN_ADDR((GetGpuReg(REG_OFFSET_BG0CNT) >> 8) & 0x1F);
                 SET_TILE(ptr, posY - 2, posX, 1);
                 SET_TILE(ptr, posY - 1, posX, 1);
                 SET_TILE(ptr, posY - 0, posX, 1);
@@ -1209,7 +1209,7 @@ static void Task_ClockwiseWipe(u8 taskId)
     while (sClockwiseWipe_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 ClockwiseWipe_Init(struct Task *task)
+static bool8 ClockwiseWipe_Init(struct Task* task)
 {
     u16 i;
 
@@ -1227,15 +1227,14 @@ static bool8 ClockwiseWipe_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 ClockwiseWipe_TopRight(struct Task *task)
+static bool8 ClockwiseWipe_TopRight(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     InitBlackWipe(sTransitionData->data, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, sTransitionData->tWipeEndX, -1, 1, 1);
     do
     {
         gScanlineEffectRegBuffers[0][sTransitionData->tWipeCurrY] = WIN_RANGE(DISPLAY_WIDTH / 2, sTransitionData->tWipeCurrX + 1);
-    }
-    while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
+    } while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
 
     sTransitionData->tWipeEndX += 32;
     if (sTransitionData->tWipeEndX >= DISPLAY_WIDTH)
@@ -1247,7 +1246,7 @@ static bool8 ClockwiseWipe_TopRight(struct Task *task)
     return FALSE;
 }
 
-static bool8 ClockwiseWipe_Right(struct Task *task)
+static bool8 ClockwiseWipe_Right(struct Task* task)
 {
     s16 start, end;
     vu8 finished = FALSE;
@@ -1283,15 +1282,14 @@ static bool8 ClockwiseWipe_Right(struct Task *task)
     return FALSE;
 }
 
-static bool8 ClockwiseWipe_Bottom(struct Task *task)
+static bool8 ClockwiseWipe_Bottom(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     InitBlackWipe(sTransitionData->data, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, sTransitionData->tWipeEndX, DISPLAY_HEIGHT, 1, 1);
     do
     {
         gScanlineEffectRegBuffers[0][sTransitionData->tWipeCurrY] = (sTransitionData->tWipeCurrX << 8) | DISPLAY_WIDTH;
-    }
-    while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
+    } while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
     sTransitionData->tWipeEndX -= 32;
     if (sTransitionData->tWipeEndX <= 0)
     {
@@ -1303,18 +1301,18 @@ static bool8 ClockwiseWipe_Bottom(struct Task *task)
 }
 
 /*
- * BUG: The following 2 functions are incorrect. The animation after 
- * the rotation angle reaches 1.5π will not be displayed. 
+ * BUG: The following 2 functions are incorrect. The animation after
+ * the rotation angle reaches 1.5π will not be displayed.
  *
- * There're 2 problems which need to be solved in order to correct the logic. 
+ * There're 2 problems which need to be solved in order to correct the logic.
  * 1. With current setup, nothing is displayed inside WIN0 and everything
  * is displayed outside WIN0. Thus, if the rotation angle is > 1.5π, it
- * won't be able to handle the situation. 
+ * won't be able to handle the situation.
  * 2. The programmer sometimes swapped the place of start and end boundary
  * of WIN0 (see variables start and end), which will sometimes cause end
- * to be smaller than start. In this way, garbage data will be written to WIN0H. 
+ * to be smaller than start. In this way, garbage data will be written to WIN0H.
  */
-static bool8 ClockwiseWipe_Left(struct Task *task)
+static bool8 ClockwiseWipe_Left(struct Task* task)
 {
     s16 end, start;
     u16 win0H;
@@ -1352,7 +1350,7 @@ static bool8 ClockwiseWipe_Left(struct Task *task)
     return FALSE;
 }
 
-static bool8 ClockwiseWipe_TopLeft(struct Task *task)
+static bool8 ClockwiseWipe_TopLeft(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     InitBlackWipe(sTransitionData->data, 120, 80, sTransitionData->tWipeEndX, 0, 1, 1);
@@ -1366,8 +1364,7 @@ static bool8 ClockwiseWipe_TopLeft(struct Task *task)
             end = DISPLAY_WIDTH;
         }
         gScanlineEffectRegBuffers[0][sTransitionData->tWipeCurrY] = WIN_RANGE2(start, end);
-    }
-    while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
+    } while (!UpdateBlackWipe(sTransitionData->data, TRUE, TRUE));
     sTransitionData->tWipeEndX += 32;
     if (sTransitionData->tWipeCurrX > DISPLAY_WIDTH / 2)
         task->tState++;
@@ -1375,7 +1372,7 @@ static bool8 ClockwiseWipe_TopLeft(struct Task *task)
     return FALSE;
 }
 
-static bool8 ClockwiseWipe_End(struct Task *task)
+static bool8 ClockwiseWipe_End(struct Task* task)
 {
     DmaStop(0);
     FadeScreenBlack();
@@ -1410,7 +1407,7 @@ static void Task_Ripple(u8 taskId)
     while (sRipple_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Ripple_Init(struct Task *task)
+static bool8 Ripple_Init(struct Task* task)
 {
     u8 i;
 
@@ -1425,7 +1422,7 @@ static bool8 Ripple_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 Ripple_Main(struct Task *task)
+static bool8 Ripple_Main(struct Task* task)
 {
     u8 i;
     s16 amplitude;
@@ -1464,7 +1461,7 @@ static void VBlankCB_Ripple(void)
 static void HBlankCB_Ripple(void)
 {
     s16 offset = gScanlineEffectRegBuffers[1][REG_VCOUNT];
-    
+
     REG_BG1VOFS = offset;
     REG_BG2VOFS = offset;
     REG_BG3VOFS = offset;
@@ -1487,7 +1484,7 @@ static void Task_Wave(u8 taskId)
     while (sWave_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Wave_Init(struct Task *task)
+static bool8 Wave_Init(struct Task* task)
 {
     u8 i;
 
@@ -1504,10 +1501,10 @@ static bool8 Wave_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 Wave_Main(struct Task *task)
+static bool8 Wave_Main(struct Task* task)
 {
     u8 i, sinIndex;
-    u16 *winVal;
+    u16* winVal;
     bool8 finished;
 
     sTransitionData->vblankDma = FALSE;
@@ -1532,7 +1529,7 @@ static bool8 Wave_Main(struct Task *task)
     return FALSE;
 }
 
-static bool8 Wave_End(struct Task *task)
+static bool8 Wave_End(struct Task* task)
 {
     DmaStop(0);
     FadeScreenBlack();
@@ -1660,7 +1657,7 @@ static void Spiral_UpdateFrame(s16 initRadius, s16 deltaAngleMax, u8 offsetMaybe
     {
         for (i = 0; i < DISPLAY_HEIGHT; i++)
             gScanlineEffectRegBuffers[1][i * 2 + offsetMaybe] = gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 2] << 8
-                                                              | gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 3];
+            | gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 3];
         return;
     }
 
@@ -1734,10 +1731,10 @@ static void Spiral_UpdateFrame(s16 initRadius, s16 deltaAngleMax, u8 offsetMaybe
 
     for (i = 0; i < DISPLAY_HEIGHT; i++)
         gScanlineEffectRegBuffers[1][i * 2 + offsetMaybe] = (gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 2] << 8)
-                                                           | gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 3];
+        | gScanlineEffectRegBuffers[1][i + DISPLAY_HEIGHT * 3];
 }
 
-static bool8 Spiral_Init(struct Task *task)
+static bool8 Spiral_Init(struct Task* task)
 {
     InitTransitionData();
     ScanlineEffect_Clear();
@@ -1757,7 +1754,7 @@ static bool8 Spiral_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 Spiral_End(struct Task *task)
+static bool8 Spiral_End(struct Task* task)
 {
     s16 win_top, win_bottom;
 
@@ -1877,7 +1874,7 @@ static void DoMugshotTransition(u8 taskId)
     while (sMugshot_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Mugshot_Init(struct Task *task)
+static bool8 Mugshot_Init(struct Task* task)
 {
     u8 i;
 
@@ -1898,17 +1895,17 @@ static bool8 Mugshot_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_SetGfx(struct Task *task)
+static bool8 Mugshot_SetGfx(struct Task* task)
 {
     s16 i, j;
-    u16 *tilemap, *tileset;
-    const u16 *mugshotsMap = sMugshotsTilemap;
-    
+    u16* tilemap, * tileset;
+    const u16* mugshotsMap = sMugshotsTilemap;
+
     GetBg0TilesDst(&tilemap, &tileset);
     CpuCopy16(sMugshotBanner_Gfx, tileset, sizeof(sMugshotBanner_Gfx));
     LoadPalette(sOpponentMugshotsPals[task->tMugshotId], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
     LoadPalette(sPlayerMugshotsPals[gSaveBlock2Ptr->playerGender], BG_PLTT_ID(15) + 10, PLTT_SIZEOF(16 - 10));
-    
+
     for (i = 0; i < 20; i++)
         for (j = 0; j < 32; j++, mugshotsMap++)
             SET_TILE(tilemap, i, j, *mugshotsMap);
@@ -1919,10 +1916,10 @@ static bool8 Mugshot_SetGfx(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_ShowBanner(struct Task *task)
+static bool8 Mugshot_ShowBanner(struct Task* task)
 {
     u8 i, sinIndex;
-    u16 *winVal;
+    u16* winVal;
     s16 x;
     s32 mergedValue;
 
@@ -1963,7 +1960,7 @@ static bool8 Mugshot_ShowBanner(struct Task *task)
     if (task->tBottomBannerX < 0)
         task->tBottomBannerX = 0;
 
-    mergedValue = *(s32 *)(&task->tTopBannerX);
+    mergedValue = *(s32*)(&task->tTopBannerX);
     if (mergedValue == DISPLAY_WIDTH)
         task->tState++;
 
@@ -1973,10 +1970,10 @@ static bool8 Mugshot_ShowBanner(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_StartOpponentSlide(struct Task *task)
+static bool8 Mugshot_StartOpponentSlide(struct Task* task)
 {
     u8 i;
-    u16 *winVal;
+    u16* winVal;
 
     sTransitionData->vblankDma = FALSE;
     for (i = 0, winVal = gScanlineEffectRegBuffers[0]; i < DISPLAY_HEIGHT; i++, winVal++)
@@ -2001,7 +1998,7 @@ static bool8 Mugshot_StartOpponentSlide(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_WaitStartPlayerSlide(struct Task *task)
+static bool8 Mugshot_WaitStartPlayerSlide(struct Task* task)
 {
     sTransitionData->bg0HOfsOpponent -= 8;
     sTransitionData->bg0HOfsPlayer += 8;
@@ -2015,7 +2012,7 @@ static bool8 Mugshot_WaitStartPlayerSlide(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_WaitPlayerSlide(struct Task *task)
+static bool8 Mugshot_WaitPlayerSlide(struct Task* task)
 {
     sTransitionData->bg0HOfsOpponent -= 8;
     sTransitionData->bg0HOfsPlayer += 8;
@@ -2038,7 +2035,7 @@ static bool8 Mugshot_WaitPlayerSlide(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_GradualWhiteFade(struct Task *task)
+static bool8 Mugshot_GradualWhiteFade(struct Task* task)
 {
     bool32 active;
 
@@ -2081,7 +2078,7 @@ static bool8 Mugshot_GradualWhiteFade(struct Task *task)
 
 // Set palette to white to replace the scanline white fade
 // before the screen fades to black.
-static bool8 Mugshot_InitFadeWhiteToBlack(struct Task *task)
+static bool8 Mugshot_InitFadeWhiteToBlack(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     BlendPalettes(PALETTES_ALL, 16, RGB_WHITE);
@@ -2091,7 +2088,7 @@ static bool8 Mugshot_InitFadeWhiteToBlack(struct Task *task)
     return TRUE;
 }
 
-static bool8 Mugshot_FadeToBlack(struct Task *task)
+static bool8 Mugshot_FadeToBlack(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     task->tTimer++;
@@ -2102,7 +2099,7 @@ static bool8 Mugshot_FadeToBlack(struct Task *task)
     return FALSE;
 }
 
-static bool8 Mugshot_End(struct Task *task)
+static bool8 Mugshot_End(struct Task* task)
 {
     DmaStop(0);
     FadeScreenBlack();
@@ -2142,21 +2139,21 @@ static void HBlankCB_Mugshots(void)
 }
 
 
-static void Mugshots_CreateTrainerPics(struct Task *task)
+static void Mugshots_CreateTrainerPics(struct Task* task)
 {
-    struct Sprite *opponentSprite, *playerSprite;
+    struct Sprite* opponentSprite, * playerSprite;
     s16 mugshotId;
 
     gReservedSpritePaletteCount = 10;
     mugshotId = task->tMugshotId;
     task->tOpponentSpriteId = CreateTrainerSprite(sMugshotsTrainerPicIDsTable[mugshotId],
-                                                  sMugshotsOpponentCoords[mugshotId][0] - 32,
-                                                  sMugshotsOpponentCoords[mugshotId][1] + 42,
-                                                  0, gDecompressionBuffer);
+        sMugshotsOpponentCoords[mugshotId][0] - 32,
+        sMugshotsOpponentCoords[mugshotId][1] + 42,
+        0, gDecompressionBuffer);
     task->tPlayerSpriteId = CreateTrainerSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE),
-                                                DISPLAY_WIDTH + 32,
-                                                106,
-                                                0, gDecompressionBuffer);
+        DISPLAY_WIDTH + 32,
+        106,
+        0, gDecompressionBuffer);
     gReservedSpritePaletteCount = 12;
 
     opponentSprite = &gSprites[task->tOpponentSpriteId];
@@ -2184,18 +2181,18 @@ static void Mugshots_CreateTrainerPics(struct Task *task)
     SetOamMatrixRotationScaling(playerSprite->oam.matrixNum, -512, 512, 0);
 }
 
-static void SpriteCB_MugshotTrainerPic(struct Sprite *sprite)
+static void SpriteCB_MugshotTrainerPic(struct Sprite* sprite)
 {
     while (sMugshotTrainerPicFuncs[sprite->sState](sprite));
 }
 
 // Wait until IncrementTrainerPicState is called
-static bool8 MugshotTrainerPic_Pause(struct Sprite *sprite)
+static bool8 MugshotTrainerPic_Pause(struct Sprite* sprite)
 {
     return FALSE;
 }
 
-static bool8 MugshotTrainerPic_Init(struct Sprite *sprite)
+static bool8 MugshotTrainerPic_Init(struct Sprite* sprite)
 {
     s16 speeds[ARRAY_COUNT(sTrainerPicSlideSpeeds)];
     s16 accels[ARRAY_COUNT(sTrainerPicSlideAccels)];
@@ -2208,7 +2205,7 @@ static bool8 MugshotTrainerPic_Init(struct Sprite *sprite)
     return TRUE;
 }
 
-static bool8 MugshotTrainerPic_Slide(struct Sprite *sprite)
+static bool8 MugshotTrainerPic_Slide(struct Sprite* sprite)
 {
     sprite->x += sprite->sSlideSpeed;
 
@@ -2220,7 +2217,7 @@ static bool8 MugshotTrainerPic_Slide(struct Sprite *sprite)
     return FALSE;
 }
 
-static bool8 MugshotTrainerPic_SlideSlow(struct Sprite *sprite)
+static bool8 MugshotTrainerPic_SlideSlow(struct Sprite* sprite)
 {
     // Add acceleration value to speed, then add speed.
     // For both sides acceleration is opposite speed, so slide slows down.
@@ -2240,7 +2237,7 @@ static bool8 MugshotTrainerPic_SlideSlow(struct Sprite *sprite)
 // Slides trainer pic offscreen. This is never reached, because it's preceded
 // by a second MugshotTrainerPic_Pause, and IncrementTrainerPicState is
 // only called once per trainer pic.
-static bool8 MugshotTrainerPic_SlideOffscreen(struct Sprite *sprite)
+static bool8 MugshotTrainerPic_SlideOffscreen(struct Sprite* sprite)
 {
     sprite->sSlideSpeed += sprite->sSlideAccel;
     sprite->x += sprite->sSlideSpeed;
@@ -2291,7 +2288,7 @@ static void Task_Slice(u8 taskId)
     while (sSlice_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Slice_Init(struct Task *task)
+static bool8 Slice_Init(struct Task* task)
 {
     u16 i;
 
@@ -2314,7 +2311,7 @@ static bool8 Slice_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 Slice_Main(struct Task *task)
+static bool8 Slice_Main(struct Task* task)
 {
     u16 i;
 
@@ -2329,9 +2326,9 @@ static bool8 Slice_Main(struct Task *task)
 
     for (i = 0; i < DISPLAY_HEIGHT; i++)
     {
-        u16 *ofsBuffer = &gScanlineEffectRegBuffers[0][i];
-        u16 *win0HBuffer = &gScanlineEffectRegBuffers[0][i + DISPLAY_HEIGHT];
-        
+        u16* ofsBuffer = &gScanlineEffectRegBuffers[0][i];
+        u16* win0HBuffer = &gScanlineEffectRegBuffers[0][i + DISPLAY_HEIGHT];
+
         // Alternate rows
         if (i & 1)
         {
@@ -2350,7 +2347,7 @@ static bool8 Slice_Main(struct Task *task)
     return FALSE;
 }
 
-static bool8 Slice_End(struct Task *task)
+static bool8 Slice_End(struct Task* task)
 {
     DmaStop(0);
     FadeScreenBlack();
@@ -2373,7 +2370,7 @@ static void VBlankCB_Slice(void)
 static void HBlankCB_Slice(void)
 {
     s16 offset = gScanlineEffectRegBuffers[1][REG_VCOUNT];
-    
+
     REG_BG1HOFS = offset;
     REG_BG2HOFS = offset;
     REG_BG3HOFS = offset;
@@ -2400,7 +2397,7 @@ static void Task_WhiteBarsFade(u8 taskId)
     while (sWhiteBarsFade_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 WhiteBarsFade_Init(struct Task *task)
+static bool8 WhiteBarsFade_Init(struct Task* task)
 {
     u16 i;
 
@@ -2423,11 +2420,11 @@ static bool8 WhiteBarsFade_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 WhiteBarsFade_StartBars(struct Task *task)
+static bool8 WhiteBarsFade_StartBars(struct Task* task)
 {
     s16 i, posY;
     s16 delays[ARRAY_COUNT(sWhiteBarsFade_StartDelays)];
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     memcpy(delays, sWhiteBarsFade_StartDelays, sizeof(sWhiteBarsFade_StartDelays));
 
     for (i = 0, posY = 0; i < NUM_WHITE_BARS; i++, posY += WHITE_BAR_HEIGHT)
@@ -2446,7 +2443,7 @@ static bool8 WhiteBarsFade_StartBars(struct Task *task)
     return FALSE;
 }
 
-static bool8 WhiteBarsFade_WaitBars(struct Task *task)
+static bool8 WhiteBarsFade_WaitBars(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     if (sTransitionData->counter >= NUM_WHITE_BARS)
@@ -2457,7 +2454,7 @@ static bool8 WhiteBarsFade_WaitBars(struct Task *task)
     return FALSE;
 }
 
-static bool8 WhiteBarsFade_BlendToBlack(struct Task *task)
+static bool8 WhiteBarsFade_BlendToBlack(struct Task* task)
 {
     sTransitionData->vblankDma = FALSE;
     DmaStop(0);
@@ -2473,16 +2470,16 @@ static bool8 WhiteBarsFade_BlendToBlack(struct Task *task)
     return FALSE;
 }
 
-static bool8 WhiteBarsFade_End(struct Task *task)
+static bool8 WhiteBarsFade_End(struct Task* task)
 {
-   sTransitionData->counter += 480;
-   sTransitionData->bldY = sTransitionData->counter >> 8;
-   if (sTransitionData->bldY > 16)
-   {
-       FadeScreenBlack();
-       DestroyTask(FindTaskIdByFunc(Task_WhiteBarsFade));
-   }
-   return FALSE;
+    sTransitionData->counter += 480;
+    sTransitionData->bldY = sTransitionData->counter >> 8;
+    if (sTransitionData->bldY > 16)
+    {
+        FadeScreenBlack();
+        DestroyTask(FindTaskIdByFunc(Task_WhiteBarsFade));
+    }
+    return FALSE;
 }
 
 static void VBlankCB_WhiteBarsFade(void)
@@ -2519,7 +2516,7 @@ static void HBlankCB_WhiteBarsFade(void)
     REG_BLDY = gScanlineEffectRegBuffers[1][index];
 }
 
-static void SpriteCB_WhiteBarFade(struct Sprite *sprite)
+static void SpriteCB_WhiteBarFade(struct Sprite* sprite)
 {
     if (sprite->sDelay)
     {
@@ -2530,13 +2527,13 @@ static void SpriteCB_WhiteBarFade(struct Sprite *sprite)
     else
     {
         u16 i;
-        u16 *bldY = &gScanlineEffectRegBuffers[0][sprite->y];
-        u16 *win0H = &gScanlineEffectRegBuffers[0][sprite->y + DISPLAY_HEIGHT];
+        u16* bldY = &gScanlineEffectRegBuffers[0][sprite->y];
+        u16* win0H = &gScanlineEffectRegBuffers[0][sprite->y + DISPLAY_HEIGHT];
 
         // Each bar is 27 pixels high. With 6 bars this is a total of 162, which is 2 pixels taller than the screen.
         // 1 bar is therefore shortened by 2 pixels
         u32 stripeWidth = sprite->sIsMainSprite ? (WHITE_BAR_HEIGHT - 2) : WHITE_BAR_HEIGHT;
-        
+
         for (i = 0; i < stripeWidth; i++)
         {
             bldY[i] = sprite->sFade >> 8;
@@ -2581,9 +2578,9 @@ static void Task_GridSquares(u8 taskId)
     while (sGridSquares_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 GridSquares_Init(struct Task *task)
+static bool8 GridSquares_Init(struct Task* task)
 {
-    u16 *tilemap, *tileset;
+    u16* tilemap, * tileset;
 
     GetBg0TilesDst(&tilemap, &tileset);
     CpuCopy16(sGridSquare_Gfx, tileset, 0x20);
@@ -2593,9 +2590,9 @@ static bool8 GridSquares_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 GridSquares_Main(struct Task *task)
+static bool8 GridSquares_Main(struct Task* task)
 {
-    u16 *tileset;
+    u16* tileset;
 
     if (task->tDelay == 0)
     {
@@ -2613,7 +2610,7 @@ static bool8 GridSquares_Main(struct Task *task)
     return FALSE;
 }
 
-static bool8 GridSquares_End(struct Task *task)
+static bool8 GridSquares_End(struct Task* task)
 {
     if (--task->tDelay == 0)
     {
@@ -2639,7 +2636,7 @@ static void Task_AngledWipes(u8 taskId)
     while (sAngledWipes_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 AngledWipes_Init(struct Task *task)
+static bool8 AngledWipes_Init(struct Task* task)
 {
     u16 i;
 
@@ -2656,20 +2653,20 @@ static bool8 AngledWipes_Init(struct Task *task)
     return TRUE;
 }
 
-static bool8 AngledWipes_SetWipeData(struct Task *task)
+static bool8 AngledWipes_SetWipeData(struct Task* task)
 {
     InitBlackWipe(sTransitionData->data,
-                  sAngledWipes_MoveData[task->tWipeId][0],
-                  sAngledWipes_MoveData[task->tWipeId][1],
-                  sAngledWipes_MoveData[task->tWipeId][2],
-                  sAngledWipes_MoveData[task->tWipeId][3],
-                  1, 1);
+        sAngledWipes_MoveData[task->tWipeId][0],
+        sAngledWipes_MoveData[task->tWipeId][1],
+        sAngledWipes_MoveData[task->tWipeId][2],
+        sAngledWipes_MoveData[task->tWipeId][3],
+        1, 1);
     task->tDir = sAngledWipes_MoveData[task->tWipeId][4];
     task->tState++;
     return TRUE;
 }
 
-static bool8 AngledWipes_DoWipe(struct Task *task)
+static bool8 AngledWipes_DoWipe(struct Task* task)
 {
     s16 i;
     bool8 finished;
@@ -2707,7 +2704,7 @@ static bool8 AngledWipes_DoWipe(struct Task *task)
     return FALSE;
 }
 
-static bool8 AngledWipes_TryEnd(struct Task *task)
+static bool8 AngledWipes_TryEnd(struct Task* task)
 {
     if (++task->tWipeId < NUM_ANGLED_WIPES)
     {
@@ -2726,7 +2723,7 @@ static bool8 AngledWipes_TryEnd(struct Task *task)
     }
 }
 
-static bool8 AngledWipes_StartNext(struct Task *task)
+static bool8 AngledWipes_StartNext(struct Task* task)
 {
     if (--task->tDelay == 0)
     {
@@ -2791,7 +2788,7 @@ static void Task_BattleTransition_Intro(u8 taskId)
     while (sTransitionIntroFuncs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 TransitionIntro_FadeToGray(struct Task *task)
+static bool8 TransitionIntro_FadeToGray(struct Task* task)
 {
     if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
     {
@@ -2810,7 +2807,7 @@ static bool8 TransitionIntro_FadeToGray(struct Task *task)
     return FALSE;
 }
 
-static bool8 TransitionIntro_FadeFromGray(struct Task *task)
+static bool8 TransitionIntro_FadeFromGray(struct Task* task)
 {
     if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
     {
@@ -2862,16 +2859,16 @@ static void VBlankCB_BattleTransition(void)
     TransferPlttBuffer();
 }
 
-static void GetBg0TilemapDst(u16 **tilesetPtr)
+static void GetBg0TilemapDst(u16** tilesetPtr)
 {
     u16 charBase;
 
     charBase = GetGpuReg(REG_OFFSET_BG0CNT) >> 2;
     charBase <<= 14;
-    *tilesetPtr = (u16 *)(VRAM + charBase);
+    *tilesetPtr = (u16*)(VRAM + charBase);
 }
 
-static void GetBg0TilesDst(u16 **tilemapPtr, u16 **tilesetPtr)
+static void GetBg0TilesDst(u16** tilemapPtr, u16** tilesetPtr)
 {
     u16 screenBase, charBase;
 
@@ -2879,8 +2876,8 @@ static void GetBg0TilesDst(u16 **tilemapPtr, u16 **tilesetPtr)
     charBase = GetGpuReg(REG_OFFSET_BG0CNT) >> 2;
     screenBase <<= 11;
     charBase <<= 14;
-    *tilemapPtr = (u16 *)(VRAM + screenBase);
-    *tilesetPtr = (u16 *)(VRAM + charBase);
+    *tilemapPtr = (u16*)(VRAM + screenBase);
+    *tilesetPtr = (u16*)(VRAM + charBase);
 }
 
 static void FadeScreenBlack(void)
@@ -2888,7 +2885,7 @@ static void FadeScreenBlack(void)
     BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
 }
 
-static void SetSinWave(s16 *buffer, s16 offset, s16 index, s16 frequency, s16 amplitude, s16 bufSize)
+static void SetSinWave(s16* buffer, s16 offset, s16 index, s16 frequency, s16 amplitude, s16 bufSize)
 {
     u8 i;
 
@@ -2896,7 +2893,7 @@ static void SetSinWave(s16 *buffer, s16 offset, s16 index, s16 frequency, s16 am
         buffer[i] = offset + Sin(index & 0xFF, amplitude);
 }
 
-static void SetCircularMask(s16 *buffer, s16 x, s16 y, s16 radius)
+static void SetCircularMask(s16* buffer, s16 x, s16 y, s16 radius)
 {
     s16 i;
 
@@ -2945,7 +2942,7 @@ static void SetCircularMask(s16 *buffer, s16 x, s16 y, s16 radius)
     }
 }
 
-static void InitBlackWipe(s16 *data, s16 startX, s16 startY, s16 endX, s16 endY, s16 stepX, s16 stepY)
+static void InitBlackWipe(s16* data, s16 startX, s16 startY, s16 endX, s16 endY, s16 stepX, s16 stepY)
 {
     tWipeStartX = startX;
     tWipeStartY = startY;
@@ -2972,7 +2969,7 @@ static void InitBlackWipe(s16 *data, s16 startX, s16 startY, s16 endX, s16 endY,
     tWipeTemp = 0;
 }
 
-static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
+static bool8 UpdateBlackWipe(s16* data, bool8 xExact, bool8 yExact)
 {
     u8 numFinished;
 
@@ -2980,7 +2977,7 @@ static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
     {
         // X has further to move, move it first
         tWipeCurrX += tWipeXMove;
-        
+
         // If it has been far enough since Y's
         // last move then move it too
         tWipeTemp += tWipeYDist;
@@ -2994,7 +2991,7 @@ static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
     {
         // Y has further to move, move it first
         tWipeCurrY += tWipeYMove;
-        
+
         // If it has been far enough since X's
         // last move then move it too
         tWipeTemp += tWipeXDist;
@@ -3009,7 +3006,7 @@ static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
 
     // Has X coord reached end?
     if ((tWipeXMove > 0 && tWipeCurrX >= tWipeEndX)
-     || (tWipeXMove < 0 && tWipeCurrX <= tWipeEndX))
+        || (tWipeXMove < 0 && tWipeCurrX <= tWipeEndX))
     {
         numFinished++;
         if (xExact)
@@ -3018,7 +3015,7 @@ static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
 
     // Has Y coord reached end?
     if ((tWipeYMove > 0 && tWipeCurrY >= tWipeEndY)
-     || (tWipeYMove < 0 && tWipeCurrY <= tWipeEndY))
+        || (tWipeYMove < 0 && tWipeCurrY <= tWipeEndY))
     {
         numFinished++;
         if (yExact)

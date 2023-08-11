@@ -29,12 +29,12 @@ extern const struct MonCoords gMonBackPicCoords[];
 extern const struct CompressedSpriteSheet gMonBackPicTable[];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
-extern const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[];
+extern const union AnimCmd* const* const gTrainerFrontAnimsPtrTable[];
 extern const struct MonCoords gTrainerFrontPicCoords[];
 extern const struct CompressedSpriteSheet gTrainerFrontPicTable[];
 extern const struct CompressedSpriteSheet gTrainerBackPicTable[];
 extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
-extern const union AnimCmd *const *const gTrainerBackAnimsPtrTable[];
+extern const union AnimCmd* const* const gTrainerBackAnimsPtrTable[];
 extern const struct MonCoords gTrainerBackPicCoords[];
 extern const struct CompressedSpritePalette gTrainerBackPicPaletteTable[];
 
@@ -43,12 +43,12 @@ extern const struct SpriteTemplate gSpriteTemplate_EnemyShadow;
 
 extern const u8 gEnemyMonElevation[NUM_SPECIES];
 
-extern const u8 *const gBattleAnims_General[];
-extern const u8 *const gBattleAnims_Special[];
+extern const u8* const gBattleAnims_General[];
+extern const u8* const gBattleAnims_Special[];
 
-extern const union AnimCmd *const gAnims_MonPic[];
-extern const union AffineAnimCmd *const gAffineAnims_BattleSpritePlayerSide[];
-extern const union AffineAnimCmd *const gAffineAnims_BattleSpriteOpponentSide[];
+extern const union AnimCmd* const gAnims_MonPic[];
+extern const union AffineAnimCmd* const gAffineAnims_BattleSpritePlayerSide[];
+extern const union AffineAnimCmd* const gAffineAnims_BattleSpriteOpponentSide[];
 extern const struct SpriteFrameImage gBattlerPicTable_PlayerLeft[];
 extern const struct SpriteFrameImage gBattlerPicTable_OpponentLeft[];
 extern const struct SpriteFrameImage gBattlerPicTable_PlayerRight[];

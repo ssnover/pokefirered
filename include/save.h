@@ -56,7 +56,7 @@ enum
 // and the size of that data. Size cannot be greater than SECTOR_DATA_SIZE.
 struct SaveSectorLocation
 {
-    u8 *data;
+    u8* data;
     u16 size;
 };
 
@@ -82,7 +82,7 @@ enum
 };
 
 extern u32 gDamagedSaveSectors;
-extern struct SaveSector *gSaveDataBufferPtr; // the pointer is in fast IWRAM but points to the slower EWRAM.
+extern struct SaveSector* gSaveDataBufferPtr; // the pointer is in fast IWRAM but points to the slower EWRAM.
 extern u16 gSaveFileStatus;
 extern void (*gGameContinueCallback)(void);
 extern u16 gSaveAttemptStatus;
@@ -100,8 +100,8 @@ bool8 LinkFullSave_SetLastSectorSignature(void);
 bool8 WriteSaveBlock2(void);
 bool8 WriteSaveBlock1Sector(void);
 u8 LoadGameSave(u8 saveType);
-u32 TryReadSpecialSaveSector(u8 sector, u8 *dst);
-u32 TryWriteSpecialSaveSector(u8 sector, u8 *src);
+u32 TryReadSpecialSaveSector(u8 sector, u8* dst);
+u32 TryWriteSpecialSaveSector(u8 sector, u8* src);
 void Task_LinkFullSave(u8 taskId);
 
 #endif // GUARD_SAVE_H

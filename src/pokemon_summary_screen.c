@@ -36,9 +36,9 @@
 #include "constants/sound.h"
 
 // needs conflicting header to match (curIndex is s8 in the function, but has to be defined as u8 here)
-extern s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, u8 curIndex, u8 maxIndex, u8 flags);
+extern s16 SeekToNextMonInBox(struct BoxPokemon* boxMons, u8 curIndex, u8 maxIndex, u8 flags);
 
-static void BufferSelectedMonData(struct Pokemon * mon);
+static void BufferSelectedMonData(struct Pokemon* mon);
 static void CB2_SetUpPSS(void);
 static void PokeSum_TryPlayMonCry(void);
 static void PokeSum_RemoveWindows(u8 curPageIndex);
@@ -63,9 +63,9 @@ static void PokeSum_PrintRightPaneText(void);
 static void PokeSum_PrintBottomPaneText(void);
 static void PokeSum_PrintAbilityDataOrMoveTypes(void);
 static void PokeSum_PrintMonTypeIcons(void);
-static void PokeSum_PrintPageName(const u8 * str);
-static void PokeSum_PrintControlsString(const u8 * str);
-static void PrintMonLevelNickOnWindow2(const u8 * str);
+static void PokeSum_PrintPageName(const u8* str);
+static void PokeSum_PrintControlsString(const u8* str);
+static void PrintMonLevelNickOnWindow2(const u8* str);
 static void PokeSum_UpdateBgPriorityForPageFlip(u8 setBg0Priority, u8 keepBg1Bg2PriorityOrder);
 static void ShowOrHideHpBarObjs(u8 invisible);
 static void ShowOrHideExpBarObjs(u8 invisible);
@@ -92,8 +92,8 @@ static void BufferMonSkills(void);
 static void BufferMonMoves(void);
 static u8 StatusToAilment(u32 status);
 static void BufferMonMoveI(u8);
-static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot);
-static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot);
+static u16 GetMonMoveBySlotId(struct Pokemon* mon, u8 moveSlot);
+static u16 GetMonPpByMoveSlot(struct Pokemon* mon, u8 moveSlot);
 static void CreateShinyStarObj(u16, u16);
 static void CreatePokerusIconObj(u16, u16);
 static void PokeSum_CreateMonMarkingsSprite(void);
@@ -120,16 +120,16 @@ static bool32 IsMultiBattlePartner(void);
 static bool32 PokeSum_IsMonBoldOrGentle(u8 nature);
 static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void);
 static bool32 CurrentMonIsFromGBA(void);
-static u8 PokeSum_BufferOtName_IsEqualToCurrentOwner(struct Pokemon * mon);
+static u8 PokeSum_BufferOtName_IsEqualToCurrentOwner(struct Pokemon* mon);
 static void PokeSum_PrintAbilityNameAndDesc(void);
 static void PokeSum_DrawMoveTypeIcons(void);
 static void PokeSum_DestroySprites(void);
 static void PokeSum_FlipPages_HandleBgHofs(void);
 static void SwapMonMoveSlots(void);
 static void SwapBoxMonMoveSlots(void);
-static void UpdateCurrentMonBufferFromPartyOrBox(struct Pokemon * mon);
+static void UpdateCurrentMonBufferFromPartyOrBox(struct Pokemon* mon);
 static void PokeSum_SetMonPicSpriteCallback(u16 spriteId);
-static void SpriteCB_MoveSelectionCursor(struct Sprite *sprite);
+static void SpriteCB_MoveSelectionCursor(struct Sprite* sprite);
 static void UpdateMonStatusIconObj(void);
 static void UpdateHpBarObjs(void);
 static void UpdateExpBarObjs(void);
@@ -233,12 +233,12 @@ struct PokemonSummaryScreenData
 
     union
     {
-        struct Pokemon * mons;
-        struct BoxPokemon * boxMons;
+        struct Pokemon* mons;
+        struct BoxPokemon* boxMons;
     } monList;
 
     MainCallback savedCallback;
-    struct Sprite *markingSprite;
+    struct Sprite* markingSprite;
 
     u8 ALIGNED(4) lastPageFlipDirection; /* 0x3300 */
     u8 ALIGNED(4) unk3304; /* 0x3304 */
@@ -264,7 +264,7 @@ struct Struct203B144
 
 struct ExpBarObjs
 {
-    struct Sprite *sprites[11]; /* 0x00 */
+    struct Sprite* sprites[11]; /* 0x00 */
     u16 xpos[11]; /* 0x2c */
     u16 tileTag; /* 0x42 */
     u16 palTag; /* 0x44 */
@@ -272,7 +272,7 @@ struct ExpBarObjs
 
 struct HpBarObjs
 {
-    struct Sprite *sprites[10]; /* 0x00 */
+    struct Sprite* sprites[10]; /* 0x00 */
     u16 xpos[10]; /* 0x28 */
     u16 tileTag; /* 0x3c */
     u16 palTag; /* 0x3e */
@@ -287,7 +287,7 @@ struct MonPicBounceState
 
 struct MoveSelectionCursor
 {
-    struct Sprite *sprite; /* 0x00 */
+    struct Sprite* sprite; /* 0x00 */
     u16 whichSprite; /* 0x04 */
     u16 tileTag; /* 0x06 */
     u16 palTag; /* 0x08 */
@@ -295,37 +295,37 @@ struct MoveSelectionCursor
 
 struct MonStatusIconObj
 {
-    struct Sprite *sprite; /* 0x00 */
+    struct Sprite* sprite; /* 0x00 */
     u16 tileTag; /* 0x04 */
     u16 palTag; /* 0x06 */
 };
 
 struct PokerusIconObj
 {
-    struct Sprite *sprite; /* 0x00 */
+    struct Sprite* sprite; /* 0x00 */
     u16 tileTag; /* 0x04 */
     u16 palTag; /* 0x06 */
 };
 
 struct ShinyStarObjData
 {
-    struct Sprite *sprite; /* 0x00 */
+    struct Sprite* sprite; /* 0x00 */
     u16 tileTag; /* 0x04 */
     u16 palTag; /* 0x06 */
 };
 
-static EWRAM_DATA struct PokemonSummaryScreenData * sMonSummaryScreen = NULL;
-static EWRAM_DATA struct Struct203B144 * sMonSkillsPrinterXpos = NULL;
-static EWRAM_DATA struct MoveSelectionCursor * sMoveSelectionCursorObjs[4] = {};
-static EWRAM_DATA struct MonStatusIconObj * sStatusIcon = NULL;
-static EWRAM_DATA struct HpBarObjs * sHpBarObjs = NULL;
-static EWRAM_DATA struct ExpBarObjs * sExpBarObjs = NULL;
-static EWRAM_DATA struct PokerusIconObj * sPokerusIconObj = NULL;
-static EWRAM_DATA struct ShinyStarObjData * sShinyStarObjData = NULL;
+static EWRAM_DATA struct PokemonSummaryScreenData* sMonSummaryScreen = NULL;
+static EWRAM_DATA struct Struct203B144* sMonSkillsPrinterXpos = NULL;
+static EWRAM_DATA struct MoveSelectionCursor* sMoveSelectionCursorObjs[4] = {};
+static EWRAM_DATA struct MonStatusIconObj* sStatusIcon = NULL;
+static EWRAM_DATA struct HpBarObjs* sHpBarObjs = NULL;
+static EWRAM_DATA struct ExpBarObjs* sExpBarObjs = NULL;
+static EWRAM_DATA struct PokerusIconObj* sPokerusIconObj = NULL;
+static EWRAM_DATA struct ShinyStarObjData* sShinyStarObjData = NULL;
 static EWRAM_DATA u8 sLastViewedMonIndex = 0;
 static EWRAM_DATA u8 sMoveSelectionCursorPos = 0;
 static EWRAM_DATA u8 sMoveSwapCursorPos = 0;
-static EWRAM_DATA struct MonPicBounceState * sMonPicBounceState = NULL;
+static EWRAM_DATA struct MonPicBounceState* sMonPicBounceState = NULL;
 
 extern const u32 gSummaryScreen_PageSkills_Tilemap[];
 extern const u32 gSummaryScreen_PageMoves_Tilemap[];
@@ -363,19 +363,19 @@ static const struct OamData sMoveSelectionCursorOamData =
     .paletteNum = 0
 };
 
-static const union AnimCmd sMoveSelectionCursorOamAnim_Red[] = 
+static const union AnimCmd sMoveSelectionCursorOamAnim_Red[] =
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sMoveSelectionCursorOamAnim_Blue[] = 
+static const union AnimCmd sMoveSelectionCursorOamAnim_Blue[] =
 {
     ANIMCMD_FRAME(0x20, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sMoveSelectionCursorOamAnimTable[] =
+static const union AnimCmd* const sMoveSelectionCursorOamAnimTable[] =
 {
     sMoveSelectionCursorOamAnim_Red,
     sMoveSelectionCursorOamAnim_Blue
@@ -396,55 +396,55 @@ static const struct OamData sStatusAilmentIconOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_PSN[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PSN[] =
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_PRZ[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PRZ[] =
 {
     ANIMCMD_FRAME(4, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_SLP[] = 
+static const union AnimCmd sStatusAilmentIconAnim_SLP[] =
 {
     ANIMCMD_FRAME(8, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_FRZ[] = 
+static const union AnimCmd sStatusAilmentIconAnim_FRZ[] =
 {
     ANIMCMD_FRAME(12, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_BRN[] = 
+static const union AnimCmd sStatusAilmentIconAnim_BRN[] =
 {
     ANIMCMD_FRAME(16, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_PKRS[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PKRS[] =
 {
     ANIMCMD_FRAME(20, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_FNT[] = 
+static const union AnimCmd sStatusAilmentIconAnim_FNT[] =
 {
     ANIMCMD_FRAME(24, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sStatusAilmentIconAnim_Blank[] = 
+static const union AnimCmd sStatusAilmentIconAnim_Blank[] =
 {
     ANIMCMD_FRAME(28, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sStatusAilmentIconAnimTable[] =
+static const union AnimCmd* const sStatusAilmentIconAnimTable[] =
 {
     sStatusAilmentIconAnim_PSN,
     sStatusAilmentIconAnim_PRZ,
@@ -471,79 +471,79 @@ static const struct OamData sHpOrExpBarOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sHpOrExpAnim_0[] = 
+static const union AnimCmd sHpOrExpAnim_0[] =
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_1[] = 
+static const union AnimCmd sHpOrExpAnim_1[] =
 {
     ANIMCMD_FRAME(1, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_2[] = 
+static const union AnimCmd sHpOrExpAnim_2[] =
 {
     ANIMCMD_FRAME(2, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_3[] = 
+static const union AnimCmd sHpOrExpAnim_3[] =
 {
     ANIMCMD_FRAME(3, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_4[] = 
+static const union AnimCmd sHpOrExpAnim_4[] =
 {
     ANIMCMD_FRAME(4, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_5[] = 
+static const union AnimCmd sHpOrExpAnim_5[] =
 {
     ANIMCMD_FRAME(5, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_6[] = 
+static const union AnimCmd sHpOrExpAnim_6[] =
 {
     ANIMCMD_FRAME(6, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_7[] = 
+static const union AnimCmd sHpOrExpAnim_7[] =
 {
     ANIMCMD_FRAME(7, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_8[] = 
+static const union AnimCmd sHpOrExpAnim_8[] =
 {
     ANIMCMD_FRAME(8, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_9[] = 
+static const union AnimCmd sHpOrExpAnim_9[] =
 {
     ANIMCMD_FRAME(9, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_10[] = 
+static const union AnimCmd sHpOrExpAnim_10[] =
 {
     ANIMCMD_FRAME(10, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sHpOrExpAnim_11[] = 
+static const union AnimCmd sHpOrExpAnim_11[] =
 {
     ANIMCMD_FRAME(11, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sHpOrExpBarAnimTable[] =
+static const union AnimCmd* const sHpOrExpBarAnimTable[] =
 {
     sHpOrExpAnim_0,
     sHpOrExpAnim_1,
@@ -577,13 +577,13 @@ static const struct OamData sPokerusIconObjOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sPokerusIconObjAnim0[] = 
+static const union AnimCmd sPokerusIconObjAnim0[] =
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sPokerusIconObjAnimTable[] =
+static const union AnimCmd* const sPokerusIconObjAnimTable[] =
 {
     sPokerusIconObjAnim0
 };
@@ -607,35 +607,35 @@ static const struct OamData sStarObjOamData =
     .paletteNum = 0
 };
 
-static const union AnimCmd sStarObjAnim0[] = 
+static const union AnimCmd sStarObjAnim0[] =
 {
     ANIMCMD_FRAME(1, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sStarObjAnimTable[] =
+static const union AnimCmd* const sStarObjAnimTable[] =
 {
     sStarObjAnim0
 };
 
-static const u16 sStarObjPal[] = INCBIN_U16( "graphics/summary_screen/shiny_star.gbapal");
-static const u32 sStarObjTiles[] = INCBIN_U32( "graphics/summary_screen/shiny_star.4bpp.lz");
-static const u32 sBgTilemap_MovesInfoPage[] = INCBIN_U32( "graphics/summary_screen/moves_info_page.bin.lz");
-static const u32 sBgTilemap_MovesPage[] = INCBIN_U32( "graphics/summary_screen/moves_page.bin.lz");
+static const u16 sStarObjPal[] = INCBIN_U16("graphics/summary_screen/shiny_star.gbapal");
+static const u32 sStarObjTiles[] = INCBIN_U32("graphics/summary_screen/shiny_star.4bpp.lz");
+static const u32 sBgTilemap_MovesInfoPage[] = INCBIN_U32("graphics/summary_screen/moves_info_page.bin.lz");
+static const u32 sBgTilemap_MovesPage[] = INCBIN_U32("graphics/summary_screen/moves_page.bin.lz");
 
 #include "data/text/nature_names.h"
 
-static const u8 *const sEggHatchTimeTexts[] = {
+static const u8* const sEggHatchTimeTexts[] = {
     gText_PokeSum_EggHatch_LongTime,
     gText_PokeSum_EggHatch_SomeTime,
-    gText_PokeSum_EggHatch_Soon, 
+    gText_PokeSum_EggHatch_Soon,
     gText_PokeSum_EggHatch_AlmostReady
 };
 
-static const u8 *const sEggOriginTexts[] = {
-    gText_PokeSum_EggOrigin_DayCare,      
+static const u8* const sEggOriginTexts[] = {
+    gText_PokeSum_EggOrigin_DayCare,
     gText_PokeSum_EggOrigin_Trade,
-    gText_PokeSum_EggOrigin_TravelingMan, 
+    gText_PokeSum_EggOrigin_TravelingMan,
     gText_PokeSum_EggOrigin_Trade,
     gText_PokeSum_EggOrigin_NicePlace,
     gText_PokeSum_EggOrigin_Spa,
@@ -649,44 +649,44 @@ static const u8 sPrintMoveTextColors[][3] = {
     {0, 5, 6}
 };
 
-static const struct BgTemplate sBgTempaltes[] = 
+static const struct BgTemplate sBgTempaltes[] =
 {
-	 {
-	 	.bg = 0,
-	 	.charBaseIndex = 0,
-	 	.mapBaseIndex = 14,
-	 	.screenSize = 1,
-	 	.paletteMode = 0,
-	 	.priority = 0,
-	 	.baseTile = 0x0000
-	 },
-	 {
-	 	.bg = 2,
-	 	.charBaseIndex = 2,
-	 	.mapBaseIndex = 10,
-	 	.screenSize = 1,
-	 	.paletteMode = 0,
-	 	.priority = 1,
-	 	.baseTile = 0x0000
-	 },
-	 {
-	 	.bg = 3,
-	 	.charBaseIndex = 2,
-	 	.mapBaseIndex = 9,
-	 	.screenSize = 0,
-	 	.paletteMode = 0,
-	 	.priority = 3,
-	 	.baseTile = 0x0000
-	 },
-	 {
-	 	.bg = 1,
-	 	.charBaseIndex = 2,
-	 	.mapBaseIndex = 12,
-	 	.screenSize = 1,
-	 	.paletteMode = 0,
-	 	.priority = 2,
-	 	.baseTile = 0x0000
-	 }
+     {
+        .bg = 0,
+        .charBaseIndex = 0,
+        .mapBaseIndex = 14,
+        .screenSize = 1,
+        .paletteMode = 0,
+        .priority = 0,
+        .baseTile = 0x0000
+     },
+     {
+        .bg = 2,
+        .charBaseIndex = 2,
+        .mapBaseIndex = 10,
+        .screenSize = 1,
+        .paletteMode = 0,
+        .priority = 1,
+        .baseTile = 0x0000
+     },
+     {
+        .bg = 3,
+        .charBaseIndex = 2,
+        .mapBaseIndex = 9,
+        .screenSize = 0,
+        .paletteMode = 0,
+        .priority = 3,
+        .baseTile = 0x0000
+     },
+     {
+        .bg = 1,
+        .charBaseIndex = 2,
+        .mapBaseIndex = 12,
+        .screenSize = 1,
+        .paletteMode = 0,
+        .priority = 2,
+        .baseTile = 0x0000
+     }
 };
 
 #define POKESUM_WIN_PAGE_NAME        0
@@ -741,7 +741,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
     }
 };
 
-static const struct WindowTemplate sWindowTemplates_Permanent_Bg2[] = 
+static const struct WindowTemplate sWindowTemplates_Permanent_Bg2[] =
 {
     {
         .bg = 2,
@@ -772,7 +772,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg2[] =
     },
 };
 
-static const struct WindowTemplate sWindowTemplates_Info[] = 
+static const struct WindowTemplate sWindowTemplates_Info[] =
 {
     [POKESUM_WIN_INFO_3 - 3] = {
         .bg = 0,
@@ -812,7 +812,7 @@ static const struct WindowTemplate sWindowTemplates_Info[] =
     },
 };
 
-static const struct WindowTemplate sWindowTemplates_Skills[] = 
+static const struct WindowTemplate sWindowTemplates_Skills[] =
 {
     [POKESUM_WIN_SKILLS_3 - 3] = {
         .bg = 0,
@@ -852,7 +852,7 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
     },
 };
 
-static const struct WindowTemplate sWindowTemplates_Moves[] = 
+static const struct WindowTemplate sWindowTemplates_Moves[] =
 {
     [POKESUM_WIN_MOVES_3 - 3] = {
         .bg = 0,
@@ -892,7 +892,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
     },
 };
 
-static const struct WindowTemplate sWindowTemplates_Dummy[] = 
+static const struct WindowTemplate sWindowTemplates_Dummy[] =
 {
     {
         .bg = 255,
@@ -956,7 +956,7 @@ static const s8 sEggPicShakeXDelta_AlmostReadyToHatch[] =
     2, 1, 1, 0, -1, -1, -2, 0, -2, -1, -1, 0, 1, 1, 2
 };
 
-static const u16 * const sHpBarPals[] =
+static const u16* const sHpBarPals[] =
 {
     gSummaryScreen_HpExpBar_Pal,
     sPokeSummary_HpBarPalYellow,
@@ -973,7 +973,7 @@ static const u16 * const sHpBarPals[] =
     }                                 \
 }
 
-void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u8 mode)
+void ShowPokemonSummaryScreen(struct Pokemon* party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u8 mode)
 {
     sMonSummaryScreen = AllocZeroed(sizeof(struct PokemonSummaryScreenData));
     sMonSkillsPrinterXpos = AllocZeroed(sizeof(struct Struct203B144));
@@ -1047,7 +1047,7 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
     SetMainCallback2(CB2_SetUpPSS);
 }
 
-void ShowSelectMovePokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 a4)
+void ShowSelectMovePokemonSummaryScreen(struct Pokemon* party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 a4)
 {
     ShowPokemonSummaryScreen(party, cursorPos, lastIdx, savedCallback, PSS_MODE_SELECT_MOVE);
     sMonSummaryScreen->moveIds[4] = a4;
@@ -1232,7 +1232,7 @@ static void Task_InputHandler_Info(u8 taskId)
 
 static void Task_PokeSum_FlipPages(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (data[0])
     {
@@ -2275,17 +2275,17 @@ static void BufferMonMoveI(u8 i)
     if (i >= 4 && sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
     {
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveCurPpStrBufs[i],
-                                   gBattleMoves[sMonSummaryScreen->moveIds[i]].pp, STR_CONV_MODE_LEFT_ALIGN, 3);
+            gBattleMoves[sMonSummaryScreen->moveIds[i]].pp, STR_CONV_MODE_LEFT_ALIGN, 3);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveMaxPpStrBufs[i],
-                                   gBattleMoves[sMonSummaryScreen->moveIds[i]].pp, STR_CONV_MODE_LEFT_ALIGN, 3);
+            gBattleMoves[sMonSummaryScreen->moveIds[i]].pp, STR_CONV_MODE_LEFT_ALIGN, 3);
     }
     else
     {
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveCurPpStrBufs[i],
-                                   GetMonPpByMoveSlot(&sMonSummaryScreen->currentMon, i), STR_CONV_MODE_LEFT_ALIGN, 3);
+            GetMonPpByMoveSlot(&sMonSummaryScreen->currentMon, i), STR_CONV_MODE_LEFT_ALIGN, 3);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveMaxPpStrBufs[i],
-                                   CalculatePPWithBonus(sMonSummaryScreen->moveIds[i], GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES), i),
-                                   STR_CONV_MODE_LEFT_ALIGN, 3);
+            CalculatePPWithBonus(sMonSummaryScreen->moveIds[i], GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES), i),
+            STR_CONV_MODE_LEFT_ALIGN, 3);
     }
 
     sMonSkillsPrinterXpos->curPp[i] = GetRightAlignXpos_NDigits(2, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
@@ -2352,9 +2352,9 @@ static void PokeSum_Setup_SpritesReset(void)
 
 static void PokeSum_Setup_InitGpu(void)
 {
-    DmaClearLarge16(3, (void *)VRAM, VRAM_SIZE, 0x1000);
-    DmaClear32(3, (void *)OAM, OAM_SIZE);
-    DmaClear16(3, (void *)PLTT, PLTT_SIZE);
+    DmaClearLarge16(3, (void*)VRAM, VRAM_SIZE, 0x1000);
+    DmaClear32(3, (void*)OAM, OAM_SIZE);
+    DmaClear16(3, (void*)PLTT, PLTT_SIZE);
 
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
 
@@ -2401,14 +2401,14 @@ static void PokeSum_FinishSetup(void)
     SetMainCallback2(CB2_RunPokemonSummaryScreen);
 }
 
-static void PokeSum_PrintPageName(const u8 * str)
+static void PokeSum_PrintPageName(const u8* str)
 {
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_PAGE_NAME], 0);
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_PAGE_NAME], FONT_NORMAL, 4, 1, sLevelNickTextColors[1], 0, str);
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_PAGE_NAME]);
 }
 
-static void PokeSum_PrintControlsString(const u8 * str)
+static void PokeSum_PrintControlsString(const u8* str)
 {
     u8 v0;
     s32 width;
@@ -2421,7 +2421,7 @@ static void PokeSum_PrintControlsString(const u8 * str)
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_CONTROLS]);
 }
 
-static void PrintMonLevelNickOnWindow2(const u8 * str)
+static void PrintMonLevelNickOnWindow2(const u8* str)
 {
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], 0);
 
@@ -2524,8 +2524,8 @@ static void PrintMovesPage(void)
             PokeSum_PrintMoveName(4);
         else
             AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL,
-                                         3, GetMoveNamePrinterYpos(4),
-                                         sPrintMoveTextColors[0], TEXT_SKIP_DRAW, gFameCheckerText_Cancel);
+                3, GetMoveNamePrinterYpos(4),
+                sPrintMoveTextColors[0], TEXT_SKIP_DRAW, gFameCheckerText_Cancel);
     }
 }
 
@@ -2543,27 +2543,27 @@ static void PokeSum_PrintMoveName(u8 i)
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 3, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
 
     if (sMonSummaryScreen->moveIds[i] == 0 || (curPP == maxPP))
-      colorIdx = 0;
+        colorIdx = 0;
     else if (curPP == 0)
-      colorIdx = 3;
+        colorIdx = 3;
     else if (maxPP == 3)
     {
         if (curPP == 2)
-          colorIdx = 2;
+            colorIdx = 2;
         else if (curPP == 1)
-          colorIdx = 1;
+            colorIdx = 1;
     }
     else if (maxPP == 2)
     {
         if (curPP == 1)
-          colorIdx = 1;
+            colorIdx = 1;
     }
     else
     {
         if (curPP <= (maxPP / 4))
-          colorIdx = 2;
+            colorIdx = 2;
         else if (curPP <= (maxPP / 2))
-          colorIdx = 1;
+            colorIdx = 1;
     }
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 36, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
@@ -2842,14 +2842,14 @@ static void PokeSum_PrintTrainerMemo_Egg(void)
 static void PokeSum_PrintExpPoints_NextLv(void)
 {
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                 26, 7,
-                                 sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 gText_PokeSum_ExpPoints);
+        26, 7,
+        sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+        gText_PokeSum_ExpPoints);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                 26, 20,
-                                 sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 gText_PokeSum_NextLv);
+        26, 20,
+        sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+        gText_PokeSum_NextLv);
 }
 
 static void PokeSum_PrintSelectedMoveStats(void)
@@ -2860,20 +2860,20 @@ static void PokeSum_PrintSelectedMoveStats(void)
             return;
 
         AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 1,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     sMonSummaryScreen->summary.movePowerStrBufs[sMoveSelectionCursorPos]);
+            57, 1,
+            sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+            sMonSummaryScreen->summary.movePowerStrBufs[sMoveSelectionCursorPos]);
 
         AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 15,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
+            57, 15,
+            sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+            sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
 
         AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     7, 42,
-                                     0, 0,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
+            7, 42,
+            0, 0,
+            sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+            gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
     }
 }
 
@@ -2900,11 +2900,11 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 66, 1, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
+        66, 1, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 2, 15, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 sMonSummaryScreen->summary.abilityDescStrBuf);
+        2, 15, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+        sMonSummaryScreen->summary.abilityDescStrBuf);
 
 }
 
@@ -3240,7 +3240,7 @@ static void PokeSum_SetHelpContext(void)
     }
 }
 
-static u8 PokeSum_BufferOtName_IsEqualToCurrentOwner(struct Pokemon * mon)
+static u8 PokeSum_BufferOtName_IsEqualToCurrentOwner(struct Pokemon* mon)
 {
     u8 i;
     u8 multiplayerId;
@@ -3299,13 +3299,13 @@ static void PokeSum_DrawPageProgressTiles(void)
             FillBgTilemapBufferRect(3, 33 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 1, 1, 1, 0);
             FillBgTilemapBufferRect(3, 48 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
             FillBgTilemapBufferRect(3, 64 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 1, 1, 1, 0);
-            FillBgTilemapBufferRect(3,  2 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 0, 4, 2, 0);
+            FillBgTilemapBufferRect(3, 2 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 0, 4, 2, 0);
         }
         break;
     case PSS_PAGE_SKILLS:
         FillBgTilemapBufferRect(3, 49 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 65 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 1, 1, 1, 0);
-        FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
+        FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 1, 1, 1, 0);
         FillBgTilemapBufferRect(3, 17 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 33 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 1, 1, 1, 0);
@@ -3319,11 +3319,11 @@ static void PokeSum_DrawPageProgressTiles(void)
     case PSS_PAGE_MOVES:
         FillBgTilemapBufferRect(3, 49 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 65 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 1, 1, 1, 0);
-        FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
+        FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 1, 1, 1, 0);
         FillBgTilemapBufferRect(3, 49 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 65 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 1, 1, 1, 0);
-        FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 0, 1, 1, 0);
+        FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 1, 1, 1, 0);
         FillBgTilemapBufferRect(3, 17 + PAGE_PROGRESS_BASE_TILE_NUM, 17, 0, 1, 1, 0);
         FillBgTilemapBufferRect(3, 33 + PAGE_PROGRESS_BASE_TILE_NUM, 17, 1, 1, 1, 0);
@@ -3333,18 +3333,18 @@ static void PokeSum_DrawPageProgressTiles(void)
     case PSS_PAGE_MOVES_INFO:
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
         {
-            FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 0, 4, 1, 0);
+            FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 0, 4, 1, 0);
             FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 1, 4, 1, 0);
         }
         else
         {
             FillBgTilemapBufferRect(3, 49 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 0, 1, 1, 0);
             FillBgTilemapBufferRect(3, 65 + PAGE_PROGRESS_BASE_TILE_NUM, 13, 1, 1, 1, 0);
-            FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
+            FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 0, 1, 1, 0);
             FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 14, 1, 1, 1, 0);
             FillBgTilemapBufferRect(3, 49 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 0, 1, 1, 0);
             FillBgTilemapBufferRect(3, 65 + PAGE_PROGRESS_BASE_TILE_NUM, 15, 1, 1, 1, 0);
-            FillBgTilemapBufferRect(3,  1 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 0, 1, 1, 0);
+            FillBgTilemapBufferRect(3, 1 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 0, 1, 1, 0);
             FillBgTilemapBufferRect(3, 19 + PAGE_PROGRESS_BASE_TILE_NUM, 16, 1, 1, 1, 0);
         }
         FillBgTilemapBufferRect(3, 50 + PAGE_PROGRESS_BASE_TILE_NUM, 17, 0, 1, 1, 0);
@@ -3410,21 +3410,21 @@ static bool32 IsMultiBattlePartner(void)
     return FALSE;
 }
 
-static void BufferSelectedMonData(struct Pokemon * mon)
+static void BufferSelectedMonData(struct Pokemon* mon)
 {
     if (!sMonSummaryScreen->isBoxMon)
     {
-        struct Pokemon * partyMons = sMonSummaryScreen->monList.mons;
+        struct Pokemon* partyMons = sMonSummaryScreen->monList.mons;
         *mon = partyMons[GetLastViewedMonIndex()];
     }
     else
     {
-        struct BoxPokemon * boxMons = sMonSummaryScreen->monList.boxMons;
+        struct BoxPokemon* boxMons = sMonSummaryScreen->monList.boxMons;
         BoxMonToMon(&boxMons[GetLastViewedMonIndex()], mon);
     }
 }
 
-static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
+static u16 GetMonMoveBySlotId(struct Pokemon* mon, u8 moveSlot)
 {
     u16 move;
 
@@ -3446,7 +3446,7 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
     return move;
 }
 
-static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
+static u16 GetMonPpByMoveSlot(struct Pokemon* mon, u8 moveSlot)
 {
     u16 pp;
 
@@ -3679,8 +3679,8 @@ static void Task_HandleInput_SelectMove(u8 taskId)
 
 static void SwapMonMoveSlots(void)
 {
-    struct Pokemon * partyMons;
-    struct Pokemon * mon;
+    struct Pokemon* partyMons;
+    struct Pokemon* mon;
 
     u16 move1, move2;
     u8 pp1, pp2;
@@ -3705,8 +3705,8 @@ static void SwapMonMoveSlots(void)
     allMovesPPBonuses &= ~gPPUpGetMask[sMoveSwapCursorPos];
     allMovesPPBonuses |= (move1ppBonus << (sMoveSwapCursorPos * 2)) + (move2ppBonus << (sMoveSelectionCursorPos * 2));
 
-    SetMonData(mon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, (u8 *)&move2);
-    SetMonData(mon, MON_DATA_MOVE1 + sMoveSwapCursorPos, (u8 *)&move1);
+    SetMonData(mon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, (u8*)&move2);
+    SetMonData(mon, MON_DATA_MOVE1 + sMoveSwapCursorPos, (u8*)&move1);
     SetMonData(mon, MON_DATA_PP1 + sMoveSelectionCursorPos, &pp2);
     SetMonData(mon, MON_DATA_PP1 + sMoveSwapCursorPos, &pp1);
     SetMonData(mon, MON_DATA_PP_BONUSES, &allMovesPPBonuses);
@@ -3714,8 +3714,8 @@ static void SwapMonMoveSlots(void)
 
 static void SwapBoxMonMoveSlots(void)
 {
-    struct BoxPokemon * boxMons;
-    struct BoxPokemon * boxMon;
+    struct BoxPokemon* boxMons;
+    struct BoxPokemon* boxMon;
 
     u16 move1, move2;
     u8 pp1, pp2;
@@ -3740,24 +3740,24 @@ static void SwapBoxMonMoveSlots(void)
     allMovesPPBonuses &= ~gPPUpGetMask[sMoveSwapCursorPos];
     allMovesPPBonuses |= (move1ppBonus << (sMoveSwapCursorPos * 2)) + (move2ppBonus << (sMoveSelectionCursorPos * 2));
 
-    SetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, (u8 *)&move2);
-    SetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSwapCursorPos, (u8 *)&move1);
+    SetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, (u8*)&move2);
+    SetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSwapCursorPos, (u8*)&move1);
     SetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSelectionCursorPos, &pp2);
     SetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSwapCursorPos, &pp1);
     SetBoxMonData(boxMon, MON_DATA_PP_BONUSES, &allMovesPPBonuses);
 }
 
-static void UpdateCurrentMonBufferFromPartyOrBox(struct Pokemon * mon)
+static void UpdateCurrentMonBufferFromPartyOrBox(struct Pokemon* mon)
 {
     if (!sMonSummaryScreen->isBoxMon)
     {
-        struct Pokemon * partyMons;
+        struct Pokemon* partyMons;
         partyMons = sMonSummaryScreen->monList.mons;
         *mon = partyMons[GetLastViewedMonIndex()];
     }
     else
     {
-        struct BoxPokemon * boxMons;
+        struct BoxPokemon* boxMons;
         boxMons = sMonSummaryScreen->monList.boxMons;
         BoxMonToMon(&boxMons[GetLastViewedMonIndex()], mon);
     }
@@ -3893,10 +3893,10 @@ static void Task_InputHandler_SelectOrForgetMove(u8 taskId)
     case 5:
         FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], 0);
         AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     7, 42,
-                                     0, 0,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     gText_PokeSum_HmMovesCantBeForgotten);
+            7, 42,
+            0, 0,
+            sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+            gText_PokeSum_HmMovesCantBeForgotten);
         CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(3);
@@ -3913,7 +3913,7 @@ static void Task_InputHandler_SelectOrForgetMove(u8 taskId)
     }
 }
 
-static void SpriteCB_PokeSum_MonPicSprite(struct Sprite *sprite)
+static void SpriteCB_PokeSum_MonPicSprite(struct Sprite* sprite)
 {
     if (sMonSummaryScreen->numMonPicBounces >= 2)
         return;
@@ -3953,7 +3953,7 @@ static void SpriteCB_PokeSum_MonPicSprite(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_PokeSum_EggPicShake(struct Sprite *sprite)
+static void SpriteCB_PokeSum_EggPicShake(struct Sprite* sprite)
 {
     if (sMonSummaryScreen->numMonPicBounces >= 2)
         return;
@@ -4000,7 +4000,7 @@ static void SpriteCB_PokeSum_EggPicShake(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_MonPicDummy(struct Sprite *sprite)
+static void SpriteCB_MonPicDummy(struct Sprite* sprite)
 {
 }
 
@@ -4186,7 +4186,7 @@ static void CreateMoveSelectionCursorObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
-    void *gfxBufferPtrs[2];
+    void* gfxBufferPtrs[2];
     gfxBufferPtrs[0] = AllocZeroed(0x20 * 64);
     gfxBufferPtrs[1] = AllocZeroed(0x20 * 64);
 
@@ -4206,7 +4206,7 @@ static void CreateMoveSelectionCursorObjs(u16 tileTag, u16 palTag)
             .tag = tileTag + i
         };
 
-        struct SpritePalette palette = {.data = sMoveSelectionCursorPals, .tag = palTag};
+        struct SpritePalette palette = { .data = sMoveSelectionCursorPals, .tag = palTag };
         struct SpriteTemplate template = {
             .tileTag = tileTag + i,
             .paletteTag = palTag,
@@ -4244,7 +4244,7 @@ static void ShoworHideMoveSelectionCursor(bool8 invisible)
         sMoveSelectionCursorObjs[i]->sprite->invisible = invisible;
 }
 
-static void SpriteCB_MoveSelectionCursor(struct Sprite *sprite)
+static void SpriteCB_MoveSelectionCursor(struct Sprite* sprite)
 {
     u8 i;
 
@@ -4303,7 +4303,7 @@ static void DestroyMoveSelectionCursorObjs(void)
 static void CreateMonStatusIconObj(u16 tileTag, u16 palTag)
 {
     u16 spriteId;
-    void *gfxBufferPtr;
+    void* gfxBufferPtr;
 
     sStatusIcon = AllocZeroed(sizeof(struct MonStatusIconObj));
     gfxBufferPtr = AllocZeroed(0x20 * 32);
@@ -4318,7 +4318,7 @@ static void CreateMonStatusIconObj(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = gSummaryScreen_StatusAilmentIcon_Pal, .tag = palTag};
+        struct SpritePalette palette = { .data = gSummaryScreen_StatusAilmentIcon_Pal, .tag = palTag };
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
@@ -4393,7 +4393,7 @@ static void CreateHpBarObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
-    void *gfxBufferPtr;
+    void* gfxBufferPtr;
     u32 curHp;
     u32 maxHp;
     u8 hpBarPalTagOffset = 0;
@@ -4418,9 +4418,9 @@ static void CreateHpBarObjs(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette1 = {.data = sHpBarPals[0], .tag = palTag};
-        struct SpritePalette palette2 = {.data = sHpBarPals[1], .tag = palTag + 1};
-        struct SpritePalette palette3 = {.data = sHpBarPals[2], .tag = palTag + 2};
+        struct SpritePalette palette1 = { .data = sHpBarPals[0], .tag = palTag };
+        struct SpritePalette palette2 = { .data = sHpBarPals[1], .tag = palTag + 1 };
+        struct SpritePalette palette3 = { .data = sHpBarPals[2], .tag = palTag + 2 };
 
         LoadSpriteSheet(&sheet);
         LoadSpritePalette(&palette1);
@@ -4553,7 +4553,7 @@ static void CreateExpBarObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
-    void *gfxBufferPtr;
+    void* gfxBufferPtr;
 
     sExpBarObjs = AllocZeroed(sizeof(struct ExpBarObjs));
     gfxBufferPtr = AllocZeroed(0x20 * 12);
@@ -4567,7 +4567,7 @@ static void CreateExpBarObjs(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = gSummaryScreen_HpExpBar_Pal, .tag = palTag};
+        struct SpritePalette palette = { .data = gSummaryScreen_HpExpBar_Pal, .tag = palTag };
         LoadSpriteSheet(&sheet);
         LoadSpritePalette(&palette);
     }
@@ -4684,7 +4684,7 @@ static void ShowOrHideExpBarObjs(u8 invisible)
 static void CreatePokerusIconObj(u16 tileTag, u16 palTag)
 {
     u16 spriteId;
-    void *gfxBufferPtr;
+    void* gfxBufferPtr;
 
     sPokerusIconObj = AllocZeroed(sizeof(struct PokerusIconObj));
     gfxBufferPtr = AllocZeroed(0x20 * 1);
@@ -4699,7 +4699,7 @@ static void CreatePokerusIconObj(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = sPokerusIconObjPal, .tag = palTag};
+        struct SpritePalette palette = { .data = sPokerusIconObjPal, .tag = palTag };
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
@@ -4769,7 +4769,7 @@ static void HideShowPokerusIcon(bool8 invisible)
 static void CreateShinyStarObj(u16 tileTag, u16 palTag)
 {
     u16 spriteId;
-    void *gfxBufferPtr;
+    void* gfxBufferPtr;
 
     sShinyStarObjData = AllocZeroed(sizeof(struct ShinyStarObjData));
     gfxBufferPtr = AllocZeroed(0x20 * 2);
@@ -4784,7 +4784,7 @@ static void CreateShinyStarObj(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = sStarObjPal, .tag = palTag};
+        struct SpritePalette palette = { .data = sStarObjPal, .tag = palTag };
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
@@ -4959,7 +4959,7 @@ static void PokeSum_SeekToNextMon(u8 taskId, s8 direction)
 
 static s8 SeekToNextMonInSingleParty(s8 direction)
 {
-    struct Pokemon * partyMons = sMonSummaryScreen->monList.mons;
+    struct Pokemon* partyMons = sMonSummaryScreen->monList.mons;
     s8 seekDelta = 0;
 
     if (sMonSummaryScreen->curPageIndex == 0)
@@ -4985,7 +4985,7 @@ static s8 SeekToNextMonInSingleParty(s8 direction)
     return -1;
 }
 
-static u8 PokeSum_CanSeekToMon(struct Pokemon * partyMons)
+static u8 PokeSum_CanSeekToMon(struct Pokemon* partyMons)
 {
     if (GetMonData(partyMons, MON_DATA_SPECIES) != SPECIES_NONE && (sMonSummaryScreen->curPageIndex != PSS_PAGE_INFO || !GetMonData(partyMons, MON_DATA_IS_EGG)))
         return TRUE;

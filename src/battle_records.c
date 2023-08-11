@@ -16,7 +16,7 @@
 #include "constants/songs.h"
 #include "constants/maps.h"
 
-static EWRAM_DATA u16 * sBg3TilemapBuffer_p = NULL;
+static EWRAM_DATA u16* sBg3TilemapBuffer_p = NULL;
 
 static void MainCB2_SetUp(void);
 static void VBlankCB(void);
@@ -74,7 +74,7 @@ static const struct BgTemplate sBgTemplates[2] = {
     }
 };
 
-static u8 *const sStringVars[3] = {
+static u8* const sStringVars[3] = {
     gStringVar1,
     gStringVar2,
     gStringVar3
@@ -167,7 +167,7 @@ static void Task_WaitFadeIn(u8 taskId)
 
 static void Task_WaitButton(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
     {
@@ -205,21 +205,21 @@ static void ClearWindowCommitAndRemove(u8 windowId)
 static void ResetGpu(void)
 {
     {
-    void *dest = (void *)VRAM;
-    u32 size = VRAM_SIZE;
-    DmaClearLarge16(3, dest, size, 0x1000);
+        void* dest = (void*)VRAM;
+        u32 size = VRAM_SIZE;
+        DmaClearLarge16(3, dest, size, 0x1000);
     }
 
     {
-    void *dest = (void *)OAM;
-    u32 size = OAM_SIZE;
-    DmaClear32(3, dest, size);
+        void* dest = (void*)OAM;
+        u32 size = OAM_SIZE;
+        DmaClear32(3, dest, size);
     }
 
     {
-    void *dest = (void *)PLTT;
-    u32 size = PLTT_SIZE;
-    DmaClear16(3, dest, size);
+        void* dest = (void*)PLTT;
+        u32 size = PLTT_SIZE;
+        DmaClear16(3, dest, size);
     }
 
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
@@ -271,7 +271,7 @@ static void ResetBGPos(void)
     ChangeBgY(3, 0, 0);
 }
 
-static void ClearLinkBattleRecord(struct LinkBattleRecord *record)
+static void ClearLinkBattleRecord(struct LinkBattleRecord* record)
 {
     CpuFill16(0, record, sizeof(*record));
     record->name[0] = EOS;
@@ -281,7 +281,7 @@ static void ClearLinkBattleRecord(struct LinkBattleRecord *record)
     record->draws = 0;
 }
 
-static void ClearLinkBattleRecords(struct LinkBattleRecords *records)
+static void ClearLinkBattleRecords(struct LinkBattleRecords* records)
 {
     s32 i;
 
@@ -292,12 +292,12 @@ static void ClearLinkBattleRecords(struct LinkBattleRecords *records)
     SetGameStat(GAME_STAT_LINK_BATTLE_DRAWS, 0);
 }
 
-static s32 GetLinkBattleRecordTotalBattles(struct LinkBattleRecord * record)
+static s32 GetLinkBattleRecordTotalBattles(struct LinkBattleRecord* record)
 {
     return record->wins + record->losses + record->draws;
 }
 
-static s32 IndexOfOpponentLinkBattleRecord(struct LinkBattleRecords * records, const u8 * name, u16 trainerId)
+static s32 IndexOfOpponentLinkBattleRecord(struct LinkBattleRecords* records, const u8* name, u16 trainerId)
 {
     s32 i;
 
@@ -310,7 +310,7 @@ static s32 IndexOfOpponentLinkBattleRecord(struct LinkBattleRecords * records, c
     return LINK_B_RECORDS_COUNT;
 }
 
-static void SortLinkBattleRecords(struct LinkBattleRecords * records)
+static void SortLinkBattleRecords(struct LinkBattleRecords* records)
 {
     struct LinkBattleRecord tmp;
     s32 i;
@@ -330,7 +330,7 @@ static void SortLinkBattleRecords(struct LinkBattleRecords * records)
     }
 }
 
-static void UpdateLinkBattleRecord(struct LinkBattleRecord * record, s32 outcome)
+static void UpdateLinkBattleRecord(struct LinkBattleRecord* record, s32 outcome)
 {
     switch (outcome)
     {
@@ -375,11 +375,11 @@ static void UpdateLinkBattleGameStats(s32 outcome)
         IncrementGameStat(statId);
 }
 
-static void AddOpponentLinkBattleRecord(struct LinkBattleRecords * records, const u8 * name, u16 trainerId, s32 outcome, u32 language)
+static void AddOpponentLinkBattleRecord(struct LinkBattleRecords* records, const u8* name, u16 trainerId, s32 outcome, u32 language)
 {
     u8 namebuf[PLAYER_NAME_LENGTH + 1];
     s32 i;
-    struct LinkBattleRecord * record;
+    struct LinkBattleRecord* record;
 
     if (language == LANGUAGE_JAPANESE)
     {
@@ -411,7 +411,7 @@ void ClearPlayerLinkBattleRecords(void)
 
 static void IncTrainerCardWinCount(s32 battlerId)
 {
-    u16 *wins = &gTrainerCards[battlerId].rse.linkBattleWins;
+    u16* wins = &gTrainerCards[battlerId].rse.linkBattleWins;
     (*wins)++;
     if (*wins > 9999)
         *wins = 9999;
@@ -419,7 +419,7 @@ static void IncTrainerCardWinCount(s32 battlerId)
 
 static void IncTrainerCardLossCount(s32 battlerId)
 {
-    u16 *losses = &gTrainerCards[battlerId].rse.linkBattleLosses;
+    u16* losses = &gTrainerCards[battlerId].rse.linkBattleLosses;
     (*losses)++;
     if (*losses > 9999)
         *losses = 9999;
@@ -449,7 +449,7 @@ void UpdatePlayerLinkBattleRecords(s32 battlerId)
     }
 }
 
-static void PrintTotalRecord(struct LinkBattleRecords * records)
+static void PrintTotalRecord(struct LinkBattleRecords* records)
 {
     u32 nwins = GetGameStat(GAME_STAT_LINK_BATTLE_WINS);
     u32 nlosses = GetGameStat(GAME_STAT_LINK_BATTLE_LOSSES);
@@ -457,7 +457,7 @@ static void PrintTotalRecord(struct LinkBattleRecords * records)
     s32 i;
     s32 j;
     bool32 foundEnd;
-    u8 * strvar;
+    u8* strvar;
 
     if (nwins > 9999)
         nwins = 9999;
@@ -489,7 +489,7 @@ static void PrintTotalRecord(struct LinkBattleRecords * records)
     AddTextPrinterParameterized4(0, FONT_NORMAL, 12, 24, 0, 2, sTextColor, 0, gStringVar4);
 }
 
-static void PrintOpponentBattleRecord(struct LinkBattleRecord * record, u8 y)
+static void PrintOpponentBattleRecord(struct LinkBattleRecord* record, u8 y)
 {
     u8 i = 0;
     s32 x;

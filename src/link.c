@@ -31,7 +31,7 @@ struct BlockTransfer
 {
     u16 pos;
     u16 size;
-    const u8 *src;
+    const u8* src;
     bool8 active;
     u8 multiplayerId;
 };
@@ -116,7 +116,7 @@ EWRAM_DATA struct {
     bool8 disconnected;
 } sLinkErrorBuffer = {};
 static EWRAM_DATA u16 sReadyCloseLinkAttempts = 0; // never read
-static EWRAM_DATA void *sLinkErrorBgTilemapBuffer = NULL;
+static EWRAM_DATA void* sLinkErrorBgTilemapBuffer = NULL;
 
 static void InitLocalLinkPlayer(void);
 static void VBlankCB_LinkError(void);
@@ -124,13 +124,13 @@ static void CB2_LinkTest(void);
 static void ProcessRecvCmds(u8 id);
 static void LinkCB_SendHeldKeys(void);
 static void ResetBlockSend(void);
-static bool32 InitBlockSend(const void *src, size_t size);
+static bool32 InitBlockSend(const void* src, size_t size);
 static void LinkCB_BlockSendBegin(void);
 static void LinkCB_BlockSend(void);
 static void LinkCB_BlockSendEnd(void);
 static void SetBerryBlenderLinkCallback(void);
 static void SetBlockReceivedFlag(u8 id);
-static u16 LinkTestCalcBlockChecksum(const u16 *src, u16 size);
+static u16 LinkTestCalcBlockChecksum(const u16* src, u16 size);
 static void LinkTest_PrintHex(u32 pos, u8 a0, u8 a1, u8 a2);
 static void LinkCB_RequestPlayerDataExchange(void);
 static void Task_PrintTestData(u8 taskId);
@@ -146,8 +146,8 @@ static void EnableSerial(void);
 static bool8 IsSioMultiMaster(void);
 static void CheckMasterOrSlave(void);
 static void InitTimer(void);
-static void EnqueueSendCmd(u16 *sendCmd);
-static void DequeueRecvCmds(u16 (*recvCmds)[CMD_LENGTH]);
+static void EnqueueSendCmd(u16* sendCmd);
+static void DequeueRecvCmds(u16(*recvCmds)[CMD_LENGTH]);
 static void StartTransfer(void);
 static bool8 DoHandshake(void);
 static void DoRecv(void);
@@ -163,10 +163,10 @@ static const u16 sLinkTestFontGfx[] = INCBIN_U16("graphics/link/test_font.4bpp")
 
 static const struct BlockRequest sBlockRequests[] = {
     [BLOCK_REQ_SIZE_NONE] = { gBlockSendBuffer, 200 },
-    [BLOCK_REQ_SIZE_200]  = { gBlockSendBuffer, 200 },
-    [BLOCK_REQ_SIZE_100]  = { gBlockSendBuffer, 100 },
-    [BLOCK_REQ_SIZE_220]  = { gBlockSendBuffer, 220 },
-    [BLOCK_REQ_SIZE_40]   = { gBlockSendBuffer,  40 }
+    [BLOCK_REQ_SIZE_200] = { gBlockSendBuffer, 200 },
+    [BLOCK_REQ_SIZE_100] = { gBlockSendBuffer, 100 },
+    [BLOCK_REQ_SIZE_220] = { gBlockSendBuffer, 220 },
+    [BLOCK_REQ_SIZE_40] = { gBlockSendBuffer,  40 }
 };
 static const char sASCIIGameFreakInc[] = "GameFreak inc.";
 static const char sASCIITestPrint[] = "TEST PRINT\nP0\nP1\nP2\nP3";
@@ -243,7 +243,7 @@ void Task_DestroySelf(u8 taskId)
 void InitLinkTestBG(u8 paletteNum, u8 bgNum, u8 screenBaseBlock, u8 charBaseBlock, u16 baseChar)
 {
     LoadPalette(sLinkTestFontPal, BG_PLTT_ID(paletteNum), PLTT_SIZE_4BPP);
-    DmaCopy16(3, sLinkTestFontGfx, (u16 *)BG_CHAR_ADDR(charBaseBlock) + (16 * baseChar), sizeof sLinkTestFontGfx);
+    DmaCopy16(3, sLinkTestFontGfx, (u16*)BG_CHAR_ADDR(charBaseBlock) + (16 * baseChar), sizeof sLinkTestFontGfx);
     gLinkTestBGInfo.screenBaseBlock = screenBaseBlock;
     gLinkTestBGInfo.paletteNum = paletteNum;
     gLinkTestBGInfo.baseChar = baseChar;
@@ -267,7 +267,7 @@ void InitLinkTestBG(u8 paletteNum, u8 bgNum, u8 screenBaseBlock, u8 charBaseBloc
 static void LoadLinkTestBgGfx(u8 paletteNum, u8 bgNum, u8 screenBaseBlock, u8 charBaseBlock)
 {
     LoadPalette(sLinkTestFontPal, BG_PLTT_ID(paletteNum), PLTT_SIZE_4BPP);
-    DmaCopy16(3, sLinkTestFontGfx, (u16 *)BG_CHAR_ADDR(charBaseBlock), sizeof sLinkTestFontGfx);
+    DmaCopy16(3, sLinkTestFontGfx, (u16*)BG_CHAR_ADDR(charBaseBlock), sizeof sLinkTestFontGfx);
     gLinkTestBGInfo.screenBaseBlock = screenBaseBlock;
     gLinkTestBGInfo.paletteNum = paletteNum;
     gLinkTestBGInfo.baseChar = 0;
@@ -464,7 +464,7 @@ static void CB2_LinkTest(void)
     UpdatePaletteFade();
 }
 
-u16 LinkMain2(const u16 *heldKeys)
+u16 LinkMain2(const u16* heldKeys)
 {
     u8 i;
 
@@ -513,7 +513,7 @@ static void ProcessRecvCmds(u8 unused)
         {
         case LINKCMD_SEND_LINK_TYPE:
         {
-            struct LinkPlayerBlock * block;
+            struct LinkPlayerBlock* block;
 
             InitLocalLinkPlayer();
             block = &gLocalLinkPlayerBlock;
@@ -534,7 +534,7 @@ static void ProcessRecvCmds(u8 unused)
             break;
         case LINKCMD_INIT_BLOCK:
         {
-            struct BlockTransfer * blockRecv;
+            struct BlockTransfer* blockRecv;
 
             blockRecv = &sBlockRecv[i];
             blockRecv->pos = 0;
@@ -546,10 +546,10 @@ static void ProcessRecvCmds(u8 unused)
         {
             if (sBlockRecv[i].size > BLOCK_BUFFER_SIZE)
             {
-                u16 *buffer;
+                u16* buffer;
                 u16 j;
 
-                buffer = (u16 *)gDecompressionBuffer;
+                buffer = (u16*)gDecompressionBuffer;
                 for (j = 0; j < CMD_LENGTH - 1; j++)
                     buffer[(sBlockRecv[i].pos / 2) + j] = gRecvCmds[i][j + 1];
             }
@@ -567,10 +567,10 @@ static void ProcessRecvCmds(u8 unused)
             {
                 if (gRemoteLinkPlayersNotReceived[i] == TRUE)
                 {
-                    struct LinkPlayerBlock * block;
-                    struct LinkPlayer * linkPlayer;
+                    struct LinkPlayerBlock* block;
+                    struct LinkPlayer* linkPlayer;
 
-                    block = (struct LinkPlayerBlock *)&gBlockRecvBuffer[i];
+                    block = (struct LinkPlayerBlock*)&gBlockRecvBuffer[i];
                     linkPlayer = &gLinkPlayers[i];
                     *linkPlayer = block->linkPlayer;
                     if ((linkPlayer->version & 0xFF) == VERSION_RUBY || (linkPlayer->version & 0xFF) == VERSION_SAPPHIRE)
@@ -581,7 +581,7 @@ static void ProcessRecvCmds(u8 unused)
                     }
                     ConvertLinkPlayerName(linkPlayer);
                     if (strcmp(block->magic1, sASCIIGameFreakInc) != 0
-                     || strcmp(block->magic2, sASCIIGameFreakInc) != 0)
+                        || strcmp(block->magic2, sASCIIGameFreakInc) != 0)
                         SetMainCallback2(CB2_LinkError);
                     else
                         HandleReceiveRemoteLinkPlayer(i);
@@ -592,7 +592,7 @@ static void ProcessRecvCmds(u8 unused)
                 }
             }
         }
-            break;
+        break;
         case LINKCMD_READY_CLOSE_LINK:
             gReadyToCloseLink[i] = TRUE;
             break;
@@ -841,7 +841,7 @@ static void ResetBlockSend(void)
     sBlockSend.src = NULL;
 }
 
-static bool32 InitBlockSend(const void *src, size_t size)
+static bool32 InitBlockSend(const void* src, size_t size)
 {
     if (sBlockSend.active)
         return FALSE;
@@ -876,7 +876,7 @@ static void LinkCB_BlockSendBegin(void)
 static void LinkCB_BlockSend(void)
 {
     int i;
-    const u8 *src;
+    const u8* src;
 
     src = sBlockSend.src;
     gSendCmd[0] = LINKCMD_CONT_BLOCK;
@@ -937,7 +937,7 @@ u8 BitmaskAllOtherLinkPlayers(void)
     return ((1 << MAX_LINK_PLAYERS) - 1) ^ (1 << mpId);
 }
 
-bool8 SendBlock(u8 unused, const void *src, u16 size)
+bool8 SendBlock(u8 unused, const void* src, u16 size)
 {
     if (gWirelessCommType == 1)
         return Rfu_InitBlockSend(src, size);
@@ -1013,7 +1013,7 @@ void CheckShouldAdvanceLinkState(void)
         gShouldAdvanceLinkState = 1;
 }
 
-static u16 LinkTestCalcBlockChecksum(const u16 *src, u16 size)
+static u16 LinkTestCalcBlockChecksum(const u16* src, u16 size)
 {
     u16 checksum;
     u16 i;
@@ -1027,17 +1027,17 @@ static u16 LinkTestCalcBlockChecksum(const u16 *src, u16 size)
 
 static void LinkTest_PrintNumChar(char val, u8 x, u8 y)
 {
-    u16 *vAddr;
+    u16* vAddr;
 
-    vAddr = (u16 *)BG_SCREEN_ADDR(gLinkTestBGInfo.screenBaseBlock);
+    vAddr = (u16*)BG_SCREEN_ADDR(gLinkTestBGInfo.screenBaseBlock);
     vAddr[y * 32 + x] = (gLinkTestBGInfo.paletteNum << 12) | (val + 1 + gLinkTestBGInfo.baseChar);
 }
 
 static void LinkTest_PrintChar(char val, u8 x, u8 y)
 {
-    u16 *vAddr;
+    u16* vAddr;
 
-    vAddr = (u16 *)BG_SCREEN_ADDR(gLinkTestBGInfo.screenBaseBlock);
+    vAddr = (u16*)BG_SCREEN_ADDR(gLinkTestBGInfo.screenBaseBlock);
     vAddr[y * 32 + x] = (gLinkTestBGInfo.paletteNum << 12) | (val + gLinkTestBGInfo.baseChar);
 }
 
@@ -1058,7 +1058,7 @@ static void LinkTest_PrintHex(u32 num, u8 x, u8 y, u8 length)
     }
 }
 
-static void LinkTest_PrintString(const char *str, u8 x, u8 y)
+static void LinkTest_PrintString(const char* str, u8 x, u8 y)
 {
     int xOffset;
     int i;
@@ -1192,8 +1192,8 @@ void CheckLinkPlayersMatchSaved(void)
 
     for (i = 0; i < gSavedLinkPlayerCount; i++)
     {
-        if (gSavedLinkPlayers[i].trainerId != gLinkPlayers[i].trainerId 
-         || StringCompare(gSavedLinkPlayers[i].name, gLinkPlayers[i].name) != 0)
+        if (gSavedLinkPlayers[i].trainerId != gLinkPlayers[i].trainerId
+            || StringCompare(gSavedLinkPlayers[i].name, gLinkPlayers[i].name) != 0)
         {
             gLinkErrorOccurred = TRUE;
             CloseLink();
@@ -1372,7 +1372,7 @@ void SetLinkErrorFromRfu(u32 status, u8 lastSendQueueCount, u8 lastRecvQueueCoun
 
 void CB2_LinkError(void)
 {
-    u8 *tilemapBuffer;
+    u8* tilemapBuffer;
 
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     m4aMPlayStop(&gMPlayInfo_SE1);
@@ -1533,7 +1533,7 @@ bool8 HasLinkErrorOccurred(void)
 
 void LocalLinkPlayerToBlock(void)
 {
-    struct LinkPlayerBlock * block;
+    struct LinkPlayerBlock* block;
 
     InitLocalLinkPlayer();
     block = &gLocalLinkPlayerBlock;
@@ -1546,16 +1546,16 @@ void LocalLinkPlayerToBlock(void)
 void LinkPlayerFromBlock(u32 who)
 {
     u8 who_ = who;
-    struct LinkPlayerBlock * block;
-    struct LinkPlayer * player;
+    struct LinkPlayerBlock* block;
+    struct LinkPlayer* player;
 
-    block = (struct LinkPlayerBlock *)gBlockRecvBuffer[who_];
+    block = (struct LinkPlayerBlock*)gBlockRecvBuffer[who_];
     player = &gLinkPlayers[who_];
     *player = block->linkPlayer;
     ConvertLinkPlayerName(player);
 
     if (strcmp(block->magic1, sASCIIGameFreakInc) != 0
-     || strcmp(block->magic2, sASCIIGameFreakInc) != 0)
+        || strcmp(block->magic2, sASCIIGameFreakInc) != 0)
     {
         SetMainCallback2(CB2_LinkError);
     }
@@ -1624,7 +1624,7 @@ bool32 IsLinkRecvQueueAtOverworldMax(void)
     return FALSE;
 }
 
-void ConvertLinkPlayerName(struct LinkPlayer * player)
+void ConvertLinkPlayerName(struct LinkPlayer* player)
 {
     player->progressFlagsCopy = player->progressFlags; // ? Perhaps relocating for a longer name field
     ConvertInternationalString(player->name, player->language);
@@ -1667,7 +1667,7 @@ void ResetSerial(void)
     DisableSerial();
 }
 
-u32 LinkMain1(u8 *shouldAdvanceLinkState, u16 *sendCmd, u16 (*recvCmds)[CMD_LENGTH])
+u32 LinkMain1(u8* shouldAdvanceLinkState, u16* sendCmd, u16(*recvCmds)[CMD_LENGTH])
 {
     u32 retVal;
     u32 retVal2;
@@ -1765,7 +1765,7 @@ static void CheckMasterOrSlave(void)
 {
     u32 terminals;
 
-    terminals = *(vu32 *)REG_ADDR_SIOCNT & (SIO_MULTI_SD | SIO_MULTI_SI);
+    terminals = *(vu32*)REG_ADDR_SIOCNT & (SIO_MULTI_SD | SIO_MULTI_SI);
     if (terminals == SIO_MULTI_SD && gLink.localId == 0)
         gLink.isMaster = LINK_MASTER;
     else
@@ -1782,7 +1782,7 @@ static void InitTimer(void)
     }
 }
 
-static void EnqueueSendCmd(u16 *sendCmd)
+static void EnqueueSendCmd(u16* sendCmd)
 {
     u8 i;
     u8 offset;
@@ -1816,7 +1816,7 @@ static void EnqueueSendCmd(u16 *sendCmd)
     gLastSendQueueCount = gLink.sendQueue.count;
 }
 
-static void DequeueRecvCmds(u16 (*recvCmds)[CMD_LENGTH])
+static void DequeueRecvCmds(u16(*recvCmds)[CMD_LENGTH])
 {
     u8 i;
     u8 j;
@@ -1944,7 +1944,7 @@ static bool8 DoHandshake(void)
         REG_SIOMLT_SEND = MASTER_HANDSHAKE;
     else
         REG_SIOMLT_SEND = SLAVE_HANDSHAKE;
-    *(u64 *)gLink.tempRecvBuffer = REG_SIOMLT_RECV;
+    *(u64*)gLink.tempRecvBuffer = REG_SIOMLT_RECV;
     REG_SIOMLT_RECV = 0;
     gLink.handshakeAsMaster = FALSE;
     for (i = 0; i < 4; i++)
@@ -1980,7 +1980,7 @@ static void DoRecv(void)
     u8 i;
     u8 index;
 
-    *(u64 *)recv = REG_SIOMLT_RECV;
+    *(u64*)recv = REG_SIOMLT_RECV;
     if (gLink.sendCmdIndex == 0)
     {
         for (i = 0; i < gLink.playerCount; i++)

@@ -19,7 +19,7 @@
 
 #define DOWNCONVERT_BIT_DEPTH(x) ((x) / 8)
 
-static void AdvanceMetatilePosition(int *subTileX, int *subTileY, int *metatileX, int *metatileY, int metatilesWide, int metatileWidth, int metatileHeight)
+static void AdvanceMetatilePosition(int* subTileX, int* subTileY, int* metatileX, int* metatileY, int metatilesWide, int metatileWidth, int metatileHeight)
 {
 	(*subTileX)++;
 	if (*subTileX == metatileWidth) {
@@ -36,7 +36,7 @@ static void AdvanceMetatilePosition(int *subTileX, int *subTileY, int *metatileX
 	}
 }
 
-static void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertFromTiles1Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -49,7 +49,7 @@ static void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int nu
 			int destY = (metatileY * metatileHeight + subTileY) * 8 + j;
 			int destX = metatileX * metatileWidth + subTileX;
 			unsigned char srcPixelOctet = *src++;
-			unsigned char *destPixelOctet = &dest[destY * pitch + destX];
+			unsigned char* destPixelOctet = &dest[destY * pitch + destX];
 
 			for (int k = 0; k < 8; k++) {
 				*destPixelOctet <<= 1;
@@ -62,7 +62,7 @@ static void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int nu
 	}
 }
 
-static void ConvertFromTiles4Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertFromTiles4Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -93,7 +93,7 @@ static void ConvertFromTiles4Bpp(unsigned char *src, unsigned char *dest, int nu
 	}
 }
 
-static void ConvertFromTiles8Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertFromTiles8Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -120,7 +120,7 @@ static void ConvertFromTiles8Bpp(unsigned char *src, unsigned char *dest, int nu
 	}
 }
 
-static void ConvertToTiles1Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertToTiles1Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -133,7 +133,7 @@ static void ConvertToTiles1Bpp(unsigned char *src, unsigned char *dest, int numT
 			int srcY = (metatileY * metatileHeight + subTileY) * 8 + j;
 			int srcX = metatileX * metatileWidth + subTileX;
 			unsigned char srcPixelOctet = src[srcY * pitch + srcX];
-			unsigned char *destPixelOctet = dest++;
+			unsigned char* destPixelOctet = dest++;
 
 			for (int k = 0; k < 8; k++) {
 				*destPixelOctet <<= 1;
@@ -146,7 +146,7 @@ static void ConvertToTiles1Bpp(unsigned char *src, unsigned char *dest, int numT
 	}
 }
 
-static void ConvertToTiles4Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertToTiles4Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -177,7 +177,7 @@ static void ConvertToTiles4Bpp(unsigned char *src, unsigned char *dest, int numT
 	}
 }
 
-static void ConvertToTiles8Bpp(unsigned char *src, unsigned char *dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
+static void ConvertToTiles8Bpp(unsigned char* src, unsigned char* dest, int numTiles, int metatilesWide, int metatileWidth, int metatileHeight, bool invertColors)
 {
 	int subTileX = 0;
 	int subTileY = 0;
@@ -204,12 +204,12 @@ static void ConvertToTiles8Bpp(unsigned char *src, unsigned char *dest, int numT
 	}
 }
 
-static void DecodeAffineTilemap(unsigned char *input, unsigned char *output, unsigned char *tilemap, int tileSize, int numTiles)
+static void DecodeAffineTilemap(unsigned char* input, unsigned char* output, unsigned char* tilemap, int tileSize, int numTiles)
 {
-    for (int i = 0; i < numTiles; i++)
-    {
-        memcpy(&output[i * tileSize], &input[tilemap[i] * tileSize], tileSize);
-    }
+	for (int i = 0; i < numTiles; i++)
+	{
+		memcpy(&output[i * tileSize], &input[tilemap[i] * tileSize], tileSize);
+	}
 }
 
 #define REVERSE_BIT_ORDER(x) ({ \
@@ -237,132 +237,132 @@ static void DecodeAffineTilemap(unsigned char *input, unsigned char *output, uns
     *(b) = tmp;                      \
 })
 
-static void VflipTile(unsigned char * tile, int bitDepth)
+static void VflipTile(unsigned char* tile, int bitDepth)
 {
-    int i;
-    switch (bitDepth)
-    {
-    case 1:
-        SWAP_BYTES(&tile[0], &tile[7]);
-        SWAP_BYTES(&tile[1], &tile[6]);
-        SWAP_BYTES(&tile[2], &tile[5]);
-        SWAP_BYTES(&tile[3], &tile[4]);
-        break;
-    case 4:
-        for (i = 0; i < 4; i++)
-        {
-            SWAP_BYTES(&tile[i + 0], &tile[i + 28]);
-            SWAP_BYTES(&tile[i + 4], &tile[i + 24]);
-            SWAP_BYTES(&tile[i + 8], &tile[i + 20]);
-            SWAP_BYTES(&tile[i + 12], &tile[i + 16]);
-        }
-        break;
-    case 8:
-        for (i = 0; i < 8; i++)
-        {
-            SWAP_BYTES(&tile[i + 0], &tile[i + 56]);
-            SWAP_BYTES(&tile[i + 8], &tile[i + 48]);
-            SWAP_BYTES(&tile[i + 16], &tile[i + 40]);
-            SWAP_BYTES(&tile[i + 24], &tile[i + 32]);
-        }
-        break;
-    }
+	int i;
+	switch (bitDepth)
+	{
+	case 1:
+		SWAP_BYTES(&tile[0], &tile[7]);
+		SWAP_BYTES(&tile[1], &tile[6]);
+		SWAP_BYTES(&tile[2], &tile[5]);
+		SWAP_BYTES(&tile[3], &tile[4]);
+		break;
+	case 4:
+		for (i = 0; i < 4; i++)
+		{
+			SWAP_BYTES(&tile[i + 0], &tile[i + 28]);
+			SWAP_BYTES(&tile[i + 4], &tile[i + 24]);
+			SWAP_BYTES(&tile[i + 8], &tile[i + 20]);
+			SWAP_BYTES(&tile[i + 12], &tile[i + 16]);
+		}
+		break;
+	case 8:
+		for (i = 0; i < 8; i++)
+		{
+			SWAP_BYTES(&tile[i + 0], &tile[i + 56]);
+			SWAP_BYTES(&tile[i + 8], &tile[i + 48]);
+			SWAP_BYTES(&tile[i + 16], &tile[i + 40]);
+			SWAP_BYTES(&tile[i + 24], &tile[i + 32]);
+		}
+		break;
+	}
 }
 
-static void HflipTile(unsigned char * tile, int bitDepth)
+static void HflipTile(unsigned char* tile, int bitDepth)
 {
-    int i;
-    switch (bitDepth)
-    {
-    case 1:
-        for (i = 0; i < 8; i++)
-            tile[i] = REVERSE_BIT_ORDER(tile[i]);
-        break;
-    case 4:
-        for (i = 0; i < 8; i++)
-        {
-            SWAP_NYBBLES(&tile[4 * i + 0], &tile[4 * i + 3]);
-            SWAP_NYBBLES(&tile[4 * i + 1], &tile[4 * i + 2]);
-        }
-        break;
-    case 8:
-        for (i = 0; i < 8; i++)
-        {
-            SWAP_BYTES(&tile[8 * i + 0], &tile[8 * i + 7]);
-            SWAP_BYTES(&tile[8 * i + 1], &tile[8 * i + 6]);
-            SWAP_BYTES(&tile[8 * i + 2], &tile[8 * i + 5]);
-            SWAP_BYTES(&tile[8 * i + 3], &tile[8 * i + 4]);
-        }
-        break;
-    }
+	int i;
+	switch (bitDepth)
+	{
+	case 1:
+		for (i = 0; i < 8; i++)
+			tile[i] = REVERSE_BIT_ORDER(tile[i]);
+		break;
+	case 4:
+		for (i = 0; i < 8; i++)
+		{
+			SWAP_NYBBLES(&tile[4 * i + 0], &tile[4 * i + 3]);
+			SWAP_NYBBLES(&tile[4 * i + 1], &tile[4 * i + 2]);
+		}
+		break;
+	case 8:
+		for (i = 0; i < 8; i++)
+		{
+			SWAP_BYTES(&tile[8 * i + 0], &tile[8 * i + 7]);
+			SWAP_BYTES(&tile[8 * i + 1], &tile[8 * i + 6]);
+			SWAP_BYTES(&tile[8 * i + 2], &tile[8 * i + 5]);
+			SWAP_BYTES(&tile[8 * i + 3], &tile[8 * i + 4]);
+		}
+		break;
+	}
 }
 
-static void DecodeNonAffineTilemap(unsigned char *input, unsigned char *output, struct NonAffineTile *tilemap, int tileSize, int outTileSize, int bitDepth, int numTiles)
+static void DecodeNonAffineTilemap(unsigned char* input, unsigned char* output, struct NonAffineTile* tilemap, int tileSize, int outTileSize, int bitDepth, int numTiles)
 {
-    unsigned char * in_tile;
-    unsigned char * out_tile = output;
-    int effectiveBitDepth = tileSize == outTileSize ? bitDepth : 8;
-    for (int i = 0; i < numTiles; i++)
-    {
-        in_tile = &input[tilemap[i].index * tileSize];
-        if (tileSize == outTileSize)
-            memcpy(out_tile, in_tile, tileSize);
-        else
-        {
-            for (int j = 0; j < 64; j++)
-            {
-                int shift = (j & 1) * 4;
-                out_tile[j] = (in_tile[j / 2] & (0xF << shift)) >> shift;
-            }
-        }
-        if (tilemap[i].hflip)
-            HflipTile(out_tile, effectiveBitDepth);
-        if (tilemap[i].vflip)
-            VflipTile(out_tile, effectiveBitDepth);
-        if (bitDepth == 4 && effectiveBitDepth == 8)
-        {
-            for (int j = 0; j < 64; j++)
-            {
-                out_tile[j] &= 0xF;
-                out_tile[j] |= (15 - tilemap[i].palno) << 4;
-            }
-        }
-        out_tile += outTileSize;
-    }
+	unsigned char* in_tile;
+	unsigned char* out_tile = output;
+	int effectiveBitDepth = tileSize == outTileSize ? bitDepth : 8;
+	for (int i = 0; i < numTiles; i++)
+	{
+		in_tile = &input[tilemap[i].index * tileSize];
+		if (tileSize == outTileSize)
+			memcpy(out_tile, in_tile, tileSize);
+		else
+		{
+			for (int j = 0; j < 64; j++)
+			{
+				int shift = (j & 1) * 4;
+				out_tile[j] = (in_tile[j / 2] & (0xF << shift)) >> shift;
+			}
+		}
+		if (tilemap[i].hflip)
+			HflipTile(out_tile, effectiveBitDepth);
+		if (tilemap[i].vflip)
+			VflipTile(out_tile, effectiveBitDepth);
+		if (bitDepth == 4 && effectiveBitDepth == 8)
+		{
+			for (int j = 0; j < 64; j++)
+			{
+				out_tile[j] &= 0xF;
+				out_tile[j] |= (15 - tilemap[i].palno) << 4;
+			}
+		}
+		out_tile += outTileSize;
+	}
 }
 
-static unsigned char *DecodeTilemap(unsigned char *tiles, struct Tilemap *tilemap, int *numTiles_p, bool isAffine, int tileSize, int outTileSize, int bitDepth)
+static unsigned char* DecodeTilemap(unsigned char* tiles, struct Tilemap* tilemap, int* numTiles_p, bool isAffine, int tileSize, int outTileSize, int bitDepth)
 {
-    int mapTileSize = isAffine ? 1 : 2;
-    int numTiles = tilemap->size / mapTileSize;
-    unsigned char *decoded = calloc(numTiles, outTileSize);
-    if (isAffine)
-        DecodeAffineTilemap(tiles, decoded, tilemap->data.affine, tileSize, numTiles);
-    else
-        DecodeNonAffineTilemap(tiles, decoded, tilemap->data.non_affine, tileSize, outTileSize, bitDepth, numTiles);
-    free(tiles);
-    *numTiles_p = numTiles;
-    return decoded;
+	int mapTileSize = isAffine ? 1 : 2;
+	int numTiles = tilemap->size / mapTileSize;
+	unsigned char* decoded = calloc(numTiles, outTileSize);
+	if (isAffine)
+		DecodeAffineTilemap(tiles, decoded, tilemap->data.affine, tileSize, numTiles);
+	else
+		DecodeNonAffineTilemap(tiles, decoded, tilemap->data.non_affine, tileSize, outTileSize, bitDepth, numTiles);
+	free(tiles);
+	*numTiles_p = numTiles;
+	return decoded;
 }
 
-void ReadImage(char *path, int tilesWidth, int bitDepth, int metatileWidth, int metatileHeight, struct Image *image, bool invertColors)
+void ReadImage(char* path, int tilesWidth, int bitDepth, int metatileWidth, int metatileHeight, struct Image* image, bool invertColors)
 {
 	int tileSize = bitDepth * 8;
 
 	int fileSize;
-	unsigned char *buffer = ReadWholeFile(path, &fileSize);
+	unsigned char* buffer = ReadWholeFile(path, &fileSize);
 
 	int numTiles = fileSize / tileSize;
 	if (image->tilemap.data.affine != NULL)
-    {
-	    int outTileSize = (bitDepth == 4 && image->palette.numColors > 16) ? 64 : tileSize;
-        buffer = DecodeTilemap(buffer, &image->tilemap, &numTiles, image->isAffine, tileSize, outTileSize, bitDepth);
-        if (outTileSize == 64)
-        {
-            tileSize = 64;
-            image->bitDepth = bitDepth = 8;
-        }
-    }
+	{
+		int outTileSize = (bitDepth == 4 && image->palette.numColors > 16) ? 64 : tileSize;
+		buffer = DecodeTilemap(buffer, &image->tilemap, &numTiles, image->isAffine, tileSize, outTileSize, bitDepth);
+		if (outTileSize == 64)
+		{
+			tileSize = 64;
+			image->bitDepth = bitDepth = 8;
+		}
+	}
 
 	int tilesHeight = (numTiles + tilesWidth - 1) / tilesWidth;
 
@@ -397,7 +397,7 @@ void ReadImage(char *path, int tilesWidth, int bitDepth, int metatileWidth, int 
 	free(buffer);
 }
 
-void WriteImage(char *path, enum NumTilesMode numTilesMode, int numTiles, int bitDepth, int metatileWidth, int metatileHeight, struct Image *image, bool invertColors)
+void WriteImage(char* path, enum NumTilesMode numTilesMode, int numTiles, int bitDepth, int metatileWidth, int metatileHeight, struct Image* image, bool invertColors)
 {
 	int tileSize = bitDepth * 8;
 
@@ -425,7 +425,7 @@ void WriteImage(char *path, enum NumTilesMode numTilesMode, int numTiles, int bi
 
 	int bufferSize = numTiles * tileSize;
 	int maxBufferSize = maxNumTiles * tileSize;
-	unsigned char *buffer = malloc(maxBufferSize);
+	unsigned char* buffer = malloc(maxBufferSize);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for pixels.\n");
@@ -468,21 +468,21 @@ void WriteImage(char *path, enum NumTilesMode numTilesMode, int numTiles, int bi
 	free(buffer);
 }
 
-void FreeImage(struct Image *image)
+void FreeImage(struct Image* image)
 {
 	if (image->tilemap.data.affine != NULL)
-    {
-        free(image->tilemap.data.affine);
-        image->tilemap.data.affine = NULL;
-    }
+	{
+		free(image->tilemap.data.affine);
+		image->tilemap.data.affine = NULL;
+	}
 	free(image->pixels);
 	image->pixels = NULL;
 }
 
-void ReadGbaPalette(char *path, struct Palette *palette)
+void ReadGbaPalette(char* path, struct Palette* palette)
 {
 	int fileSize;
-	unsigned char *data = ReadWholeFile(path, &fileSize);
+	unsigned char* data = ReadWholeFile(path, &fileSize);
 
 	if (fileSize % 2 != 0)
 		FATAL_ERROR("The file size (%d) is not a multiple of 2.\n", fileSize);
@@ -497,17 +497,17 @@ void ReadGbaPalette(char *path, struct Palette *palette)
 	}
 	// png can only accept 16 or 256 colors, so fill the remainder with black
 	if (palette->numColors > 16)
-    {
-	    memset(&palette->colors[palette->numColors], 0, (256 - palette->numColors) * sizeof(struct Color));
-	    palette->numColors = 256;
-    }
+	{
+		memset(&palette->colors[palette->numColors], 0, (256 - palette->numColors) * sizeof(struct Color));
+		palette->numColors = 256;
+	}
 
 	free(data);
 }
 
-void WriteGbaPalette(char *path, struct Palette *palette)
+void WriteGbaPalette(char* path, struct Palette* palette)
 {
-	FILE *fp = fopen(path, "wb");
+	FILE* fp = fopen(path, "wb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for writing.\n", path);

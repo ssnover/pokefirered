@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-extern const u8 *const gStdStringPtrs[];
+extern const u8* const gStdStringPtrs[];
 
 bool8 ScriptMenu_Multichoice(u8 left, u8 top, u8 var3, u8 var4);
 bool8 ScriptMenu_MultichoiceWithDefault(u8 left, u8 top, u8 var3, u8 var4, u8 var5);
@@ -13,7 +13,7 @@ bool8 ScriptMenu_ShowPokemonPic(u16 var1, u8 var2, u8 var3);
 bool8 CreatePCMenu(void);
 void ScriptMenu_DisplayPCStartupPrompt(void);
 
-bool8 (*ScriptMenu_HidePokemonPic(void))(void);
+bool8(*ScriptMenu_HidePokemonPic(void))(void);
 void QLPlaybackCB_DestroyScriptMenuMonPicSprites(void);
 void PicboxCancel(void);
 

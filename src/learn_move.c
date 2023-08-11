@@ -20,19 +20,19 @@
 /*
  * Move relearner state machine
  * ------------------------
- * 
+ *
  * CB2_MoveRelearner_Init
  *   - Creates listMenuScrollPos to listen to right/left buttons.
  *   - Creates listMenuScrollRow to listen to up/down buttons.
  * MoveRelearnerStateMachine: MENU_STATE_FADE_TO_BLACK
  * MoveRelearnerStateMachine: MENU_STATE_WAIT_FOR_FADE
  *   - Go to MENU_STATE_IDLE_BATTLE_MODE
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_SETUP_BATTLE_MODE
  * MoveRelearnerStateMachine: MENU_STATE_IDLE_BATTLE_MODE
  *   - If the player selected a move (pressed A), go to MENU_STATE_PRINT_TEACH_MOVE_PROMPT.
  *   - If the player cancelled (pressed B), go to MENU_STATE_PRINT_GIVE_UP_PROMPT.
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_TEACH_MOVE_PROMPT
  * MoveRelearnerStateMachine: MENU_STATE_TEACH_MOVE_CONFIRM
  *   - Wait for the player to confirm.
@@ -41,24 +41,24 @@
  *     MENU_STATE_PRINT_TEXT_THEN_FANFARE.
  *   - If confirmed and the pokemon doesn't have an empty move slot, go to
  *     MENU_STATE_PRINT_TRYING_TO_LEARN_PROMPT.
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_TRYING_TO_LEARN_PROMPT
  * MoveRelearnerStateMachine: MENU_STATE_WAIT_FOR_TRYING_TO_LEARN
  * MoveRelearnerStateMachine: MENU_STATE_CONFIRM_DELETE_OLD_MOVE
  *   - If the player confirms, go to MENU_STATE_PRINT_WHICH_MOVE_PROMPT.
  *   - If the player cancels, go to MENU_STATE_PRINT_STOP_TEACHING
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_STOP_TEACHING
  * MoveRelearnerStateMachine: MENU_STATE_WAIT_FOR_STOP_TEACHING
  * MoveRelearnerStateMachine: MENU_STATE_CONFIRM_STOP_TEACHING
  *   - If the player confirms, go to MENU_STATE_CHOOSE_SETUP_STATE.
  *   - If the player cancels, go back to MENU_STATE_PRINT_TRYING_TO_LEARN_PROMPT.
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_WHICH_MOVE_PROMPT
  * MoveRelearnerStateMachine: MENU_STATE_SHOW_MOVE_SUMMARY_SCREEN
  *   - Go to ShowSelectMovePokemonSummaryScreen. When done, control returns to
  *     CB2_MoveRelearner_Resume.
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_TEXT_THEN_FANFARE
  * MoveRelearnerStateMachine: MENU_STATE_WAIT_FOR_FANFARE
@@ -66,12 +66,12 @@
  * MoveRelearnerStateMachine: MENU_STATE_FADE_AND_RETURN
  * MoveRelearnerStateMachine: MENU_STATE_RETURN_TO_FIELD
  *   - Clean up and go to CB2_ReturnToField.
- * 
+ *
  * MoveRelearnerStateMachine: MENU_STATE_PRINT_GIVE_UP_PROMPT
  * MoveRelearnerStateMachine: MENU_STATE_GIVE_UP_CONFIRM
  *   - If the player confirms, go to MENU_STATE_FADE_AND_RETURN, and set VAR_0x8004 to FALSE.
  *   - If the player cancels, go to MENU_STATE_SETUP_BATTLE_MODE.
- * 
+ *
  * CB2_MoveRelearner_Resume:
  *   - Do most of the same stuff as CB2_MoveRelearner_Init.
  * MoveRelearnerStateMachine: MENU_STATE_FADE_FROM_SUMMARY_SCREEN
@@ -80,15 +80,15 @@
  *     go to MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE and set VAR_0x8004 to TRUE.
  *   - If the chosen move is the one the player selected before the summary screen,
  *     go to MENU_STATE_PRINT_STOP_TEACHING.
- * 
+ *
  */
- 
+
 #define MENU_STATE_FADE_TO_BLACK 0
 #define MENU_STATE_WAIT_FOR_FADE 1
 #define MENU_STATE_UNREACHABLE 2
 #define MENU_STATE_SETUP_BATTLE_MODE 3
 #define MENU_STATE_IDLE_BATTLE_MODE 4
-// States 5, 6, and 7 are skipped.
+ // States 5, 6, and 7 are skipped.
 #define MENU_STATE_PRINT_TEACH_MOVE_PROMPT 8
 #define MENU_STATE_TEACH_MOVE_CONFIRM 9
 // States 10 and 11 are skipped.
@@ -115,7 +115,7 @@
 
 struct MoveTutorMoveInfoHeaders
 {
-    const u8 *text;
+    const u8* text;
     u8 left;
     u8 right;
     u8 index; // unused
@@ -150,7 +150,7 @@ struct LearnMoveGfxResources
     u16 listMenuScrollRow;
 };
 
-static EWRAM_DATA struct LearnMoveGfxResources * sMoveRelearner = NULL;
+static EWRAM_DATA struct LearnMoveGfxResources* sMoveRelearner = NULL;
 
 static void Task_InitMoveRelearnerMenu(u8 taskId);
 static void CB2_MoveRelearner_Init(void);
@@ -159,16 +159,16 @@ static void MoveRelearnerStateMachine(void);
 static void DrawTextBorderOnWindows6and7(void);
 static void PrintTeachWhichMoveToStrVar1(bool8 onInit);
 static void InitMoveRelearnerStateVariables(void);
-static void SpriteCB_ListMenuScrollIndicators(struct Sprite *sprite);
+static void SpriteCB_ListMenuScrollIndicators(struct Sprite* sprite);
 static void SpawnListMenuScrollIndicatorSprites(void);
 static void MoveRelearnerInitListMenuBuffersEtc(void);
 static void MoveRelearnerMenuHandleInput(void);
 static void MoveLearnerInitListMenu(void);
 static void LoadMoveInfoUI(void);
 static void PrintMoveInfoHandleCancel_CopyToVram(void);
-static void MoveRelearnerMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list);
+static void MoveRelearnerMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list);
 static s8 YesNoMenuProcessInput(void);
-static void PrintTextOnWindow(u8 windowId, const u8 *str, u8 x, u8 y, s32 speed, s32 colorIdx);
+static void PrintTextOnWindow(u8 windowId, const u8* str, u8 x, u8 y, s32 speed, s32 colorIdx);
 
 static const u16 sLearnMoveInterfaceSpritesPalette[] = INCBIN_U16("graphics/learn_move/interface_sprites.gbapal");
 static const u16 sLearnMoveInterfaceSpritesTiles[] = INCBIN_U16("graphics/learn_move/interface_sprites.4bpp");
@@ -227,7 +227,7 @@ static const union AnimCmd sAnimCmd_ScrollIndicatorUp[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnimTable_MoveRelearnerListMenuScrollIndicators[] = {
+static const union AnimCmd* const sSpriteAnimTable_MoveRelearnerListMenuScrollIndicators[] = {
     sAnimCmd_ScrollIndicatorDown,
     sAnimCmd_ScrollIndicatorUp
 };
@@ -467,7 +467,7 @@ static void CB2_MoveRelearner(void)
     UpdatePaletteFade();
 }
 
-static void StringExpandPlaceholdersAndPrintTextOnWindow7Color2(const u8 *str)
+static void StringExpandPlaceholdersAndPrintTextOnWindow7Color2(const u8* str)
 {
     StringExpandPlaceholders(gStringVar4, str);
     PrintTextOnWindow(7, gStringVar4, 0, 2, GetTextSpeedSetting(), 2);
@@ -509,7 +509,7 @@ static void MoveRelearnerStateMachine(void)
         CreateYesNoMenu(&sMoveRelearnerYesNoMenuTemplate, FONT_NORMAL_COPY_2, 0, 2, 0x001, 14, 0);
         sMoveRelearner->state++;
         break;
-    case MENU_STATE_TEACH_MOVE_CONFIRM :
+    case MENU_STATE_TEACH_MOVE_CONFIRM:
         switch (YesNoMenuProcessInput())
         {
         case 0:
@@ -588,7 +588,7 @@ static void MoveRelearnerStateMachine(void)
             break;
         }
         break;
-    case MENU_STATE_CHOOSE_SETUP_STATE :
+    case MENU_STATE_CHOOSE_SETUP_STATE:
         sMoveRelearner->state = 3;
         break;
     case MENU_STATE_PRINT_WHICH_MOVE_PROMPT:
@@ -711,7 +711,7 @@ static void InitMoveRelearnerStateVariables(void)
         sMoveRelearner->learnableMoves[i] = MOVE_NONE;
 }
 
-static void SpriteCB_ListMenuScrollIndicators(struct Sprite *sprite)
+static void SpriteCB_ListMenuScrollIndicators(struct Sprite* sprite)
 {
     s16 abcissa = (sprite->data[1] * 10) & 0xFF;
     switch (sprite->data[0])
@@ -883,7 +883,7 @@ static void PrintMoveInfoHandleCancel_CopyToVram(void)
     CopyWindowToVram(7, COPYWIN_FULL);
 }
 
-static void MoveRelearnerMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list)
+static void MoveRelearnerMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list)
 {
     if (!onInit)
     {
@@ -904,7 +904,7 @@ static s8 YesNoMenuProcessInput(void)
     return input;
 }
 
-static void PrintTextOnWindow(u8 windowId, const u8 *str, u8 x, u8 y, s32 speed, s32 colorIdx)
+static void PrintTextOnWindow(u8 windowId, const u8* str, u8 x, u8 y, s32 speed, s32 colorIdx)
 {
     s32 letterSpacing = 1;
     s32 lineSpacing = 1;

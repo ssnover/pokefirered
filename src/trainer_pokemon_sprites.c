@@ -5,8 +5,8 @@
 
 struct PicData
 {
-    u8 *frames;
-    struct SpriteFrameImage *images;
+    u8* frames;
+    struct SpriteFrameImage* images;
     u16 paletteTag;
     u8 spriteId;
     u8 active;
@@ -25,7 +25,7 @@ static const struct OamData sOamData_Normal =
     .size = SPRITE_SIZE(64x64)
 };
 
-void DummyPicSpriteCallback(struct Sprite *sprite)
+void DummyPicSpriteCallback(struct Sprite* sprite)
 {
 
 }
@@ -34,13 +34,13 @@ bool16 ResetAllPicSprites(void)
 {
     int i;
 
-    for (i = 0; i < PICS_COUNT; i ++)
+    for (i = 0; i < PICS_COUNT; i++)
         sSpritePics[i] = sDummyPicData;
 
     return FALSE;
 }
 
-static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8 *dest, bool8 isTrainer, bool8 ignoreDeoxys)
+static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8* dest, bool8 isTrainer, bool8 ignoreDeoxys)
 {
     if (!isTrainer)
     {
@@ -69,7 +69,7 @@ static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8 *
     return FALSE;
 }
 
-static bool16 DecompressPic_HandleDeoxys(u16 species, u32 personality, bool8 isFrontPic, u8 *dest, bool8 isTrainer)
+static bool16 DecompressPic_HandleDeoxys(u16 species, u32 personality, bool8 isFrontPic, u8* dest, bool8 isTrainer)
 {
     return DecompressPic(species, personality, isFrontPic, dest, isTrainer, FALSE);
 }
@@ -123,12 +123,12 @@ void AssignSpriteAnimsTable(bool8 isTrainer)
 u16 CreatePicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, bool8 ignoreDeoxys)
 {
     u8 i;
-    u8 *framePics;
-    struct SpriteFrameImage *images;
+    u8* framePics;
+    struct SpriteFrameImage* images;
     int j;
     u8 spriteId;
 
-    for (i = 0; i < PICS_COUNT; i ++)
+    for (i = 0; i < PICS_COUNT; i++)
     {
         if (!sSpritePics[i].active)
             break;
@@ -151,7 +151,7 @@ u16 CreatePicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s1
         // debug trap?
         return 0xFFFF;
     }
-    for (j = 0; j < 4; j ++)
+    for (j = 0; j < 4; j++)
     {
         images[j].data = framePics + 0x800 * j;
         images[j].size = 0x800;
@@ -182,10 +182,10 @@ u16 CreatePicSprite_HandleDeoxys(u16 species, u32 otId, u32 personality, bool8 i
 u16 FreeAndDestroyPicSpriteInternal(u16 spriteId)
 {
     u8 i;
-    u8 *framePics;
-    struct SpriteFrameImage *images;
+    u8* framePics;
+    struct SpriteFrameImage* images;
 
-    for (i = 0; i < PICS_COUNT; i ++)
+    for (i = 0; i < PICS_COUNT; i++)
     {
         if (sSpritePics[i].spriteId == spriteId)
             break;
@@ -206,7 +206,7 @@ u16 FreeAndDestroyPicSpriteInternal(u16 spriteId)
 
 static u16 LoadPicSpriteInWindow(u16 species, u32 otId, u32 personality, bool8 isFrontPic, u8 paletteSlot, u8 windowId, bool8 isTrainer)
 {
-    if (DecompressPic_HandleDeoxys(species, personality, isFrontPic, (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA), FALSE))
+    if (DecompressPic_HandleDeoxys(species, personality, isFrontPic, (u8*)GetWindowAttribute(windowId, WINDOW_TILE_DATA), FALSE))
         return 0xFFFF;
 
     LoadPicPaletteBySlot(species, otId, personality, paletteSlot, isTrainer);
@@ -215,7 +215,7 @@ static u16 LoadPicSpriteInWindow(u16 species, u32 otId, u32 personality, bool8 i
 
 u16 CreateTrainerCardSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, u16 destX, u16 destY, u8 paletteSlot, u8 windowId, bool8 isTrainer)
 {
-    u8 *framePics;
+    u8* framePics;
 
     framePics = Alloc(4 * 0x800);
     if (framePics && !DecompressPic_HandleDeoxys(species, personality, isFrontPic, framePics, isTrainer))

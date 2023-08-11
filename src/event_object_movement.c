@@ -21,139 +21,139 @@
 #include "constants/trainer_types.h"
 #include "constants/union_room.h"
 
-static void MoveCoordsInDirection(u32, s16 *, s16 *, s16, s16);
-static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *, struct Sprite *);
-static u8 GetCollisionInDirection(struct ObjectEvent *, u8);
+static void MoveCoordsInDirection(u32, s16*, s16*, s16, s16);
+static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent*, struct Sprite*);
+static u8 GetCollisionInDirection(struct ObjectEvent*, u8);
 static u32 GetCopyDirection(u8, u32, u32);
-static void TryEnableObjectEventAnim(struct ObjectEvent *, struct Sprite *);
-static void ObjectEventExecHeldMovementAction(struct ObjectEvent *, struct Sprite *);
-static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent *, struct Sprite *);
-static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent *, s16, s16);
-static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent *, s16, s16, u8);
-static bool8 DoesObjectCollideWithObjectAt(struct ObjectEvent *, s16, s16);
-static void CalcWhetherObjectIsOffscreen(struct ObjectEvent *, struct Sprite *);
-static void UpdateObjEventSpriteVisibility(struct ObjectEvent *, struct Sprite *);
-static void ObjectEventUpdateMetatileBehaviors(struct ObjectEvent *);
-static void GetGroundEffectFlags_Reflection(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_TallGrassOnSpawn(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_LongGrassOnSpawn(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_SandHeap(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_ShallowFlowingWater(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_HotSprings(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_TallGrassOnBeginStep(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_LongGrassOnBeginStep(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_Tracks(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_Puddle(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_Ripple(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_Seaweed(struct ObjectEvent *, u32 *);
-static void GetGroundEffectFlags_JumpLanding(struct ObjectEvent *, u32 *);
-static u8 ObjectEventCheckForReflectiveSurface(struct ObjectEvent *);
+static void TryEnableObjectEventAnim(struct ObjectEvent*, struct Sprite*);
+static void ObjectEventExecHeldMovementAction(struct ObjectEvent*, struct Sprite*);
+static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent*, struct Sprite*);
+static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent*, s16, s16);
+static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent*, s16, s16, u8);
+static bool8 DoesObjectCollideWithObjectAt(struct ObjectEvent*, s16, s16);
+static void CalcWhetherObjectIsOffscreen(struct ObjectEvent*, struct Sprite*);
+static void UpdateObjEventSpriteVisibility(struct ObjectEvent*, struct Sprite*);
+static void ObjectEventUpdateMetatileBehaviors(struct ObjectEvent*);
+static void GetGroundEffectFlags_Reflection(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_TallGrassOnSpawn(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_LongGrassOnSpawn(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_SandHeap(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_ShallowFlowingWater(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_HotSprings(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_TallGrassOnBeginStep(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_LongGrassOnBeginStep(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_Tracks(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_Puddle(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_Ripple(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_Seaweed(struct ObjectEvent*, u32*);
+static void GetGroundEffectFlags_JumpLanding(struct ObjectEvent*, u32*);
+static u8 ObjectEventCheckForReflectiveSurface(struct ObjectEvent*);
 static u8 GetReflectionTypeByMetatileBehavior(u32);
-static void InitObjectPriorityByElevation(struct Sprite *sprite, u8 elevation);
-static void ObjectEventUpdateSubpriority(struct ObjectEvent *, struct Sprite *);
-static void DoTracksGroundEffect_None(struct ObjectEvent *, struct Sprite *, u8);
-static void DoTracksGroundEffect_Footprints(struct ObjectEvent *, struct Sprite *, u8);
-static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent *, struct Sprite *, u8);
-static void DoRippleFieldEffect(struct ObjectEvent *, struct Sprite *);
-static void DoGroundEffects_OnSpawn(struct ObjectEvent *, struct Sprite *);
-static void DoGroundEffects_OnBeginStep(struct ObjectEvent *, struct Sprite *);
-static void DoGroundEffects_OnFinishStep(struct ObjectEvent *, struct Sprite *);
+static void InitObjectPriorityByElevation(struct Sprite* sprite, u8 elevation);
+static void ObjectEventUpdateSubpriority(struct ObjectEvent*, struct Sprite*);
+static void DoTracksGroundEffect_None(struct ObjectEvent*, struct Sprite*, u8);
+static void DoTracksGroundEffect_Footprints(struct ObjectEvent*, struct Sprite*, u8);
+static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent*, struct Sprite*, u8);
+static void DoRippleFieldEffect(struct ObjectEvent*, struct Sprite*);
+static void DoGroundEffects_OnSpawn(struct ObjectEvent*, struct Sprite*);
+static void DoGroundEffects_OnBeginStep(struct ObjectEvent*, struct Sprite*);
+static void DoGroundEffects_OnFinishStep(struct ObjectEvent*, struct Sprite*);
 static void CreateReflectionEffectSprites(void);
 static u8 GetObjectEventIdByLocalId(u8);
 static u8 GetObjectEventIdByLocalIdAndMapInternal(u8, u8, u8);
-static bool8 GetAvailableObjectEventId(u16, u8, u8, u8 *);
-static void SetObjectEventDynamicGraphicsId(struct ObjectEvent *);
-static void RemoveObjectEventInternal(struct ObjectEvent *);
+static bool8 GetAvailableObjectEventId(u16, u8, u8, u8*);
+static void SetObjectEventDynamicGraphicsId(struct ObjectEvent*);
+static void RemoveObjectEventInternal(struct ObjectEvent*);
 static u16 GetObjectEventFlagIdByObjectEventId(u8);
-static void UpdateObjectEventVisibility(struct ObjectEvent *, struct Sprite *);
-static void MakeObjectTemplateFromObjectEventTemplate(const struct ObjectEventTemplate *, struct SpriteTemplate *, const struct SubspriteTable **);
-static void GetObjectEventMovingCameraOffset(s16 *, s16 *);
-static const struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8, u8, u8);
+static void UpdateObjectEventVisibility(struct ObjectEvent*, struct Sprite*);
+static void MakeObjectTemplateFromObjectEventTemplate(const struct ObjectEventTemplate*, struct SpriteTemplate*, const struct SubspriteTable**);
+static void GetObjectEventMovingCameraOffset(s16*, s16*);
+static const struct ObjectEventTemplate* GetObjectEventTemplateByLocalIdAndMap(u8, u8, u8);
 static void LoadObjectEventPalette(u16);
-static void RemoveObjectEventIfOutsideView(struct ObjectEvent *);
+static void RemoveObjectEventIfOutsideView(struct ObjectEvent*);
 static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y);
 static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
-static void ResetObjectEventFldEffData(struct ObjectEvent *);
-static u8 TryLoadObjectPalette(const struct SpritePalette *spritePalette);
+static void ResetObjectEventFldEffData(struct ObjectEvent*);
+static u8 TryLoadObjectPalette(const struct SpritePalette* spritePalette);
 static u8 FindObjectEventPaletteIndexByTag(u16);
-static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *, u8);
+static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent*, u8);
 static bool8 IsElevationMismatchAt(u8 elevation, s16 x, s16 y);
 static bool8 AreElevationsCompatible(u8 a, u8 b);
-static void ObjectCB_CameraObject(struct Sprite *);
-static void CameraObject_0(struct Sprite *);
-static void CameraObject_1(struct Sprite *);
-static void CameraObject_2(struct Sprite *);
-static const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate *templates, u8 count);
-static void ClearObjectEventMovement(struct ObjectEvent *, struct Sprite *);
-static void ObjectEventSetSingleMovement(struct ObjectEvent *, struct Sprite *, u8);
-static bool8 ShouldInitObjectEventStateFromTemplate(const struct ObjectEventTemplate *, u8, s16, s16);
-static bool8 TemplateIsObstacleAndWithinView(const struct ObjectEventTemplate *, s16, s16);
-static bool8 TemplateIsObstacleAndVisibleFromConnectingMap(const struct ObjectEventTemplate *, s16, s16);
-static void SetHideObstacleFlag(const struct ObjectEventTemplate *);
-static bool8 MovementType_Disguise_Callback(struct ObjectEvent *, struct Sprite *);
-static bool8 MovementType_Buried_Callback(struct ObjectEvent *, struct Sprite *);
-static u8 MovementType_RaiseHandAndStop_Callback(struct ObjectEvent *, struct Sprite *);
-static u8 MovementType_RaiseHandAndJump_Callback(struct ObjectEvent *, struct Sprite *);
-static u8 MovementType_RaiseHandAndSwim_Callback(struct ObjectEvent *, struct Sprite *);
-static void QuestLogObjectEventExecHeldMovementAction(struct ObjectEvent *, struct Sprite *);
-static void VirtualObject_UpdateAnim(struct Sprite *sprite);
-static void MovementType_None(struct Sprite *);
-static void MovementType_LookAround(struct Sprite *);
-static void MovementType_WanderAround(struct Sprite *);
-static void MovementType_WanderUpAndDown(struct Sprite *);
-static void MovementType_WanderLeftAndRight(struct Sprite *);
-static void MovementType_FaceDirection(struct Sprite *);
-static void MovementType_FaceDownAndUp(struct Sprite *);
-static void MovementType_FaceLeftAndRight(struct Sprite *);
-static void MovementType_FaceUpAndLeft(struct Sprite *);
-static void MovementType_FaceUpAndRight(struct Sprite *);
-static void MovementType_FaceDownAndLeft(struct Sprite *);
-static void MovementType_FaceDownAndRight(struct Sprite *);
-static void MovementType_FaceDownUpAndLeft(struct Sprite *);
-static void MovementType_FaceDownUpAndRight(struct Sprite *);
-static void MovementType_FaceUpRightAndLeft(struct Sprite *);
-static void MovementType_FaceDownRightAndLeft(struct Sprite *);
-static void MovementType_RotateCounterclockwise(struct Sprite *);
-static void MovementType_RotateClockwise(struct Sprite *);
-static void MovementType_WalkBackAndForth(struct Sprite *);
-static void MovementType_WalkSequenceUpRightLeftDown(struct Sprite *);
-static void MovementType_WalkSequenceRightLeftDownUp(struct Sprite *);
-static void MovementType_WalkSequenceDownUpRightLeft(struct Sprite *);
-static void MovementType_WalkSequenceLeftDownUpRight(struct Sprite *);
-static void MovementType_WalkSequenceUpLeftRightDown(struct Sprite *);
-static void MovementType_WalkSequenceLeftRightDownUp(struct Sprite *);
-static void MovementType_WalkSequenceDownUpLeftRight(struct Sprite *);
-static void MovementType_WalkSequenceRightDownUpLeft(struct Sprite *);
-static void MovementType_WalkSequenceLeftUpDownRight(struct Sprite *);
-static void MovementType_WalkSequenceUpDownRightLeft(struct Sprite *);
-static void MovementType_WalkSequenceRightLeftUpDown(struct Sprite *);
-static void MovementType_WalkSequenceDownRightLeftUp(struct Sprite *);
-static void MovementType_WalkSequenceRightUpDownLeft(struct Sprite *);
-static void MovementType_WalkSequenceUpDownLeftRight(struct Sprite *);
-static void MovementType_WalkSequenceLeftRightUpDown(struct Sprite *);
-static void MovementType_WalkSequenceDownLeftRightUp(struct Sprite *);
-static void MovementType_WalkSequenceUpLeftDownRight(struct Sprite *);
-static void MovementType_WalkSequenceDownRightUpLeft(struct Sprite *);
-static void MovementType_WalkSequenceLeftDownRightUp(struct Sprite *);
-static void MovementType_WalkSequenceRightUpLeftDown(struct Sprite *);
-static void MovementType_WalkSequenceUpRightDownLeft(struct Sprite *);
-static void MovementType_WalkSequenceDownLeftUpRight(struct Sprite *);
-static void MovementType_WalkSequenceLeftUpRightDown(struct Sprite *);
-static void MovementType_WalkSequenceRightDownLeftUp(struct Sprite *);
-static void MovementType_CopyPlayer(struct Sprite *);
-static void MovementType_TreeDisguise(struct Sprite *);
-static void MovementType_MountainDisguise(struct Sprite *);
-static void MovementType_CopyPlayerInGrass(struct Sprite *);
-static void MovementType_Buried(struct Sprite *);
-static void MovementType_WalkInPlace(struct Sprite *);
-static void MovementType_WalkInPlaceFast(struct Sprite *);
-static void MovementType_JogInPlace(struct Sprite *);
-static void MovementType_Invisible(struct Sprite *);
-static void MovementType_RaiseHandAndStop(struct Sprite *);
-static void MovementType_RaiseHandAndJump(struct Sprite *);
-static void MovementType_RaiseHandAndSwim(struct Sprite *);
-static void MovementType_WanderAroundSlower(struct Sprite *);
+static void ObjectCB_CameraObject(struct Sprite*);
+static void CameraObject_0(struct Sprite*);
+static void CameraObject_1(struct Sprite*);
+static void CameraObject_2(struct Sprite*);
+static const struct ObjectEventTemplate* FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate* templates, u8 count);
+static void ClearObjectEventMovement(struct ObjectEvent*, struct Sprite*);
+static void ObjectEventSetSingleMovement(struct ObjectEvent*, struct Sprite*, u8);
+static bool8 ShouldInitObjectEventStateFromTemplate(const struct ObjectEventTemplate*, u8, s16, s16);
+static bool8 TemplateIsObstacleAndWithinView(const struct ObjectEventTemplate*, s16, s16);
+static bool8 TemplateIsObstacleAndVisibleFromConnectingMap(const struct ObjectEventTemplate*, s16, s16);
+static void SetHideObstacleFlag(const struct ObjectEventTemplate*);
+static bool8 MovementType_Disguise_Callback(struct ObjectEvent*, struct Sprite*);
+static bool8 MovementType_Buried_Callback(struct ObjectEvent*, struct Sprite*);
+static u8 MovementType_RaiseHandAndStop_Callback(struct ObjectEvent*, struct Sprite*);
+static u8 MovementType_RaiseHandAndJump_Callback(struct ObjectEvent*, struct Sprite*);
+static u8 MovementType_RaiseHandAndSwim_Callback(struct ObjectEvent*, struct Sprite*);
+static void QuestLogObjectEventExecHeldMovementAction(struct ObjectEvent*, struct Sprite*);
+static void VirtualObject_UpdateAnim(struct Sprite* sprite);
+static void MovementType_None(struct Sprite*);
+static void MovementType_LookAround(struct Sprite*);
+static void MovementType_WanderAround(struct Sprite*);
+static void MovementType_WanderUpAndDown(struct Sprite*);
+static void MovementType_WanderLeftAndRight(struct Sprite*);
+static void MovementType_FaceDirection(struct Sprite*);
+static void MovementType_FaceDownAndUp(struct Sprite*);
+static void MovementType_FaceLeftAndRight(struct Sprite*);
+static void MovementType_FaceUpAndLeft(struct Sprite*);
+static void MovementType_FaceUpAndRight(struct Sprite*);
+static void MovementType_FaceDownAndLeft(struct Sprite*);
+static void MovementType_FaceDownAndRight(struct Sprite*);
+static void MovementType_FaceDownUpAndLeft(struct Sprite*);
+static void MovementType_FaceDownUpAndRight(struct Sprite*);
+static void MovementType_FaceUpRightAndLeft(struct Sprite*);
+static void MovementType_FaceDownRightAndLeft(struct Sprite*);
+static void MovementType_RotateCounterclockwise(struct Sprite*);
+static void MovementType_RotateClockwise(struct Sprite*);
+static void MovementType_WalkBackAndForth(struct Sprite*);
+static void MovementType_WalkSequenceUpRightLeftDown(struct Sprite*);
+static void MovementType_WalkSequenceRightLeftDownUp(struct Sprite*);
+static void MovementType_WalkSequenceDownUpRightLeft(struct Sprite*);
+static void MovementType_WalkSequenceLeftDownUpRight(struct Sprite*);
+static void MovementType_WalkSequenceUpLeftRightDown(struct Sprite*);
+static void MovementType_WalkSequenceLeftRightDownUp(struct Sprite*);
+static void MovementType_WalkSequenceDownUpLeftRight(struct Sprite*);
+static void MovementType_WalkSequenceRightDownUpLeft(struct Sprite*);
+static void MovementType_WalkSequenceLeftUpDownRight(struct Sprite*);
+static void MovementType_WalkSequenceUpDownRightLeft(struct Sprite*);
+static void MovementType_WalkSequenceRightLeftUpDown(struct Sprite*);
+static void MovementType_WalkSequenceDownRightLeftUp(struct Sprite*);
+static void MovementType_WalkSequenceRightUpDownLeft(struct Sprite*);
+static void MovementType_WalkSequenceUpDownLeftRight(struct Sprite*);
+static void MovementType_WalkSequenceLeftRightUpDown(struct Sprite*);
+static void MovementType_WalkSequenceDownLeftRightUp(struct Sprite*);
+static void MovementType_WalkSequenceUpLeftDownRight(struct Sprite*);
+static void MovementType_WalkSequenceDownRightUpLeft(struct Sprite*);
+static void MovementType_WalkSequenceLeftDownRightUp(struct Sprite*);
+static void MovementType_WalkSequenceRightUpLeftDown(struct Sprite*);
+static void MovementType_WalkSequenceUpRightDownLeft(struct Sprite*);
+static void MovementType_WalkSequenceDownLeftUpRight(struct Sprite*);
+static void MovementType_WalkSequenceLeftUpRightDown(struct Sprite*);
+static void MovementType_WalkSequenceRightDownLeftUp(struct Sprite*);
+static void MovementType_CopyPlayer(struct Sprite*);
+static void MovementType_TreeDisguise(struct Sprite*);
+static void MovementType_MountainDisguise(struct Sprite*);
+static void MovementType_CopyPlayerInGrass(struct Sprite*);
+static void MovementType_Buried(struct Sprite*);
+static void MovementType_WalkInPlace(struct Sprite*);
+static void MovementType_WalkInPlaceFast(struct Sprite*);
+static void MovementType_JogInPlace(struct Sprite*);
+static void MovementType_Invisible(struct Sprite*);
+static void MovementType_RaiseHandAndStop(struct Sprite*);
+static void MovementType_RaiseHandAndJump(struct Sprite*);
+static void MovementType_RaiseHandAndSwim(struct Sprite*);
+static void MovementType_WanderAroundSlower(struct Sprite*);
 
 enum {
     MOVE_SPEED_NORMAL, // walking
@@ -195,31 +195,31 @@ EWRAM_DATA u8 sCurrentReflectionType = 0;
 EWRAM_DATA u16 sCurrentSpecialObjectPaletteTag = 0;
 
 const u8 gReflectionEffectPaletteMap[16] = {
-    [PALSLOT_PLAYER]                 = PALSLOT_PLAYER_REFLECTION,
-    [PALSLOT_PLAYER_REFLECTION]      = PALSLOT_PLAYER_REFLECTION,
-    [PALSLOT_NPC_1]                  = PALSLOT_NPC_1_REFLECTION,
-    [PALSLOT_NPC_2]                  = PALSLOT_NPC_2_REFLECTION,
-    [PALSLOT_NPC_3]                  = PALSLOT_NPC_3_REFLECTION,
-    [PALSLOT_NPC_4]                  = PALSLOT_NPC_4_REFLECTION,
-    [PALSLOT_NPC_1_REFLECTION]       = PALSLOT_NPC_1_REFLECTION,
-    [PALSLOT_NPC_2_REFLECTION]       = PALSLOT_NPC_2_REFLECTION,
-    [PALSLOT_NPC_3_REFLECTION]       = PALSLOT_NPC_3_REFLECTION,
-    [PALSLOT_NPC_4_REFLECTION]       = PALSLOT_NPC_4_REFLECTION,
-    [PALSLOT_NPC_SPECIAL]            = PALSLOT_NPC_SPECIAL_REFLECTION,
+    [PALSLOT_PLAYER] = PALSLOT_PLAYER_REFLECTION,
+    [PALSLOT_PLAYER_REFLECTION] = PALSLOT_PLAYER_REFLECTION,
+    [PALSLOT_NPC_1] = PALSLOT_NPC_1_REFLECTION,
+    [PALSLOT_NPC_2] = PALSLOT_NPC_2_REFLECTION,
+    [PALSLOT_NPC_3] = PALSLOT_NPC_3_REFLECTION,
+    [PALSLOT_NPC_4] = PALSLOT_NPC_4_REFLECTION,
+    [PALSLOT_NPC_1_REFLECTION] = PALSLOT_NPC_1_REFLECTION,
+    [PALSLOT_NPC_2_REFLECTION] = PALSLOT_NPC_2_REFLECTION,
+    [PALSLOT_NPC_3_REFLECTION] = PALSLOT_NPC_3_REFLECTION,
+    [PALSLOT_NPC_4_REFLECTION] = PALSLOT_NPC_4_REFLECTION,
+    [PALSLOT_NPC_SPECIAL] = PALSLOT_NPC_SPECIAL_REFLECTION,
     [PALSLOT_NPC_SPECIAL_REFLECTION] = PALSLOT_NPC_SPECIAL_REFLECTION
 };
 
 static const struct SpriteTemplate gCameraSpriteTemplate = {
-    .tileTag = 0, 
+    .tileTag = 0,
     .paletteTag = TAG_NONE,
-    .oam = &gDummyOamData, 
-    .anims = gDummySpriteAnimTable, 
-    .images = NULL, 
-    .affineAnims = gDummySpriteAffineAnimTable, 
+    .oam = &gDummyOamData,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
     .callback = ObjectCB_CameraObject
 };
 
-void (*const gCameraObjectFuncs[])(struct Sprite *) = {
+void (* const gCameraObjectFuncs[])(struct Sprite*) = {
     CameraObject_0,
     CameraObject_1,
     CameraObject_2,
@@ -227,88 +227,88 @@ void (*const gCameraObjectFuncs[])(struct Sprite *) = {
 
 #include "data/object_events/object_event_graphics.h"
 
-static void (*const sMovementTypeCallbacks[MOVEMENT_TYPES_COUNT])(struct Sprite *) = {
-    [MOVEMENT_TYPE_NONE]                                  = MovementType_None,
-    [MOVEMENT_TYPE_LOOK_AROUND]                           = MovementType_LookAround,
-    [MOVEMENT_TYPE_WANDER_AROUND]                         = MovementType_WanderAround,
-    [MOVEMENT_TYPE_WANDER_UP_AND_DOWN]                    = MovementType_WanderUpAndDown,
-    [MOVEMENT_TYPE_WANDER_DOWN_AND_UP]                    = MovementType_WanderUpAndDown,
-    [MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT]                 = MovementType_WanderLeftAndRight,
-    [MOVEMENT_TYPE_WANDER_RIGHT_AND_LEFT]                 = MovementType_WanderLeftAndRight,
-    [MOVEMENT_TYPE_FACE_UP]                               = MovementType_FaceDirection,
-    [MOVEMENT_TYPE_FACE_DOWN]                             = MovementType_FaceDirection,
-    [MOVEMENT_TYPE_FACE_LEFT]                             = MovementType_FaceDirection,
-    [MOVEMENT_TYPE_FACE_RIGHT]                            = MovementType_FaceDirection,
-    [MOVEMENT_TYPE_PLAYER]                                = MovementType_Player,
-    [MOVEMENT_TYPE_BERRY_TREE_GROWTH]                     = NULL,
-    [MOVEMENT_TYPE_FACE_DOWN_AND_UP]                      = MovementType_FaceDownAndUp,
-    [MOVEMENT_TYPE_FACE_LEFT_AND_RIGHT]                   = MovementType_FaceLeftAndRight,
-    [MOVEMENT_TYPE_FACE_UP_AND_LEFT]                      = MovementType_FaceUpAndLeft,
-    [MOVEMENT_TYPE_FACE_UP_AND_RIGHT]                     = MovementType_FaceUpAndRight,
-    [MOVEMENT_TYPE_FACE_DOWN_AND_LEFT]                    = MovementType_FaceDownAndLeft,
-    [MOVEMENT_TYPE_FACE_DOWN_AND_RIGHT]                   = MovementType_FaceDownAndRight,
-    [MOVEMENT_TYPE_FACE_DOWN_UP_AND_LEFT]                 = MovementType_FaceDownUpAndLeft,
-    [MOVEMENT_TYPE_FACE_DOWN_UP_AND_RIGHT]                = MovementType_FaceDownUpAndRight,
-    [MOVEMENT_TYPE_FACE_UP_LEFT_AND_RIGHT]                = MovementType_FaceUpRightAndLeft,
-    [MOVEMENT_TYPE_FACE_DOWN_LEFT_AND_RIGHT]              = MovementType_FaceDownRightAndLeft,
-    [MOVEMENT_TYPE_ROTATE_COUNTERCLOCKWISE]               = MovementType_RotateCounterclockwise,
-    [MOVEMENT_TYPE_ROTATE_CLOCKWISE]                      = MovementType_RotateClockwise,
-    [MOVEMENT_TYPE_WALK_UP_AND_DOWN]                      = MovementType_WalkBackAndForth,
-    [MOVEMENT_TYPE_WALK_DOWN_AND_UP]                      = MovementType_WalkBackAndForth,
-    [MOVEMENT_TYPE_WALK_LEFT_AND_RIGHT]                   = MovementType_WalkBackAndForth,
-    [MOVEMENT_TYPE_WALK_RIGHT_AND_LEFT]                   = MovementType_WalkBackAndForth,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_RIGHT_LEFT_DOWN]      = MovementType_WalkSequenceUpRightLeftDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_LEFT_DOWN_UP]      = MovementType_WalkSequenceRightLeftDownUp,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_UP_RIGHT_LEFT]      = MovementType_WalkSequenceDownUpRightLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_UP_RIGHT]      = MovementType_WalkSequenceLeftDownUpRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_RIGHT_DOWN]      = MovementType_WalkSequenceUpLeftRightDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_RIGHT_DOWN_UP]      = MovementType_WalkSequenceLeftRightDownUp,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_UP_LEFT_RIGHT]      = MovementType_WalkSequenceDownUpLeftRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_DOWN_UP_LEFT]      = MovementType_WalkSequenceRightDownUpLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_DOWN_RIGHT]      = MovementType_WalkSequenceLeftUpDownRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_DOWN_RIGHT_LEFT]      = MovementType_WalkSequenceUpDownRightLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_LEFT_UP_DOWN]      = MovementType_WalkSequenceRightLeftUpDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_LEFT_UP]      = MovementType_WalkSequenceDownRightLeftUp,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_DOWN_LEFT]      = MovementType_WalkSequenceRightUpDownLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_DOWN_LEFT_RIGHT]      = MovementType_WalkSequenceUpDownLeftRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_RIGHT_UP_DOWN]      = MovementType_WalkSequenceLeftRightUpDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_RIGHT_UP]      = MovementType_WalkSequenceDownLeftRightUp,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_DOWN_RIGHT]      = MovementType_WalkSequenceUpLeftDownRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_UP_LEFT]      = MovementType_WalkSequenceDownRightUpLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_RIGHT_UP]      = MovementType_WalkSequenceLeftDownRightUp,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_LEFT_DOWN]      = MovementType_WalkSequenceRightUpLeftDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_RIGHT_DOWN_LEFT]      = MovementType_WalkSequenceUpRightDownLeft,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_UP_RIGHT]      = MovementType_WalkSequenceDownLeftUpRight,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_RIGHT_DOWN]      = MovementType_WalkSequenceLeftUpRightDown,
-    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_DOWN_LEFT_UP]      = MovementType_WalkSequenceRightDownLeftUp,
-    [MOVEMENT_TYPE_COPY_PLAYER]                           = MovementType_CopyPlayer,
-    [MOVEMENT_TYPE_COPY_PLAYER_OPPOSITE]                  = MovementType_CopyPlayer,
-    [MOVEMENT_TYPE_COPY_PLAYER_COUNTERCLOCKWISE]          = MovementType_CopyPlayer,
-    [MOVEMENT_TYPE_COPY_PLAYER_CLOCKWISE]                 = MovementType_CopyPlayer,
-    [MOVEMENT_TYPE_TREE_DISGUISE]                         = MovementType_TreeDisguise,
-    [MOVEMENT_TYPE_MOUNTAIN_DISGUISE]                     = MovementType_MountainDisguise,
-    [MOVEMENT_TYPE_COPY_PLAYER_IN_GRASS]                  = MovementType_CopyPlayerInGrass,
-    [MOVEMENT_TYPE_COPY_PLAYER_OPPOSITE_IN_GRASS]         = MovementType_CopyPlayerInGrass,
+static void (* const sMovementTypeCallbacks[MOVEMENT_TYPES_COUNT])(struct Sprite*) = {
+    [MOVEMENT_TYPE_NONE] = MovementType_None,
+    [MOVEMENT_TYPE_LOOK_AROUND] = MovementType_LookAround,
+    [MOVEMENT_TYPE_WANDER_AROUND] = MovementType_WanderAround,
+    [MOVEMENT_TYPE_WANDER_UP_AND_DOWN] = MovementType_WanderUpAndDown,
+    [MOVEMENT_TYPE_WANDER_DOWN_AND_UP] = MovementType_WanderUpAndDown,
+    [MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT] = MovementType_WanderLeftAndRight,
+    [MOVEMENT_TYPE_WANDER_RIGHT_AND_LEFT] = MovementType_WanderLeftAndRight,
+    [MOVEMENT_TYPE_FACE_UP] = MovementType_FaceDirection,
+    [MOVEMENT_TYPE_FACE_DOWN] = MovementType_FaceDirection,
+    [MOVEMENT_TYPE_FACE_LEFT] = MovementType_FaceDirection,
+    [MOVEMENT_TYPE_FACE_RIGHT] = MovementType_FaceDirection,
+    [MOVEMENT_TYPE_PLAYER] = MovementType_Player,
+    [MOVEMENT_TYPE_BERRY_TREE_GROWTH] = NULL,
+    [MOVEMENT_TYPE_FACE_DOWN_AND_UP] = MovementType_FaceDownAndUp,
+    [MOVEMENT_TYPE_FACE_LEFT_AND_RIGHT] = MovementType_FaceLeftAndRight,
+    [MOVEMENT_TYPE_FACE_UP_AND_LEFT] = MovementType_FaceUpAndLeft,
+    [MOVEMENT_TYPE_FACE_UP_AND_RIGHT] = MovementType_FaceUpAndRight,
+    [MOVEMENT_TYPE_FACE_DOWN_AND_LEFT] = MovementType_FaceDownAndLeft,
+    [MOVEMENT_TYPE_FACE_DOWN_AND_RIGHT] = MovementType_FaceDownAndRight,
+    [MOVEMENT_TYPE_FACE_DOWN_UP_AND_LEFT] = MovementType_FaceDownUpAndLeft,
+    [MOVEMENT_TYPE_FACE_DOWN_UP_AND_RIGHT] = MovementType_FaceDownUpAndRight,
+    [MOVEMENT_TYPE_FACE_UP_LEFT_AND_RIGHT] = MovementType_FaceUpRightAndLeft,
+    [MOVEMENT_TYPE_FACE_DOWN_LEFT_AND_RIGHT] = MovementType_FaceDownRightAndLeft,
+    [MOVEMENT_TYPE_ROTATE_COUNTERCLOCKWISE] = MovementType_RotateCounterclockwise,
+    [MOVEMENT_TYPE_ROTATE_CLOCKWISE] = MovementType_RotateClockwise,
+    [MOVEMENT_TYPE_WALK_UP_AND_DOWN] = MovementType_WalkBackAndForth,
+    [MOVEMENT_TYPE_WALK_DOWN_AND_UP] = MovementType_WalkBackAndForth,
+    [MOVEMENT_TYPE_WALK_LEFT_AND_RIGHT] = MovementType_WalkBackAndForth,
+    [MOVEMENT_TYPE_WALK_RIGHT_AND_LEFT] = MovementType_WalkBackAndForth,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_RIGHT_LEFT_DOWN] = MovementType_WalkSequenceUpRightLeftDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_LEFT_DOWN_UP] = MovementType_WalkSequenceRightLeftDownUp,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_UP_RIGHT_LEFT] = MovementType_WalkSequenceDownUpRightLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_UP_RIGHT] = MovementType_WalkSequenceLeftDownUpRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_RIGHT_DOWN] = MovementType_WalkSequenceUpLeftRightDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_RIGHT_DOWN_UP] = MovementType_WalkSequenceLeftRightDownUp,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_UP_LEFT_RIGHT] = MovementType_WalkSequenceDownUpLeftRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_DOWN_UP_LEFT] = MovementType_WalkSequenceRightDownUpLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_DOWN_RIGHT] = MovementType_WalkSequenceLeftUpDownRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_DOWN_RIGHT_LEFT] = MovementType_WalkSequenceUpDownRightLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_LEFT_UP_DOWN] = MovementType_WalkSequenceRightLeftUpDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_LEFT_UP] = MovementType_WalkSequenceDownRightLeftUp,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_DOWN_LEFT] = MovementType_WalkSequenceRightUpDownLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_DOWN_LEFT_RIGHT] = MovementType_WalkSequenceUpDownLeftRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_RIGHT_UP_DOWN] = MovementType_WalkSequenceLeftRightUpDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_RIGHT_UP] = MovementType_WalkSequenceDownLeftRightUp,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_DOWN_RIGHT] = MovementType_WalkSequenceUpLeftDownRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_UP_LEFT] = MovementType_WalkSequenceDownRightUpLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_RIGHT_UP] = MovementType_WalkSequenceLeftDownRightUp,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_LEFT_DOWN] = MovementType_WalkSequenceRightUpLeftDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_UP_RIGHT_DOWN_LEFT] = MovementType_WalkSequenceUpRightDownLeft,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_UP_RIGHT] = MovementType_WalkSequenceDownLeftUpRight,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_RIGHT_DOWN] = MovementType_WalkSequenceLeftUpRightDown,
+    [MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_DOWN_LEFT_UP] = MovementType_WalkSequenceRightDownLeftUp,
+    [MOVEMENT_TYPE_COPY_PLAYER] = MovementType_CopyPlayer,
+    [MOVEMENT_TYPE_COPY_PLAYER_OPPOSITE] = MovementType_CopyPlayer,
+    [MOVEMENT_TYPE_COPY_PLAYER_COUNTERCLOCKWISE] = MovementType_CopyPlayer,
+    [MOVEMENT_TYPE_COPY_PLAYER_CLOCKWISE] = MovementType_CopyPlayer,
+    [MOVEMENT_TYPE_TREE_DISGUISE] = MovementType_TreeDisguise,
+    [MOVEMENT_TYPE_MOUNTAIN_DISGUISE] = MovementType_MountainDisguise,
+    [MOVEMENT_TYPE_COPY_PLAYER_IN_GRASS] = MovementType_CopyPlayerInGrass,
+    [MOVEMENT_TYPE_COPY_PLAYER_OPPOSITE_IN_GRASS] = MovementType_CopyPlayerInGrass,
     [MOVEMENT_TYPE_COPY_PLAYER_COUNTERCLOCKWISE_IN_GRASS] = MovementType_CopyPlayerInGrass,
-    [MOVEMENT_TYPE_COPY_PLAYER_CLOCKWISE_IN_GRASS]        = MovementType_CopyPlayerInGrass,
-    [MOVEMENT_TYPE_BURIED]                                = MovementType_Buried,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_DOWN]                    = MovementType_WalkInPlace,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_UP]                      = MovementType_WalkInPlace,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_LEFT]                    = MovementType_WalkInPlace,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_RIGHT]                   = MovementType_WalkInPlace,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_DOWN]               = MovementType_WalkInPlaceFast,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_UP]                 = MovementType_WalkInPlaceFast,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_LEFT]               = MovementType_WalkInPlaceFast,
-    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_RIGHT]              = MovementType_WalkInPlaceFast,
-    [MOVEMENT_TYPE_JOG_IN_PLACE_DOWN]                     = MovementType_JogInPlace,
-    [MOVEMENT_TYPE_JOG_IN_PLACE_UP]                       = MovementType_JogInPlace,
-    [MOVEMENT_TYPE_JOG_IN_PLACE_LEFT]                     = MovementType_JogInPlace,
-    [MOVEMENT_TYPE_JOG_IN_PLACE_RIGHT]                    = MovementType_JogInPlace,
-    [MOVEMENT_TYPE_INVISIBLE]                             = MovementType_Invisible,
-    [MOVEMENT_TYPE_RAISE_HAND_AND_STOP]                   = MovementType_RaiseHandAndStop,
-    [MOVEMENT_TYPE_RAISE_HAND_AND_JUMP]                   = MovementType_RaiseHandAndJump,
-    [MOVEMENT_TYPE_RAISE_HAND_AND_SWIM]                   = MovementType_RaiseHandAndSwim,
-    [MOVEMENT_TYPE_WANDER_AROUND_SLOWER]                  = MovementType_WanderAroundSlower,
+    [MOVEMENT_TYPE_COPY_PLAYER_CLOCKWISE_IN_GRASS] = MovementType_CopyPlayerInGrass,
+    [MOVEMENT_TYPE_BURIED] = MovementType_Buried,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_DOWN] = MovementType_WalkInPlace,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_UP] = MovementType_WalkInPlace,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_LEFT] = MovementType_WalkInPlace,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_RIGHT] = MovementType_WalkInPlace,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_DOWN] = MovementType_WalkInPlaceFast,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_UP] = MovementType_WalkInPlaceFast,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_LEFT] = MovementType_WalkInPlaceFast,
+    [MOVEMENT_TYPE_WALK_IN_PLACE_FAST_RIGHT] = MovementType_WalkInPlaceFast,
+    [MOVEMENT_TYPE_JOG_IN_PLACE_DOWN] = MovementType_JogInPlace,
+    [MOVEMENT_TYPE_JOG_IN_PLACE_UP] = MovementType_JogInPlace,
+    [MOVEMENT_TYPE_JOG_IN_PLACE_LEFT] = MovementType_JogInPlace,
+    [MOVEMENT_TYPE_JOG_IN_PLACE_RIGHT] = MovementType_JogInPlace,
+    [MOVEMENT_TYPE_INVISIBLE] = MovementType_Invisible,
+    [MOVEMENT_TYPE_RAISE_HAND_AND_STOP] = MovementType_RaiseHandAndStop,
+    [MOVEMENT_TYPE_RAISE_HAND_AND_JUMP] = MovementType_RaiseHandAndJump,
+    [MOVEMENT_TYPE_RAISE_HAND_AND_SWIM] = MovementType_RaiseHandAndSwim,
+    [MOVEMENT_TYPE_WANDER_AROUND_SLOWER] = MovementType_WanderAroundSlower,
 };
 
 static const bool8 gRangedMovementTypes[MOVEMENT_TYPES_COUNT] = {
@@ -666,7 +666,7 @@ static const u16 sObjectPaletteTags3[] = {
     OBJ_EVENT_PAL_TAG_NPC_WHITE_REFLECTION,
 };
 
-static const u16 *const gObjectPaletteTagSets[] = {
+static const u16* const gObjectPaletteTagSets[] = {
     sObjectPaletteTags0,
     sObjectPaletteTags1,
     sObjectPaletteTags2,
@@ -676,18 +676,18 @@ static const u16 *const gObjectPaletteTagSets[] = {
 //#include "data/object_events/berry_tree_graphics_tables.h"
 #include "data/field_effects/field_effect_objects.h"
 
-static const s16 gMovementDelaysMedium[] = {32, 64,  96, 128};
-static const s16 gMovementDelaysLong[] =   {32, 64, 128, 192};
-static const s16 gMovementDelaysShort[] =  {32, 48,  64,  80};
+static const s16 gMovementDelaysMedium[] = { 32, 64,  96, 128 };
+static const s16 gMovementDelaysLong[] = { 32, 64, 128, 192 };
+static const s16 gMovementDelaysShort[] = { 32, 48,  64,  80 };
 
 #include "data/object_events/movement_type_func_tables.h"
 
 static const u8 sFaceDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_STD_FACE_SOUTH,
-    [DIR_SOUTH]     = ANIM_STD_FACE_SOUTH,
-    [DIR_NORTH]     = ANIM_STD_FACE_NORTH,
-    [DIR_WEST]      = ANIM_STD_FACE_WEST,
-    [DIR_EAST]      = ANIM_STD_FACE_EAST,
+    [DIR_NONE] = ANIM_STD_FACE_SOUTH,
+    [DIR_SOUTH] = ANIM_STD_FACE_SOUTH,
+    [DIR_NORTH] = ANIM_STD_FACE_NORTH,
+    [DIR_WEST] = ANIM_STD_FACE_WEST,
+    [DIR_EAST] = ANIM_STD_FACE_EAST,
     [DIR_SOUTHWEST] = ANIM_STD_FACE_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STD_FACE_SOUTH,
     [DIR_NORTHWEST] = ANIM_STD_FACE_NORTH,
@@ -695,11 +695,11 @@ static const u8 sFaceDirectionAnimNums[] = {
 };
 
 static const u8 sMoveDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_STD_GO_SOUTH,
-    [DIR_SOUTH]     = ANIM_STD_GO_SOUTH,
-    [DIR_NORTH]     = ANIM_STD_GO_NORTH,
-    [DIR_WEST]      = ANIM_STD_GO_WEST,
-    [DIR_EAST]      = ANIM_STD_GO_EAST,
+    [DIR_NONE] = ANIM_STD_GO_SOUTH,
+    [DIR_SOUTH] = ANIM_STD_GO_SOUTH,
+    [DIR_NORTH] = ANIM_STD_GO_NORTH,
+    [DIR_WEST] = ANIM_STD_GO_WEST,
+    [DIR_EAST] = ANIM_STD_GO_EAST,
     [DIR_SOUTHWEST] = ANIM_STD_GO_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STD_GO_SOUTH,
     [DIR_NORTHWEST] = ANIM_STD_GO_NORTH,
@@ -707,11 +707,11 @@ static const u8 sMoveDirectionAnimNums[] = {
 };
 
 static const u8 sMoveDirectionFastAnimNums[] = {
-    [DIR_NONE]      = ANIM_STD_GO_FAST_SOUTH,
-    [DIR_SOUTH]     = ANIM_STD_GO_FAST_SOUTH,
-    [DIR_NORTH]     = ANIM_STD_GO_FAST_NORTH,
-    [DIR_WEST]      = ANIM_STD_GO_FAST_WEST,
-    [DIR_EAST]      = ANIM_STD_GO_FAST_EAST,
+    [DIR_NONE] = ANIM_STD_GO_FAST_SOUTH,
+    [DIR_SOUTH] = ANIM_STD_GO_FAST_SOUTH,
+    [DIR_NORTH] = ANIM_STD_GO_FAST_NORTH,
+    [DIR_WEST] = ANIM_STD_GO_FAST_WEST,
+    [DIR_EAST] = ANIM_STD_GO_FAST_EAST,
     [DIR_SOUTHWEST] = ANIM_STD_GO_FAST_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STD_GO_FAST_SOUTH,
     [DIR_NORTHWEST] = ANIM_STD_GO_FAST_NORTH,
@@ -719,11 +719,11 @@ static const u8 sMoveDirectionFastAnimNums[] = {
 };
 
 static const u8 sMoveDirectionFasterAnimNums[] = {
-    [DIR_NONE]      = ANIM_STD_GO_FASTER_SOUTH,
-    [DIR_SOUTH]     = ANIM_STD_GO_FASTER_SOUTH,
-    [DIR_NORTH]     = ANIM_STD_GO_FASTER_NORTH,
-    [DIR_WEST]      = ANIM_STD_GO_FASTER_WEST,
-    [DIR_EAST]      = ANIM_STD_GO_FASTER_EAST,
+    [DIR_NONE] = ANIM_STD_GO_FASTER_SOUTH,
+    [DIR_SOUTH] = ANIM_STD_GO_FASTER_SOUTH,
+    [DIR_NORTH] = ANIM_STD_GO_FASTER_NORTH,
+    [DIR_WEST] = ANIM_STD_GO_FASTER_WEST,
+    [DIR_EAST] = ANIM_STD_GO_FASTER_EAST,
     [DIR_SOUTHWEST] = ANIM_STD_GO_FASTER_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STD_GO_FASTER_SOUTH,
     [DIR_NORTHWEST] = ANIM_STD_GO_FASTER_NORTH,
@@ -731,11 +731,11 @@ static const u8 sMoveDirectionFasterAnimNums[] = {
 };
 
 static const u8 sMoveDirectionFastestAnimNums[] = {
-    [DIR_NONE]      = ANIM_STD_GO_FASTEST_SOUTH,
-    [DIR_SOUTH]     = ANIM_STD_GO_FASTEST_SOUTH,
-    [DIR_NORTH]     = ANIM_STD_GO_FASTEST_NORTH,
-    [DIR_WEST]      = ANIM_STD_GO_FASTEST_WEST,
-    [DIR_EAST]      = ANIM_STD_GO_FASTEST_EAST,
+    [DIR_NONE] = ANIM_STD_GO_FASTEST_SOUTH,
+    [DIR_SOUTH] = ANIM_STD_GO_FASTEST_SOUTH,
+    [DIR_NORTH] = ANIM_STD_GO_FASTEST_NORTH,
+    [DIR_WEST] = ANIM_STD_GO_FASTEST_WEST,
+    [DIR_EAST] = ANIM_STD_GO_FASTEST_EAST,
     [DIR_SOUTHWEST] = ANIM_STD_GO_FASTEST_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STD_GO_FASTEST_SOUTH,
     [DIR_NORTHWEST] = ANIM_STD_GO_FASTEST_NORTH,
@@ -743,11 +743,11 @@ static const u8 sMoveDirectionFastestAnimNums[] = {
 };
 
 static const u8 sJumpSpecialDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_GET_ON_OFF_POKEMON_SOUTH,
-    [DIR_SOUTH]     = ANIM_GET_ON_OFF_POKEMON_SOUTH,
-    [DIR_NORTH]     = ANIM_GET_ON_OFF_POKEMON_NORTH,
-    [DIR_WEST]      = ANIM_GET_ON_OFF_POKEMON_WEST,
-    [DIR_EAST]      = ANIM_GET_ON_OFF_POKEMON_EAST,
+    [DIR_NONE] = ANIM_GET_ON_OFF_POKEMON_SOUTH,
+    [DIR_SOUTH] = ANIM_GET_ON_OFF_POKEMON_SOUTH,
+    [DIR_NORTH] = ANIM_GET_ON_OFF_POKEMON_NORTH,
+    [DIR_WEST] = ANIM_GET_ON_OFF_POKEMON_WEST,
+    [DIR_EAST] = ANIM_GET_ON_OFF_POKEMON_EAST,
     [DIR_SOUTHWEST] = ANIM_GET_ON_OFF_POKEMON_SOUTH,
     [DIR_SOUTHEAST] = ANIM_GET_ON_OFF_POKEMON_SOUTH,
     [DIR_NORTHWEST] = ANIM_GET_ON_OFF_POKEMON_NORTH,
@@ -755,11 +755,11 @@ static const u8 sJumpSpecialDirectionAnimNums[] = {
 };
 
 static const u8 sAcroBunnyHopBackWheelDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
-    [DIR_SOUTH]     = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
-    [DIR_NORTH]     = ANIM_BUNNY_HOP_BACK_WHEEL_NORTH,
-    [DIR_WEST]      = ANIM_BUNNY_HOP_BACK_WHEEL_WEST,
-    [DIR_EAST]      = ANIM_BUNNY_HOP_BACK_WHEEL_EAST,
+    [DIR_NONE] = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
+    [DIR_SOUTH] = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
+    [DIR_NORTH] = ANIM_BUNNY_HOP_BACK_WHEEL_NORTH,
+    [DIR_WEST] = ANIM_BUNNY_HOP_BACK_WHEEL_WEST,
+    [DIR_EAST] = ANIM_BUNNY_HOP_BACK_WHEEL_EAST,
     [DIR_SOUTHWEST] = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
     [DIR_SOUTHEAST] = ANIM_BUNNY_HOP_BACK_WHEEL_SOUTH,
     [DIR_NORTHWEST] = ANIM_BUNNY_HOP_BACK_WHEEL_NORTH,
@@ -767,11 +767,11 @@ static const u8 sAcroBunnyHopBackWheelDirectionAnimNums[] = {
 };
 
 static const u8 sAcroBunnyHopFrontWheelDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
-    [DIR_SOUTH]     = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
-    [DIR_NORTH]     = ANIM_BUNNY_HOP_FRONT_WHEEL_NORTH,
-    [DIR_WEST]      = ANIM_BUNNY_HOP_FRONT_WHEEL_WEST,
-    [DIR_EAST]      = ANIM_BUNNY_HOP_FRONT_WHEEL_EAST,
+    [DIR_NONE] = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
+    [DIR_SOUTH] = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
+    [DIR_NORTH] = ANIM_BUNNY_HOP_FRONT_WHEEL_NORTH,
+    [DIR_WEST] = ANIM_BUNNY_HOP_FRONT_WHEEL_WEST,
+    [DIR_EAST] = ANIM_BUNNY_HOP_FRONT_WHEEL_EAST,
     [DIR_SOUTHWEST] = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
     [DIR_SOUTHEAST] = ANIM_BUNNY_HOP_FRONT_WHEEL_SOUTH,
     [DIR_NORTHWEST] = ANIM_BUNNY_HOP_FRONT_WHEEL_NORTH,
@@ -779,11 +779,11 @@ static const u8 sAcroBunnyHopFrontWheelDirectionAnimNums[] = {
 };
 
 static const u8 sAcroStandingWheelieBackWheelDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
-    [DIR_SOUTH]     = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
-    [DIR_NORTH]     = ANIM_STANDING_WHEELIE_BACK_WHEEL_NORTH,
-    [DIR_WEST]      = ANIM_STANDING_WHEELIE_BACK_WHEEL_WEST,
-    [DIR_EAST]      = ANIM_STANDING_WHEELIE_BACK_WHEEL_EAST,
+    [DIR_NONE] = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
+    [DIR_SOUTH] = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
+    [DIR_NORTH] = ANIM_STANDING_WHEELIE_BACK_WHEEL_NORTH,
+    [DIR_WEST] = ANIM_STANDING_WHEELIE_BACK_WHEEL_WEST,
+    [DIR_EAST] = ANIM_STANDING_WHEELIE_BACK_WHEEL_EAST,
     [DIR_SOUTHWEST] = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STANDING_WHEELIE_BACK_WHEEL_SOUTH,
     [DIR_NORTHWEST] = ANIM_STANDING_WHEELIE_BACK_WHEEL_NORTH,
@@ -791,11 +791,11 @@ static const u8 sAcroStandingWheelieBackWheelDirectionAnimNums[] = {
 };
 
 static const u8 sSpinDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_SPIN_SOUTH,
-    [DIR_SOUTH]     = ANIM_SPIN_SOUTH,
-    [DIR_NORTH]     = ANIM_SPIN_NORTH,
-    [DIR_WEST]      = ANIM_SPIN_WEST,
-    [DIR_EAST]      = ANIM_SPIN_EAST,
+    [DIR_NONE] = ANIM_SPIN_SOUTH,
+    [DIR_SOUTH] = ANIM_SPIN_SOUTH,
+    [DIR_NORTH] = ANIM_SPIN_NORTH,
+    [DIR_WEST] = ANIM_SPIN_WEST,
+    [DIR_EAST] = ANIM_SPIN_EAST,
     [DIR_SOUTHWEST] = ANIM_SPIN_SOUTH,
     [DIR_SOUTHEAST] = ANIM_SPIN_NORTH,
     [DIR_NORTHWEST] = ANIM_SPIN_WEST,
@@ -803,11 +803,11 @@ static const u8 sSpinDirectionAnimNums[] = {
 };
 
 static const u8 sAcroStandingWheelieFrontWheelDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
-    [DIR_SOUTH]     = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
-    [DIR_NORTH]     = ANIM_STANDING_WHEELIE_FRONT_WHEEL_NORTH,
-    [DIR_WEST]      = ANIM_STANDING_WHEELIE_FRONT_WHEEL_WEST,
-    [DIR_EAST]      = ANIM_STANDING_WHEELIE_FRONT_WHEEL_EAST,
+    [DIR_NONE] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
+    [DIR_SOUTH] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
+    [DIR_NORTH] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_NORTH,
+    [DIR_WEST] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_WEST,
+    [DIR_EAST] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_EAST,
     [DIR_SOUTHWEST] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
     [DIR_SOUTHEAST] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_SOUTH,
     [DIR_NORTHWEST] = ANIM_STANDING_WHEELIE_FRONT_WHEEL_NORTH,
@@ -815,11 +815,11 @@ static const u8 sAcroStandingWheelieFrontWheelDirectionAnimNums[] = {
 };
 
 static const u8 sAcroMovingWheelieDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_MOVING_WHEELIE_SOUTH,
-    [DIR_SOUTH]     = ANIM_MOVING_WHEELIE_SOUTH,
-    [DIR_NORTH]     = ANIM_MOVING_WHEELIE_NORTH,
-    [DIR_WEST]      = ANIM_MOVING_WHEELIE_WEST,
-    [DIR_EAST]      = ANIM_MOVING_WHEELIE_EAST,
+    [DIR_NONE] = ANIM_MOVING_WHEELIE_SOUTH,
+    [DIR_SOUTH] = ANIM_MOVING_WHEELIE_SOUTH,
+    [DIR_NORTH] = ANIM_MOVING_WHEELIE_NORTH,
+    [DIR_WEST] = ANIM_MOVING_WHEELIE_WEST,
+    [DIR_EAST] = ANIM_MOVING_WHEELIE_EAST,
     [DIR_SOUTHWEST] = ANIM_MOVING_WHEELIE_SOUTH,
     [DIR_SOUTHEAST] = ANIM_MOVING_WHEELIE_SOUTH,
     [DIR_NORTHWEST] = ANIM_MOVING_WHEELIE_NORTH,
@@ -827,11 +827,11 @@ static const u8 sAcroMovingWheelieDirectionAnimNums[] = {
 };
 
 static const u8 sFishingDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_TAKE_OUT_ROD_SOUTH,
-    [DIR_SOUTH]     = ANIM_TAKE_OUT_ROD_SOUTH,
-    [DIR_NORTH]     = ANIM_TAKE_OUT_ROD_NORTH,
-    [DIR_WEST]      = ANIM_TAKE_OUT_ROD_WEST,
-    [DIR_EAST]      = ANIM_TAKE_OUT_ROD_EAST,
+    [DIR_NONE] = ANIM_TAKE_OUT_ROD_SOUTH,
+    [DIR_SOUTH] = ANIM_TAKE_OUT_ROD_SOUTH,
+    [DIR_NORTH] = ANIM_TAKE_OUT_ROD_NORTH,
+    [DIR_WEST] = ANIM_TAKE_OUT_ROD_WEST,
+    [DIR_EAST] = ANIM_TAKE_OUT_ROD_EAST,
     [DIR_SOUTHWEST] = ANIM_TAKE_OUT_ROD_SOUTH,
     [DIR_SOUTHEAST] = ANIM_TAKE_OUT_ROD_SOUTH,
     [DIR_NORTHWEST] = ANIM_TAKE_OUT_ROD_NORTH,
@@ -839,11 +839,11 @@ static const u8 sFishingDirectionAnimNums[] = {
 };
 
 static const u8 sFishingNoCatchDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_PUT_AWAY_ROD_SOUTH,
-    [DIR_SOUTH]     = ANIM_PUT_AWAY_ROD_SOUTH,
-    [DIR_NORTH]     = ANIM_PUT_AWAY_ROD_NORTH,
-    [DIR_WEST]      = ANIM_PUT_AWAY_ROD_WEST,
-    [DIR_EAST]      = ANIM_PUT_AWAY_ROD_EAST,
+    [DIR_NONE] = ANIM_PUT_AWAY_ROD_SOUTH,
+    [DIR_SOUTH] = ANIM_PUT_AWAY_ROD_SOUTH,
+    [DIR_NORTH] = ANIM_PUT_AWAY_ROD_NORTH,
+    [DIR_WEST] = ANIM_PUT_AWAY_ROD_WEST,
+    [DIR_EAST] = ANIM_PUT_AWAY_ROD_EAST,
     [DIR_SOUTHWEST] = ANIM_PUT_AWAY_ROD_SOUTH,
     [DIR_SOUTHEAST] = ANIM_PUT_AWAY_ROD_SOUTH,
     [DIR_NORTHWEST] = ANIM_PUT_AWAY_ROD_NORTH,
@@ -851,11 +851,11 @@ static const u8 sFishingNoCatchDirectionAnimNums[] = {
 };
 
 static const u8 sFishingBiteDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_HOOKED_POKEMON_SOUTH,
-    [DIR_SOUTH]     = ANIM_HOOKED_POKEMON_SOUTH,
-    [DIR_NORTH]     = ANIM_HOOKED_POKEMON_NORTH,
-    [DIR_WEST]      = ANIM_HOOKED_POKEMON_WEST,
-    [DIR_EAST]      = ANIM_HOOKED_POKEMON_EAST,
+    [DIR_NONE] = ANIM_HOOKED_POKEMON_SOUTH,
+    [DIR_SOUTH] = ANIM_HOOKED_POKEMON_SOUTH,
+    [DIR_NORTH] = ANIM_HOOKED_POKEMON_NORTH,
+    [DIR_WEST] = ANIM_HOOKED_POKEMON_WEST,
+    [DIR_EAST] = ANIM_HOOKED_POKEMON_EAST,
     [DIR_SOUTHWEST] = ANIM_HOOKED_POKEMON_SOUTH,
     [DIR_SOUTHEAST] = ANIM_HOOKED_POKEMON_SOUTH,
     [DIR_NORTHWEST] = ANIM_HOOKED_POKEMON_NORTH,
@@ -863,11 +863,11 @@ static const u8 sFishingBiteDirectionAnimNums[] = {
 };
 
 static const u8 sRunningDirectionAnimNums[] = {
-    [DIR_NONE]      = ANIM_RUN_SOUTH,
-    [DIR_SOUTH]     = ANIM_RUN_SOUTH,
-    [DIR_NORTH]     = ANIM_RUN_NORTH,
-    [DIR_WEST]      = ANIM_RUN_WEST,
-    [DIR_EAST]      = ANIM_RUN_EAST,
+    [DIR_NONE] = ANIM_RUN_SOUTH,
+    [DIR_SOUTH] = ANIM_RUN_SOUTH,
+    [DIR_NORTH] = ANIM_RUN_NORTH,
+    [DIR_WEST] = ANIM_RUN_WEST,
+    [DIR_EAST] = ANIM_RUN_EAST,
     [DIR_SOUTHWEST] = ANIM_RUN_SOUTH,
     [DIR_SOUTHEAST] = ANIM_RUN_SOUTH,
     [DIR_NORTHWEST] = ANIM_RUN_NORTH,
@@ -875,25 +875,25 @@ static const u8 sRunningDirectionAnimNums[] = {
 };
 
 static const u8 sTrainerFacingDirectionMovementTypes[] = {
-    [DIR_NONE]      = MOVEMENT_TYPE_FACE_DOWN,
-    [DIR_SOUTH]     = MOVEMENT_TYPE_FACE_DOWN,
-    [DIR_NORTH]     = MOVEMENT_TYPE_FACE_UP,
-    [DIR_WEST]      = MOVEMENT_TYPE_FACE_LEFT,
-    [DIR_EAST]      = MOVEMENT_TYPE_FACE_RIGHT,
+    [DIR_NONE] = MOVEMENT_TYPE_FACE_DOWN,
+    [DIR_SOUTH] = MOVEMENT_TYPE_FACE_DOWN,
+    [DIR_NORTH] = MOVEMENT_TYPE_FACE_UP,
+    [DIR_WEST] = MOVEMENT_TYPE_FACE_LEFT,
+    [DIR_EAST] = MOVEMENT_TYPE_FACE_RIGHT,
     [DIR_SOUTHWEST] = MOVEMENT_TYPE_FACE_DOWN,
     [DIR_SOUTHEAST] = MOVEMENT_TYPE_FACE_DOWN,
     [DIR_NORTHWEST] = MOVEMENT_TYPE_FACE_UP,
     [DIR_NORTHEAST] = MOVEMENT_TYPE_FACE_UP,
 };
 
-bool8 (*const gOppositeDirectionBlockedMetatileFuncs[])(u8) = {
+bool8(* const gOppositeDirectionBlockedMetatileFuncs[])(u8) = {
     MetatileBehavior_IsSouthBlocked,
     MetatileBehavior_IsNorthBlocked,
     MetatileBehavior_IsWestBlocked,
     MetatileBehavior_IsEastBlocked
 };
 
-bool8 (*const gDirectionBlockedMetatileFuncs[])(u8) = {
+bool8(* const gDirectionBlockedMetatileFuncs[])(u8) = {
     MetatileBehavior_IsNorthBlocked,
     MetatileBehavior_IsSouthBlocked,
     MetatileBehavior_IsEastBlocked,
@@ -901,11 +901,11 @@ bool8 (*const gDirectionBlockedMetatileFuncs[])(u8) = {
 };
 
 static const struct Coords16 sDirectionToVectors[] = {
-    [DIR_NONE]      = { 0,  0},
-    [DIR_SOUTH]     = { 0,  1},
-    [DIR_NORTH]     = { 0, -1},
-    [DIR_WEST]      = {-1,  0},
-    [DIR_EAST]      = { 1,  0},
+    [DIR_NONE] = { 0,  0},
+    [DIR_SOUTH] = { 0,  1},
+    [DIR_NORTH] = { 0, -1},
+    [DIR_WEST] = {-1,  0},
+    [DIR_EAST] = { 1,  0},
     [DIR_SOUTHWEST] = {-1,  1},
     [DIR_SOUTHEAST] = { 1,  1},
     [DIR_NORTHWEST] = {-1, -1},
@@ -913,267 +913,267 @@ static const struct Coords16 sDirectionToVectors[] = {
 };
 
 static const u8 sFaceDirectionMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_FACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_FACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_FACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_FACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_FACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_FACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_FACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_FACE_RIGHT,
 };
 
 static const u8 sFaceDirectionFastMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_FACE_DOWN_FAST,
+    [DIR_NONE] = MOVEMENT_ACTION_FACE_DOWN_FAST,
     [DIR_SOUTH] = MOVEMENT_ACTION_FACE_DOWN_FAST,
     [DIR_NORTH] = MOVEMENT_ACTION_FACE_UP_FAST,
-    [DIR_WEST]  = MOVEMENT_ACTION_FACE_LEFT_FAST,
-    [DIR_EAST]  = MOVEMENT_ACTION_FACE_RIGHT_FAST,
+    [DIR_WEST] = MOVEMENT_ACTION_FACE_LEFT_FAST,
+    [DIR_EAST] = MOVEMENT_ACTION_FACE_RIGHT_FAST,
 };
 
 static const u8 sWalkSlowestMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_SLOWEST_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_SLOWEST_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_SLOWEST_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_SLOWEST_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_SLOWEST_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_SLOWEST_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_SLOWEST_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_SLOWEST_RIGHT,
 };
 
 static const u8 sWalkSlowerMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_SLOWER_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_SLOWER_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_SLOWER_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_SLOWER_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_SLOWER_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_SLOWER_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_SLOWER_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_SLOWER_RIGHT,
 };
 
 static const u8 sWalkSlowMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_SLOW_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_SLOW_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_SLOW_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_SLOW_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_SLOW_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_SLOW_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_SLOW_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_SLOW_RIGHT,
 };
 
 static const u8 sWalkNormalMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_NORMAL_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_NORMAL_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_NORMAL_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_NORMAL_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_NORMAL_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_NORMAL_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_NORMAL_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_NORMAL_RIGHT,
 };
 
 static const u8 sWalkFastMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_FAST_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_FAST_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_FAST_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_FAST_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_FAST_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_FAST_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_FAST_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_FAST_RIGHT,
 };
 
 static const u8 sGlideMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_GLIDE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_GLIDE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_GLIDE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_GLIDE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_GLIDE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_GLIDE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_GLIDE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_GLIDE_RIGHT,
 };
 
 static const u8 sRideWaterCurrentMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_RIDE_WATER_CURRENT_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_RIDE_WATER_CURRENT_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_RIDE_WATER_CURRENT_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_RIDE_WATER_CURRENT_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_RIDE_WATER_CURRENT_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_RIDE_WATER_CURRENT_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_RIDE_WATER_CURRENT_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_RIDE_WATER_CURRENT_RIGHT,
 };
 
 static const u8 sWalkFasterMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_FASTER_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_FASTER_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_FASTER_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_FASTER_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_FASTER_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_FASTER_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_FASTER_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_FASTER_RIGHT,
 };
 
 static const u8 sSlideMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_SLIDE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_SLIDE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_SLIDE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_SLIDE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_SLIDE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_SLIDE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_SLIDE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_SLIDE_RIGHT,
 };
 
 static const u8 sPlayerRunMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_PLAYER_RUN_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_PLAYER_RUN_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_PLAYER_RUN_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_PLAYER_RUN_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_PLAYER_RUN_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_PLAYER_RUN_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_PLAYER_RUN_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_PLAYER_RUN_RIGHT,
 };
 
 static const u8 sPlayerRunSlowMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_PLAYER_RUN_DOWN_SLOW,
+    [DIR_NONE] = MOVEMENT_ACTION_PLAYER_RUN_DOWN_SLOW,
     [DIR_SOUTH] = MOVEMENT_ACTION_PLAYER_RUN_DOWN_SLOW,
     [DIR_NORTH] = MOVEMENT_ACTION_PLAYER_RUN_UP_SLOW,
-    [DIR_WEST]  = MOVEMENT_ACTION_PLAYER_RUN_LEFT_SLOW,
-    [DIR_EAST]  = MOVEMENT_ACTION_PLAYER_RUN_RIGHT_SLOW,
+    [DIR_WEST] = MOVEMENT_ACTION_PLAYER_RUN_LEFT_SLOW,
+    [DIR_EAST] = MOVEMENT_ACTION_PLAYER_RUN_RIGHT_SLOW,
 };
 
 static const u8 sSpinMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_SPIN_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_SPIN_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_SPIN_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_SPIN_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_SPIN_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_SPIN_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_SPIN_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_SPIN_RIGHT,
 };
 
 static const u8 sJump2MovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_2_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_2_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_2_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_2_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_2_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_2_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_2_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_2_RIGHT,
 };
 
 static const u8 sJumpInPlaceMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_IN_PLACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_IN_PLACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_IN_PLACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_IN_PLACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_IN_PLACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_IN_PLACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_IN_PLACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_IN_PLACE_RIGHT,
 };
 
 static const u8 sJumpInPlaceTurnAroundMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_IN_PLACE_UP_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_IN_PLACE_UP_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_IN_PLACE_UP_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_IN_PLACE_DOWN_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_IN_PLACE_RIGHT_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_IN_PLACE_LEFT_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_IN_PLACE_RIGHT_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_IN_PLACE_LEFT_RIGHT,
 };
 
 static const u8 sJumpMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_RIGHT,
 };
 
 static const u8 sJumpSpecialMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_SPECIAL_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_SPECIAL_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_SPECIAL_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_SPECIAL_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_SPECIAL_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_SPECIAL_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_SPECIAL_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_SPECIAL_RIGHT,
 };
 
 static const u8 sJumpSpecialWithEffectMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_JUMP_SPECIAL_WITH_EFFECT_RIGHT,
 };
 
 static const u8 sWalkInPlaceSlowMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_IN_PLACE_SLOW_RIGHT,
 };
 
 static const u8 sWalkInPlaceNormalMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_RIGHT,
 };
 
 static const u8 sWalkInPlaceFastMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_IN_PLACE_FAST_RIGHT,
 };
 
 static const u8 sWalkInPlaceFasterMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_WALK_IN_PLACE_FASTER_RIGHT,
 };
 
 static const u8 sAcroWheelieFaceDirectionMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_FACE_RIGHT,
 };
 
 static const u8 sAcroPopWheelieFaceDirectionMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_RIGHT,
 };
 
 static const u8 sAcroEndWheelieFaceDirectionMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_END_WHEELIE_FACE_RIGHT,
 };
 
 static const u8 sAcroWheelieHopFaceDirectionMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_FACE_RIGHT,
 };
 
 static const u8 sAcroWheelieHopMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_HOP_RIGHT,
 };
 
 static const u8 sAcroWheelieJumpMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_JUMP_RIGHT,
 };
 
 static const u8 sAcroWheelieInPlaceMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_IN_PLACE_RIGHT,
 };
 
 static const u8 sAcroPopWheelieMoveMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_POP_WHEELIE_MOVE_RIGHT,
 };
 
 static const u8 sAcroWheelieMoveMovementActions[] = {
-    [DIR_NONE]  = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_DOWN,
+    [DIR_NONE] = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_DOWN,
     [DIR_SOUTH] = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_DOWN,
     [DIR_NORTH] = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_UP,
-    [DIR_WEST]  = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_LEFT,
-    [DIR_EAST]  = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_RIGHT,
+    [DIR_WEST] = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_LEFT,
+    [DIR_EAST] = MOVEMENT_ACTION_ACRO_WHEELIE_MOVE_RIGHT,
 };
 
 static const u8 gOppositeDirections[] = {
@@ -1203,7 +1203,7 @@ static const u8 sPlayerDirectionToCopyDirection[][4] = {
 
 #include "data/object_events/movement_action_func_tables.h"
 
-static void ClearObjectEvent(struct ObjectEvent *objectEvent)
+static void ClearObjectEvent(struct ObjectEvent* objectEvent)
 {
     *objectEvent = (struct ObjectEvent){};
     objectEvent->localId = 0xFF;
@@ -1264,7 +1264,7 @@ u8 GetObjectEventIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroupId)
     return GetObjectEventIdByLocalId(localId);
 }
 
-bool8 TryGetObjectEventIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroupId, u8 *objectEventId)
+bool8 TryGetObjectEventIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroupId, u8* objectEventId)
 {
     *objectEventId = GetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroupId);
     if (*objectEventId == OBJECT_EVENTS_COUNT)
@@ -1309,10 +1309,10 @@ static u8 GetObjectEventIdByLocalId(u8 localId)
     return OBJECT_EVENTS_COUNT;
 }
 
-static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate *template, u8 mapNum, u8 mapGroup)
+static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate* template, u8 mapNum, u8 mapGroup)
 {
-    struct ObjectEvent *objectEvent;
-    const struct MapHeader *mapHeader;
+    struct ObjectEvent* objectEvent;
+    const struct MapHeader* mapHeader;
     u8 objectEventId;
     s16 x;
     s16 y;
@@ -1322,7 +1322,7 @@ static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate *tem
     s16 y2 = 0;
     s16 x3 = 0;
     s16 y3 = 0;
-    
+
     if (template->kind == OBJ_KIND_CLONE)
     {
         isClone = TRUE;
@@ -1388,18 +1388,18 @@ static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate *tem
     return objectEventId;
 }
 
-static bool8 ShouldInitObjectEventStateFromTemplate(const struct ObjectEventTemplate *template, bool8 isClone, s16 x, s16 y)
+static bool8 ShouldInitObjectEventStateFromTemplate(const struct ObjectEventTemplate* template, bool8 isClone, s16 x, s16 y)
 {
     if (isClone && !TemplateIsObstacleAndWithinView(template, x, y))
         return FALSE;
 
     if (!TemplateIsObstacleAndVisibleFromConnectingMap(template, x, y))
         return FALSE;
-    
+
     return TRUE;
 }
 
-static bool8 TemplateIsObstacleAndWithinView(const struct ObjectEventTemplate *template, s16 x, s16 y)
+static bool8 TemplateIsObstacleAndWithinView(const struct ObjectEventTemplate* template, s16 x, s16 y)
 {
     if (template->graphicsId == OBJ_EVENT_GFX_CUT_TREE || template->graphicsId == OBJ_EVENT_GFX_ROCK_SMASH_ROCK)
     {
@@ -1422,7 +1422,7 @@ static bool8 TemplateIsObstacleAndWithinView(const struct ObjectEventTemplate *t
     return TRUE;
 }
 
-static bool8 TemplateIsObstacleAndVisibleFromConnectingMap(const struct ObjectEventTemplate *template, s16 unused1, s16 unused2)
+static bool8 TemplateIsObstacleAndVisibleFromConnectingMap(const struct ObjectEventTemplate* template, s16 unused1, s16 unused2)
 {
     if (IsMapTypeOutdoors(GetCurrentMapType()))
     {
@@ -1459,7 +1459,7 @@ static bool8 TemplateIsObstacleAndVisibleFromConnectingMap(const struct ObjectEv
     return TRUE;
 }
 
-static void SetHideObstacleFlag(const struct ObjectEventTemplate *template)
+static void SetHideObstacleFlag(const struct ObjectEventTemplate* template)
 {
     if (template->flagId >= FLAG_TEMP_11 && template->flagId <= FLAG_TEMP_1F)
         FlagSet(template->flagId);
@@ -1469,13 +1469,13 @@ u8 Unref_TryInitLocalObjectEvent(u8 localId)
 {
     u8 i;
     u8 objectEventCount;
-    struct ObjectEventTemplate *template;
+    struct ObjectEventTemplate* template;
 
     if (gMapHeader.events == NULL)
         return OBJECT_EVENTS_COUNT;
 
     objectEventCount = gMapHeader.events->objectEventCount;
-    
+
     for (i = 0; i < objectEventCount; i++)
     {
         template = &gSaveBlock1Ptr->objectEventTemplates[i];
@@ -1486,7 +1486,7 @@ u8 Unref_TryInitLocalObjectEvent(u8 localId)
     return OBJECT_EVENTS_COUNT;
 }
 
-static bool8 GetAvailableObjectEventId(u16 localId, u8 mapNum, u8 mapGroup, u8 *objectEventId)
+static bool8 GetAvailableObjectEventId(u16 localId, u8 mapNum, u8 mapGroup, u8* objectEventId)
 // Looks for an empty slot.
 // Returns FALSE and the location of the available slot
 // in *objectEventId.
@@ -1514,7 +1514,7 @@ static bool8 GetAvailableObjectEventId(u16 localId, u8 mapNum, u8 mapGroup, u8 *
     return FALSE;
 }
 
-static void RemoveObjectEvent(struct ObjectEvent *objectEvent)
+static void RemoveObjectEvent(struct ObjectEvent* objectEvent)
 {
     objectEvent->active = FALSE;
     RemoveObjectEventInternal(objectEvent);
@@ -1530,7 +1530,7 @@ void RemoveObjectEventByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
     }
 }
 
-static void RemoveObjectEventInternal(struct ObjectEvent *objectEvent)
+static void RemoveObjectEventInternal(struct ObjectEvent* objectEvent)
 {
     struct SpriteFrameImage image;
     image.size = GetObjectEventGraphicsInfo(objectEvent->graphicsId)->size;
@@ -1549,13 +1549,13 @@ void Unref_RemoveAllObjectEventsExceptPlayer(void)
     }
 }
 
-static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEventTemplate, struct SpriteTemplate *spriteTemplate, u8 mapNum, u8 mapGroup, s16 cameraX, s16 cameraY)
+static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate* objectEventTemplate, struct SpriteTemplate* spriteTemplate, u8 mapNum, u8 mapGroup, s16 cameraX, s16 cameraY)
 {
     u8 spriteId;
     u8 objectEventId;
-    struct Sprite *sprite;
-    struct ObjectEvent *objectEvent;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    struct Sprite* sprite;
+    struct ObjectEvent* objectEvent;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
     objectEventId = InitObjectEventStateFromTemplate(objectEventTemplate, mapNum, mapGroup);
     if (objectEventId == OBJECT_EVENTS_COUNT)
@@ -1572,7 +1572,7 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     if (objectEvent->movementType == MOVEMENT_TYPE_INVISIBLE)
         objectEvent->invisible = TRUE;
 
-    *(u16 *)&spriteTemplate->paletteTag = TAG_NONE;
+    *(u16*)&spriteTemplate->paletteTag = TAG_NONE;
     spriteId = CreateSprite(spriteTemplate, 0, 0, 0);
     if (spriteId == MAX_SPRITES)
     {
@@ -1599,13 +1599,13 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     return objectEventId;
 }
 
-static u8 TrySpawnObjectEventTemplate(const struct ObjectEventTemplate *objectEventTemplate, u8 mapNum, u8 mapGroup, s16 cameraX, s16 cameraY)
+static u8 TrySpawnObjectEventTemplate(const struct ObjectEventTemplate* objectEventTemplate, u8 mapNum, u8 mapGroup, s16 cameraX, s16 cameraY)
 {
     u8 objectEventId;
     struct SpriteTemplate spriteTemplate;
     struct SpriteFrameImage spriteFrameImage;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
-    const struct SubspriteTable *subspriteTables = NULL;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
+    const struct SubspriteTable* subspriteTables = NULL;
 
     graphicsInfo = GetObjectEventGraphicsInfo(objectEventTemplate->graphicsId);
     MakeObjectTemplateFromObjectEventTemplate(objectEventTemplate, &spriteTemplate, &subspriteTables);
@@ -1622,7 +1622,7 @@ static u8 TrySpawnObjectEventTemplate(const struct ObjectEventTemplate *objectEv
     return objectEventId;
 }
 
-u8 SpawnSpecialObjectEvent(struct ObjectEventTemplate *objectEventTemplate)
+u8 SpawnSpecialObjectEvent(struct ObjectEventTemplate* objectEventTemplate)
 {
     s16 cameraX;
     s16 cameraY;
@@ -1653,7 +1653,7 @@ int SpawnSpecialObjectEventParameterized(u8 graphicsId, u8 movementBehavior, u8 
 
 u8 TrySpawnObjectEvent(u8 localId, u8 mapNum, u8 mapGroup)
 {
-    const struct ObjectEventTemplate *objectEventTemplate;
+    const struct ObjectEventTemplate* objectEventTemplate;
     s16 cameraX, cameraY;
 
     objectEventTemplate = GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup);
@@ -1664,9 +1664,9 @@ u8 TrySpawnObjectEvent(u8 localId, u8 mapNum, u8 mapGroup)
     return TrySpawnObjectEventTemplate(objectEventTemplate, mapNum, mapGroup, cameraX, cameraY);
 }
 
-void CopyObjectGraphicsInfoToSpriteTemplate(u16 graphicsId, void (*callback)(struct Sprite *), struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables)
+void CopyObjectGraphicsInfoToSpriteTemplate(u16 graphicsId, void (*callback)(struct Sprite*), struct SpriteTemplate* spriteTemplate, const struct SubspriteTable** subspriteTables)
 {
-    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
+    const struct ObjectEventGraphicsInfo* graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
 
     spriteTemplate->tileTag = graphicsInfo->tileTag;
     spriteTemplate->paletteTag = graphicsInfo->paletteTag;
@@ -1674,7 +1674,7 @@ void CopyObjectGraphicsInfoToSpriteTemplate(u16 graphicsId, void (*callback)(str
     spriteTemplate->anims = graphicsInfo->anims;
     spriteTemplate->images = graphicsInfo->images;
     spriteTemplate->affineAnims = graphicsInfo->affineAnims;
-    
+
     do
     {
         if (ScriptContext_IsEnabled() != TRUE && sub_8112CAC() == 1)
@@ -1682,16 +1682,16 @@ void CopyObjectGraphicsInfoToSpriteTemplate(u16 graphicsId, void (*callback)(str
         else
             spriteTemplate->callback = callback;
     } while (0);
-    
+
     *subspriteTables = graphicsInfo->subspriteTables;
 }
 
-static void CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(u16 graphicsId, u16 movementType, struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables)
+static void CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(u16 graphicsId, u16 movementType, struct SpriteTemplate* spriteTemplate, const struct SubspriteTable** subspriteTables)
 {
     CopyObjectGraphicsInfoToSpriteTemplate(graphicsId, sMovementTypeCallbacks[movementType], spriteTemplate, subspriteTables);
 }
 
-static void MakeObjectTemplateFromObjectEventTemplate(const struct ObjectEventTemplate *objectEventTemplate, struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables)
+static void MakeObjectTemplateFromObjectEventTemplate(const struct ObjectEventTemplate* objectEventTemplate, struct SpriteTemplate* spriteTemplate, const struct SubspriteTable** subspriteTables)
 {
     CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(objectEventTemplate->graphicsId, objectEventTemplate->objUnion.normal.movementType, spriteTemplate, subspriteTables);
 }
@@ -1700,7 +1700,7 @@ static void MakeObjectTemplateFromObjectEventTemplate(const struct ObjectEventTe
 u8 CreateObjectGraphicsSprite(u16 graphicsId, SpriteCallback callback, s16 x, s16 y, u8 subpriority)
 {
     struct SpriteTemplate spriteTemplate;
-    const struct SubspriteTable *subspriteTables;
+    const struct SubspriteTable* subspriteTables;
     u8 spriteId;
 
     CopyObjectGraphicsInfoToSpriteTemplate(graphicsId, callback, &spriteTemplate, &subspriteTables);
@@ -1722,14 +1722,14 @@ u8 CreateObjectGraphicsSprite(u16 graphicsId, SpriteCallback callback, s16 x, s1
 u8 CreateVirtualObject(u8 graphicsId, u8 virtualObjId, s16 x, s16 y, u8 elevation, u8 direction)
 {
     u8 spriteId;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     struct SpriteTemplate spriteTemplate;
-    const struct SubspriteTable *subspriteTables;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct SubspriteTable* subspriteTables;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
     graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     CopyObjectGraphicsInfoToSpriteTemplate(graphicsId, SpriteCB_VirtualObject, &spriteTemplate, &subspriteTables);
-    *(u16 *)&spriteTemplate.paletteTag = TAG_NONE;
+    *(u16*)&spriteTemplate.paletteTag = TAG_NONE;
     x += MAP_OFFSET;
     y += MAP_OFFSET;
     SetSpritePosToOffsetMapCoords(&x, &y, 8, 16);
@@ -1762,14 +1762,14 @@ u8 CreateVirtualObject(u8 graphicsId, u8 virtualObjId, s16 x, s16 y, u8 elevatio
 u8 CreateFameCheckerObject(u8 graphicsId, u8 localId, s16 x, s16 y)
 {
     u8 spriteId;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
     struct SpriteTemplate spriteTemplate;
-    const struct SubspriteTable *subspriteTables;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct SubspriteTable* subspriteTables;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
     graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     CopyObjectGraphicsInfoToSpriteTemplate(graphicsId, SpriteCallbackDummy, &spriteTemplate, &subspriteTables);
-    *(u16 *)&spriteTemplate.paletteTag = TAG_NONE;
+    *(u16*)&spriteTemplate.paletteTag = TAG_NONE;
 
     spriteId = CreateSpriteAtEnd(&spriteTemplate, x, y, 0);
     if (spriteId != MAX_SPRITES)
@@ -1808,7 +1808,7 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
 
         for (i = 0; i < objectCount; i++)
         {
-            struct ObjectEventTemplate *template = &gSaveBlock1Ptr->objectEventTemplates[i];
+            struct ObjectEventTemplate* template = &gSaveBlock1Ptr->objectEventTemplates[i];
             s16 npcX = template->x + MAP_OFFSET;
             s16 npcY = template->y + MAP_OFFSET;
 
@@ -1833,7 +1833,7 @@ void RemoveObjectEventsOutsideView(void)
         }
         if (!isActiveLinkPlayer)
         {
-            struct ObjectEvent *objectEvent = &gObjectEvents[i];
+            struct ObjectEvent* objectEvent = &gObjectEvents[i];
 
             if (objectEvent->active && !objectEvent->isPlayer)
                 RemoveObjectEventIfOutsideView(objectEvent);
@@ -1841,18 +1841,18 @@ void RemoveObjectEventsOutsideView(void)
     }
 }
 
-static void RemoveObjectEventIfOutsideView(struct ObjectEvent *objectEvent)
+static void RemoveObjectEventIfOutsideView(struct ObjectEvent* objectEvent)
 {
-    s16 left =   gSaveBlock1Ptr->pos.x - 2;
-    s16 right =  gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2;
-    s16 top =    gSaveBlock1Ptr->pos.y;
+    s16 left = gSaveBlock1Ptr->pos.x - 2;
+    s16 right = gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2;
+    s16 top = gSaveBlock1Ptr->pos.y;
     s16 bottom = gSaveBlock1Ptr->pos.y + MAP_OFFSET_H + 2;
 
     if (objectEvent->currentCoords.x >= left && objectEvent->currentCoords.x <= right
-     && objectEvent->currentCoords.y >= top && objectEvent->currentCoords.y <= bottom)
+        && objectEvent->currentCoords.y >= top && objectEvent->currentCoords.y <= bottom)
         return;
     if (objectEvent->initialCoords.x >= left && objectEvent->initialCoords.x <= right
-     && objectEvent->initialCoords.y >= top && objectEvent->initialCoords.y <= bottom)
+        && objectEvent->initialCoords.y >= top && objectEvent->initialCoords.y <= bottom)
         return;
     RemoveObjectEvent(objectEvent);
 }
@@ -1873,12 +1873,12 @@ void SpawnObjectEventsOnReturnToField(s16 x, s16 y)
 static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
 {
     u8 spriteId;
-    struct Sprite *sprite;
-    struct ObjectEvent *objectEvent;
+    struct Sprite* sprite;
+    struct ObjectEvent* objectEvent;
     struct SpriteTemplate spriteTemplate;
     struct SpriteFrameImage spriteFrameImage;
-    const struct SubspriteTable *subspriteTables;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct SubspriteTable* subspriteTables;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
 #define i spriteId
     for (i = 0; i < NELEMS(gLinkPlayerObjectEvents); i++)
@@ -1896,14 +1896,14 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
     CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(objectEvent->graphicsId, objectEvent->movementType, &spriteTemplate, &subspriteTables);
     spriteTemplate.images = &spriteFrameImage;
 
-    *(u16 *)&spriteTemplate.paletteTag = TAG_NONE;
+    *(u16*)&spriteTemplate.paletteTag = TAG_NONE;
     if (graphicsInfo->paletteSlot == PALSLOT_PLAYER)
         LoadPlayerObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
 
     if (graphicsInfo->paletteSlot >= PALSLOT_NPC_SPECIAL)
         LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
 
-    *(u16 *)&spriteTemplate.paletteTag = TAG_NONE;
+    *(u16*)&spriteTemplate.paletteTag = TAG_NONE;
     spriteId = CreateSprite(&spriteTemplate, 0, 0, 0);
     if (spriteId != MAX_SPRITES)
     {
@@ -1934,7 +1934,7 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
     }
 }
 
-static void ResetObjectEventFldEffData(struct ObjectEvent *objectEvent)
+static void ResetObjectEventFldEffData(struct ObjectEvent* objectEvent)
 {
     objectEvent->singleMovementActive = FALSE;
     objectEvent->triggerGroundEffectsOnMove = TRUE;
@@ -1955,10 +1955,10 @@ static void SetPlayerAvatarObjectEventIdAndObjectId(u8 objectEventId, u8 spriteI
     SetPlayerAvatarExtraStateTransition(gObjectEvents[objectEventId].graphicsId, PLAYER_AVATAR_FLAG_CONTROLLABLE);
 }
 
-void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
+void ObjectEventSetGraphicsId(struct ObjectEvent* objectEvent, u8 graphicsId)
 {
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
-    struct Sprite *sprite;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
+    struct Sprite* sprite;
     u8 var;
     u8 var3;
 
@@ -1969,7 +1969,7 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
 
     if (graphicsInfo->paletteSlot == PALSLOT_NPC_SPECIAL)
         LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
-    
+
     var = sprite->images->size / TILE_SIZE_4BPP;
     if (!sprite->usingSheet)
     {
@@ -1988,12 +1988,12 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
         var2 = AllocSpriteTiles(var3);
         if (var2 == -1)
         {
-            var2 = AllocSpriteTiles(var);    
+            var2 = AllocSpriteTiles(var);
         }
         sprite->oam.tileNum = var2;
     }
     objectEvent->inanimate = graphicsInfo->inanimate;
-    objectEvent->graphicsId = graphicsId;  
+    objectEvent->graphicsId = graphicsId;
     SetSpritePosToMapCoords(objectEvent->currentCoords.x, objectEvent->currentCoords.y, &sprite->x, &sprite->y);
     sprite->centerToCornerVecX = -(graphicsInfo->width >> 1);
     sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);
@@ -2015,7 +2015,7 @@ void ObjectEventSetGraphicsIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup,
     }
 }
 
-void ObjectEventTurn(struct ObjectEvent *objectEvent, u8 direction)
+void ObjectEventTurn(struct ObjectEvent* objectEvent, u8 direction)
 {
     SetObjectEventDirection(objectEvent, direction);
     if (!objectEvent->inanimate)
@@ -2035,23 +2035,23 @@ void ObjectEventTurnByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, u8 direc
     }
 }
 
-void PlayerObjectTurn(struct PlayerAvatar *playerAvatar, u8 direction)
+void PlayerObjectTurn(struct PlayerAvatar* playerAvatar, u8 direction)
 {
     ObjectEventTurn(&gObjectEvents[playerAvatar->objectEventId], direction);
 }
 
-const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u8 graphicsId)
+const struct ObjectEventGraphicsInfo* GetObjectEventGraphicsInfo(u8 graphicsId)
 {
     if (graphicsId >= OBJ_EVENT_GFX_VARS)
         graphicsId = VarGetObjectEventGraphicsId(graphicsId - OBJ_EVENT_GFX_VARS);
-    
+
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_LITTLE_BOY;
-    
+
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }
 
-static void SetObjectEventDynamicGraphicsId(struct ObjectEvent *objectEvent)
+static void SetObjectEventDynamicGraphicsId(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->graphicsId >= OBJ_EVENT_GFX_VARS)
     {
@@ -2069,17 +2069,17 @@ void SetObjectInvisibility(u8 localId, u8 mapNum, u8 mapGroup, u8 state)
     }
 }
 
-void ObjectEventGetLocalIdAndMap(struct ObjectEvent *objectEvent, void *localId, void *mapNum, void *mapGroup)
+void ObjectEventGetLocalIdAndMap(struct ObjectEvent* objectEvent, void* localId, void* mapNum, void* mapGroup)
 {
-    *(u8 *)(localId) = objectEvent->localId;
-    *(u8 *)(mapNum) = objectEvent->mapNum;
-    *(u8 *)(mapGroup) = objectEvent->mapGroup;
+    *(u8*)(localId) = objectEvent->localId;
+    *(u8*)(mapNum) = objectEvent->mapNum;
+    *(u8*)(mapGroup) = objectEvent->mapGroup;
 }
 
 void EnableObjectGroundEffectsByXY(s16 x, s16 y)
 {
     u8 objectEventId;
-    struct ObjectEvent *objectEvent;
+    struct ObjectEvent* objectEvent;
 
     objectEventId = GetObjectEventIdByXY(x, y);
     if (objectEventId != OBJECT_EVENTS_COUNT)
@@ -2092,8 +2092,8 @@ void EnableObjectGroundEffectsByXY(s16 x, s16 y)
 void SetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup, u8 subpriority)
 {
     u8 objectEventId;
-    struct ObjectEvent *objectEvent;
-    struct Sprite *sprite;
+    struct ObjectEvent* objectEvent;
+    struct Sprite* sprite;
 
     if (!TryGetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroup, &objectEventId))
     {
@@ -2107,7 +2107,7 @@ void SetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup, u8 subpriority)
 void ResetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup)
 {
     u8 objectEventId;
-    struct ObjectEvent *objectEvent;
+    struct ObjectEvent* objectEvent;
 
     if (!TryGetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroup, &objectEventId))
     {
@@ -2120,7 +2120,7 @@ void ResetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup)
 void SetObjectPositionByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, s16 x, s16 y)
 {
     u8 objectEventId;
-    struct Sprite *sprite;
+    struct Sprite* sprite;
 
     if (!TryGetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroup, &objectEventId))
     {
@@ -2151,7 +2151,7 @@ static void LoadObjectEventPalette(u16 paletteTag)
 }
 
 // Unused
-void LoadObjectEventPaletteSet(u16 *paletteTags)
+void LoadObjectEventPaletteSet(u16* paletteTags)
 {
     u8 i;
 
@@ -2161,7 +2161,7 @@ void LoadObjectEventPaletteSet(u16 *paletteTags)
     }
 }
 
-static u8 TryLoadObjectPalette(const struct SpritePalette *spritePalette)
+static u8 TryLoadObjectPalette(const struct SpritePalette* spritePalette)
 {
     if (IndexOfSpritePaletteTag(spritePalette->tag) != 0xFF)
     {
@@ -2179,7 +2179,7 @@ void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
     ApplyGlobalFieldPaletteTint(paletteSlot);
 }
 
-void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)
+void PatchObjectPaletteRange(const u16* paletteTags, u8 minSlot, u8 maxSlot)
 {
     while (minSlot < maxSlot)
     {
@@ -2241,7 +2241,7 @@ static u8 GetReflectionEffectPaletteSlot(u8 slot)
 }
 
 // Unused
-void IncrementObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
+void IncrementObjectEventCoords(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
     objectEvent->previousCoords.x = objectEvent->currentCoords.x;
     objectEvent->previousCoords.y = objectEvent->currentCoords.y;
@@ -2249,7 +2249,7 @@ void IncrementObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
     objectEvent->currentCoords.y += y;
 }
 
-void ShiftObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
+void ShiftObjectEventCoords(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
     objectEvent->previousCoords.x = objectEvent->currentCoords.x;
     objectEvent->previousCoords.y = objectEvent->currentCoords.y;
@@ -2257,7 +2257,7 @@ void ShiftObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
     objectEvent->currentCoords.y = y;
 }
 
-static void SetObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
+static void SetObjectEventCoords(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
     objectEvent->previousCoords.x = x;
     objectEvent->previousCoords.y = y;
@@ -2265,10 +2265,10 @@ static void SetObjectEventCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
     objectEvent->currentCoords.y = y;
 }
 
-void MoveObjectEventToMapCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
+void MoveObjectEventToMapCoords(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
-    struct Sprite *sprite;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    struct Sprite* sprite;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
     sprite = &gSprites[objectEvent->spriteId];
     graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
@@ -2294,7 +2294,7 @@ void TryMoveObjectEventToMapCoords(u8 localId, u8 mapNum, u8 mapGroup, s16 x, s1
     }
 }
 
-void ShiftStillObjectEventCoords(struct ObjectEvent *objectEvent)
+void ShiftStillObjectEventCoords(struct ObjectEvent* objectEvent)
 {
     ShiftObjectEventCoords(objectEvent, objectEvent->currentCoords.x, objectEvent->currentCoords.y);
 }
@@ -2333,15 +2333,15 @@ u8 GetObjectEventIdByPosition(u16 x, u16 y, u8 elevation)
         if (gObjectEvents[i].active)
         {
             if (gObjectEvents[i].currentCoords.x == x
-             && gObjectEvents[i].currentCoords.y == y
-             && ObjectEventDoesElevationMatch(&gObjectEvents[i], elevation))
+                && gObjectEvents[i].currentCoords.y == y
+                && ObjectEventDoesElevationMatch(&gObjectEvents[i], elevation))
                 return i;
         }
     }
     return OBJECT_EVENTS_COUNT;
 }
 
-static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *objectEvent, u8 elevation)
+static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent* objectEvent, u8 elevation)
 {
     if (objectEvent->currentElevation != 0 && elevation != 0 && objectEvent->currentElevation != elevation)
         return FALSE;
@@ -2365,15 +2365,15 @@ u8 AddCameraObject(u8 linkedSpriteId)
     return spriteId;
 }
 
-static void ObjectCB_CameraObject(struct Sprite *sprite)
+static void ObjectCB_CameraObject(struct Sprite* sprite)
 {
-    void (*callbacks[NELEMS(gCameraObjectFuncs)])(struct Sprite *);
+    void (*callbacks[NELEMS(gCameraObjectFuncs)])(struct Sprite*);
 
     memcpy(callbacks, gCameraObjectFuncs, sizeof gCameraObjectFuncs);
     callbacks[sprite->data[1]](sprite);
 }
 
-static void CameraObject_0(struct Sprite *sprite)
+static void CameraObject_0(struct Sprite* sprite)
 {
     sprite->x = gSprites[sprite->data[0]].x;
     sprite->y = gSprites[sprite->data[0]].y;
@@ -2382,7 +2382,7 @@ static void CameraObject_0(struct Sprite *sprite)
     CameraObject_1(sprite);
 }
 
-static void CameraObject_1(struct Sprite *sprite)
+static void CameraObject_1(struct Sprite* sprite)
 {
     s16 x = gSprites[sprite->data[0]].x;
     s16 y = gSprites[sprite->data[0]].y;
@@ -2393,7 +2393,7 @@ static void CameraObject_1(struct Sprite *sprite)
     sprite->y = y;
 }
 
-static void CameraObject_2(struct Sprite *sprite)
+static void CameraObject_2(struct Sprite* sprite)
 {
     sprite->x = gSprites[sprite->data[0]].x;
     sprite->y = gSprites[sprite->data[0]].y;
@@ -2401,7 +2401,7 @@ static void CameraObject_2(struct Sprite *sprite)
     sprite->data[3] = 0;
 }
 
-static struct Sprite *FindCameraObject(void)
+static struct Sprite* FindCameraObject(void)
 {
     u8 i;
 
@@ -2417,7 +2417,7 @@ static struct Sprite *FindCameraObject(void)
 
 void CameraObjectReset1(void)
 {
-    struct Sprite *cameraObject;
+    struct Sprite* cameraObject;
 
     cameraObject = FindCameraObject();
     if (cameraObject != NULL)
@@ -2429,7 +2429,7 @@ void CameraObjectReset1(void)
 
 void CameraObjectSetFollowedObjectId(u8 objectId)
 {
-    struct Sprite *cameraObject;
+    struct Sprite* cameraObject;
 
     cameraObject = FindCameraObject();
     if (cameraObject != NULL)
@@ -2441,7 +2441,7 @@ void CameraObjectSetFollowedObjectId(u8 objectId)
 
 u8 CameraObjectGetFollowedObjectId(void)
 {
-    struct Sprite *cameraObject;
+    struct Sprite* cameraObject;
 
     cameraObject = FindCameraObject();
     if (cameraObject == NULL)
@@ -2456,7 +2456,7 @@ void CameraObjectReset2(void)
     FindCameraObject()->data[1] = 2;
 }
 
-u8 CopySprite(struct Sprite *sprite, s16 x, s16 y, u8 subpriority)
+u8 CopySprite(struct Sprite* sprite, s16 x, s16 y, u8 subpriority)
 {
     u8 i;
 
@@ -2474,7 +2474,7 @@ u8 CopySprite(struct Sprite *sprite, s16 x, s16 y, u8 subpriority)
     return i;
 }
 
-u8 CreateCopySpriteAt(struct Sprite *sprite, s16 x, s16 y, u8 subpriority)
+u8 CreateCopySpriteAt(struct Sprite* sprite, s16 x, s16 y, u8 subpriority)
 {
     s16 i;
 
@@ -2492,7 +2492,7 @@ u8 CreateCopySpriteAt(struct Sprite *sprite, s16 x, s16 y, u8 subpriority)
     return MAX_SPRITES;
 }
 
-void SetObjectEventDirection(struct ObjectEvent *objectEvent, u8 direction)
+void SetObjectEventDirection(struct ObjectEvent* objectEvent, u8 direction)
 {
     s8 d2;
     objectEvent->previousMovementDirection = objectEvent->facingDirection;
@@ -2504,19 +2504,19 @@ void SetObjectEventDirection(struct ObjectEvent *objectEvent, u8 direction)
     objectEvent->movementDirection = direction;
 }
 
-static const u8 *GetObjectEventScriptPointerByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
+static const u8* GetObjectEventScriptPointerByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
 {
     return GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup)->script;
 }
 
-const u8 *GetObjectEventScriptPointerByObjectEventId(u8 objectEventId)
+const u8* GetObjectEventScriptPointerByObjectEventId(u8 objectEventId)
 {
     return GetObjectEventScriptPointerByLocalIdAndMap(gObjectEvents[objectEventId].localId, gObjectEvents[objectEventId].mapNum, gObjectEvents[objectEventId].mapGroup);
 }
 
 static u16 GetObjectEventFlagIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
 {
-    const struct ObjectEventTemplate *obj = GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup);
+    const struct ObjectEventTemplate* obj = GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup);
 #ifdef UBFIX
     // BUG: The function may return NULL, and attempting to read from NULL may freeze the game using modern compilers.
     if (obj == NULL)
@@ -2571,10 +2571,10 @@ u8 GetObjectEventBerryTreeId(u8 objectEventId)
     return gObjectEvents[objectEventId].trainerRange_berryTreeId;
 }
 
-static const struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
+static const struct ObjectEventTemplate* GetObjectEventTemplateByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
 {
-    const struct ObjectEventTemplate *templates;
-    const struct MapHeader *mapHeader;
+    const struct ObjectEventTemplate* templates;
+    const struct MapHeader* mapHeader;
     u8 count;
 
     if (gSaveBlock1Ptr->location.mapNum == mapNum && gSaveBlock1Ptr->location.mapGroup == mapGroup)
@@ -2591,7 +2591,7 @@ static const struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u
     return FindObjectEventTemplateByLocalId(localId, templates, count);
 }
 
-static const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate *templates, u8 count)
+static const struct ObjectEventTemplate* FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate* templates, u8 count)
 {
     u8 i;
 
@@ -2605,7 +2605,7 @@ static const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8 loc
     return NULL;
 }
 
-struct ObjectEventTemplate *GetBaseTemplateForObjectEvent(const struct ObjectEvent *objectEvent)
+struct ObjectEventTemplate* GetBaseTemplateForObjectEvent(const struct ObjectEvent* objectEvent)
 {
     int i;
 
@@ -2616,16 +2616,16 @@ struct ObjectEventTemplate *GetBaseTemplateForObjectEvent(const struct ObjectEve
     for (i = 0; i < OBJECT_EVENT_TEMPLATES_COUNT; i++)
     {
         if ((objectEvent->localId == gSaveBlock1Ptr->objectEventTemplates[i].localId)
-         && (objectEvent->mapNum == gSaveBlock1Ptr->location.mapNum)
-         && (objectEvent->mapGroup == gSaveBlock1Ptr->location.mapGroup))
+            && (objectEvent->mapNum == gSaveBlock1Ptr->location.mapNum)
+            && (objectEvent->mapGroup == gSaveBlock1Ptr->location.mapGroup))
             return &gSaveBlock1Ptr->objectEventTemplates[i];
     }
     return NULL;
 }
 
-void OverrideTemplateCoordsForObjectEvent(const struct ObjectEvent *objectEvent)
+void OverrideTemplateCoordsForObjectEvent(const struct ObjectEvent* objectEvent)
 {
-    struct ObjectEventTemplate *objectEventTemplate;
+    struct ObjectEventTemplate* objectEventTemplate;
 
     objectEventTemplate = GetBaseTemplateForObjectEvent(objectEvent);
     if (objectEventTemplate != NULL)
@@ -2635,9 +2635,9 @@ void OverrideTemplateCoordsForObjectEvent(const struct ObjectEvent *objectEvent)
     }
 }
 
-void OverrideMovementTypeForObjectEvent(const struct ObjectEvent *objectEvent, u8 movementType)
+void OverrideMovementTypeForObjectEvent(const struct ObjectEvent* objectEvent, u8 movementType)
 {
-    struct ObjectEventTemplate *objectEventTemplate;
+    struct ObjectEventTemplate* objectEventTemplate;
 
     objectEventTemplate = GetBaseTemplateForObjectEvent(objectEvent);
     if (objectEventTemplate != NULL)
@@ -2691,21 +2691,21 @@ movement_type_empty_callback(MovementType_None)
 movement_type_def(MovementType_WanderAround, gMovementTypeFuncs_WanderAround)
 movement_type_def(MovementType_WanderAroundSlower, gMovementTypeFuncs_WanderAroundSlower)
 
-static bool8 MovementType_WanderAround_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (!ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -2716,7 +2716,7 @@ static bool8 MovementType_WanderAround_Step2(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite))
     {
@@ -2726,7 +2726,7 @@ static bool8 MovementType_WanderAround_Step3(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-static bool8 MovementType_WanderAround_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[4];
     u8 chosenDirection;
@@ -2741,7 +2741,7 @@ static bool8 MovementType_WanderAround_Step4(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step5(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step5(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkNormalMovementAction(objectEvent->movementDirection));
     objectEvent->singleMovementActive = TRUE;
@@ -2749,7 +2749,7 @@ static bool8 MovementType_WanderAround_Step5(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step5Slower(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step5Slower(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkSlowerMovementAction(objectEvent->movementDirection));
     objectEvent->singleMovementActive = TRUE;
@@ -2757,7 +2757,7 @@ static bool8 MovementType_WanderAround_Step5Slower(struct ObjectEvent *objectEve
     return TRUE;
 }
 
-static bool8 MovementType_WanderAround_Step6(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderAround_Step6(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -2767,7 +2767,7 @@ static bool8 MovementType_WanderAround_Step6(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent *objectEvent)
+bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent* objectEvent)
 {
     s16 playerX;
     s16 playerY;
@@ -2987,7 +2987,7 @@ static u8 GetLimitedVectorDirection_SouthWestEast(s16 dx, s16 dy, s16 absdx, s16
     return direction;
 }
 
-u8 TryGetTrainerEncounterDirection(struct ObjectEvent *objectEvent, u8 movementType)
+u8 TryGetTrainerEncounterDirection(struct ObjectEvent* objectEvent, u8 movementType)
 {
     s16 dx, dy;
     s16 absdx, absdy;
@@ -3014,21 +3014,21 @@ u8 TryGetTrainerEncounterDirection(struct ObjectEvent *objectEvent, u8 movementT
 
 movement_type_def(MovementType_LookAround, gMovementTypeFuncs_LookAround)
 
-static bool8 MovementType_LookAround_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_LookAround_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_LookAround_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_LookAround_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_LookAround_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_LookAround_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3039,7 +3039,7 @@ static bool8 MovementType_LookAround_Step2(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementType_LookAround_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_LookAround_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3049,7 +3049,7 @@ static bool8 MovementType_LookAround_Step3(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementType_LookAround_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_LookAround_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[4];
@@ -3065,21 +3065,21 @@ static bool8 MovementType_LookAround_Step4(struct ObjectEvent *objectEvent, stru
 
 movement_type_def(MovementType_WanderUpAndDown, gMovementTypeFuncs_WanderUpAndDown)
 
-static bool8 MovementType_WanderUpAndDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (!ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3090,7 +3090,7 @@ static bool8 MovementType_WanderUpAndDown_Step2(struct ObjectEvent *objectEvent,
     return TRUE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite))
     {
@@ -3100,7 +3100,7 @@ static bool8 MovementType_WanderUpAndDown_Step3(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3114,7 +3114,7 @@ static bool8 MovementType_WanderUpAndDown_Step4(struct ObjectEvent *objectEvent,
     return TRUE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step5(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step5(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkNormalMovementAction(objectEvent->movementDirection));
     objectEvent->singleMovementActive = TRUE;
@@ -3122,7 +3122,7 @@ static bool8 MovementType_WanderUpAndDown_Step5(struct ObjectEvent *objectEvent,
     return TRUE;
 }
 
-static bool8 MovementType_WanderUpAndDown_Step6(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderUpAndDown_Step6(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3134,21 +3134,21 @@ static bool8 MovementType_WanderUpAndDown_Step6(struct ObjectEvent *objectEvent,
 
 movement_type_def(MovementType_WanderLeftAndRight, gMovementTypeFuncs_WanderLeftAndRight)
 
-static bool8 MovementType_WanderLeftAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (!ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3159,7 +3159,7 @@ static bool8 MovementType_WanderLeftAndRight_Step2(struct ObjectEvent *objectEve
     return TRUE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite))
     {
@@ -3169,7 +3169,7 @@ static bool8 MovementType_WanderLeftAndRight_Step3(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3183,7 +3183,7 @@ static bool8 MovementType_WanderLeftAndRight_Step4(struct ObjectEvent *objectEve
     return TRUE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step5(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step5(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkNormalMovementAction(objectEvent->movementDirection));
     objectEvent->singleMovementActive = TRUE;
@@ -3191,7 +3191,7 @@ static bool8 MovementType_WanderLeftAndRight_Step5(struct ObjectEvent *objectEve
     return TRUE;
 }
 
-static bool8 MovementType_WanderLeftAndRight_Step6(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WanderLeftAndRight_Step6(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3203,7 +3203,7 @@ static bool8 MovementType_WanderLeftAndRight_Step6(struct ObjectEvent *objectEve
 
 movement_type_def(MovementType_FaceDirection, gMovementTypeFuncs_FaceDirection)
 
-static bool8 MovementType_FaceDirection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDirection_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
@@ -3211,7 +3211,7 @@ static bool8 MovementType_FaceDirection_Step0(struct ObjectEvent *objectEvent, s
     return TRUE;
 }
 
-static bool8 MovementType_FaceDirection_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDirection_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3221,7 +3221,7 @@ static bool8 MovementType_FaceDirection_Step1(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementType_FaceDirection_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDirection_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->singleMovementActive = FALSE;
     return FALSE;
@@ -3229,21 +3229,21 @@ static bool8 MovementType_FaceDirection_Step2(struct ObjectEvent *objectEvent, s
 
 movement_type_def(MovementType_FaceDownAndUp, gMovementTypeFuncs_FaceDownAndUp)
 
-static bool8 MovementType_FaceDownAndUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndUp_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndUp_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3254,7 +3254,7 @@ static bool8 MovementType_FaceDownAndUp_Step2(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndUp_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndUp_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3264,7 +3264,7 @@ static bool8 MovementType_FaceDownAndUp_Step3(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndUp_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndUp_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3281,21 +3281,21 @@ static bool8 MovementType_FaceDownAndUp_Step4(struct ObjectEvent *objectEvent, s
 
 movement_type_def(MovementType_FaceLeftAndRight, gMovementTypeFuncs_FaceLeftAndRight)
 
-static bool8 MovementType_FaceLeftAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceLeftAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceLeftAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceLeftAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceLeftAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceLeftAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3306,7 +3306,7 @@ static bool8 MovementType_FaceLeftAndRight_Step2(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_FaceLeftAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceLeftAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3316,7 +3316,7 @@ static bool8 MovementType_FaceLeftAndRight_Step3(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_FaceLeftAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceLeftAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3333,21 +3333,21 @@ static bool8 MovementType_FaceLeftAndRight_Step4(struct ObjectEvent *objectEvent
 
 movement_type_def(MovementType_FaceUpAndLeft, gMovementTypeFuncs_FaceUpAndLeft)
 
-static bool8 MovementType_FaceUpAndLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpAndLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpAndLeft_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndLeft_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3358,7 +3358,7 @@ static bool8 MovementType_FaceUpAndLeft_Step2(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpAndLeft_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndLeft_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3368,7 +3368,7 @@ static bool8 MovementType_FaceUpAndLeft_Step3(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpAndLeft_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndLeft_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3385,21 +3385,21 @@ static bool8 MovementType_FaceUpAndLeft_Step4(struct ObjectEvent *objectEvent, s
 
 movement_type_def(MovementType_FaceUpAndRight, gMovementTypeFuncs_FaceUpAndRight)
 
-static bool8 MovementType_FaceUpAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3410,7 +3410,7 @@ static bool8 MovementType_FaceUpAndRight_Step2(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3420,7 +3420,7 @@ static bool8 MovementType_FaceUpAndRight_Step3(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3437,21 +3437,21 @@ static bool8 MovementType_FaceUpAndRight_Step4(struct ObjectEvent *objectEvent, 
 
 movement_type_def(MovementType_FaceDownAndLeft, gMovementTypeFuncs_FaceDownAndLeft)
 
-static bool8 MovementType_FaceDownAndLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndLeft_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndLeft_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3462,7 +3462,7 @@ static bool8 MovementType_FaceDownAndLeft_Step2(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndLeft_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndLeft_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3472,7 +3472,7 @@ static bool8 MovementType_FaceDownAndLeft_Step3(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndLeft_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndLeft_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3489,21 +3489,21 @@ static bool8 MovementType_FaceDownAndLeft_Step4(struct ObjectEvent *objectEvent,
 
 movement_type_def(MovementType_FaceDownAndRight, gMovementTypeFuncs_FaceDownAndRight)
 
-static bool8 MovementType_FaceDownAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3514,7 +3514,7 @@ static bool8 MovementType_FaceDownAndRight_Step2(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3524,7 +3524,7 @@ static bool8 MovementType_FaceDownAndRight_Step3(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[2];
@@ -3541,21 +3541,21 @@ static bool8 MovementType_FaceDownAndRight_Step4(struct ObjectEvent *objectEvent
 
 movement_type_def(MovementType_FaceDownUpAndLeft, gMovementTypeFuncs_FaceDownUpAndLeft)
 
-static bool8 MovementType_FaceDownUpAndLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownUpAndLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownUpAndLeft_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndLeft_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3566,7 +3566,7 @@ static bool8 MovementType_FaceDownUpAndLeft_Step2(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownUpAndLeft_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndLeft_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3576,7 +3576,7 @@ static bool8 MovementType_FaceDownUpAndLeft_Step3(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownUpAndLeft_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndLeft_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[4];
@@ -3593,21 +3593,21 @@ static bool8 MovementType_FaceDownUpAndLeft_Step4(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_FaceDownUpAndRight, gMovementTypeFuncs_FaceDownUpAndRight)
 
-static bool8 MovementType_FaceDownUpAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownUpAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownUpAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3618,7 +3618,7 @@ static bool8 MovementType_FaceDownUpAndRight_Step2(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownUpAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3628,7 +3628,7 @@ static bool8 MovementType_FaceDownUpAndRight_Step3(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownUpAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownUpAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[4];
@@ -3645,21 +3645,21 @@ static bool8 MovementType_FaceDownUpAndRight_Step4(struct ObjectEvent *objectEve
 
 movement_type_def(MovementType_FaceUpRightAndLeft, gMovementTypeFuncs_FaceUpLeftAndRight)
 
-static bool8 MovementType_FaceUpLeftAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpLeftAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpLeftAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpLeftAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceUpLeftAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpLeftAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3670,7 +3670,7 @@ static bool8 MovementType_FaceUpLeftAndRight_Step2(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpLeftAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpLeftAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3680,7 +3680,7 @@ static bool8 MovementType_FaceUpLeftAndRight_Step3(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementType_FaceUpLeftAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceUpLeftAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[4];
@@ -3697,21 +3697,21 @@ static bool8 MovementType_FaceUpLeftAndRight_Step4(struct ObjectEvent *objectEve
 
 movement_type_def(MovementType_FaceDownRightAndLeft, gMovementTypeFuncs_FaceDownLeftAndRight)
 
-static bool8 MovementType_FaceDownLeftAndRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownLeftAndRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownLeftAndRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownLeftAndRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
     sprite->data[1] = 2;
     return TRUE;
 }
 
-static bool8 MovementType_FaceDownLeftAndRight_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownLeftAndRight_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3722,7 +3722,7 @@ static bool8 MovementType_FaceDownLeftAndRight_Step2(struct ObjectEvent *objectE
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownLeftAndRight_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownLeftAndRight_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3732,7 +3732,7 @@ static bool8 MovementType_FaceDownLeftAndRight_Step3(struct ObjectEvent *objectE
     return FALSE;
 }
 
-static bool8 MovementType_FaceDownLeftAndRight_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_FaceDownLeftAndRight_Step4(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[4];
@@ -3749,7 +3749,7 @@ static bool8 MovementType_FaceDownLeftAndRight_Step4(struct ObjectEvent *objectE
 
 movement_type_def(MovementType_RotateCounterclockwise, gMovementTypeFuncs_RotateCounterclockwise)
 
-static bool8 MovementType_RotateCounterclockwise_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateCounterclockwise_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
@@ -3757,7 +3757,7 @@ static bool8 MovementType_RotateCounterclockwise_Step0(struct ObjectEvent *objec
     return TRUE;
 }
 
-static bool8 MovementType_RotateCounterclockwise_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateCounterclockwise_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3767,7 +3767,7 @@ static bool8 MovementType_RotateCounterclockwise_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementType_RotateCounterclockwise_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateCounterclockwise_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3776,7 +3776,7 @@ static bool8 MovementType_RotateCounterclockwise_Step2(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementType_RotateCounterclockwise_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateCounterclockwise_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[5];
@@ -3793,7 +3793,7 @@ static bool8 MovementType_RotateCounterclockwise_Step3(struct ObjectEvent *objec
 
 movement_type_def(MovementType_RotateClockwise, gMovementTypeFuncs_RotateClockwise)
 
-static bool8 MovementType_RotateClockwise_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateClockwise_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
@@ -3801,7 +3801,7 @@ static bool8 MovementType_RotateClockwise_Step0(struct ObjectEvent *objectEvent,
     return TRUE;
 }
 
-static bool8 MovementType_RotateClockwise_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateClockwise_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3811,7 +3811,7 @@ static bool8 MovementType_RotateClockwise_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementType_RotateClockwise_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateClockwise_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (WaitForMovementDelay(sprite) || ObjectEventIsTrainerAndCloseToPlayer(objectEvent))
     {
@@ -3820,7 +3820,7 @@ static bool8 MovementType_RotateClockwise_Step2(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementType_RotateClockwise_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RotateClockwise_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
     u8 directions[5];
@@ -3837,14 +3837,14 @@ static bool8 MovementType_RotateClockwise_Step3(struct ObjectEvent *objectEvent,
 
 movement_type_def(MovementType_WalkBackAndForth, gMovementTypeFuncs_WalkBackAndForth)
 
-static bool8 MovementType_WalkBackAndForth_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkBackAndForth_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-static bool8 MovementType_WalkBackAndForth_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkBackAndForth_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 direction;
 
@@ -3858,7 +3858,7 @@ static bool8 MovementType_WalkBackAndForth_Step1(struct ObjectEvent *objectEvent
     return TRUE;
 }
 
-static bool8 MovementType_WalkBackAndForth_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkBackAndForth_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     bool8 collision;
     u8 movementActionId;
@@ -3887,7 +3887,7 @@ static bool8 MovementType_WalkBackAndForth_Step2(struct ObjectEvent *objectEvent
     return TRUE;
 }
 
-static bool8 MovementType_WalkBackAndForth_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkBackAndForth_Step3(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3897,14 +3897,14 @@ static bool8 MovementType_WalkBackAndForth_Step3(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_WalkSequence_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkSequence_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     sprite->data[1] = 1;
     return TRUE;
 }
 
-bool8 MoveNextDirectionInSequence(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 *route)
+bool8 MoveNextDirectionInSequence(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8* route)
 {
     u8 collision;
     u8 movementActionId;
@@ -3932,7 +3932,7 @@ bool8 MoveNextDirectionInSequence(struct ObjectEvent *objectEvent, struct Sprite
     return TRUE;
 }
 
-static bool8 MovementType_WalkSequence_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkSequence_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -3944,7 +3944,7 @@ static bool8 MovementType_WalkSequence_Step2(struct ObjectEvent *objectEvent, st
 
 movement_type_def(MovementType_WalkSequenceUpRightLeftDown, gMovementTypeFuncs_WalkSequenceUpRightLeftDown)
 
-u8 MovementType_WalkSequenceUpRightLeftDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpRightLeftDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpRightLeftDownDirections)];
     memcpy(directions, gUpRightLeftDownDirections, sizeof(gUpRightLeftDownDirections));
@@ -3957,7 +3957,7 @@ u8 MovementType_WalkSequenceUpRightLeftDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightLeftDownUp, gMovementTypeFuncs_WalkSequenceRightLeftDownUp)
 
-u8 MovementType_WalkSequenceRightLeftDownUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightLeftDownUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightLeftDownUpDirections)];
     memcpy(directions, gRightLeftDownUpDirections, sizeof(gRightLeftDownUpDirections));
@@ -3970,7 +3970,7 @@ u8 MovementType_WalkSequenceRightLeftDownUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownUpRightLeft, gMovementTypeFuncs_WalkSequenceDownUpRightLeft)
 
-u8 MovementType_WalkSequenceDownUpRightLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownUpRightLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gDownUpRightLeftDirections)];
     memcpy(directions, gDownUpRightLeftDirections, sizeof(gDownUpRightLeftDirections));
@@ -3983,7 +3983,7 @@ u8 MovementType_WalkSequenceDownUpRightLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftDownUpRight, gMovementTypeFuncs_WalkSequenceLeftDownUpRight)
 
-u8 MovementType_WalkSequenceLeftDownUpRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftDownUpRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftDownUpRightDirections)];
     memcpy(directions, gLeftDownUpRightDirections, sizeof(gLeftDownUpRightDirections));
@@ -3996,7 +3996,7 @@ u8 MovementType_WalkSequenceLeftDownUpRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceUpLeftRightDown, gMovementTypeFuncs_WalkSequenceUpLeftRightDown)
 
-u8 MovementType_WalkSequenceUpLeftRightDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpLeftRightDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpLeftRightDownDirections)];
     memcpy(directions, gUpLeftRightDownDirections, sizeof(gUpLeftRightDownDirections));
@@ -4009,7 +4009,7 @@ u8 MovementType_WalkSequenceUpLeftRightDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftRightDownUp, gMovementTypeFuncs_WalkSequenceLeftRightDownUp)
 
-u8 MovementType_WalkSequenceLeftRightDownUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftRightDownUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftRightDownUpDirections)];
     memcpy(directions, gLeftRightDownUpDirections, sizeof(gLeftRightDownUpDirections));
@@ -4022,7 +4022,7 @@ u8 MovementType_WalkSequenceLeftRightDownUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownUpLeftRight, gMovementTypeFuncs_WalkSequenceDownUpLeftRight)
 
-u8 MovementType_WalkSequenceDownUpLeftRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownUpLeftRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gStandardDirections)];
     memcpy(directions, gStandardDirections, sizeof(gStandardDirections));
@@ -4035,7 +4035,7 @@ u8 MovementType_WalkSequenceDownUpLeftRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightDownUpLeft, gMovementTypeFuncs_WalkSequenceRightDownUpLeft)
 
-u8 MovementType_WalkSequenceRightDownUpLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightDownUpLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightDownUpLeftDirections)];
     memcpy(directions, gRightDownUpLeftDirections, sizeof(gRightDownUpLeftDirections));
@@ -4048,7 +4048,7 @@ u8 MovementType_WalkSequenceRightDownUpLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftUpDownRight, gMovementTypeFuncs_WalkSequenceLeftUpDownRight)
 
-u8 MovementType_WalkSequenceLeftUpDownRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftUpDownRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftUpDownRightDirections)];
     memcpy(directions, gLeftUpDownRightDirections, sizeof(gLeftUpDownRightDirections));
@@ -4061,7 +4061,7 @@ u8 MovementType_WalkSequenceLeftUpDownRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceUpDownRightLeft, gMovementTypeFuncs_WalkSequenceUpDownRightLeft)
 
-u8 MovementType_WalkSequenceUpDownRightLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpDownRightLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpDownRightLeftDirections)];
     memcpy(directions, gUpDownRightLeftDirections, sizeof(gUpDownRightLeftDirections));
@@ -4074,7 +4074,7 @@ u8 MovementType_WalkSequenceUpDownRightLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightLeftUpDown, gMovementTypeFuncs_WalkSequenceRightLeftUpDown)
 
-u8 MovementType_WalkSequenceRightLeftUpDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightLeftUpDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightLeftUpDownDirections)];
     memcpy(directions, gRightLeftUpDownDirections, sizeof(gRightLeftUpDownDirections));
@@ -4087,7 +4087,7 @@ u8 MovementType_WalkSequenceRightLeftUpDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownRightLeftUp, gMovementTypeFuncs_WalkSequenceDownRightLeftUp)
 
-u8 MovementType_WalkSequenceDownRightLeftUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownRightLeftUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gDownRightLeftUpDirections)];
     memcpy(directions, gDownRightLeftUpDirections, sizeof(gDownRightLeftUpDirections));
@@ -4100,7 +4100,7 @@ u8 MovementType_WalkSequenceDownRightLeftUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightUpDownLeft, gMovementTypeFuncs_WalkSequenceRightUpDownLeft)
 
-u8 MovementType_WalkSequenceRightUpDownLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightUpDownLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightUpDownLeftDirections)];
     memcpy(directions, gRightUpDownLeftDirections, sizeof(gRightUpDownLeftDirections));
@@ -4113,7 +4113,7 @@ u8 MovementType_WalkSequenceRightUpDownLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceUpDownLeftRight, gMovementTypeFuncs_WalkSequenceUpDownLeftRight)
 
-u8 MovementType_WalkSequenceUpDownLeftRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpDownLeftRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpDownLeftRightDirections)];
     memcpy(directions, gUpDownLeftRightDirections, sizeof(gUpDownLeftRightDirections));
@@ -4126,7 +4126,7 @@ u8 MovementType_WalkSequenceUpDownLeftRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftRightUpDown, gMovementTypeFuncs_WalkSequenceLeftRightUpDown)
 
-u8 MovementType_WalkSequenceLeftRightUpDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftRightUpDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftRightUpDownDirections)];
     memcpy(directions, gLeftRightUpDownDirections, sizeof(gLeftRightUpDownDirections));
@@ -4139,7 +4139,7 @@ u8 MovementType_WalkSequenceLeftRightUpDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownLeftRightUp, gMovementTypeFuncs_WalkSequenceDownLeftRightUp)
 
-u8 MovementType_WalkSequenceDownLeftRightUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownLeftRightUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gDownLeftRightUpDirections)];
     memcpy(directions, gDownLeftRightUpDirections, sizeof(gDownLeftRightUpDirections));
@@ -4152,7 +4152,7 @@ u8 MovementType_WalkSequenceDownLeftRightUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceUpLeftDownRight, gMovementTypeFuncs_WalkSequenceUpLeftDownRight)
 
-u8 MovementType_WalkSequenceUpLeftDownRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpLeftDownRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpLeftDownRightDirections)];
     memcpy(directions, gUpLeftDownRightDirections, sizeof(gUpLeftDownRightDirections));
@@ -4165,7 +4165,7 @@ u8 MovementType_WalkSequenceUpLeftDownRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownRightUpLeft, gMovementTypeFuncs_WalkSequenceDownRightUpLeft)
 
-u8 MovementType_WalkSequenceDownRightUpLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownRightUpLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gDownRightUpLeftDirections)];
     memcpy(directions, gDownRightUpLeftDirections, sizeof(gDownRightUpLeftDirections));
@@ -4178,7 +4178,7 @@ u8 MovementType_WalkSequenceDownRightUpLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftDownRightUp, gMovementTypeFuncs_WalkSequenceLeftDownRightUp)
 
-u8 MovementType_WalkSequenceLeftDownRightUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftDownRightUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftDownRightUpDirections)];
     memcpy(directions, gLeftDownRightUpDirections, sizeof(gLeftDownRightUpDirections));
@@ -4191,7 +4191,7 @@ u8 MovementType_WalkSequenceLeftDownRightUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightUpLeftDown, gMovementTypeFuncs_WalkSequenceRightUpLeftDown)
 
-u8 MovementType_WalkSequenceRightUpLeftDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightUpLeftDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightUpLeftDownDirections)];
     memcpy(directions, gRightUpLeftDownDirections, sizeof(gRightUpLeftDownDirections));
@@ -4204,7 +4204,7 @@ u8 MovementType_WalkSequenceRightUpLeftDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceUpRightDownLeft, gMovementTypeFuncs_WalkSequenceUpRightDownLeft)
 
-u8 MovementType_WalkSequenceUpRightDownLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceUpRightDownLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gUpRightDownLeftDirections)];
     memcpy(directions, gUpRightDownLeftDirections, sizeof(gUpRightDownLeftDirections));
@@ -4217,7 +4217,7 @@ u8 MovementType_WalkSequenceUpRightDownLeft_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceDownLeftUpRight, gMovementTypeFuncs_WalkSequenceDownLeftUpRight)
 
-u8 MovementType_WalkSequenceDownLeftUpRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceDownLeftUpRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gDownLeftUpRightDirections)];
     memcpy(directions, gDownLeftUpRightDirections, sizeof(gDownLeftUpRightDirections));
@@ -4230,7 +4230,7 @@ u8 MovementType_WalkSequenceDownLeftUpRight_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceLeftUpRightDown, gMovementTypeFuncs_WalkSequenceLeftUpRightDown)
 
-u8 MovementType_WalkSequenceLeftUpRightDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceLeftUpRightDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gLeftUpRightDownDirections)];
     memcpy(directions, gLeftUpRightDownDirections, sizeof(gLeftUpRightDownDirections));
@@ -4243,7 +4243,7 @@ u8 MovementType_WalkSequenceLeftUpRightDown_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_WalkSequenceRightDownLeftUp, gMovementTypeFuncs_WalkSequenceRightDownLeftUp)
 
-u8 MovementType_WalkSequenceRightDownLeftUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementType_WalkSequenceRightDownLeftUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 directions[sizeof(gRightDownLeftUpDirections)];
     memcpy(directions, gRightDownLeftUpDirections, sizeof(gRightDownLeftUpDirections));
@@ -4256,7 +4256,7 @@ u8 MovementType_WalkSequenceRightDownLeftUp_Step1(struct ObjectEvent *objectEven
 
 movement_type_def(MovementType_CopyPlayer, gMovementTypeFuncs_CopyPlayer)
 
-static bool8 MovementType_CopyPlayer_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_CopyPlayer_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     if (objectEvent->directionSequenceIndex == 0)
@@ -4267,7 +4267,7 @@ static bool8 MovementType_CopyPlayer_Step0(struct ObjectEvent *objectEvent, stru
     return TRUE;
 }
 
-static bool8 MovementType_CopyPlayer_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_CopyPlayer_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (gObjectEvents[gPlayerAvatar.objectEventId].movementActionId == MOVEMENT_ACTION_NONE || gPlayerAvatar.tileTransitionState == T_TILE_CENTER)
     {
@@ -4276,7 +4276,7 @@ static bool8 MovementType_CopyPlayer_Step1(struct ObjectEvent *objectEvent, stru
     return gCopyPlayerMovementFuncs[PlayerGetCopyableMovement()](objectEvent, sprite, GetPlayerMovementDirection(), NULL);
 }
 
-static bool8 MovementType_CopyPlayer_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_CopyPlayer_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -4286,12 +4286,12 @@ static bool8 MovementType_CopyPlayer_Step2(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 CopyablePlayerMovement_None(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_None(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     return FALSE;
 }
 
-static bool8 CopyablePlayerMovement_FaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_FaceDirection(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(GetCopyDirection(gInitialMovementTypeFacingDirections[objectEvent->movementType], objectEvent->directionSequenceIndex, playerDirection)));
     objectEvent->singleMovementActive = TRUE;
@@ -4299,7 +4299,7 @@ static bool8 CopyablePlayerMovement_FaceDirection(struct ObjectEvent *objectEven
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_GoSpeed0(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_GoSpeed0(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4318,7 +4318,7 @@ static bool8 CopyablePlayerMovement_GoSpeed0(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_GoSpeed1(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_GoSpeed1(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4337,7 +4337,7 @@ static bool8 CopyablePlayerMovement_GoSpeed1(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_GoSpeed2(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_GoSpeed2(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4356,7 +4356,7 @@ static bool8 CopyablePlayerMovement_GoSpeed2(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_Slide(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_Slide(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4375,7 +4375,7 @@ static bool8 CopyablePlayerMovement_Slide(struct ObjectEvent *objectEvent, struc
     return TRUE;
 }
 
-static bool8 cph_IM_DIFFERENT(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 cph_IM_DIFFERENT(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
 
@@ -4387,7 +4387,7 @@ static bool8 cph_IM_DIFFERENT(struct ObjectEvent *objectEvent, struct Sprite *sp
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_GoSpeed4(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_GoSpeed4(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4406,7 +4406,7 @@ static bool8 CopyablePlayerMovement_GoSpeed4(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 CopyablePlayerMovement_Jump(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 playerDirection, bool8 tileCallback(u8))
+static bool8 CopyablePlayerMovement_Jump(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 playerDirection, bool8 tileCallback(u8))
 {
     u32 direction;
     s16 x;
@@ -4429,7 +4429,7 @@ static bool8 CopyablePlayerMovement_Jump(struct ObjectEvent *objectEvent, struct
 
 movement_type_def(MovementType_CopyPlayerInGrass, gMovementTypeFuncs_CopyPlayerInGrass)
 
-static bool8 MovementType_CopyPlayerInGrass_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_CopyPlayerInGrass_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (gObjectEvents[gPlayerAvatar.objectEventId].movementActionId == MOVEMENT_ACTION_NONE || gPlayerAvatar.tileTransitionState == T_TILE_CENTER)
     {
@@ -4438,9 +4438,9 @@ static bool8 MovementType_CopyPlayerInGrass_Step1(struct ObjectEvent *objectEven
     return gCopyPlayerMovementFuncs[PlayerGetCopyableMovement()](objectEvent, sprite, GetPlayerMovementDirection(), MetatileBehavior_IsPokeGrass);
 }
 
-static void MovementType_TreeDisguise(struct Sprite *sprite)
+static void MovementType_TreeDisguise(struct Sprite* sprite)
 {
-    struct ObjectEvent *objectEvent;
+    struct ObjectEvent* objectEvent;
 
     objectEvent = &gObjectEvents[sprite->data[0]];
     if (objectEvent->directionSequenceIndex == 0 || (objectEvent->directionSequenceIndex == 1 && !sprite->data[7]))
@@ -4453,15 +4453,15 @@ static void MovementType_TreeDisguise(struct Sprite *sprite)
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_Disguise_Callback);
 }
 
-static bool8 MovementType_Disguise_Callback(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Disguise_Callback(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     return FALSE;
 }
 
-static void MovementType_MountainDisguise(struct Sprite *sprite)
+static void MovementType_MountainDisguise(struct Sprite* sprite)
 {
-    struct ObjectEvent *objectEvent;
+    struct ObjectEvent* objectEvent;
 
     objectEvent = &gObjectEvents[sprite->data[0]];
     if (objectEvent->directionSequenceIndex == 0 || (objectEvent->directionSequenceIndex == 1 && !sprite->data[7]))
@@ -4474,7 +4474,7 @@ static void MovementType_MountainDisguise(struct Sprite *sprite)
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_Disguise_Callback);
 }
 
-static void MovementType_Buried(struct Sprite *sprite)
+static void MovementType_Buried(struct Sprite* sprite)
 {
     if (!sprite->data[7])
     {
@@ -4486,18 +4486,18 @@ static void MovementType_Buried(struct Sprite *sprite)
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_Buried_Callback);
 }
 
-static bool8 MovementType_Buried_Callback(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Buried_Callback(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return gMovementTypeFuncs_Buried[sprite->data[1]](objectEvent, sprite);
 }
 
-static bool8 MovementType_Buried_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Buried_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     return FALSE;
 }
 
-static bool8 MovementType_MoveInPlace_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_MoveInPlace_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -4508,7 +4508,7 @@ static bool8 MovementType_MoveInPlace_Step1(struct ObjectEvent *objectEvent, str
 
 movement_type_def(MovementType_WalkInPlace, gMovementTypeFuncs_WalkInPlace)
 
-static bool8 MovementType_WalkInPlace_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkInPlace_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkInPlaceNormalMovementAction(objectEvent->facingDirection));
@@ -4518,7 +4518,7 @@ static bool8 MovementType_WalkInPlace_Step0(struct ObjectEvent *objectEvent, str
 
 movement_type_def(MovementType_WalkInPlaceFast, gMovementTypeFuncs_WalkInPlaceFast)
 
-static bool8 MovementType_WalkInPlaceFast_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_WalkInPlaceFast_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkInPlaceFastMovementAction(objectEvent->facingDirection));
@@ -4528,7 +4528,7 @@ static bool8 MovementType_WalkInPlaceFast_Step0(struct ObjectEvent *objectEvent,
 
 movement_type_def(MovementType_JogInPlace, gMovementTypeFuncs_JogInPlace)
 
-static bool8 MovementType_JogInPlace_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_JogInPlace_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetWalkInPlaceFasterMovementAction(objectEvent->facingDirection));
@@ -4538,7 +4538,7 @@ static bool8 MovementType_JogInPlace_Step0(struct ObjectEvent *objectEvent, stru
 
 movement_type_def(MovementType_Invisible, gMovementTypeFuncs_Invisible)
 
-static bool8 MovementType_Invisible_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Invisible_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, GetFaceDirectionMovementAction(objectEvent->facingDirection));
@@ -4547,7 +4547,7 @@ static bool8 MovementType_Invisible_Step0(struct ObjectEvent *objectEvent, struc
     return TRUE;
 }
 
-static bool8 MovementType_Invisible_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Invisible_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -4557,43 +4557,43 @@ static bool8 MovementType_Invisible_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-static bool8 MovementType_Invisible_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_Invisible_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->singleMovementActive = FALSE;
     return FALSE;
 }
 
-void MovementType_RaiseHandAndStop(struct Sprite *sprite)
+void MovementType_RaiseHandAndStop(struct Sprite* sprite)
 {
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_RaiseHandAndStop_Callback);
 }
 
-void MovementType_RaiseHandAndJump(struct Sprite *sprite)
+void MovementType_RaiseHandAndJump(struct Sprite* sprite)
 {
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_RaiseHandAndJump_Callback);
 }
 
-void MovementType_RaiseHandAndSwim(struct Sprite *sprite)
+void MovementType_RaiseHandAndSwim(struct Sprite* sprite)
 {
     UpdateObjectEventCurrentMovement(&gObjectEvents[sprite->data[0]], sprite, MovementType_RaiseHandAndSwim_Callback);
 }
 
-static u8 MovementType_RaiseHandAndStop_Callback(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static u8 MovementType_RaiseHandAndStop_Callback(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return gMovementTypeFuncs_RaiseHandAndStop[sprite->data[1]](objectEvent, sprite);
 }
 
-static u8 MovementType_RaiseHandAndJump_Callback(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static u8 MovementType_RaiseHandAndJump_Callback(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return gMovementTypeFuncs_RaiseHandAndJump[sprite->data[1]](objectEvent, sprite);
 }
 
-static u8 MovementType_RaiseHandAndSwim_Callback(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static u8 MovementType_RaiseHandAndSwim_Callback(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return gMovementTypeFuncs_RaiseHandAndSwim[sprite->data[1]](objectEvent, sprite);
 }
 
-static bool8 MovementType_RaiseHandAndStop_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndStop_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_RAISE_HAND_AND_STOP);
@@ -4601,7 +4601,7 @@ static bool8 MovementType_RaiseHandAndStop_Step0(struct ObjectEvent *objectEvent
     return TRUE;
 }
 
-static bool8 MovementType_RaiseHandAndStop_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndStop_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -4611,13 +4611,13 @@ static bool8 MovementType_RaiseHandAndStop_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_RaiseHandAndStop_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndStop_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->singleMovementActive = FALSE;
     return FALSE;
 }
 
-static bool8 MovementType_RaiseHandAndJump_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndJump_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_RAISE_HAND_AND_JUMP);
@@ -4625,7 +4625,7 @@ static bool8 MovementType_RaiseHandAndJump_Step0(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_RaiseHandAndSwim_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndSwim_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
     ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_RAISE_HAND_AND_SWIM);
@@ -4633,7 +4633,7 @@ static bool8 MovementType_RaiseHandAndSwim_Step0(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementType_RaiseHandAndMove_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementType_RaiseHandAndMove_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
@@ -4642,7 +4642,7 @@ static bool8 MovementType_RaiseHandAndMove_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static void ClearObjectEventMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void ClearObjectEventMovement(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->singleMovementActive = FALSE;
     objectEvent->heldMovementActive = FALSE;
@@ -4731,9 +4731,9 @@ u8 GetRunningDirectionAnimNum(u8 direction)
     return sRunningDirectionAnimNums[direction];
 }
 
-static const struct StepAnimTable *GetStepAnimTable(const union AnimCmd *const *anims)
+static const struct StepAnimTable* GetStepAnimTable(const union AnimCmd* const* anims)
 {
-    const struct StepAnimTable *stepTable;
+    const struct StepAnimTable* stepTable;
 
     for (stepTable = sStepAnimTables; stepTable->anims != NULL; stepTable++)
         if (stepTable->anims == anims)
@@ -4742,9 +4742,9 @@ static const struct StepAnimTable *GetStepAnimTable(const union AnimCmd *const *
     return NULL;
 }
 
-void SetStepAnimHandleAlternation(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 animNum)
+void SetStepAnimHandleAlternation(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 animNum)
 {
-    const struct StepAnimTable *stepTable;
+    const struct StepAnimTable* stepTable;
 
     if (!objectEvent->inanimate)
     {
@@ -4761,9 +4761,9 @@ void SetStepAnimHandleAlternation(struct ObjectEvent *objectEvent, struct Sprite
     }
 }
 
-void SetStepAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 animNum)
+void SetStepAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 animNum)
 {
-    const struct StepAnimTable *stepTable;
+    const struct StepAnimTable* stepTable;
 
     if (!objectEvent->inanimate)
     {
@@ -4801,7 +4801,7 @@ u8 GetDirectionToFace(s16 x1, s16 y1, s16 x2, s16 y2)
     return DIR_SOUTH;
 }
 
-void SetTrainerMovementType(struct ObjectEvent *objectEvent, u8 movementType)
+void SetTrainerMovementType(struct ObjectEvent* objectEvent, u8 movementType)
 {
     objectEvent->movementType = movementType;
     objectEvent->directionSequenceIndex = 0;
@@ -4815,7 +4815,7 @@ u8 GetTrainerFacingDirectionMovementType(u8 direction)
     return sTrainerFacingDirectionMovementTypes[direction];
 }
 
-static u8 GetCollisionInDirection(struct ObjectEvent *objectEvent, u8 direction)
+static u8 GetCollisionInDirection(struct ObjectEvent* objectEvent, u8 direction)
 {
     s16 x;
     s16 y;
@@ -4825,7 +4825,7 @@ static u8 GetCollisionInDirection(struct ObjectEvent *objectEvent, u8 direction)
     return GetCollisionAtCoords(objectEvent, x, y, direction);
 }
 
-u8 GetCollisionAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u32 dir)
+u8 GetCollisionAtCoords(struct ObjectEvent* objectEvent, s16 x, s16 y, u32 dir)
 {
     u8 direction = dir;
     if (IsCoordOutsideObjectEventMovementRange(objectEvent, x, y))
@@ -4841,7 +4841,7 @@ u8 GetCollisionAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u32 dir)
     return COLLISION_NONE;
 }
 
-u8 GetCollisionFlagsAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction)
+u8 GetCollisionFlagsAtCoords(struct ObjectEvent* objectEvent, s16 x, s16 y, u8 direction)
 {
     u8 flags = 0;
 
@@ -4856,7 +4856,7 @@ u8 GetCollisionFlagsAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 d
     return flags;
 }
 
-static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent *objectEvent, s16 x, s16 y)
+static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
     s16 left;
     s16 right;
@@ -4884,7 +4884,7 @@ static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent *objectEv
     return FALSE;
 }
 
-static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction)
+static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent* objectEvent, s16 x, s16 y, u8 direction)
 {
     if (gOppositeDirectionBlockedMetatileFuncs[direction - 1](objectEvent->currentMetatileBehavior)
         || gDirectionBlockedMetatileFuncs[direction - 1](MapGridGetMetatileBehaviorAt(x, y)))
@@ -4894,10 +4894,10 @@ static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 DoesObjectCollideWithObjectAt(struct ObjectEvent *objectEvent, s16 x, s16 y)
+static bool8 DoesObjectCollideWithObjectAt(struct ObjectEvent* objectEvent, s16 x, s16 y)
 {
     u8 i;
-    struct ObjectEvent *curObject;
+    struct ObjectEvent* curObject;
 
     for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
     {
@@ -4935,20 +4935,20 @@ static void SetBerryTreeJustPicked(u8 localId, u8 mapNum, u8 mapGroup)
         gSprites[gObjectEvents[objectEventId].spriteId].data[7] |= 0x04;
 }
 
-void MoveCoords(u8 direction, s16 *x, s16 *y)
+void MoveCoords(u8 direction, s16* x, s16* y)
 {
     *x += sDirectionToVectors[direction].x;
     *y += sDirectionToVectors[direction].y;
 }
 
 // Unused
-static void MoveCoordsInMapCoordIncrement(u8 direction, s16 *x, s16 *y)
+static void MoveCoordsInMapCoordIncrement(u8 direction, s16* x, s16* y)
 {
     *x += sDirectionToVectors[direction].x << 4;
     *y += sDirectionToVectors[direction].y << 4;
 }
 
-static void MoveCoordsInDirection(u32 dir, s16 *x, s16 *y, s16 deltaX, s16 deltaY)
+static void MoveCoordsInDirection(u32 dir, s16* x, s16* y, s16 deltaX, s16 deltaY)
 {
     u8 direction = dir;
     s16 dx2 = (u16)deltaX;
@@ -4963,7 +4963,7 @@ static void MoveCoordsInDirection(u32 dir, s16 *x, s16 *y, s16 deltaX, s16 delta
         *y -= dy2;
 }
 
-void GetMapCoordsFromSpritePos(s16 x, s16 y, s16 *destX, s16 *destY)
+void GetMapCoordsFromSpritePos(s16 x, s16 y, s16* destX, s16* destY)
 {
     *destX = (x - gSaveBlock1Ptr->pos.x) << 4;
     *destY = (y - gSaveBlock1Ptr->pos.y) << 4;
@@ -4971,7 +4971,7 @@ void GetMapCoordsFromSpritePos(s16 x, s16 y, s16 *destX, s16 *destY)
     *destY -= gTotalCameraPixelOffsetY;
 }
 
-void SetSpritePosToMapCoords(s16 mapX, s16 mapY, s16 *destX, s16 *destY)
+void SetSpritePosToMapCoords(s16 mapX, s16 mapY, s16* destX, s16* destY)
 {
     s16 dx = -gTotalCameraPixelOffsetX - gFieldCamera.x;
     s16 dy = -gTotalCameraPixelOffsetY - gFieldCamera.y;
@@ -4991,14 +4991,14 @@ void SetSpritePosToMapCoords(s16 mapX, s16 mapY, s16 *destX, s16 *destY)
     *destY = ((mapY - gSaveBlock1Ptr->pos.y) << 4) + dy;
 }
 
-void SetSpritePosToOffsetMapCoords(s16 *x, s16 *y, s16 dx, s16 dy)
+void SetSpritePosToOffsetMapCoords(s16* x, s16* y, s16 dx, s16 dy)
 {
     SetSpritePosToMapCoords(*x, *y, x, y);
     *x += dx;
     *y += dy;
 }
 
-static void GetObjectEventMovingCameraOffset(s16 *x, s16 *y)
+static void GetObjectEventMovingCameraOffset(s16* x, s16* y)
 {
     *x = 0;
     *y = 0;
@@ -5020,7 +5020,7 @@ static void GetObjectEventMovingCameraOffset(s16 *x, s16 *y)
     }
 }
 
-void ObjectEventMoveDestCoords(struct ObjectEvent *objectEvent, u32 direction, s16 *x, s16 *y)
+void ObjectEventMoveDestCoords(struct ObjectEvent* objectEvent, u32 direction, s16* x, s16* y)
 {
     u8 newDirn = direction;
     *x = objectEvent->currentCoords.x;
@@ -5028,7 +5028,7 @@ void ObjectEventMoveDestCoords(struct ObjectEvent *objectEvent, u32 direction, s
     MoveCoords(newDirn, x, y);
 }
 
-bool8 ObjectEventIsMovementOverridden(struct ObjectEvent *objectEvent)
+bool8 ObjectEventIsMovementOverridden(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->singleMovementActive || objectEvent->heldMovementActive)
         return TRUE;
@@ -5036,7 +5036,7 @@ bool8 ObjectEventIsMovementOverridden(struct ObjectEvent *objectEvent)
     return FALSE;
 }
 
-bool8 ObjectEventIsHeldMovementActive(struct ObjectEvent *objectEvent)
+bool8 ObjectEventIsHeldMovementActive(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->heldMovementActive && objectEvent->movementActionId != MOVEMENT_ACTION_NONE)
         return TRUE;
@@ -5044,9 +5044,9 @@ bool8 ObjectEventIsHeldMovementActive(struct ObjectEvent *objectEvent)
     return FALSE;
 }
 
-bool8 ObjectEventSetHeldMovement(struct ObjectEvent *objectEvent, u8 movementActionId)
+bool8 ObjectEventSetHeldMovement(struct ObjectEvent* objectEvent, u8 movementActionId)
 {
-    if(sub_8112CAC() == TRUE)
+    if (sub_8112CAC() == TRUE)
         ObjectEventClearHeldMovementIfActive(objectEvent);
     else if (ObjectEventIsMovementOverridden(objectEvent))
         return TRUE;
@@ -5059,19 +5059,19 @@ bool8 ObjectEventSetHeldMovement(struct ObjectEvent *objectEvent, u8 movementAct
     return FALSE;
 }
 
-void ObjectEventForceSetHeldMovement(struct ObjectEvent *objectEvent, u8 movementActionId)
+void ObjectEventForceSetHeldMovement(struct ObjectEvent* objectEvent, u8 movementActionId)
 {
     ObjectEventClearHeldMovementIfActive(objectEvent);
     ObjectEventSetHeldMovement(objectEvent, movementActionId);
 }
 
-void ObjectEventClearHeldMovementIfActive(struct ObjectEvent *objectEvent)
+void ObjectEventClearHeldMovementIfActive(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->heldMovementActive)
         ObjectEventClearHeldMovement(objectEvent);
 }
 
-void ObjectEventClearHeldMovement(struct ObjectEvent *objectEvent)
+void ObjectEventClearHeldMovement(struct ObjectEvent* objectEvent)
 {
     objectEvent->movementActionId = MOVEMENT_ACTION_NONE;
     objectEvent->heldMovementActive = FALSE;
@@ -5080,7 +5080,7 @@ void ObjectEventClearHeldMovement(struct ObjectEvent *objectEvent)
     gSprites[objectEvent->spriteId].data[2] = 0;
 }
 
-u8 ObjectEventCheckHeldMovementStatus(struct ObjectEvent *objectEvent)
+u8 ObjectEventCheckHeldMovementStatus(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->heldMovementActive)
         return objectEvent->heldMovementFinished;
@@ -5088,7 +5088,7 @@ u8 ObjectEventCheckHeldMovementStatus(struct ObjectEvent *objectEvent)
     return 16;
 }
 
-u8 ObjectEventClearHeldMovementIfFinished(struct ObjectEvent *objectEvent)
+u8 ObjectEventClearHeldMovementIfFinished(struct ObjectEvent* objectEvent)
 {
     u8 heldMovementStatus = ObjectEventCheckHeldMovementStatus(objectEvent);
     if (heldMovementStatus != 0 && heldMovementStatus != 16)
@@ -5097,7 +5097,7 @@ u8 ObjectEventClearHeldMovementIfFinished(struct ObjectEvent *objectEvent)
     return heldMovementStatus;
 }
 
-u8 ObjectEventGetHeldMovementActionId(struct ObjectEvent *objectEvent)
+u8 ObjectEventGetHeldMovementActionId(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->heldMovementActive)
         return objectEvent->movementActionId;
@@ -5105,7 +5105,7 @@ u8 ObjectEventGetHeldMovementActionId(struct ObjectEvent *objectEvent)
     return MOVEMENT_ACTION_NONE;
 }
 
-void UpdateObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, bool8 (*callback)(struct ObjectEvent *, struct Sprite *))
+void UpdateObjectEventCurrentMovement(struct ObjectEvent* objectEvent, struct Sprite* sprite, bool8(*callback)(struct ObjectEvent*, struct Sprite*))
 {
     DoGroundEffects_OnSpawn(objectEvent, sprite);
     TryEnableObjectEventAnim(objectEvent, sprite);
@@ -5122,14 +5122,14 @@ void UpdateObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sp
     ObjectEventUpdateSubpriority(objectEvent, sprite);
 }
 
-void UpdateQuestLogObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+void UpdateQuestLogObjectEventCurrentMovement(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     DoGroundEffects_OnSpawn(objectEvent, sprite);
     TryEnableObjectEventAnim(objectEvent, sprite);
 
     if (ObjectEventIsHeldMovementActive(objectEvent) && !sprite->animBeginning)
         QuestLogObjectEventExecHeldMovementAction(objectEvent, sprite);
-    
+
     if (MetatileBehavior_IsIce_2(objectEvent->currentMetatileBehavior) == TRUE
         || MetatileBehavior_IsTrickHouseSlipperyFloor(objectEvent->currentMetatileBehavior) == TRUE)
         objectEvent->disableAnim = TRUE;
@@ -5188,7 +5188,7 @@ dirn_to_anim(GetWalkInPlaceNormalMovementAction, sWalkInPlaceNormalMovementActio
 dirn_to_anim(GetWalkInPlaceFastMovementAction, sWalkInPlaceFastMovementActions);
 dirn_to_anim(GetWalkInPlaceFasterMovementAction, sWalkInPlaceFasterMovementActions);
 
-bool8 ObjectEventFaceOppositeDirection(struct ObjectEvent *objectEvent, u8 direction)
+bool8 ObjectEventFaceOppositeDirection(struct ObjectEvent* objectEvent, u8 direction)
 {
     return ObjectEventSetHeldMovement(objectEvent, GetFaceDirectionMovementAction(GetOppositeDirection(direction)));
 }
@@ -5208,7 +5208,7 @@ u8 GetOppositeDirection(u8 direction)
     u8 directions[sizeof gOppositeDirections];
 
     memcpy(directions, gOppositeDirections, sizeof gOppositeDirections);
-    if (direction < 1 || direction > (sizeof gOppositeDirections))
+    if (direction < 1 || direction >(sizeof gOppositeDirections))
     {
         return direction;
     }
@@ -5226,14 +5226,14 @@ static u32 GetCopyDirection(u8 copyInitDir, u32 playerInitDir, u32 playerMoveDir
     u8 _playerInitDir = playerInitDir;
     u8 _playerMoveDir = playerMoveDir;
     if (_playerInitDir == DIR_NONE || _playerMoveDir == DIR_NONE
-      || _playerInitDir > DIR_EAST || _playerMoveDir > DIR_EAST)
+        || _playerInitDir > DIR_EAST || _playerMoveDir > DIR_EAST)
         return DIR_NONE;
 
     dir = GetPlayerDirectionForCopy(_playerInitDir, playerMoveDir);
     return sPlayerDirectionToCopyDirection[copyInitDir - 1][dir - 1];
 }
 
-static void ObjectEventExecHeldMovementAction(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void ObjectEventExecHeldMovementAction(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (sMovementActionFuncs[objectEvent->movementActionId][sprite->data[2]](objectEvent, sprite))
     {
@@ -5241,7 +5241,7 @@ static void ObjectEventExecHeldMovementAction(struct ObjectEvent *objectEvent, s
     }
 }
 
-static void QuestLogObjectEventExecHeldMovementAction(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void QuestLogObjectEventExecHeldMovementAction(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (sMovementActionFuncs[objectEvent->movementActionId][sprite->data[2]](objectEvent, sprite))
     {
@@ -5251,7 +5251,7 @@ static void QuestLogObjectEventExecHeldMovementAction(struct ObjectEvent *object
     }
 }
 
-static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (sMovementActionFuncs[objectEvent->movementActionId][sprite->data[2]](objectEvent, sprite))
     {
@@ -5262,18 +5262,18 @@ static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static void ObjectEventSetSingleMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 animId)
+static void ObjectEventSetSingleMovement(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 animId)
 {
     objectEvent->movementActionId = animId;
     sprite->data[2] = 0;
-    
+
     if (gQuestLogPlaybackState == 2)
     {
         QuestLogRecordNPCStep(objectEvent->localId, objectEvent->mapNum, objectEvent->mapGroup, animId);
     }
 }
 
-static void FaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+static void FaceDirection(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     SetObjectEventDirection(objectEvent, direction);
     ShiftStillObjectEventCoords(objectEvent);
@@ -5282,31 +5282,31 @@ static void FaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite
     sprite->data[2] = 1;
 }
 
-static bool8 MovementAction_FaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FaceDirection(objectEvent, sprite, DIR_SOUTH);
     return TRUE;
 }
 
-static bool8 MovementAction_FaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FaceDirection(objectEvent, sprite, DIR_NORTH);
     return TRUE;
 }
 
-static bool8 MovementAction_FaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FaceDirection(objectEvent, sprite, DIR_WEST);
     return TRUE;
 }
 
-static bool8 MovementAction_FaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FaceDirection(objectEvent, sprite, DIR_EAST);
     return TRUE;
 }
 
-void InitNpcForMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed)
+void InitNpcForMovement(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 speed)
 {
     s16 x;
     s16 y;
@@ -5322,21 +5322,21 @@ void InitNpcForMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, 
     sprite->data[2] = 1;
 }
 
-void InitMovementNormal(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed)
+void InitMovementNormal(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 speed)
 {
-    u8 (*functions[NELEMS(sDirectionAnimFuncsBySpeed)])(u8);
+    u8(*functions[NELEMS(sDirectionAnimFuncsBySpeed)])(u8);
     memcpy(functions, sDirectionAnimFuncsBySpeed, sizeof sDirectionAnimFuncsBySpeed);
     InitNpcForMovement(objectEvent, sprite, direction, speed);
     SetStepAnimHandleAlternation(objectEvent, sprite, functions[speed](objectEvent->facingDirection));
 }
 
-void StartRunningAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void StartRunningAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitNpcForMovement(objectEvent, sprite, direction, MOVE_SPEED_FAST_1);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetRunningDirectionAnimNum(objectEvent->facingDirection));
 }
 
-bool8 UpdateMovementNormal(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateMovementNormal(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (NpcTakeStep(sprite))
     {
@@ -5348,7 +5348,7 @@ bool8 UpdateMovementNormal(struct ObjectEvent *objectEvent, struct Sprite *sprit
     return FALSE;
 }
 
-void InitNpcForWalkSlower(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitNpcForWalkSlower(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     s16 x;
     s16 y;
@@ -5364,13 +5364,13 @@ void InitNpcForWalkSlower(struct ObjectEvent *objectEvent, struct Sprite *sprite
     sprite->data[2] = 1;
 }
 
-void InitWalkSlower(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitWalkSlower(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitNpcForWalkSlower(objectEvent, sprite, direction);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetMoveDirectionAnimNum(objectEvent->facingDirection));
 }
 
-bool8 UpdateWalkSlower(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateWalkSlower(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowerAnim(sprite))
     {
@@ -5382,7 +5382,7 @@ bool8 UpdateWalkSlower(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-void InitNpcForWalkSlowest(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitNpcForWalkSlowest(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     s16 x;
     s16 y;
@@ -5398,13 +5398,13 @@ void InitNpcForWalkSlowest(struct ObjectEvent *objectEvent, struct Sprite *sprit
     sprite->data[2] = 1;
 }
 
-void InitWalkSlowest(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitWalkSlowest(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitNpcForWalkSlowest(objectEvent, sprite, direction);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetMoveDirectionAnimNum(objectEvent->facingDirection));
 }
 
-bool8 UpdateWalkSlowest(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateWalkSlowest(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowestAnim(sprite))
     {
@@ -5416,13 +5416,13 @@ bool8 UpdateWalkSlowest(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowestDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlowest(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_WalkSlowestDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowestDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowest(objectEvent, sprite))
     {
@@ -5432,13 +5432,13 @@ static bool8 MovementAction_WalkSlowestDown_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowestUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlowest(objectEvent, sprite, DIR_NORTH);
     return MovementAction_WalkSlowestUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowestUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowest(objectEvent, sprite))
     {
@@ -5448,13 +5448,13 @@ static bool8 MovementAction_WalkSlowestUp_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowestLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlowest(objectEvent, sprite, DIR_WEST);
     return MovementAction_WalkSlowestLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowestLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowest(objectEvent, sprite))
     {
@@ -5464,13 +5464,13 @@ static bool8 MovementAction_WalkSlowestLeft_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowestRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlowest(objectEvent, sprite, DIR_EAST);
     return MovementAction_WalkSlowestRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowestRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowestRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowest(objectEvent, sprite))
     {
@@ -5480,13 +5480,13 @@ static bool8 MovementAction_WalkSlowestRight_Step1(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowerDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_WalkSlowerDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowerDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -5496,13 +5496,13 @@ static bool8 MovementAction_WalkSlowerDown_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowerUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_NORTH);
     return MovementAction_WalkSlowerUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowerUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -5512,13 +5512,13 @@ static bool8 MovementAction_WalkSlowerUp_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowerLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_WEST);
     return MovementAction_WalkSlowerLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowerLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -5528,13 +5528,13 @@ static bool8 MovementAction_WalkSlowerLeft_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowerRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_EAST);
     return MovementAction_WalkSlowerRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowerRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowerRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -5546,7 +5546,7 @@ static bool8 MovementAction_WalkSlowerRight_Step1(struct ObjectEvent *objectEven
 
 // InitNpcForWalkSlow, InitNpcForWalkSlower, InitNpcForWalkSlowest, and
 // InitNpcForRunSlow are functionally equivalent
-void InitNpcForWalkSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitNpcForWalkSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     s16 x;
     s16 y;
@@ -5564,13 +5564,13 @@ void InitNpcForWalkSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, 
 
 // InitWalkSlow, InitWalkSlower, InitWalkSlowest, and InitRunSlow are
 // functionally equivalent
-void InitWalkSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitWalkSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitNpcForWalkSlow(objectEvent, sprite, direction);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetMoveDirectionAnimNum(objectEvent->facingDirection));
 }
 
-bool8 UpdateWalkSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateWalkSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlowAnim(sprite))
     {
@@ -5582,13 +5582,13 @@ bool8 UpdateWalkSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlow(objectEvent, sprite, DIR_NORTH);
     return MovementAction_WalkSlowUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlow(objectEvent, sprite))
     {
@@ -5598,13 +5598,13 @@ static bool8 MovementAction_WalkSlowUp_Step1(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlow(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_WalkSlowDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlow(objectEvent, sprite))
     {
@@ -5614,13 +5614,13 @@ static bool8 MovementAction_WalkSlowDown_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlow(objectEvent, sprite, DIR_WEST);
     return MovementAction_WalkSlowLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlow(objectEvent, sprite))
     {
@@ -5630,13 +5630,13 @@ static bool8 MovementAction_WalkSlowLeft_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkSlowRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlow(objectEvent, sprite, DIR_EAST);
     return MovementAction_WalkSlowRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkSlowRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkSlowRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlow(objectEvent, sprite))
     {
@@ -5646,13 +5646,13 @@ static bool8 MovementAction_WalkSlowRight_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_WalkNormalDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_NORMAL);
     return MovementAction_WalkNormalDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkNormalDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5662,13 +5662,13 @@ static bool8 MovementAction_WalkNormalDown_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkNormalUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_NORMAL);
     return MovementAction_WalkNormalUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkNormalUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5678,13 +5678,13 @@ static bool8 MovementAction_WalkNormalUp_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkNormalLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_WEST, MOVE_SPEED_NORMAL);
     return MovementAction_WalkNormalLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkNormalLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5694,13 +5694,13 @@ static bool8 MovementAction_WalkNormalLeft_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkNormalRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_EAST, MOVE_SPEED_NORMAL);
     return MovementAction_WalkNormalRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkNormalRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkNormalRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5719,7 +5719,7 @@ enum {
     JUMP_TYPE_NORMAL,
 };
 
-void InitJump(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 distance, u8 type)
+void InitJump(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 distance, u8 type)
 {
     s16 displacements[NELEMS(sJumpInitDisplacements)];
     s16 x;
@@ -5738,14 +5738,14 @@ void InitJump(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 directi
     objectEvent->disableCoveringGroundEffects = 1;
 }
 
-void InitJumpRegular(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 distance, u8 type)
+void InitJumpRegular(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 distance, u8 type)
 {
     InitJump(objectEvent, sprite, direction, distance, type);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetMoveDirectionAnimNum(objectEvent->facingDirection));
     DoShadowFieldEffect(objectEvent);
 }
 
-u8 UpdateJumpAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 callback(struct Sprite *))
+u8 UpdateJumpAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 callback(struct Sprite*))
 {
     s16 displacements[NELEMS(sJumpDisplacements)];
     s16 x;
@@ -5773,17 +5773,17 @@ u8 UpdateJumpAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 cal
     return result;
 }
 
-u8 DoJumpAnimStep(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 DoJumpAnimStep(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return UpdateJumpAnim(objectEvent, sprite, DoJumpSpriteMovement);
 }
 
-u8 DoJumpSpecialAnimStep(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 DoJumpSpecialAnimStep(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return UpdateJumpAnim(objectEvent, sprite, DoJumpSpecialSpriteMovement);
 }
 
-bool8 DoJumpAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 DoJumpAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnimStep(objectEvent, sprite) == JUMP_FINISHED)
         return TRUE;
@@ -5791,7 +5791,7 @@ bool8 DoJumpAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-bool8 DoJumpSpecialAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 DoJumpSpecialAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnimStep(objectEvent, sprite) == JUMP_FINISHED)
         return TRUE;
@@ -5799,7 +5799,7 @@ bool8 DoJumpSpecialAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-bool8 DoJumpInPlaceAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 DoJumpInPlaceAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     switch (DoJumpAnimStep(objectEvent, sprite))
     {
@@ -5813,13 +5813,13 @@ bool8 DoJumpInPlaceAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     }
 }
 
-static bool8 MovementAction_Jump2Down_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Down_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_Jump2Down_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Jump2Down_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Down_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -5830,13 +5830,13 @@ static bool8 MovementAction_Jump2Down_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_Jump2Up_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Up_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_Jump2Up_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Jump2Up_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Up_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -5847,13 +5847,13 @@ static bool8 MovementAction_Jump2Up_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-static bool8 MovementAction_Jump2Left_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Left_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_Jump2Left_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Jump2Left_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Left_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -5864,13 +5864,13 @@ static bool8 MovementAction_Jump2Left_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_Jump2Right_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Right_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_Jump2Right_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Jump2Right_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Jump2Right_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -5881,13 +5881,13 @@ static bool8 MovementAction_Jump2Right_Step1(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-void InitMovementDelay(struct Sprite *sprite, u16 duration)
+void InitMovementDelay(struct Sprite* sprite, u16 duration)
 {
     sprite->data[2] = 1;
     sprite->data[3] = duration;
 }
 
-static bool8 MovementAction_Delay_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (--sprite->data[3] == 0)
     {
@@ -5897,43 +5897,43 @@ static bool8 MovementAction_Delay_Step1(struct ObjectEvent *objectEvent, struct 
     return FALSE;
 }
 
-static bool8 MovementAction_Delay1_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay1_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementDelay(sprite, 1);
     return MovementAction_Delay_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Delay2_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay2_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementDelay(sprite, 2);
     return MovementAction_Delay_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Delay4_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay4_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementDelay(sprite, 4);
     return MovementAction_Delay_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Delay8_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay8_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementDelay(sprite, 8);
     return MovementAction_Delay_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_Delay16_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_Delay16_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementDelay(sprite, 16);
     return MovementAction_Delay_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFastDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_1);
     return MovementAction_WalkFastDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFastDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5943,13 +5943,13 @@ static bool8 MovementAction_WalkFastDown_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFastUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_1);
     return MovementAction_WalkFastUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFastUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5959,13 +5959,13 @@ static bool8 MovementAction_WalkFastUp_Step1(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFastLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_1);
     return MovementAction_WalkFastLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFastLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5975,13 +5975,13 @@ static bool8 MovementAction_WalkFastLeft_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFastRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_1);
     return MovementAction_WalkFastRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFastRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFastRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -5991,7 +5991,7 @@ static bool8 MovementAction_WalkFastRight_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-bool8 UpdateMovementGlide(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateMovementGlide(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (NpcTakeStep(sprite))
     {
@@ -6002,16 +6002,16 @@ bool8 UpdateMovementGlide(struct ObjectEvent *objectEvent, struct Sprite *sprite
     return FALSE;
 }
 
-u8 MovementAction_GlideDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_GlideDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_SOUTH)
+    if (objectEvent->facingDirection != DIR_SOUTH)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_SOUTH));
-    
+
     InitNpcForMovement(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_1);
     return MovementAction_GlideDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_GlideDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_GlideDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AnimateSprite(sprite);
     if (UpdateMovementGlide(objectEvent, sprite))
@@ -6022,16 +6022,16 @@ static bool8 MovementAction_GlideDown_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-u8 MovementAction_GlideUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_GlideUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_NORTH)
+    if (objectEvent->facingDirection != DIR_NORTH)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_NORTH));
-    
+
     InitNpcForMovement(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_1);
     return MovementAction_GlideUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_GlideUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_GlideUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AnimateSprite(sprite);
     if (UpdateMovementGlide(objectEvent, sprite))
@@ -6042,16 +6042,16 @@ static bool8 MovementAction_GlideUp_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-u8 MovementAction_GlideLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_GlideLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_WEST)
+    if (objectEvent->facingDirection != DIR_WEST)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_WEST));
-    
+
     InitNpcForMovement(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_1);
     return MovementAction_GlideLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_GlideLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_GlideLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AnimateSprite(sprite);
     if (UpdateMovementGlide(objectEvent, sprite))
@@ -6062,16 +6062,16 @@ static bool8 MovementAction_GlideLeft_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-u8 MovementAction_GlideRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_GlideRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_EAST)
+    if (objectEvent->facingDirection != DIR_EAST)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_EAST));
-    
+
     InitNpcForMovement(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_1);
     return MovementAction_GlideRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_GlideRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_GlideRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AnimateSprite(sprite);
     if (UpdateMovementGlide(objectEvent, sprite))
@@ -6082,7 +6082,7 @@ static bool8 MovementAction_GlideRight_Step1(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-void FaceDirectionFast(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void FaceDirectionFast(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     SetObjectEventDirection(objectEvent, direction);
     ShiftStillObjectEventCoords(objectEvent);
@@ -6090,47 +6090,47 @@ void FaceDirectionFast(struct ObjectEvent *objectEvent, struct Sprite *sprite, u
     sprite->data[2] = 1;
 }
 
-u8 MovementAction_FaceDownFast_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_FaceDownFast_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_SOUTH)
+    if (objectEvent->facingDirection != DIR_SOUTH)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_SOUTH));
-    
+
     AnimateSprite(sprite);
     FaceDirectionFast(objectEvent, sprite, DIR_SOUTH);
     return TRUE;
 }
 
-u8 MovementAction_FaceUpFast_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_FaceUpFast_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_NORTH)
+    if (objectEvent->facingDirection != DIR_NORTH)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_NORTH));
-    
+
     AnimateSprite(sprite);
     FaceDirectionFast(objectEvent, sprite, DIR_NORTH);
     return TRUE;
 }
 
-u8 MovementAction_FaceLeftFast_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_FaceLeftFast_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_WEST)
+    if (objectEvent->facingDirection != DIR_WEST)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_WEST));
-    
+
     AnimateSprite(sprite);
     FaceDirectionFast(objectEvent, sprite, DIR_WEST);
     return TRUE;
 }
 
-u8 MovementAction_FaceRightFast_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_FaceRightFast_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    if(objectEvent->facingDirection != DIR_EAST)
+    if (objectEvent->facingDirection != DIR_EAST)
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(DIR_EAST));
-    
+
     AnimateSprite(sprite);
     FaceDirectionFast(objectEvent, sprite, DIR_EAST);
     return TRUE;
 }
 
-void InitMoveInPlace(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 animNum, u16 duration)
+void InitMoveInPlace(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 animNum, u16 duration)
 {
     SetObjectEventDirection(objectEvent, direction);
     SetStepAnimHandleAlternation(objectEvent, sprite, animNum);
@@ -6139,7 +6139,7 @@ void InitMoveInPlace(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 
     sprite->data[3] = duration;
 }
 
-static bool8 MovementAction_WalkInPlace_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlace_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (--sprite->data[3] == 0)
     {
@@ -6150,7 +6150,7 @@ static bool8 MovementAction_WalkInPlace_Step1(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementAction_WalkInPlaceSlow_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceSlow_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (sprite->data[3] & 1)
         sprite->animDelayCounter++;
@@ -6158,109 +6158,109 @@ static bool8 MovementAction_WalkInPlaceSlow_Step1(struct ObjectEvent *objectEven
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceSlowDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceSlowDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_SOUTH, GetMoveDirectionAnimNum(DIR_SOUTH), 32);
     return MovementAction_WalkInPlaceSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceSlowUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceSlowUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_NORTH, GetMoveDirectionAnimNum(DIR_NORTH), 32);
     return MovementAction_WalkInPlaceSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceSlowLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceSlowLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_WEST, GetMoveDirectionAnimNum(DIR_WEST), 32);
     return MovementAction_WalkInPlaceSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceSlowRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceSlowRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_EAST, GetMoveDirectionAnimNum(DIR_EAST), 32);
     return MovementAction_WalkInPlaceSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceNormalDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceNormalDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_SOUTH, GetMoveDirectionAnimNum(DIR_SOUTH), 16);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceNormalUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceNormalUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_NORTH, GetMoveDirectionAnimNum(DIR_NORTH), 16);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceNormalLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceNormalLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_WEST, GetMoveDirectionAnimNum(DIR_WEST), 16);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceNormalRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceNormalRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_EAST, GetMoveDirectionAnimNum(DIR_EAST), 16);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFastDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFastDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_SOUTH, GetMoveDirectionFastAnimNum(DIR_SOUTH), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFastUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFastUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_NORTH, GetMoveDirectionFastAnimNum(DIR_NORTH), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFastLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFastLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_WEST, GetMoveDirectionFastAnimNum(DIR_WEST), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFastRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFastRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_EAST, GetMoveDirectionFastAnimNum(DIR_EAST), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFasterDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFasterDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_SOUTH, GetMoveDirectionFasterAnimNum(DIR_SOUTH), 4);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFasterUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFasterUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_NORTH, GetMoveDirectionFasterAnimNum(DIR_NORTH), 4);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFasterLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFasterLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_WEST, GetMoveDirectionFasterAnimNum(DIR_WEST), 4);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkInPlaceFasterRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkInPlaceFasterRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_EAST, GetMoveDirectionFasterAnimNum(DIR_EAST), 4);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RideWaterCurrentDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_2);
     return MovementAction_RideWaterCurrentDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RideWaterCurrentDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6270,13 +6270,13 @@ static bool8 MovementAction_RideWaterCurrentDown_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_RideWaterCurrentUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_2);
     return MovementAction_RideWaterCurrentUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RideWaterCurrentUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6286,13 +6286,13 @@ static bool8 MovementAction_RideWaterCurrentUp_Step1(struct ObjectEvent *objectE
     return FALSE;
 }
 
-static bool8 MovementAction_RideWaterCurrentLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_2);
     return MovementAction_RideWaterCurrentLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RideWaterCurrentLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6302,13 +6302,13 @@ static bool8 MovementAction_RideWaterCurrentLeft_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_RideWaterCurrentRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_2);
     return MovementAction_RideWaterCurrentRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RideWaterCurrentRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RideWaterCurrentRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6318,13 +6318,13 @@ static bool8 MovementAction_RideWaterCurrentRight_Step1(struct ObjectEvent *obje
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFasterDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FASTER);
     return MovementAction_WalkFasterDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFasterDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6334,13 +6334,13 @@ static bool8 MovementAction_WalkFasterDown_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFasterUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FASTER);
     return MovementAction_WalkFasterUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFasterUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6350,13 +6350,13 @@ static bool8 MovementAction_WalkFasterUp_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFasterLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FASTER);
     return MovementAction_WalkFasterLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFasterLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6366,13 +6366,13 @@ static bool8 MovementAction_WalkFasterLeft_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_WalkFasterRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FASTER);
     return MovementAction_WalkFasterRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkFasterRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkFasterRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6382,13 +6382,13 @@ static bool8 MovementAction_WalkFasterRight_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_SlideDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FASTEST);
     return MovementAction_SlideDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SlideDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6398,13 +6398,13 @@ static bool8 MovementAction_SlideDown_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_SlideUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FASTEST);
     return MovementAction_SlideUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SlideUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6414,13 +6414,13 @@ static bool8 MovementAction_SlideUp_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-static bool8 MovementAction_SlideLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FASTEST);
     return MovementAction_SlideLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SlideLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6430,13 +6430,13 @@ static bool8 MovementAction_SlideLeft_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_SlideRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMovementNormal(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FASTEST);
     return MovementAction_SlideRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SlideRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SlideRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6446,13 +6446,13 @@ static bool8 MovementAction_SlideRight_Step1(struct ObjectEvent *objectEvent, st
     return FALSE;
 }
 
-static bool8 MovementAction_PlayerRunDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartRunningAnim(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_PlayerRunDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_PlayerRunDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6462,13 +6462,13 @@ static bool8 MovementAction_PlayerRunDown_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_PlayerRunUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartRunningAnim(objectEvent, sprite, DIR_NORTH);
     return MovementAction_PlayerRunUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_PlayerRunUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6478,13 +6478,13 @@ static bool8 MovementAction_PlayerRunUp_Step1(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementAction_PlayerRunLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartRunningAnim(objectEvent, sprite, DIR_WEST);
     return MovementAction_PlayerRunLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_PlayerRunLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6494,13 +6494,13 @@ static bool8 MovementAction_PlayerRunLeft_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_PlayerRunRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartRunningAnim(objectEvent, sprite, DIR_EAST);
     return MovementAction_PlayerRunRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_PlayerRunRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PlayerRunRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -6510,7 +6510,7 @@ static bool8 MovementAction_PlayerRunRight_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-void InitNpcForRunSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitNpcForRunSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     s16 x;
     s16 y;
@@ -6526,13 +6526,13 @@ void InitNpcForRunSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, u
     sprite->data[2] = 1;
 }
 
-void InitRunSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitRunSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitNpcForRunSlow(objectEvent, sprite, direction);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetRunningDirectionAnimNum(objectEvent->facingDirection));
 }
 
-bool8 UpdateRunSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+bool8 UpdateRunSlow(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRunSlowAnim(sprite))
     {
@@ -6544,13 +6544,13 @@ bool8 UpdateRunSlow(struct ObjectEvent *objectEvent, struct Sprite *sprite)
     return FALSE;
 }
 
-static bool8 MovementAction_RunDownSlow_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunDownSlow_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitRunSlow(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_RunDownSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RunDownSlow_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunDownSlow_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRunSlow(objectEvent, sprite))
     {
@@ -6560,13 +6560,13 @@ static bool8 MovementAction_RunDownSlow_Step1(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementAction_RunUpSlow_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunUpSlow_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitRunSlow(objectEvent, sprite, DIR_NORTH);
     return MovementAction_RunUpSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RunUpSlow_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunUpSlow_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRunSlow(objectEvent, sprite))
     {
@@ -6576,13 +6576,13 @@ static bool8 MovementAction_RunUpSlow_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_RunLeftSlow_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunLeftSlow_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitRunSlow(objectEvent, sprite, DIR_WEST);
     return MovementAction_RunLeftSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RunLeftSlow_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunLeftSlow_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRunSlow(objectEvent, sprite))
     {
@@ -6592,13 +6592,13 @@ static bool8 MovementAction_RunLeftSlow_Step1(struct ObjectEvent *objectEvent, s
     return FALSE;
 }
 
-static bool8 MovementAction_RunRightSlow_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunRightSlow_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitRunSlow(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_RunRightSlow_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RunRightSlow_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RunRightSlow_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRunSlow(objectEvent, sprite))
     {
@@ -6608,20 +6608,20 @@ static bool8 MovementAction_RunRightSlow_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-void StartSpriteAnimInDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 animNum)
+void StartSpriteAnimInDirection(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 animNum)
 {
     SetAndStartSpriteAnim(sprite, animNum, 0);
     SetObjectEventDirection(objectEvent, direction);
     sprite->data[2] = 1;
 }
 
-static bool8 MovementAction_StartAnimInDirection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_StartAnimInDirection_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, objectEvent->movementDirection, sprite->animNum);
     return FALSE;
 }
 
-static bool8 MovementAction_WaitSpriteAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WaitSpriteAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (SpriteAnimEnded(sprite))
     {
@@ -6631,19 +6631,19 @@ static bool8 MovementAction_WaitSpriteAnim(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-void InitJumpSpecial(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void InitJumpSpecial(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     InitJump(objectEvent, sprite, direction, JUMP_DISTANCE_NORMAL, JUMP_TYPE_HIGH);
     StartSpriteAnim(sprite, GetJumpSpecialDirectionAnimNum(direction));
 }
 
-static bool8 MovementAction_JumpSpecialDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_JumpSpecialDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6654,13 +6654,13 @@ static bool8 MovementAction_JumpSpecialDown_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_NORTH);
     return MovementAction_JumpSpecialUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6671,13 +6671,13 @@ static bool8 MovementAction_JumpSpecialUp_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_WEST);
     return MovementAction_JumpSpecialLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6688,13 +6688,13 @@ static bool8 MovementAction_JumpSpecialLeft_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_EAST);
     return MovementAction_JumpSpecialRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6705,13 +6705,13 @@ static bool8 MovementAction_JumpSpecialRight_Step1(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_SOUTH);
     return MovementAction_JumpSpecialWithEffectDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6721,13 +6721,13 @@ static bool8 MovementAction_JumpSpecialWithEffectDown_Step1(struct ObjectEvent *
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_NORTH);
     return MovementAction_JumpSpecialWithEffectUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6737,13 +6737,13 @@ static bool8 MovementAction_JumpSpecialWithEffectUp_Step1(struct ObjectEvent *ob
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_WEST);
     return MovementAction_JumpSpecialWithEffectLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6753,13 +6753,13 @@ static bool8 MovementAction_JumpSpecialWithEffectLeft_Step1(struct ObjectEvent *
     return FALSE;
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpSpecial(objectEvent, sprite, DIR_EAST);
     return MovementAction_JumpSpecialWithEffectRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpSpecialWithEffectRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpSpecialWithEffectRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpSpecialAnim(objectEvent, sprite))
     {
@@ -6769,7 +6769,7 @@ static bool8 MovementAction_JumpSpecialWithEffectRight_Step1(struct ObjectEvent 
     return FALSE;
 }
 
-static bool8 MovementAction_FacePlayer_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FacePlayer_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 playerObjectId;
 
@@ -6781,7 +6781,7 @@ static bool8 MovementAction_FacePlayer_Step0(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 MovementAction_FaceAwayPlayer_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceAwayPlayer_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u8 playerObjectId;
 
@@ -6793,27 +6793,27 @@ static bool8 MovementAction_FaceAwayPlayer_Step0(struct ObjectEvent *objectEvent
     return TRUE;
 }
 
-static bool8 MovementAction_LockFacingDirection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_LockFacingDirection_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->facingDirectionLocked = TRUE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_UnlockFacingDirection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_UnlockFacingDirection_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->facingDirectionLocked = FALSE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_JumpDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_NORMAL, JUMP_TYPE_NORMAL);
     return MovementAction_JumpDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6824,13 +6824,13 @@ static bool8 MovementAction_JumpDown_Step1(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementAction_JumpUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_NORMAL, JUMP_TYPE_NORMAL);
     return MovementAction_JumpUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6841,13 +6841,13 @@ static bool8 MovementAction_JumpUp_Step1(struct ObjectEvent *objectEvent, struct
     return FALSE;
 }
 
-static bool8 MovementAction_JumpLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_NORMAL, JUMP_TYPE_NORMAL);
     return MovementAction_JumpLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6858,13 +6858,13 @@ static bool8 MovementAction_JumpLeft_Step1(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementAction_JumpRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_NORMAL, JUMP_TYPE_NORMAL);
     return MovementAction_JumpRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6875,13 +6875,13 @@ static bool8 MovementAction_JumpRight_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_HIGH);
     return MovementAction_JumpInPlaceDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6892,13 +6892,13 @@ static bool8 MovementAction_JumpInPlaceDown_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_HIGH);
     return MovementAction_JumpInPlaceUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6909,13 +6909,13 @@ static bool8 MovementAction_JumpInPlaceUp_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_HIGH);
     return MovementAction_JumpInPlaceLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6926,13 +6926,13 @@ static bool8 MovementAction_JumpInPlaceLeft_Step1(struct ObjectEvent *objectEven
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_HIGH);
     return MovementAction_JumpInPlaceRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -6943,13 +6943,13 @@ static bool8 MovementAction_JumpInPlaceRight_Step1(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceDownUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceDownUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_NORMAL);
     return MovementAction_JumpInPlaceDownUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceDownUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceDownUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
@@ -6960,13 +6960,13 @@ static bool8 MovementAction_JumpInPlaceDownUp_Step1(struct ObjectEvent *objectEv
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceUpDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceUpDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_NORMAL);
     return MovementAction_JumpInPlaceUpDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceUpDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceUpDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
@@ -6977,13 +6977,13 @@ static bool8 MovementAction_JumpInPlaceUpDown_Step1(struct ObjectEvent *objectEv
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceLeftRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceLeftRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_NORMAL);
     return MovementAction_JumpInPlaceLeftRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceLeftRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceLeftRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
@@ -6994,13 +6994,13 @@ static bool8 MovementAction_JumpInPlaceLeftRight_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_JumpInPlaceRightLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceRightLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitJumpRegular(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_NORMAL);
     return MovementAction_JumpInPlaceRightLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_JumpInPlaceRightLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_JumpInPlaceRightLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
@@ -7011,61 +7011,61 @@ static bool8 MovementAction_JumpInPlaceRightLeft_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_FaceOriginalDirection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FaceOriginalDirection_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FaceDirection(objectEvent, sprite, gInitialMovementTypeFacingDirections[objectEvent->movementType]);
     return TRUE;
 }
 
-static bool8 MovementAction_NurseJoyBowDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_NurseJoyBowDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_SOUTH, ANIM_NURSE_BOW);
     return FALSE;
 }
 
-static bool8 MovementAction_EnableJumpLandingGroundEffect_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EnableJumpLandingGroundEffect_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->disableJumpLandingGroundEffect = FALSE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_DisableJumpLandingGroundEffect_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_DisableJumpLandingGroundEffect_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->disableJumpLandingGroundEffect = TRUE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_DisableAnimation_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_DisableAnimation_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->inanimate = TRUE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_RestoreAnimation_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RestoreAnimation_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->inanimate = GetObjectEventGraphicsInfo(objectEvent->graphicsId)->inanimate;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_SetInvisible_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SetInvisible_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->invisible = TRUE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_SetVisible_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SetVisible_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->invisible = FALSE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_EmoteExclamationMark_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EmoteExclamationMark_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventGetLocalIdAndMap(objectEvent, &gFieldEffectArguments[0], &gFieldEffectArguments[1], &gFieldEffectArguments[2]);
     FieldEffectStart(FLDEFF_EXCLAMATION_MARK_ICON);
@@ -7073,7 +7073,7 @@ static bool8 MovementAction_EmoteExclamationMark_Step0(struct ObjectEvent *objec
     return TRUE;
 }
 
-static bool8 MovementAction_EmoteQuestionMark_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EmoteQuestionMark_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventGetLocalIdAndMap(objectEvent, &gFieldEffectArguments[0], &gFieldEffectArguments[1], &gFieldEffectArguments[2]);
     FieldEffectStart(FLDEFF_QUESTION_MARK_ICON);
@@ -7081,7 +7081,7 @@ static bool8 MovementAction_EmoteQuestionMark_Step0(struct ObjectEvent *objectEv
     return TRUE;
 }
 
-static bool8 MovementAction_EmoteX_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EmoteX_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventGetLocalIdAndMap(objectEvent, &gFieldEffectArguments[0], &gFieldEffectArguments[1], &gFieldEffectArguments[2]);
     FieldEffectStart(FLDEFF_X_ICON);
@@ -7089,7 +7089,7 @@ static bool8 MovementAction_EmoteX_Step0(struct ObjectEvent *objectEvent, struct
     return TRUE;
 }
 
-static bool8 MovementAction_EmoteDoubleExclamationMark_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EmoteDoubleExclamationMark_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventGetLocalIdAndMap(objectEvent, &gFieldEffectArguments[0], &gFieldEffectArguments[1], &gFieldEffectArguments[2]);
     FieldEffectStart(FLDEFF_DOUBLE_EXCL_MARK_ICON);
@@ -7097,7 +7097,7 @@ static bool8 MovementAction_EmoteDoubleExclamationMark_Step0(struct ObjectEvent 
     return TRUE;
 }
 
-static bool8 MovementAction_EmoteSmile_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_EmoteSmile_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     ObjectEventGetLocalIdAndMap(objectEvent, &gFieldEffectArguments[0], &gFieldEffectArguments[1], &gFieldEffectArguments[2]);
     FieldEffectStart(FLDEFF_SMILEY_FACE_ICON);
@@ -7105,7 +7105,7 @@ static bool8 MovementAction_EmoteSmile_Step0(struct ObjectEvent *objectEvent, st
     return TRUE;
 }
 
-static bool8 MovementAction_RevealTrainer_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RevealTrainer_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (objectEvent->movementType == MOVEMENT_TYPE_BURIED)
     {
@@ -7122,7 +7122,7 @@ static bool8 MovementAction_RevealTrainer_Step0(struct ObjectEvent *objectEvent,
     return MovementAction_RevealTrainer_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_RevealTrainer_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RevealTrainer_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateRevealDisguise(objectEvent))
     {
@@ -7132,14 +7132,14 @@ static bool8 MovementAction_RevealTrainer_Step1(struct ObjectEvent *objectEvent,
     return FALSE;
 }
 
-static bool8 MovementAction_RockSmashBreak_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RockSmashBreak_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     SetAndStartSpriteAnim(sprite, ANIM_REMOVE_OBSTACLE, 0);
     sprite->data[2] = 1;
     return FALSE;
 }
 
-static bool8 MovementAction_RockSmashBreak_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RockSmashBreak_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (SpriteAnimEnded(sprite))
     {
@@ -7149,7 +7149,7 @@ static bool8 MovementAction_RockSmashBreak_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_RockSmashBreak_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RockSmashBreak_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->invisible ^= TRUE;
     if (WaitForMovementDelay(sprite))
@@ -7160,14 +7160,14 @@ static bool8 MovementAction_RockSmashBreak_Step2(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static bool8 MovementAction_CutTree_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_CutTree_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     SetAndStartSpriteAnim(sprite, ANIM_REMOVE_OBSTACLE, 0);
     sprite->data[2] = 1;
     return FALSE;
 }
 
-static bool8 MovementAction_CutTree_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_CutTree_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (SpriteAnimEnded(sprite))
     {
@@ -7177,7 +7177,7 @@ static bool8 MovementAction_CutTree_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-static bool8 MovementAction_CutTree_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_CutTree_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->invisible ^= TRUE;
     if (WaitForMovementDelay(sprite))
@@ -7188,21 +7188,21 @@ static bool8 MovementAction_CutTree_Step2(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-static bool8 MovementAction_SetFixedPriority_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SetFixedPriority_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->fixedPriority = TRUE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_ClearFixedPriority_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_ClearFixedPriority_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     objectEvent->fixedPriority = FALSE;
     sprite->data[2] = 1;
     return TRUE;
 }
 
-static bool8 MovementAction_InitAffineAnim_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_InitAffineAnim_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
     InitSpriteAffineAnim(sprite);
@@ -7211,7 +7211,7 @@ static bool8 MovementAction_InitAffineAnim_Step0(struct ObjectEvent *objectEvent
     return TRUE;
 }
 
-static bool8 MovementAction_ClearAffineAnim_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_ClearAffineAnim_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     FreeOamMatrix(sprite->oam.matrixNum);
     sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
@@ -7219,7 +7219,7 @@ static bool8 MovementAction_ClearAffineAnim_Step0(struct ObjectEvent *objectEven
     return TRUE;
 }
 
-static bool8 MovementAction_WalkDownStartAffine_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkDownStartAffine_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_SOUTH);
     sprite->affineAnimPaused = FALSE;
@@ -7227,7 +7227,7 @@ static bool8 MovementAction_WalkDownStartAffine_Step0(struct ObjectEvent *object
     return MovementAction_WalkDownStartAffine_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkDownStartAffine_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkDownStartAffine_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -7238,7 +7238,7 @@ static bool8 MovementAction_WalkDownStartAffine_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_WalkDownAffine_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkDownAffine_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitWalkSlower(objectEvent, sprite, DIR_SOUTH);
     sprite->affineAnimPaused = FALSE;
@@ -7246,7 +7246,7 @@ static bool8 MovementAction_WalkDownAffine_Step0(struct ObjectEvent *objectEvent
     return MovementAction_WalkDownAffine_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_WalkDownAffine_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_WalkDownAffine_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateWalkSlower(objectEvent, sprite))
     {
@@ -7257,7 +7257,7 @@ static bool8 MovementAction_WalkDownAffine_Step1(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-void AcroWheelieFaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)
+void AcroWheelieFaceDirection(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction)
 {
     SetObjectEventDirection(objectEvent, direction);
     ShiftStillObjectEventCoords(objectEvent);
@@ -7266,116 +7266,116 @@ void AcroWheelieFaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sp
     sprite->data[2] = 1;
 }
 
-static bool8 MovementAction_AcroWheelieFaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieFaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AcroWheelieFaceDirection(objectEvent, sprite, DIR_SOUTH);
     return TRUE;
 }
 
-static bool8 MovementAction_AcroWheelieFaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieFaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AcroWheelieFaceDirection(objectEvent, sprite, DIR_NORTH);
     return TRUE;
 }
 
-static bool8 MovementAction_AcroWheelieFaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieFaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AcroWheelieFaceDirection(objectEvent, sprite, DIR_WEST);
     return TRUE;
 }
 
-static bool8 MovementAction_AcroWheelieFaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieFaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     AcroWheelieFaceDirection(objectEvent, sprite, DIR_EAST);
     return TRUE;
 }
 
-static bool8 MovementAction_AcroPopWheelieDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_SOUTH, GetAcroWheelieDirectionAnimNum(DIR_SOUTH));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_NORTH, GetAcroWheelieDirectionAnimNum(DIR_NORTH));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_WEST, GetAcroWheelieDirectionAnimNum(DIR_WEST));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_EAST, GetAcroWheelieDirectionAnimNum(DIR_EAST));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroEndWheelieFaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroEndWheelieFaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_SOUTH, GetAcroEndWheelieDirectionAnimNum(DIR_SOUTH));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroEndWheelieFaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroEndWheelieFaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_NORTH, GetAcroEndWheelieDirectionAnimNum(DIR_NORTH));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroEndWheelieFaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroEndWheelieFaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_WEST, GetAcroEndWheelieDirectionAnimNum(DIR_WEST));
     return FALSE;
 }
 
-static bool8 MovementAction_AcroEndWheelieFaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroEndWheelieFaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_EAST, GetAcroEndWheelieDirectionAnimNum(DIR_EAST));
     return FALSE;
 }
 
-static bool8 MovementAction_UnusedAcroActionDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_UnusedAcroActionDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_SOUTH, GetAcroUnusedActionDirectionAnimNum(DIR_SOUTH));
     return FALSE;
 }
 
-static bool8 MovementAction_UnusedAcroActionUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_UnusedAcroActionUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_NORTH, GetAcroUnusedActionDirectionAnimNum(DIR_NORTH));
     return FALSE;
 }
 
-static bool8 MovementAction_UnusedAcroActionLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_UnusedAcroActionLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_WEST, GetAcroUnusedActionDirectionAnimNum(DIR_WEST));
     return FALSE;
 }
 
-static bool8 MovementAction_UnusedAcroActionRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_UnusedAcroActionRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnimInDirection(objectEvent, sprite, DIR_EAST, GetAcroUnusedActionDirectionAnimNum(DIR_EAST));
     return FALSE;
 }
 
-void InitAcroWheelieJump(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 distance, u8 type)
+void InitAcroWheelieJump(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 distance, u8 type)
 {
     InitJump(objectEvent, sprite, direction, distance, type);
     StartSpriteAnimIfDifferent(sprite, GetAcroWheelieDirectionAnimNum(direction));
     DoShadowFieldEffect(objectEvent);
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopFaceDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7386,13 +7386,13 @@ static bool8 MovementAction_AcroWheelieHopFaceDown_Step1(struct ObjectEvent *obj
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopFaceUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7403,13 +7403,13 @@ static bool8 MovementAction_AcroWheelieHopFaceUp_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopFaceLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7420,13 +7420,13 @@ static bool8 MovementAction_AcroWheelieHopFaceLeft_Step1(struct ObjectEvent *obj
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_IN_PLACE, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopFaceRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopFaceRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopFaceRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7437,13 +7437,13 @@ static bool8 MovementAction_AcroWheelieHopFaceRight_Step1(struct ObjectEvent *ob
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_NORMAL, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7454,13 +7454,13 @@ static bool8 MovementAction_AcroWheelieHopDown_Step1(struct ObjectEvent *objectE
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_NORMAL, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7471,13 +7471,13 @@ static bool8 MovementAction_AcroWheelieHopUp_Step1(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_NORMAL, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7488,13 +7488,13 @@ static bool8 MovementAction_AcroWheelieHopLeft_Step1(struct ObjectEvent *objectE
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieHopRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_NORMAL, JUMP_TYPE_LOW);
     return MovementAction_AcroWheelieHopRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieHopRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieHopRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7505,13 +7505,13 @@ static bool8 MovementAction_AcroWheelieHopRight_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieJumpDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_SOUTH, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_AcroWheelieJumpDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieJumpDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7522,13 +7522,13 @@ static bool8 MovementAction_AcroWheelieJumpDown_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieJumpUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_NORTH, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_AcroWheelieJumpUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieJumpUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7539,13 +7539,13 @@ static bool8 MovementAction_AcroWheelieJumpUp_Step1(struct ObjectEvent *objectEv
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieJumpLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_WEST, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_AcroWheelieJumpLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieJumpLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7556,13 +7556,13 @@ static bool8 MovementAction_AcroWheelieJumpLeft_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieJumpRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieJump(objectEvent, sprite, DIR_EAST, JUMP_DISTANCE_FAR, JUMP_TYPE_HIGH);
     return MovementAction_AcroWheelieJumpRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieJumpRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieJumpRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
@@ -7573,44 +7573,44 @@ static bool8 MovementAction_AcroWheelieJumpRight_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieInPlaceDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieInPlaceDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_SOUTH, GetAcroWheeliePedalDirectionAnimNum(DIR_SOUTH), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieInPlaceUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieInPlaceUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_NORTH, GetAcroWheeliePedalDirectionAnimNum(DIR_NORTH), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieInPlaceLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieInPlaceLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_WEST, GetAcroWheeliePedalDirectionAnimNum(DIR_WEST), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieInPlaceRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieInPlaceRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitMoveInPlace(objectEvent, sprite, DIR_EAST, GetAcroWheeliePedalDirectionAnimNum(DIR_EAST), 8);
     return MovementAction_WalkInPlace_Step1(objectEvent, sprite);
 }
 
-void InitAcroPopWheelie(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed)
+void InitAcroPopWheelie(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 speed)
 {
     InitNpcForMovement(objectEvent, sprite, direction, speed);
     StartSpriteAnim(sprite, GetAcroWheelieDirectionAnimNum(objectEvent->facingDirection));
     SeekSpriteAnim(sprite, 0);
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroPopWheelie(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_1);
     return MovementAction_AcroPopWheelieMoveDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7620,13 +7620,13 @@ static bool8 MovementAction_AcroPopWheelieMoveDown_Step1(struct ObjectEvent *obj
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroPopWheelie(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_1);
     return MovementAction_AcroPopWheelieMoveUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7636,13 +7636,13 @@ static bool8 MovementAction_AcroPopWheelieMoveUp_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroPopWheelie(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_1);
     return MovementAction_AcroPopWheelieMoveLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7652,13 +7652,13 @@ static bool8 MovementAction_AcroPopWheelieMoveLeft_Step1(struct ObjectEvent *obj
     return FALSE;
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroPopWheelie(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_1);
     return MovementAction_AcroPopWheelieMoveRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroPopWheelieMoveRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroPopWheelieMoveRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7668,19 +7668,19 @@ static bool8 MovementAction_AcroPopWheelieMoveRight_Step1(struct ObjectEvent *ob
     return FALSE;
 }
 
-void InitAcroWheelieMove(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed)
+void InitAcroWheelieMove(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 speed)
 {
     InitNpcForMovement(objectEvent, sprite, direction, speed);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetAcroWheeliePedalDirectionAnimNum(objectEvent->facingDirection));
 }
 
-static bool8 MovementAction_AcroWheelieMoveDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieMove(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_1);
     return MovementAction_AcroWheelieMoveDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieMoveDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7690,13 +7690,13 @@ static bool8 MovementAction_AcroWheelieMoveDown_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieMoveUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieMove(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_1);
     return MovementAction_AcroWheelieMoveUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieMoveUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7706,13 +7706,13 @@ static bool8 MovementAction_AcroWheelieMoveUp_Step1(struct ObjectEvent *objectEv
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieMoveLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieMove(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_1);
     return MovementAction_AcroWheelieMoveLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieMoveLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7722,13 +7722,13 @@ static bool8 MovementAction_AcroWheelieMoveLeft_Step1(struct ObjectEvent *object
     return FALSE;
 }
 
-static bool8 MovementAction_AcroWheelieMoveRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitAcroWheelieMove(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_1);
     return MovementAction_AcroWheelieMoveRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_AcroWheelieMoveRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_AcroWheelieMoveRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7738,20 +7738,20 @@ static bool8 MovementAction_AcroWheelieMoveRight_Step1(struct ObjectEvent *objec
     return FALSE;
 }
 
-void InitSpin(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed)
+void InitSpin(struct ObjectEvent* objectEvent, struct Sprite* sprite, u8 direction, u8 speed)
 {
     InitNpcForMovement(objectEvent, sprite, direction, speed);
     SetStepAnimHandleAlternation(objectEvent, sprite, GetSpinDirectionAnimNum(objectEvent->facingDirection));
     SeekSpriteAnim(sprite, 0);
 }
 
-static bool8 MovementAction_SpinDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitSpin(objectEvent, sprite, DIR_SOUTH, MOVE_SPEED_FAST_1);
     return MovementAction_SpinDown_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SpinDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7761,13 +7761,13 @@ static bool8 MovementAction_SpinDown_Step1(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementAction_SpinUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitSpin(objectEvent, sprite, DIR_NORTH, MOVE_SPEED_FAST_1);
     return MovementAction_SpinUp_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SpinUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7777,13 +7777,13 @@ static bool8 MovementAction_SpinUp_Step1(struct ObjectEvent *objectEvent, struct
     return FALSE;
 }
 
-static bool8 MovementAction_SpinLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinLeft_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitSpin(objectEvent, sprite, DIR_WEST, MOVE_SPEED_FAST_1);
     return MovementAction_SpinLeft_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SpinLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinLeft_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7793,13 +7793,13 @@ static bool8 MovementAction_SpinLeft_Step1(struct ObjectEvent *objectEvent, stru
     return FALSE;
 }
 
-static bool8 MovementAction_SpinRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinRight_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     InitSpin(objectEvent, sprite, DIR_EAST, MOVE_SPEED_FAST_1);
     return MovementAction_SpinRight_Step1(objectEvent, sprite);
 }
 
-static bool8 MovementAction_SpinRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_SpinRight_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (UpdateMovementNormal(objectEvent, sprite))
     {
@@ -7809,7 +7809,7 @@ static bool8 MovementAction_SpinRight_Step1(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_RaiseHand_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RaiseHand_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnim(sprite, ANIM_RAISE_HAND);
     sprite->animPaused = FALSE;
@@ -7822,17 +7822,17 @@ static bool8 MovementAction_RaiseHand_Step0(struct ObjectEvent *objectEvent, str
     return FALSE;
 }
 
-static bool8 MovementAction_RaiseHandAndStop_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RaiseHandAndStop_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return sprite->animEnded;
 }
 
-static bool8 MovementAction_RaiseHandAndJump_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RaiseHandAndJump_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     switch (sprite->data[7])
     {
     case 0:
-        if((sprite->data[6] += 10) > 127)
+        if ((sprite->data[6] += 10) > 127)
         {
             sprite->data[6] = 0;
             sprite->data[5]++;
@@ -7873,7 +7873,7 @@ static bool8 MovementAction_RaiseHandAndJump_Step1(struct ObjectEvent *objectEve
     return FALSE;
 }
 
-static bool8 MovementAction_RaiseHandAndSwim_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_RaiseHandAndSwim_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     bool8 ret;
     sprite->data[7] = (sprite->data[7] + 4) & 0xFF;
@@ -7885,7 +7885,7 @@ static bool8 MovementAction_RaiseHandAndSwim_Step1(struct ObjectEvent *objectEve
     return ret;
 }
 
-static bool8 MovementAction_ShakeHeadOrWalkInPlace_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_ShakeHeadOrWalkInPlace_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     StartSpriteAnim(sprite, ANIM_SHAKE_HEAD_OR_WALK_IN_PLACE);
     sprite->animPaused = FALSE;
@@ -7894,30 +7894,30 @@ static bool8 MovementAction_ShakeHeadOrWalkInPlace_Step0(struct ObjectEvent *obj
     return FALSE;
 }
 
-static bool8 MovementAction_ShakeHeadOrWalkInPlace_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_ShakeHeadOrWalkInPlace_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return sprite->animEnded;
 }
 
-u8 MovementAction_Finish(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_Finish(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return TRUE;
 }
 
-static bool8 MovementAction_PauseSpriteAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_PauseSpriteAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->animPaused = TRUE;
     return TRUE;
 }
 
-static bool8 MovementAction_FlyUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FlyUp_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->y2 = 0;
     sprite->data[2]++;
     return FALSE;
 }
 
-static bool8 MovementAction_FlyUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FlyUp_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->y2 -= 8;
     if (sprite->y2 == -160)
@@ -7925,14 +7925,14 @@ static bool8 MovementAction_FlyUp_Step1(struct ObjectEvent *objectEvent, struct 
     return FALSE;
 }
 
-static bool8 MovementAction_FlyDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FlyDown_Step0(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->y2 = -160;
     sprite->data[2]++;
     return FALSE;
 }
 
-static bool8 MovementAction_FlyDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static bool8 MovementAction_FlyDown_Step1(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->y2 += 8;
     if (sprite->y2 == 0)
@@ -7940,12 +7940,12 @@ static bool8 MovementAction_FlyDown_Step1(struct ObjectEvent *objectEvent, struc
     return FALSE;
 }
 
-u8 MovementAction_FlyUp_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+u8 MovementAction_FlyUp_Step2(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     return TRUE;
 }
 
-static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (objectEvent->disableAnim)
     {
@@ -7953,7 +7953,7 @@ static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent *objectEvent, st
     }
 }
 
-static void TryEnableObjectEventAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void TryEnableObjectEventAnim(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     if (objectEvent->enableAnim)
     {
@@ -7963,17 +7963,17 @@ static void TryEnableObjectEventAnim(struct ObjectEvent *objectEvent, struct Spr
     }
 }
 
-static void UpdateObjectEventVisibility(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void UpdateObjectEventVisibility(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     CalcWhetherObjectIsOffscreen(objectEvent, sprite);
     UpdateObjEventSpriteVisibility(objectEvent, sprite);
 }
 
-static void CalcWhetherObjectIsOffscreen(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void CalcWhetherObjectIsOffscreen(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     u16 x, y;
     u16 x2, y2;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
     s16 var;
 
     objectEvent->offScreen = FALSE;
@@ -7990,10 +7990,10 @@ static void CalcWhetherObjectIsOffscreen(struct ObjectEvent *objectEvent, struct
     }
     x2 = graphicsInfo->width + (s16)x;
     y2 = graphicsInfo->height + (s16)y;
-    
+
     if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SSANNE_EXTERIOR)
-         && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SSANNE_EXTERIOR)
-         && objectEvent->localId == 1)
+        && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SSANNE_EXTERIOR)
+        && objectEvent->localId == 1)
     {
         var = -32;
     }
@@ -8011,7 +8011,7 @@ static void CalcWhetherObjectIsOffscreen(struct ObjectEvent *objectEvent, struct
     }
 }
 
-static void UpdateObjEventSpriteVisibility(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void UpdateObjEventSpriteVisibility(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
     sprite->invisible = FALSE;
     if (objectEvent->invisible || objectEvent->offScreen)
@@ -8020,7 +8020,7 @@ static void UpdateObjEventSpriteVisibility(struct ObjectEvent *objectEvent, stru
     }
 }
 
-static void GetAllGroundEffectFlags_OnSpawn(struct ObjectEvent *objEvent, u32 *flags)
+static void GetAllGroundEffectFlags_OnSpawn(struct ObjectEvent* objEvent, u32* flags)
 {
     ObjectEventUpdateMetatileBehaviors(objEvent);
     GetGroundEffectFlags_Reflection(objEvent, flags);
@@ -8032,7 +8032,7 @@ static void GetAllGroundEffectFlags_OnSpawn(struct ObjectEvent *objEvent, u32 *f
     GetGroundEffectFlags_HotSprings(objEvent, flags);
 }
 
-static void GetAllGroundEffectFlags_OnBeginStep(struct ObjectEvent *objEvent, u32 *flags)
+static void GetAllGroundEffectFlags_OnBeginStep(struct ObjectEvent* objEvent, u32* flags)
 {
     ObjectEventUpdateMetatileBehaviors(objEvent);
     GetGroundEffectFlags_Reflection(objEvent, flags);
@@ -8046,7 +8046,7 @@ static void GetAllGroundEffectFlags_OnBeginStep(struct ObjectEvent *objEvent, u3
     GetGroundEffectFlags_HotSprings(objEvent, flags);
 }
 
-static void GetAllGroundEffectFlags_OnFinishStep(struct ObjectEvent *objEvent, u32 *flags)
+static void GetAllGroundEffectFlags_OnFinishStep(struct ObjectEvent* objEvent, u32* flags)
 {
     ObjectEventUpdateMetatileBehaviors(objEvent);
     GetGroundEffectFlags_ShallowFlowingWater(objEvent, flags);
@@ -8059,13 +8059,13 @@ static void GetAllGroundEffectFlags_OnFinishStep(struct ObjectEvent *objEvent, u
     GetGroundEffectFlags_JumpLanding(objEvent, flags);
 }
 
-static void ObjectEventUpdateMetatileBehaviors(struct ObjectEvent *objEvent)
+static void ObjectEventUpdateMetatileBehaviors(struct ObjectEvent* objEvent)
 {
     objEvent->previousMetatileBehavior = MapGridGetMetatileBehaviorAt(objEvent->previousCoords.x, objEvent->previousCoords.y);
     objEvent->currentMetatileBehavior = MapGridGetMetatileBehaviorAt(objEvent->currentCoords.x, objEvent->currentCoords.y);
 }
 
-static void GetGroundEffectFlags_Reflection(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_Reflection(struct ObjectEvent* objEvent, u32* flags)
 {
     u32 reflectionFlags[2] = { GROUND_EFFECT_FLAG_REFLECTION, GROUND_EFFECT_FLAG_ICE_REFLECTION };
     u8 type = ObjectEventCheckForReflectiveSurface(objEvent);
@@ -8085,44 +8085,44 @@ static void GetGroundEffectFlags_Reflection(struct ObjectEvent *objEvent, u32 *f
     }
 }
 
-static void GetGroundEffectFlags_TallGrassOnSpawn(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_TallGrassOnSpawn(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsTallGrass(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_TALL_GRASS_ON_SPAWN;
 }
 
-static void GetGroundEffectFlags_TallGrassOnBeginStep(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_TallGrassOnBeginStep(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsTallGrass(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_TALL_GRASS_ON_MOVE;
 }
 
-static void GetGroundEffectFlags_LongGrassOnSpawn(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_LongGrassOnSpawn(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsLongGrass(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_LONG_GRASS_ON_SPAWN;
 }
 
-static void GetGroundEffectFlags_LongGrassOnBeginStep(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_LongGrassOnBeginStep(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsLongGrass(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_LONG_GRASS_ON_MOVE;
 }
 
-static void GetGroundEffectFlags_Tracks(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_Tracks(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsDeepSand(objEvent->previousMetatileBehavior))
     {
         *flags |= GROUND_EFFECT_FLAG_DEEP_SAND;
     }
     else if (MetatileBehavior_IsSand(objEvent->previousMetatileBehavior)
-             || MetatileBehavior_IsFootprints(objEvent->previousMetatileBehavior))
+        || MetatileBehavior_IsFootprints(objEvent->previousMetatileBehavior))
     {
         *flags |= GROUND_EFFECT_FLAG_SAND;
     }
 }
 
-static void GetGroundEffectFlags_SandHeap(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_SandHeap(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsDeepSand(objEvent->currentMetatileBehavior)
         && MetatileBehavior_IsDeepSand(objEvent->previousMetatileBehavior))
@@ -8140,10 +8140,10 @@ static void GetGroundEffectFlags_SandHeap(struct ObjectEvent *objEvent, u32 *fla
     }
 }
 
-static void GetGroundEffectFlags_ShallowFlowingWater(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_ShallowFlowingWater(struct ObjectEvent* objEvent, u32* flags)
 {
     if ((MetatileBehavior_IsShallowFlowingWater(objEvent->currentMetatileBehavior)
-         && MetatileBehavior_IsShallowFlowingWater(objEvent->previousMetatileBehavior))
+        && MetatileBehavior_IsShallowFlowingWater(objEvent->previousMetatileBehavior))
         || (MetatileBehavior_IsPacifidlogLog(objEvent->currentMetatileBehavior)
             && MetatileBehavior_IsPacifidlogLog(objEvent->previousMetatileBehavior)))
     {
@@ -8160,7 +8160,7 @@ static void GetGroundEffectFlags_ShallowFlowingWater(struct ObjectEvent *objEven
     }
 }
 
-static void GetGroundEffectFlags_Puddle(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_Puddle(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsPuddle(objEvent->currentMetatileBehavior)
         && MetatileBehavior_IsPuddle(objEvent->previousMetatileBehavior))
@@ -8169,13 +8169,13 @@ static void GetGroundEffectFlags_Puddle(struct ObjectEvent *objEvent, u32 *flags
     }
 }
 
-static void GetGroundEffectFlags_Ripple(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_Ripple(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_HasRipples(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_RIPPLES;
 }
 
-static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsShortGrass(objEvent->currentMetatileBehavior)
         && MetatileBehavior_IsShortGrass(objEvent->previousMetatileBehavior))
@@ -8193,7 +8193,7 @@ static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent *objEvent, u32 *f
     }
 }
 
-static void GetGroundEffectFlags_HotSprings(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_HotSprings(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsHotSprings(objEvent->currentMetatileBehavior)
         && MetatileBehavior_IsHotSprings(objEvent->previousMetatileBehavior))
@@ -8211,15 +8211,15 @@ static void GetGroundEffectFlags_HotSprings(struct ObjectEvent *objEvent, u32 *f
     }
 }
 
-static void GetGroundEffectFlags_Seaweed(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_Seaweed(struct ObjectEvent* objEvent, u32* flags)
 {
     if (MetatileBehavior_IsSeaweed(objEvent->currentMetatileBehavior))
         *flags |= GROUND_EFFECT_FLAG_SEAWEED;
 }
 
-static void GetGroundEffectFlags_JumpLanding(struct ObjectEvent *objEvent, u32 *flags)
+static void GetGroundEffectFlags_JumpLanding(struct ObjectEvent* objEvent, u32* flags)
 {
-    typedef bool8 (*MetatileFunc)(u8);
+    typedef bool8(*MetatileFunc)(u8);
 
     static const MetatileFunc metatileFuncs[] = {
         MetatileBehavior_IsTallGrass,
@@ -8254,9 +8254,9 @@ static void GetGroundEffectFlags_JumpLanding(struct ObjectEvent *objEvent, u32 *
     }
 }
 
-static u8 ObjectEventCheckForReflectiveSurface(struct ObjectEvent *objEvent)
+static u8 ObjectEventCheckForReflectiveSurface(struct ObjectEvent* objEvent)
 {
-    const struct ObjectEventGraphicsInfo *info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
+    const struct ObjectEventGraphicsInfo* info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
 
     // ceil div by tile width?
     s16 width = 1;
@@ -8276,14 +8276,14 @@ static u8 ObjectEventCheckForReflectiveSurface(struct ObjectEvent *objEvent)
     for (i = 0, one = 1; i < height; i++)
     {
         RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x, objEvent->currentCoords.y + one + i)
-        RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x, objEvent->previousCoords.y + one + i)
-        for (j = 1; j < width; j++)
-        {
-            RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x + j, objEvent->currentCoords.y + one + i)
-            RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x - j, objEvent->currentCoords.y + one + i)
-            RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x + j, objEvent->previousCoords.y + one + i)
-            RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x - j, objEvent->previousCoords.y + one + i)
-        }
+            RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x, objEvent->previousCoords.y + one + i)
+            for (j = 1; j < width; j++)
+            {
+                RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x + j, objEvent->currentCoords.y + one + i)
+                    RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x - j, objEvent->currentCoords.y + one + i)
+                    RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x + j, objEvent->previousCoords.y + one + i)
+                    RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x - j, objEvent->previousCoords.y + one + i)
+            }
     }
     return 0;
 
@@ -8302,11 +8302,11 @@ static u8 GetReflectionTypeByMetatileBehavior(u32 behavior)
 
 u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
 {
-    static bool8 (*const ledgeBehaviorFuncs[])(u8) = {
+    static bool8(* const ledgeBehaviorFuncs[])(u8) = {
         [DIR_SOUTH - 1] = MetatileBehavior_IsJumpSouth,
         [DIR_NORTH - 1] = MetatileBehavior_IsJumpNorth,
-        [DIR_WEST - 1]  = MetatileBehavior_IsJumpWest,
-        [DIR_EAST - 1]  = MetatileBehavior_IsJumpEast,
+        [DIR_WEST - 1] = MetatileBehavior_IsJumpWest,
+        [DIR_EAST - 1] = MetatileBehavior_IsJumpEast,
     };
 
     u8 behavior;
@@ -8326,7 +8326,7 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
     return DIR_NONE;
 }
 
-static void SetObjectEventSpriteOamTableForLongGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void SetObjectEventSpriteOamTableForLongGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     if (objEvent->disableCoveringGroundEffects)
         return;
@@ -8375,7 +8375,7 @@ static const u8 sElevationToSubspriteTableNum[] = {
     1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 0, 1,
 };
 
-static void UpdateObjectEventElevationAndPriority(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void UpdateObjectEventElevationAndPriority(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     if (objEvent->fixedPriority)
         return;
@@ -8386,7 +8386,7 @@ static void UpdateObjectEventElevationAndPriority(struct ObjectEvent *objEvent, 
     sprite->oam.priority = sElevationToPriority[objEvent->previousElevation];
 }
 
-static void InitObjectPriorityByElevation(struct Sprite *sprite, u8 elevation)
+static void InitObjectPriorityByElevation(struct Sprite* sprite, u8 elevation)
 {
     sprite->subspriteTableNum = sElevationToSubspriteTableNum[elevation];
     sprite->oam.priority = sElevationToPriority[elevation];
@@ -8397,7 +8397,7 @@ u8 ElevationToPriority(u8 elevation)
     return sElevationToPriority[elevation];
 }
 
-void ObjectEventUpdateElevation(struct ObjectEvent *objEvent)
+void ObjectEventUpdateElevation(struct ObjectEvent* objEvent)
 {
     u8 curElevation = MapGridGetElevationAt(objEvent->currentCoords.x, objEvent->currentCoords.y);
     u8 prevElevation = MapGridGetElevationAt(objEvent->previousCoords.x, objEvent->previousCoords.y);
@@ -8411,17 +8411,17 @@ void ObjectEventUpdateElevation(struct ObjectEvent *objEvent)
         objEvent->previousElevation = curElevation;
 }
 
-void SetObjectSubpriorityByElevation(u8 elevation, struct Sprite *sprite, u8 subpriority)
+void SetObjectSubpriorityByElevation(u8 elevation, struct Sprite* sprite, u8 subpriority)
 {
     s32 tmp = sprite->centerToCornerVecY;
-    u32 tmpa = *(u16 *)&sprite->y;
-    u32 tmpb = *(u16 *)&gSpriteCoordOffsetY;
+    u32 tmpa = *(u16*)&sprite->y;
+    u32 tmpb = *(u16*)&gSpriteCoordOffsetY;
     s32 tmp2 = (tmpa - tmp) + tmpb;
     u16 tmp3 = (0x10 - ((((u32)tmp2 + 8) & 0xFF) >> 4)) * 2;
     sprite->subpriority = tmp3 + sElevationToSubpriority[elevation] + subpriority;
 }
 
-static void ObjectEventUpdateSubpriority(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void ObjectEventUpdateSubpriority(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     if (objEvent->fixedPriority)
         return;
@@ -8440,7 +8440,7 @@ static bool8 AreElevationsCompatible(u8 a, u8 b)
     return TRUE;
 }
 
-void GroundEffect_SpawnOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_SpawnOnTallGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8453,7 +8453,7 @@ void GroundEffect_SpawnOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *
     FieldEffectStart(FLDEFF_TALL_GRASS);
 }
 
-void GroundEffect_StepOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_StepOnTallGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8466,7 +8466,7 @@ void GroundEffect_StepOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *s
     FieldEffectStart(FLDEFF_TALL_GRASS);
 }
 
-void GroundEffect_SpawnOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_SpawnOnLongGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8479,7 +8479,7 @@ void GroundEffect_SpawnOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *
     FieldEffectStart(FLDEFF_LONG_GRASS);
 }
 
-void GroundEffect_StepOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_StepOnLongGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8492,44 +8492,44 @@ void GroundEffect_StepOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *s
     FieldEffectStart(FLDEFF_LONG_GRASS);
 }
 
-void GroundEffect_WaterReflection(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_WaterReflection(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     SetUpReflection(objEvent, sprite, 0);
 }
 
-void GroundEffect_IceReflection(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_IceReflection(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     SetUpReflection(objEvent, sprite, 1);
 }
 
-void GroundEffect_FlowingWater(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_FlowingWater(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     StartFieldEffectForObjectEvent(FLDEFF_FEET_IN_FLOWING_WATER, objEvent);
 }
 
-static void (*const sGroundEffectTracksFuncs[])(struct ObjectEvent *objEvent, struct Sprite *sprite, u8 a) = {
+static void (* const sGroundEffectTracksFuncs[])(struct ObjectEvent* objEvent, struct Sprite* sprite, u8 a) = {
     DoTracksGroundEffect_None,
     DoTracksGroundEffect_Footprints,
     DoTracksGroundEffect_BikeTireTracks,
 };
 
-void GroundEffect_SandTracks(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_SandTracks(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
-    const struct ObjectEventGraphicsInfo *info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
+    const struct ObjectEventGraphicsInfo* info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
     sGroundEffectTracksFuncs[info->tracks](objEvent, sprite, 0);
 }
 
-void GroundEffect_DeepSandTracks(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_DeepSandTracks(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
-    const struct ObjectEventGraphicsInfo *info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
+    const struct ObjectEventGraphicsInfo* info = GetObjectEventGraphicsInfo(objEvent->graphicsId);
     sGroundEffectTracksFuncs[info->tracks](objEvent, sprite, 1);
 }
 
-static void DoTracksGroundEffect_None(struct ObjectEvent *objEvent, struct Sprite *sprite, u8 a)
+static void DoTracksGroundEffect_None(struct ObjectEvent* objEvent, struct Sprite* sprite, u8 a)
 {
 }
 
-static void DoTracksGroundEffect_Footprints(struct ObjectEvent *objEvent, struct Sprite *sprite, u8 a)
+static void DoTracksGroundEffect_Footprints(struct ObjectEvent* objEvent, struct Sprite* sprite, u8 a)
 {
     // First half-word is a Field Effect script id. (gFieldEffectScriptPointers)
     u16 sandFootprints_FieldEffectData[2] = {
@@ -8545,7 +8545,7 @@ static void DoTracksGroundEffect_Footprints(struct ObjectEvent *objEvent, struct
     FieldEffectStart(sandFootprints_FieldEffectData[a]);
 }
 
-static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent *objEvent, struct Sprite *sprite, u8 a)
+static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent* objEvent, struct Sprite* sprite, u8 a)
 {
     //  Specifies which bike track shape to show next.
     //  For example, when the bike turns from up to right, it will show
@@ -8572,22 +8572,22 @@ static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent *objEvent, st
     }
 }
 
-void GroundEffect_Ripple(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_Ripple(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     DoRippleFieldEffect(objEvent, sprite);
 }
 
-void GroundEffect_StepOnPuddle(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_StepOnPuddle(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     StartFieldEffectForObjectEvent(FLDEFF_SPLASH, objEvent);
 }
 
-void GroundEffect_SandHeap(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_SandHeap(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     StartFieldEffectForObjectEvent(FLDEFF_SAND_PILE, objEvent);
 }
 
-void GroundEffect_JumpOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_JumpOnTallGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     u8 spriteId;
 
@@ -8608,7 +8608,7 @@ void GroundEffect_JumpOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *s
         GroundEffect_SpawnOnTallGrass(objEvent, sprite);
 }
 
-void GroundEffect_JumpOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_JumpOnLongGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8617,7 +8617,7 @@ void GroundEffect_JumpOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *s
     FieldEffectStart(FLDEFF_JUMP_LONG_GRASS);
 }
 
-void GroundEffect_JumpOnShallowWater(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_JumpOnShallowWater(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8626,7 +8626,7 @@ void GroundEffect_JumpOnShallowWater(struct ObjectEvent *objEvent, struct Sprite
     FieldEffectStart(FLDEFF_JUMP_SMALL_SPLASH);
 }
 
-void GroundEffect_JumpOnWater(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_JumpOnWater(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8635,7 +8635,7 @@ void GroundEffect_JumpOnWater(struct ObjectEvent *objEvent, struct Sprite *sprit
     FieldEffectStart(FLDEFF_JUMP_BIG_SPLASH);
 }
 
-void GroundEffect_JumpLandingDust(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_JumpLandingDust(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
@@ -8644,24 +8644,24 @@ void GroundEffect_JumpLandingDust(struct ObjectEvent *objEvent, struct Sprite *s
     FieldEffectStart(FLDEFF_DUST);
 }
 
-void GroundEffect_ShortGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_ShortGrass(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     StartFieldEffectForObjectEvent(FLDEFF_SHORT_GRASS, objEvent);
 }
 
-void GroundEffect_HotSprings(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_HotSprings(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     StartFieldEffectForObjectEvent(FLDEFF_HOT_SPRINGS_WATER, objEvent);
 }
 
-void GroundEffect_Seaweed(struct ObjectEvent *objEvent, struct Sprite *sprite)
+void GroundEffect_Seaweed(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     gFieldEffectArguments[0] = objEvent->currentCoords.x;
     gFieldEffectArguments[1] = objEvent->currentCoords.y;
     FieldEffectStart(FLDEFF_BUBBLES);
 }
 
-static void (*const sGroundEffectFuncs[])(struct ObjectEvent *objEvent, struct Sprite *sprite) = {
+static void (* const sGroundEffectFuncs[])(struct ObjectEvent* objEvent, struct Sprite* sprite) = {
     GroundEffect_SpawnOnTallGrass,
     GroundEffect_StepOnTallGrass,
     GroundEffect_SpawnOnLongGrass,
@@ -8684,7 +8684,7 @@ static void (*const sGroundEffectFuncs[])(struct ObjectEvent *objEvent, struct S
     GroundEffect_Seaweed
 };
 
-static void DoFlaggedGroundEffects(struct ObjectEvent *objEvent, struct Sprite *sprite, u32 flags)
+static void DoFlaggedGroundEffects(struct ObjectEvent* objEvent, struct Sprite* sprite, u32 flags)
 {
     u8 i;
 
@@ -8696,7 +8696,7 @@ static void DoFlaggedGroundEffects(struct ObjectEvent *objEvent, struct Sprite *
             sGroundEffectFuncs[i](objEvent, sprite);
 }
 
-void filters_out_some_ground_effects(struct ObjectEvent *objEvent, u32 *flags)
+void filters_out_some_ground_effects(struct ObjectEvent* objEvent, u32* flags)
 {
     if (objEvent->disableCoveringGroundEffects)
     {
@@ -8705,20 +8705,20 @@ void filters_out_some_ground_effects(struct ObjectEvent *objEvent, u32 *flags)
         objEvent->inShallowFlowingWater = 0;
         objEvent->inHotSprings = 0;
         *flags &= ~(GROUND_EFFECT_FLAG_HOT_SPRINGS
-                  | GROUND_EFFECT_FLAG_SHORT_GRASS
-                  | GROUND_EFFECT_FLAG_SAND_PILE
-                  | GROUND_EFFECT_FLAG_SHALLOW_FLOWING_WATER
-                  | GROUND_EFFECT_FLAG_TALL_GRASS_ON_MOVE);
+            | GROUND_EFFECT_FLAG_SHORT_GRASS
+            | GROUND_EFFECT_FLAG_SAND_PILE
+            | GROUND_EFFECT_FLAG_SHALLOW_FLOWING_WATER
+            | GROUND_EFFECT_FLAG_TALL_GRASS_ON_MOVE);
     }
 }
 
-void FilterOutStepOnPuddleGroundEffectIfJumping(struct ObjectEvent *objEvent, u32 *flags)
+void FilterOutStepOnPuddleGroundEffectIfJumping(struct ObjectEvent* objEvent, u32* flags)
 {
     if (objEvent->landingJump)
         *flags &= ~GROUND_EFFECT_FLAG_PUDDLE;
 }
 
-static void DoGroundEffects_OnSpawn(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void DoGroundEffects_OnSpawn(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     u32 flags;
 
@@ -8734,7 +8734,7 @@ static void DoGroundEffects_OnSpawn(struct ObjectEvent *objEvent, struct Sprite 
     }
 }
 
-static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void DoGroundEffects_OnBeginStep(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     u32 flags;
 
@@ -8751,7 +8751,7 @@ static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Spr
     }
 }
 
-static void DoGroundEffects_OnFinishStep(struct ObjectEvent *objEvent, struct Sprite *sprite)
+static void DoGroundEffects_OnFinishStep(struct ObjectEvent* objEvent, struct Sprite* sprite)
 {
     u32 flags;
 
@@ -8768,7 +8768,7 @@ static void DoGroundEffects_OnFinishStep(struct ObjectEvent *objEvent, struct Sp
     }
 }
 
-bool8 FreezeObjectEvent(struct ObjectEvent *objectEvent)
+bool8 FreezeObjectEvent(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->heldMovementActive || objectEvent->frozen)
         return TRUE;
@@ -8800,7 +8800,7 @@ void FreezeObjectEventsExceptOne(u8 noFreeze)
     }
 }
 
-void UnfreezeObjectEvent(struct ObjectEvent *objectEvent)
+void UnfreezeObjectEvent(struct ObjectEvent* objectEvent)
 {
     if (objectEvent->active && objectEvent->frozen)
     {
@@ -8824,44 +8824,44 @@ void UnfreezeObjectEvents(void)
 #define tSpeed     data[4]
 #define tStepNo    data[5]
 
-static void Step1(struct Sprite *sprite, u8 direction)
+static void Step1(struct Sprite* sprite, u8 direction)
 {
     sprite->x += sDirectionToVectors[direction].x;
     sprite->y += sDirectionToVectors[direction].y;
 }
 
-static void Step2(struct Sprite *sprite, u8 direction)
+static void Step2(struct Sprite* sprite, u8 direction)
 {
     sprite->x += 2 * (u16)sDirectionToVectors[direction].x;
     sprite->y += 2 * (u16)sDirectionToVectors[direction].y;
 }
 
-static void Step3(struct Sprite *sprite, u8 direction)
+static void Step3(struct Sprite* sprite, u8 direction)
 {
     sprite->x += 2 * (u16)sDirectionToVectors[direction].x + (u16)sDirectionToVectors[direction].x;
     sprite->y += 2 * (u16)sDirectionToVectors[direction].y + (u16)sDirectionToVectors[direction].y;
 }
 
-static void Step4(struct Sprite *sprite, u8 direction)
+static void Step4(struct Sprite* sprite, u8 direction)
 {
     sprite->x += 4 * (u16)sDirectionToVectors[direction].x;
     sprite->y += 4 * (u16)sDirectionToVectors[direction].y;
 }
 
-static void Step8(struct Sprite *sprite, u8 direction)
+static void Step8(struct Sprite* sprite, u8 direction)
 {
     sprite->x += 8 * (u16)sDirectionToVectors[direction].x;
     sprite->y += 8 * (u16)sDirectionToVectors[direction].y;
 }
 
-void SetSpriteDataForNormalStep(struct Sprite *sprite, u8 direction, u8 speed)
+void SetSpriteDataForNormalStep(struct Sprite* sprite, u8 direction, u8 speed)
 {
     sprite->tDirection = direction;
     sprite->tSpeed = speed;
     sprite->tStepNo = 0;
 }
 
-typedef void (*SpriteStepFunc)(struct Sprite *sprite, u8 direction);
+typedef void (*SpriteStepFunc)(struct Sprite* sprite, u8 direction);
 
 static const SpriteStepFunc sSpeedNormalStepFuncs[] = {
     Step1,
@@ -8914,23 +8914,23 @@ static const SpriteStepFunc sSpeedFastestStepFuncs[] = {
     Step8
 };
 
-static const SpriteStepFunc *const sNpcStepFuncTables[] = {
-    [MOVE_SPEED_NORMAL]  = sSpeedNormalStepFuncs,
-    [MOVE_SPEED_FAST_1]  = sSpeedFast1StepFuncs,
-    [MOVE_SPEED_FAST_2]  = sSpeedFast2StepFuncs,
-    [MOVE_SPEED_FASTER]  = sSpeedFasterStepFuncs,
+static const SpriteStepFunc* const sNpcStepFuncTables[] = {
+    [MOVE_SPEED_NORMAL] = sSpeedNormalStepFuncs,
+    [MOVE_SPEED_FAST_1] = sSpeedFast1StepFuncs,
+    [MOVE_SPEED_FAST_2] = sSpeedFast2StepFuncs,
+    [MOVE_SPEED_FASTER] = sSpeedFasterStepFuncs,
     [MOVE_SPEED_FASTEST] = sSpeedFastestStepFuncs,
 };
 
 static const s16 sStepTimes[] = {
-    [MOVE_SPEED_NORMAL]  = NELEMS(sSpeedNormalStepFuncs),
-    [MOVE_SPEED_FAST_1]  = NELEMS(sSpeedFast1StepFuncs),
-    [MOVE_SPEED_FAST_2]  = NELEMS(sSpeedFast2StepFuncs),
-    [MOVE_SPEED_FASTER]  = NELEMS(sSpeedFasterStepFuncs),
+    [MOVE_SPEED_NORMAL] = NELEMS(sSpeedNormalStepFuncs),
+    [MOVE_SPEED_FAST_1] = NELEMS(sSpeedFast1StepFuncs),
+    [MOVE_SPEED_FAST_2] = NELEMS(sSpeedFast2StepFuncs),
+    [MOVE_SPEED_FASTER] = NELEMS(sSpeedFasterStepFuncs),
     [MOVE_SPEED_FASTEST] = NELEMS(sSpeedFastestStepFuncs),
 };
 
-bool8 NpcTakeStep(struct Sprite *sprite)
+bool8 NpcTakeStep(struct Sprite* sprite)
 {
     if (sprite->tStepNo >= sStepTimes[sprite->tSpeed])
         return FALSE;
@@ -8949,14 +8949,14 @@ bool8 NpcTakeStep(struct Sprite *sprite)
 
 #define tDelay     data[4]
 
-void SetWalkSlowerSpriteData(struct Sprite *sprite, u8 direction)
+void SetWalkSlowerSpriteData(struct Sprite* sprite, u8 direction)
 {
     sprite->tDirection = direction;
     sprite->tDelay = 0;
     sprite->tStepNo = 0;
 }
 
-bool8 UpdateWalkSlowerAnim(struct Sprite *sprite)
+bool8 UpdateWalkSlowerAnim(struct Sprite* sprite)
 {
     if (!(sprite->tDelay & 1))
     {
@@ -8974,14 +8974,14 @@ bool8 UpdateWalkSlowerAnim(struct Sprite *sprite)
 
 // SetWalkSlowSpriteData, SetWalkSlowerSpriteData, SetWalkSlowestSpriteData,
 // and SetRunSlowSpriteData are functionally equivalent
-void SetWalkSlowSpriteData(struct Sprite *sprite, u8 direction)
+void SetWalkSlowSpriteData(struct Sprite* sprite, u8 direction)
 {
     sprite->tDirection = direction;
     sprite->tDelay = 0;
     sprite->tStepNo = 0;
 }
 
-bool8 UpdateWalkSlowAnim(struct Sprite *sprite)
+bool8 UpdateWalkSlowAnim(struct Sprite* sprite)
 {
     if (++sprite->tDelay < 3)
     {
@@ -8997,14 +8997,14 @@ bool8 UpdateWalkSlowAnim(struct Sprite *sprite)
         return FALSE;
 }
 
-void SetWalkSlowestSpriteData(struct Sprite *sprite, u8 direction)
+void SetWalkSlowestSpriteData(struct Sprite* sprite, u8 direction)
 {
     sprite->tDirection = direction;
     sprite->tDelay = 0;
     sprite->tStepNo = 0;
 }
 
-bool8 UpdateWalkSlowestAnim(struct Sprite *sprite)
+bool8 UpdateWalkSlowestAnim(struct Sprite* sprite)
 {
     if (++sprite->tDelay > 9)
     {
@@ -9019,14 +9019,14 @@ bool8 UpdateWalkSlowestAnim(struct Sprite *sprite)
         return FALSE;
 }
 
-void SetRunSlowSpriteData(struct Sprite *sprite, u8 direction)
+void SetRunSlowSpriteData(struct Sprite* sprite, u8 direction)
 {
     sprite->tDirection = direction;
     sprite->tDelay = 0;
     sprite->tStepNo = 0;
 }
 
-bool8 UpdateRunSlowAnim(struct Sprite *sprite)
+bool8 UpdateRunSlowAnim(struct Sprite* sprite)
 {
     if ((++sprite->tDelay) & 1)
     {
@@ -9067,9 +9067,9 @@ static const s8 sJumpY_Normal[] = {
 #define sJumpType      data[5]
 #define sTimer         data[6]
 
-static const s8 *const sJumpYTable[] = {
-    [JUMP_TYPE_HIGH]   = sJumpY_High,
-    [JUMP_TYPE_LOW]    = sJumpY_Low,
+static const s8* const sJumpYTable[] = {
+    [JUMP_TYPE_HIGH] = sJumpY_High,
+    [JUMP_TYPE_LOW] = sJumpY_Low,
     [JUMP_TYPE_NORMAL] = sJumpY_Normal,
 };
 
@@ -9078,7 +9078,7 @@ static s16 GetJumpY(s16 i, u8 type)
     return sJumpYTable[type][i];
 }
 
-void SetJumpSpriteData(struct Sprite *sprite, u8 direction, u8 distance, u8 type)
+void SetJumpSpriteData(struct Sprite* sprite, u8 direction, u8 distance, u8 type)
 {
     sprite->tDirection = direction;
     sprite->sJumpDistance = distance;
@@ -9086,17 +9086,17 @@ void SetJumpSpriteData(struct Sprite *sprite, u8 direction, u8 distance, u8 type
     sprite->sTimer = 0;
 }
 
-u8 DoJumpSpriteMovement(struct Sprite *sprite)
+u8 DoJumpSpriteMovement(struct Sprite* sprite)
 {
     s16 distanceToTime[] = {
         [JUMP_DISTANCE_IN_PLACE] = 16,
-        [JUMP_DISTANCE_NORMAL]   = 16,
-        [JUMP_DISTANCE_FAR]      = 32,
+        [JUMP_DISTANCE_NORMAL] = 16,
+        [JUMP_DISTANCE_FAR] = 32,
     };
     u8 distanceToShift[] = {
         [JUMP_DISTANCE_IN_PLACE] = 0,
-        [JUMP_DISTANCE_NORMAL]   = 0,
-        [JUMP_DISTANCE_FAR]      = 1,
+        [JUMP_DISTANCE_NORMAL] = 0,
+        [JUMP_DISTANCE_FAR] = 1,
     };
     u8 jumpPhase = 0;
 
@@ -9119,10 +9119,10 @@ u8 DoJumpSpriteMovement(struct Sprite *sprite)
     return jumpPhase;
 }
 
-u8 DoJumpSpecialSpriteMovement(struct Sprite *sprite)
+u8 DoJumpSpecialSpriteMovement(struct Sprite* sprite)
 {
-    s16 duration[3] = {0x20, 0x20, 0x40};
-    u8 shifts[3] = {1, 1, 2};
+    s16 duration[3] = { 0x20, 0x20, 0x40 };
+    u8 shifts[3] = { 1, 1, 2 };
     u8 jumpPhase = 0;
 
     if (sprite->sJumpDistance != JUMP_DISTANCE_IN_PLACE && !(sprite->sTimer & 1))
@@ -9151,12 +9151,12 @@ u8 DoJumpSpecialSpriteMovement(struct Sprite *sprite)
 
 #define tDelay data[3]
 
-void SetMovementDelay(struct Sprite *sprite, s16 delay)
+void SetMovementDelay(struct Sprite* sprite, s16 delay)
 {
     sprite->tDelay = delay;
 }
 
-bool8 WaitForMovementDelay(struct Sprite *sprite)
+bool8 WaitForMovementDelay(struct Sprite* sprite)
 {
     sprite->tDelay--;
 
@@ -9168,14 +9168,14 @@ bool8 WaitForMovementDelay(struct Sprite *sprite)
 
 #undef tDelay
 
-void SetAndStartSpriteAnim(struct Sprite *sprite, u8 animNum, u8 animCmdIndex)
+void SetAndStartSpriteAnim(struct Sprite* sprite, u8 animNum, u8 animCmdIndex)
 {
     sprite->animNum = animNum;
     sprite->animPaused = FALSE;
     SeekSpriteAnim(sprite, animCmdIndex);
 }
 
-bool8 SpriteAnimEnded(struct Sprite *sprite)
+bool8 SpriteAnimEnded(struct Sprite* sprite)
 {
     if (sprite->animEnded)
         return TRUE;
@@ -9183,7 +9183,7 @@ bool8 SpriteAnimEnded(struct Sprite *sprite)
         return FALSE;
 }
 
-void UpdateObjectEventSpriteInvisibility(struct Sprite *sprite, bool8 invisible)
+void UpdateObjectEventSpriteInvisibility(struct Sprite* sprite, bool8 invisible)
 {
     u16 x, y;
     s16 x2, y2;
@@ -9214,7 +9214,7 @@ void UpdateObjectEventSpriteInvisibility(struct Sprite *sprite, bool8 invisible)
 #define sAnimNum       data[3]
 #define sAnimState     data[4]
 
-void SpriteCB_VirtualObject(struct Sprite *sprite)
+void SpriteCB_VirtualObject(struct Sprite* sprite)
 {
     VirtualObject_UpdateAnim(sprite);
     SetObjectSubpriorityByElevation(sprite->sVirtualObjElev, sprite, 1);
@@ -9227,7 +9227,7 @@ static void DestroyVirtualObjects(void)
     s32 i;
     for (i = 0; i < MAX_SPRITES; i++)
     {
-        struct Sprite *sprite = &gSprites[i];
+        struct Sprite* sprite = &gSprites[i];
         if (sprite->inUse && sprite->callback == SpriteCB_VirtualObject)
             DestroySprite(sprite);
     }
@@ -9238,7 +9238,7 @@ static int GetVirtualObjectSpriteId(u8 virtualObjId)
     int i;
     for (i = 0; i < MAX_SPRITES; i++)
     {
-        struct Sprite *sprite = &gSprites[i];
+        struct Sprite* sprite = &gSprites[i];
         if (sprite->inUse && sprite->callback == SpriteCB_VirtualObject && (u8)sprite->sVirtualObjId == virtualObjId)
             return i;
     }
@@ -9251,7 +9251,7 @@ void TurnVirtualObject(u8 virtualObjId, u8 direction)
     u8 spriteId = GetVirtualObjectSpriteId(virtualObjId);
     if (spriteId != MAX_SPRITES)
     {
-        struct Sprite *sprite = &gSprites[spriteId];
+        struct Sprite* sprite = &gSprites[spriteId];
         StartSpriteAnim(sprite, GetFaceDirectionAnimNum(direction));
     }
 }
@@ -9261,8 +9261,8 @@ void SetVirtualObjectGraphics(u8 virtualObjId, u8 direction)
     int spriteId = GetVirtualObjectSpriteId(virtualObjId);
     if (spriteId != MAX_SPRITES)
     {
-        struct Sprite *sprite = &gSprites[spriteId];
-        const struct ObjectEventGraphicsInfo *info = GetObjectEventGraphicsInfo(direction);
+        struct Sprite* sprite = &gSprites[spriteId];
+        const struct ObjectEventGraphicsInfo* info = GetObjectEventGraphicsInfo(direction);
         u16 baseBlock = sprite->oam.tileNum;
         sprite->oam = *info->oam;
         sprite->oam.tileNum = baseBlock;
@@ -9313,7 +9313,7 @@ void SetVirtualObjectSpriteAnim(u8 virtualObjId, u8 animNo)
     }
 }
 
-static void MoveUnionRoomObjectUp(struct Sprite *sprite)
+static void MoveUnionRoomObjectUp(struct Sprite* sprite)
 {
     switch (sprite->sAnimState)
     {
@@ -9333,7 +9333,7 @@ static void MoveUnionRoomObjectUp(struct Sprite *sprite)
     }
 }
 
-static void MoveUnionRoomObjectDown(struct Sprite *sprite)
+static void MoveUnionRoomObjectDown(struct Sprite* sprite)
 {
     switch (sprite->sAnimState)
     {
@@ -9351,7 +9351,7 @@ static void MoveUnionRoomObjectDown(struct Sprite *sprite)
     }
 }
 
-static void VirtualObject_UpdateAnim(struct Sprite *sprite)
+static void VirtualObject_UpdateAnim(struct Sprite* sprite)
 {
     switch (sprite->sAnimNum)
     {
@@ -9386,13 +9386,13 @@ bool32 IsVirtualObjectAnimating(u8 virtualObjId)
 #undef sAnimNum
 #undef sAnimState
 
-u32 StartFieldEffectForObjectEvent(u8 fieldEffectId, struct ObjectEvent *objectEvent)
+u32 StartFieldEffectForObjectEvent(u8 fieldEffectId, struct ObjectEvent* objectEvent)
 {
-    ObjectEventGetLocalIdAndMap(objectEvent, (u8 *)&gFieldEffectArguments[0], (u8 *)&gFieldEffectArguments[1], (u8 *)&gFieldEffectArguments[2]);
+    ObjectEventGetLocalIdAndMap(objectEvent, (u8*)&gFieldEffectArguments[0], (u8*)&gFieldEffectArguments[1], (u8*)&gFieldEffectArguments[2]);
     return FieldEffectStart(fieldEffectId);
 }
 
-void DoShadowFieldEffect(struct ObjectEvent *objectEvent)
+void DoShadowFieldEffect(struct ObjectEvent* objectEvent)
 {
     if (!objectEvent->hasShadow)
     {
@@ -9401,9 +9401,9 @@ void DoShadowFieldEffect(struct ObjectEvent *objectEvent)
     }
 }
 
-static void DoRippleFieldEffect(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+static void DoRippleFieldEffect(struct ObjectEvent* objectEvent, struct Sprite* sprite)
 {
-    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
+    const struct ObjectEventGraphicsInfo* graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
     gFieldEffectArguments[0] = sprite->x;
     gFieldEffectArguments[1] = sprite->y + (graphicsInfo->height >> 1) - 2;
     gFieldEffectArguments[2] = 151;

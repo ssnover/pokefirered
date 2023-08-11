@@ -51,6 +51,6 @@ extern struct TrainerCard gTrainerCards[4];
 void ShowPlayerTrainerCard(void (*callback)(void));
 void ShowTrainerCardInLink(u8 whoseCard, MainCallback callback);
 u8 GetTrainerCardStars(u8 cardId);
-void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard);
+void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard* trainerCard);
 
 #endif //GUARD_TRAINER_CARD_H

@@ -13,7 +13,7 @@ struct ClearSaveDataStruct {
     u8 unk2;
 };
 
-static EWRAM_DATA struct ClearSaveDataStruct * sClearSaveDataState = NULL;
+static EWRAM_DATA struct ClearSaveDataStruct* sClearSaveDataState = NULL;
 
 static void Task_DrawClearSaveDataScreen(u8 taskId);
 static void Task_HandleYesNoMenu(u8 taskId);
@@ -126,7 +126,7 @@ static void Task_HandleYesNoMenu(u8 taskId)
 {
     // agbcc refuses to keep &sClearSaveDataState in a register
     // unless explicitly told to do so as such:
-    struct ClearSaveDataStruct ** r5 = &sClearSaveDataState;
+    struct ClearSaveDataStruct** r5 = &sClearSaveDataState;
     if ((*r5)->unk0 == 0)
     {
         switch (Menu_ProcessInputNoWrapClearOnChoose())
@@ -185,9 +185,9 @@ static void CB2_Sub_SaveClearScreen_Init(void)
 
 static void SaveClearScreen_GpuInit(void)
 {
-    DmaClearLarge16(3, (void *)VRAM, VRAM_SIZE, 0x1000);
-    DmaClear32(3, (void *)OAM, OAM_SIZE);
-    DmaClear16(3, (void *)PLTT, PLTT_SIZE);
+    DmaClearLarge16(3, (void*)VRAM, VRAM_SIZE, 0x1000);
+    DmaClear32(3, (void*)OAM, OAM_SIZE);
+    DmaClear16(3, (void*)PLTT, PLTT_SIZE);
 
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     SetGpuReg(REG_OFFSET_BLDY, 0);

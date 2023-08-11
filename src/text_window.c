@@ -112,14 +112,14 @@ void DrawTextBorderOuter(u8 windowId, u16 tileNum, u8 palNum)
     u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
     u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
 
-    FillBgTilemapBufferRect(bgLayer, tileNum + 0, tilemapLeft - 1,      tilemapTop - 1,         1,      1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 1, tilemapLeft,          tilemapTop - 1,         width,  1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 2, tilemapLeft + width,  tilemapTop - 1,         1,      1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 3, tilemapLeft - 1,      tilemapTop,             1,      height, palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 5, tilemapLeft + width,  tilemapTop,             1,      height, palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 6, tilemapLeft - 1,      tilemapTop + height,    1,      1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 7, tilemapLeft,          tilemapTop + height,    width,  1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 8, tilemapLeft + width,  tilemapTop + height,    1,      1,      palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 0, tilemapLeft - 1, tilemapTop - 1, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 1, tilemapLeft, tilemapTop - 1, width, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 2, tilemapLeft + width, tilemapTop - 1, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 3, tilemapLeft - 1, tilemapTop, 1, height, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 5, tilemapLeft + width, tilemapTop, 1, height, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 6, tilemapLeft - 1, tilemapTop + height, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 7, tilemapLeft, tilemapTop + height, width, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 8, tilemapLeft + width, tilemapTop + height, 1, 1, palNum);
 }
 
 void DrawTextBorderInner(u8 windowId, u16 tileNum, u8 palNum)
@@ -130,14 +130,14 @@ void DrawTextBorderInner(u8 windowId, u16 tileNum, u8 palNum)
     u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
     u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
 
-    FillBgTilemapBufferRect(bgLayer, tileNum + 0, tilemapLeft,              tilemapTop,                 1,          1,          palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 1, tilemapLeft + 1,          tilemapTop,                 width - 2,  1,          palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 2, tilemapLeft + width - 1,  tilemapTop,                 1,          1,          palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 3, tilemapLeft,              tilemapTop + 1,             1,          height - 2, palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 5, tilemapLeft + width - 1,  tilemapTop + 1,             1,          height - 2, palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 6, tilemapLeft,              tilemapTop + height - 1,    1,          1,          palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 7, tilemapLeft + 1,          tilemapTop + height - 1,    width -     2,  1,      palNum);
-    FillBgTilemapBufferRect(bgLayer, tileNum + 8, tilemapLeft + width - 1,  tilemapTop + height - 1,    1,          1,          palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 0, tilemapLeft, tilemapTop, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 1, tilemapLeft + 1, tilemapTop, width - 2, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 2, tilemapLeft + width - 1, tilemapTop, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 3, tilemapLeft, tilemapTop + 1, 1, height - 2, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 5, tilemapLeft + width - 1, tilemapTop + 1, 1, height - 2, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 6, tilemapLeft, tilemapTop + height - 1, 1, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 7, tilemapLeft + 1, tilemapTop + height - 1, width - 2, 1, palNum);
+    FillBgTilemapBufferRect(bgLayer, tileNum + 8, tilemapLeft + width - 1, tilemapTop + height - 1, 1, 1, palNum);
 }
 
 void rbox_fill_rectangle(u8 windowId)
@@ -151,7 +151,7 @@ void rbox_fill_rectangle(u8 windowId)
     FillBgTilemapBufferRect(bgLayer, 0, tilemapLeft - 1, tilemapTop - 1, width + 2, height + 2, 17);
 }
 
-const u16 *GetTextWindowPalette(u8 id)
+const u16* GetTextWindowPalette(u8 id)
 {
     switch (id)
     {
@@ -173,5 +173,5 @@ const u16 *GetTextWindowPalette(u8 id)
         break;
     }
 
-    return (const u16 *)(gTextWindowPalettes) + id;
+    return (const u16*)(gTextWindowPalettes)+id;
 }

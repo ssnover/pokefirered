@@ -8,9 +8,9 @@ static void STWI_stop_timer(void);
 static s32 STWI_restart_Command(void);
 static s32 STWI_reset_ClockCounter(void);
 
-struct STWIStatus *gSTWIStatus;
+struct STWIStatus* gSTWIStatus;
 
-void STWI_init_all(struct RfuIntrStruct *interruptStruct, IntrFunc *interrupt, bool8 copyInterruptToRam)
+void STWI_init_all(struct RfuIntrStruct* interruptStruct, IntrFunc* interrupt, bool8 copyInterruptToRam)
 {
     // If we're copying our interrupt into RAM, DMA it to block1 and use
     // block2 for our STWIStatus, otherwise block1 holds the STWIStatus.
@@ -24,7 +24,7 @@ void STWI_init_all(struct RfuIntrStruct *interruptStruct, IntrFunc *interrupt, b
     else
     {
         *interrupt = IntrSIO32;
-        gSTWIStatus = (struct STWIStatus *)interruptStruct->block1;
+        gSTWIStatus = (struct STWIStatus*)interruptStruct->block1;
     }
     gSTWIStatus->rxPacket = &interruptStruct->rxPacketAlloc;
     gSTWIStatus->txPacket = &interruptStruct->txPacketAlloc;
@@ -47,7 +47,7 @@ void STWI_init_all(struct RfuIntrStruct *interruptStruct, IntrFunc *interrupt, b
     IntrEnable(INTR_FLAG_SERIAL);
 }
 
-void STWI_init_timer(IntrFunc *interrupt, s32 timerSelect)
+void STWI_init_timer(IntrFunc* interrupt, s32 timerSelect)
 {
     *interrupt = STWI_intr_timer;
     gSTWIStatus->timerSelect = timerSelect;
@@ -56,8 +56,8 @@ void STWI_init_timer(IntrFunc *interrupt, s32 timerSelect)
 
 void AgbRFU_SoftReset(void)
 {
-    vu16 *timerL;
-    vu16 *timerH;
+    vu16* timerL;
+    vu16* timerH;
 
     REG_RCNT = 0x8000;
     REG_RCNT = 0x80A0; // all these bits are undocumented
@@ -119,7 +119,7 @@ void STWI_init_Callback_S(void)
 }
 
 // The callback can take 2 or 3 arguments.
-void STWI_set_Callback_M(void *callbackM)
+void STWI_set_Callback_M(void* callbackM)
 {
     gSTWIStatus->callbackM = callbackM;
 }
@@ -195,9 +195,9 @@ void STWI_send_ConfigStatusREQ(void)
     }
 }
 
-void STWI_send_GameConfigREQ(const u8 *serial_gname, const u8 *uname)
+void STWI_send_GameConfigREQ(const u8* serial_gname, const u8* uname)
 {
-    u8 *packetBytes;
+    u8* packetBytes;
     s32 i;
 
     if (!STWI_init(ID_GAME_CONFIG_REQ))
@@ -205,7 +205,7 @@ void STWI_send_GameConfigREQ(const u8 *serial_gname, const u8 *uname)
         gSTWIStatus->reqLength = 6;
         packetBytes = gSTWIStatus->txPacket->rfuPacket8.data;
         packetBytes += sizeof(u32);
-        *(u16 *)packetBytes = *(u16 *)serial_gname;
+        *(u16*)packetBytes = *(u16*)serial_gname;
         packetBytes += sizeof(u16);
         serial_gname += sizeof(u16);
         for (i = 0; i < 14; ++i)
@@ -228,14 +228,14 @@ void STWI_send_SystemConfigREQ(u16 availSlotFlag, u8 maxMFrame, u8 mcTimer)
 {
     if (!STWI_init(ID_SYSTEM_CONFIG_REQ))
     {
-        u8 *packetBytes;
+        u8* packetBytes;
 
         gSTWIStatus->reqLength = 1;
         packetBytes = gSTWIStatus->txPacket->rfuPacket8.data;
         packetBytes += sizeof(u32);
         *packetBytes++ = mcTimer;
         *packetBytes++ = maxMFrame;
-        *(u16 *)packetBytes = availSlotFlag;
+        *(u16*)packetBytes = availSlotFlag;
         STWI_start_Command();
     }
 }
@@ -322,7 +322,7 @@ void STWI_send_CP_EndREQ(void)
     }
 }
 
-void STWI_send_DataTxREQ(const void *in, u8 size)
+void STWI_send_DataTxREQ(const void* in, u8 size)
 {
     if (!STWI_init(ID_DATA_TX_REQ))
     {
@@ -335,7 +335,7 @@ void STWI_send_DataTxREQ(const void *in, u8 size)
     }
 }
 
-void STWI_send_DataTxAndChangeREQ(const void *in, u8 size)
+void STWI_send_DataTxAndChangeREQ(const void* in, u8 size)
 {
     if (!STWI_init(ID_DATA_TX_AND_CHANGE_REQ))
     {
@@ -376,7 +376,7 @@ void STWI_send_DataReadyAndChangeREQ(u8 unk)
         }
         else
         {
-            u8 *packetBytes;
+            u8* packetBytes;
 
             gSTWIStatus->reqLength = 1;
             packetBytes = gSTWIStatus->txPacket->rfuPacket8.data;
@@ -394,7 +394,7 @@ void STWI_send_DisconnectedAndChangeREQ(u8 unk0, u8 unk1)
 {
     if (!STWI_init(ID_DISCONNECTED_AND_CHANGE_REQ))
     {
-        u8 *packetBytes;
+        u8* packetBytes;
 
         gSTWIStatus->reqLength = 1;
         packetBytes = gSTWIStatus->txPacket->rfuPacket8.data;
@@ -438,7 +438,7 @@ void STWI_send_TestModeREQ(u8 unk0, u8 unk1)
 
 void STWI_send_CPR_StartREQ(u16 unk0, u16 unk1, u8 unk2)
 {
-    u32 *packetData;
+    u32* packetData;
     u32 arg1;
 
     if (!STWI_init(ID_CPR_START_REQ))
@@ -483,7 +483,7 @@ static void STWI_intr_timer(void)
 {
     switch (gSTWIStatus->timerState)
     {
-    // TODO: Make an enum for these
+        // TODO: Make an enum for these
     case 2:
         gSTWIStatus->timerActive = 1;
         STWI_set_timer(50);
@@ -505,8 +505,8 @@ static void STWI_intr_timer(void)
 
 static void STWI_set_timer(u8 count)
 {
-    vu16 *timerL = &REG_TMCNT_L(gSTWIStatus->timerSelect);
-    vu16 *timerH = &REG_TMCNT_H(gSTWIStatus->timerSelect);
+    vu16* timerL = &REG_TMCNT_L(gSTWIStatus->timerSelect);
+    vu16* timerH = &REG_TMCNT_H(gSTWIStatus->timerSelect);
     REG_IME = 0;
     switch (count)
     {
@@ -596,7 +596,7 @@ static s32 STWI_start_Command(void)
 
     // equivalent to gSTWIStatus->txPacket->rfuPacket32.command, 
     // but the cast here is required to avoid register issue
-    *(u32 *)gSTWIStatus->txPacket->rfuPacket8.data = 0x99660000 | (gSTWIStatus->reqLength << 8) | gSTWIStatus->reqActiveCommand;
+    *(u32*)gSTWIStatus->txPacket->rfuPacket8.data = 0x99660000 | (gSTWIStatus->reqLength << 8) | gSTWIStatus->reqActiveCommand;
     REG_SIODATA32 = gSTWIStatus->txPacket->rfuPacket32.command;
     gSTWIStatus->state = 0; // master send req
     gSTWIStatus->reqNext = 1;

@@ -14,10 +14,10 @@
 #define STD_WINDOW_PALETTE_NUM 14
 #define STD_WINDOW_BASE_TILE_NUM 0x214
 
-static EWRAM_DATA bool8 sScheduledBgCopiesToVram[4] = {FALSE};
-static EWRAM_DATA u16 sTempTileDataBufferCursor = {0};
-static EWRAM_DATA void *sTempTileDataBuffers[0x20] = {NULL};
-static EWRAM_DATA u8 sStartMenuWindowId = {0};
+static EWRAM_DATA bool8 sScheduledBgCopiesToVram[4] = { FALSE };
+static EWRAM_DATA u16 sTempTileDataBufferCursor = { 0 };
+static EWRAM_DATA void* sTempTileDataBuffers[0x20] = { NULL };
+static EWRAM_DATA u8 sStartMenuWindowId = { 0 };
 
 static const u16 sUnusedWindow_Gfx[] = INCBIN_U16("graphics/text_window/unused.4bpp");
 const u16 gMenuMessageWindow_Gfx[] = INCBIN_U16("graphics/text_window/menu_message.4bpp");
@@ -27,11 +27,11 @@ const u16 gStandardMenuPalette[] = INCBIN_U16("graphics/interface/std_menu.gbapa
 static const u8 sTextSpeedFrameDelays[] =
 {
     [OPTIONS_TEXT_SPEED_SLOW] = 8,
-    [OPTIONS_TEXT_SPEED_MID]  = 4,
+    [OPTIONS_TEXT_SPEED_MID] = 4,
     [OPTIONS_TEXT_SPEED_FAST] = 1
 };
 
-static const struct WindowTemplate sStandardTextBox_WindowTemplates[] = 
+static const struct WindowTemplate sStandardTextBox_WindowTemplates[] =
 {
     {
         .bg = 0,
@@ -45,7 +45,7 @@ static const struct WindowTemplate sStandardTextBox_WindowTemplates[] =
     DUMMY_WIN_TEMPLATE
 };
 
-static const struct WindowTemplate sYesNo_WindowTemplate = 
+static const struct WindowTemplate sYesNo_WindowTemplate =
 {
     .bg = 0,
     .tilemapLeft = 21,
@@ -56,7 +56,7 @@ static const struct WindowTemplate sYesNo_WindowTemplate =
     .baseBlock = 0x125,
 };
 
-static const struct FontInfo gFontInfos[] = 
+static const struct FontInfo gFontInfos[] =
 {
     [FONT_SMALL] = {
         .fontFunction = FontFunc_Small,
@@ -140,19 +140,19 @@ static const struct FontInfo gFontInfos[] =
     }
 };
 
-static const u8 gMenuCursorDimensions[][2] = 
+static const u8 gMenuCursorDimensions[][2] =
 {
-    [FONT_SMALL]         = { 8,  13 },
+    [FONT_SMALL] = { 8,  13 },
     [FONT_NORMAL_COPY_1] = { 8,  14 },
-    [FONT_NORMAL]        = { 8,  14 },
+    [FONT_NORMAL] = { 8,  14 },
     [FONT_NORMAL_COPY_2] = { 8,  14 },
-    [FONT_MALE]          = { 8,  14 },
-    [FONT_FEMALE]        = { 8,  14 },
-    [FONT_BRAILLE]       = { 8,  16 },
-    [FONT_BOLD]          = {}
+    [FONT_MALE] = { 8,  14 },
+    [FONT_FEMALE] = { 8,  14 },
+    [FONT_BRAILLE] = { 8,  16 },
+    [FONT_BOLD] = {}
 };
 
-static u16 CopyDecompressedTileDataToVram(u8 bgId, const void *src, u16 size, u16 offset, u8 mode);
+static u16 CopyDecompressedTileDataToVram(u8 bgId, const void* src, u16 size, u16 offset, u8 mode);
 static void WindowFunc_DrawDialogueFrame(u8 bg, u8 tilemapLeft, u8 tilemapTop, u8 width, u8 height, u8 paletteNum);
 static void WindowFunc_DrawStandardFrame(u8 bg, u8 tilemapLeft, u8 tilemapTop, u8 width, u8 height, u8 paletteNum);
 static void WindowFunc_ClearDialogWindowAndFrame(u8 bg, u8 tilemapLeft, u8 tilemapTop, u8 width, u8 height, u8 paletteNum);
@@ -226,13 +226,13 @@ bool8 FreeTempTileDataBuffersIfPossible(void)
     }
 }
 
-void *DecompressAndCopyTileDataToVram(u8 bgId, const void *src, u32 size, u16 offset, u8 mode)
+void* DecompressAndCopyTileDataToVram(u8 bgId, const void* src, u32 size, u16 offset, u8 mode)
 {
     u32 sizeOut;
 
     if (sTempTileDataBufferCursor < NELEMS(sTempTileDataBuffers))
     {
-        void *ptr = MallocAndDecompress(src, &sizeOut);
+        void* ptr = MallocAndDecompress(src, &sizeOut);
         if (!size)
             size = sizeOut;
         if (ptr)
@@ -245,13 +245,13 @@ void *DecompressAndCopyTileDataToVram(u8 bgId, const void *src, u32 size, u16 of
     return NULL;
 }
 
-void *DecompressAndCopyTileDataToVram2(u8 bgId, const void *src, u32 size, u16 offset, u8 mode)
+void* DecompressAndCopyTileDataToVram2(u8 bgId, const void* src, u32 size, u16 offset, u8 mode)
 {
     u32 sizeOut;
 
     if (sTempTileDataBufferCursor < NELEMS(sTempTileDataBuffers))
     {
-        void *ptr = MallocAndDecompress(src, &sizeOut);
+        void* ptr = MallocAndDecompress(src, &sizeOut);
         if (sizeOut > size)
             sizeOut = size;
         if (ptr)
@@ -264,11 +264,11 @@ void *DecompressAndCopyTileDataToVram2(u8 bgId, const void *src, u32 size, u16 o
     return NULL;
 }
 
-void DecompressAndLoadBgGfxUsingHeap(u8 bgId, const void *src, u32 size, u16 offset, u8 mode)
+void DecompressAndLoadBgGfxUsingHeap(u8 bgId, const void* src, u32 size, u16 offset, u8 mode)
 {
     u32 sizeOut;
 
-    void *ptr = MallocAndDecompress(src, &sizeOut);
+    void* ptr = MallocAndDecompress(src, &sizeOut);
     if (!size)
         size = sizeOut;
     if (ptr)
@@ -279,11 +279,11 @@ void DecompressAndLoadBgGfxUsingHeap(u8 bgId, const void *src, u32 size, u16 off
     }
 }
 
-void DecompressAndLoadBgGfxUsingHeap2(u8 bgId, const void *src, u32 size, u16 offset, u8 mode)
+void DecompressAndLoadBgGfxUsingHeap2(u8 bgId, const void* src, u32 size, u16 offset, u8 mode)
 {
     u32 sizeOut;
 
-    void *ptr = MallocAndDecompress(src, &sizeOut);
+    void* ptr = MallocAndDecompress(src, &sizeOut);
     if (sizeOut > size)
         sizeOut = size;
     if (ptr)
@@ -298,16 +298,16 @@ static void TaskFreeBufAfterCopyingTileDataToVram(u8 taskId)
 {
     if (!WaitDma3Request(gTasks[taskId].data[0]))
     {
-        Free((void *)GetWordTaskArg(taskId, 1));
+        Free((void*)GetWordTaskArg(taskId, 1));
         DestroyTask(taskId);
     }
 }
 
-void *MallocAndDecompress(const void *src, u32 *size)
+void* MallocAndDecompress(const void* src, u32* size)
 {
-    void *ptr;
-    u8 *sizeAsBytes = (u8 *)size;
-    const u8 *srcAsBytes = src;
+    void* ptr;
+    u8* sizeAsBytes = (u8*)size;
+    const u8* srcAsBytes = src;
 
     sizeAsBytes[0] = srcAsBytes[1];
     sizeAsBytes[1] = srcAsBytes[2];
@@ -320,13 +320,13 @@ void *MallocAndDecompress(const void *src, u32 *size)
     return ptr;
 }
 
-static u16 CopyDecompressedTileDataToVram(u8 bgId, const void *src, u16 size, u16 offset, u8 mode)
+static u16 CopyDecompressedTileDataToVram(u8 bgId, const void* src, u16 size, u16 offset, u8 mode)
 {
     switch (mode)
     {
     case 1:
         break;
-    case 0:        
+    case 0:
     default:
         return LoadBgTiles(bgId, src, size, offset);
     }
@@ -336,7 +336,7 @@ static u16 CopyDecompressedTileDataToVram(u8 bgId, const void *src, u16 size, u1
 void SetBgTilemapPalette(u8 bgId, u8 left, u8 top, u8 width, u8 height, u8 palette)
 {
     u8 i, j;
-    u16 *ptr = GetBgTilemapBuffer(bgId);
+    u16* ptr = GetBgTilemapBuffer(bgId);
 
     for (i = top; i < top + height; i++)
     {
@@ -347,10 +347,10 @@ void SetBgTilemapPalette(u8 bgId, u8 left, u8 top, u8 width, u8 height, u8 palet
     }
 }
 
-void CopyToBufferFromBgTilemap(u8 bgId, u16 *dest, u8 left, u8 top, u8 width, u8 height)
+void CopyToBufferFromBgTilemap(u8 bgId, u16* dest, u8 left, u8 top, u8 width, u8 height)
 {
-    u8 i,j;
-    const u16 *src = GetBgTilemapBuffer(bgId);
+    u8 i, j;
+    const u16* src = GetBgTilemapBuffer(bgId);
 
     for (i = 0; i < height; i++)
     {
@@ -399,7 +399,7 @@ u16 RunTextPrinters_CheckPrinter0Active(void)
     return IsTextPrinterActive(0);
 }
 
-u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16), u8 fgColor, u8 bgColor, u8 shadowColor)
+u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8* str, u8 speed, void (*callback)(struct TextPrinterTemplate*, u16), u8 fgColor, u8 bgColor, u8 shadowColor)
 {
     struct TextPrinterTemplate printer;
 
@@ -423,9 +423,9 @@ u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 speed
 void AddTextPrinterDiffStyle(bool8 allowSkippingDelayWithButtonPress)
 {
     u8 color;
-    void *nptr = NULL;
+    void* nptr = NULL;
 
-    gTextFlags.canABSpeedUpPrint = allowSkippingDelayWithButtonPress;    
+    gTextFlags.canABSpeedUpPrint = allowSkippingDelayWithButtonPress;
     color = ContextNpcGetTextColor();
     if (color == NPC_TEXT_COLOR_MALE)
         AddTextPrinterParameterized2(0, FONT_MALE, gStringVar4, GetTextSpeedSetting(), nptr, TEXT_COLOR_BLUE, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
@@ -626,7 +626,7 @@ void Menu_LoadStdPalAt(u16 offset)
 }
 
 // Unused
-static const u16 *GetStdMenuPalette(void)
+static const u16* GetStdMenuPalette(void)
 {
     return gStandardMenuPalette;
 }
@@ -638,7 +638,7 @@ static u16 GetStdPalColor(u8 colorNum)
     return gStandardMenuPalette[colorNum];
 }
 
-void DisplayItemMessageOnField(u8 taskId, u8 fontId, const u8 *string, TaskFunc callback)
+void DisplayItemMessageOnField(u8 taskId, u8 fontId, const u8* string, TaskFunc callback)
 {
     LoadStdWindowFrameGfx();
     DisplayMessageAndContinueTask(taskId, 0, DLG_WINDOW_BASE_TILE_NUM, DLG_WINDOW_PALETTE_NUM, fontId, GetTextSpeedSetting(), string, callback);
@@ -698,7 +698,7 @@ u16 GetStdWindowBaseTileNum(void)
     return STD_WINDOW_BASE_TILE_NUM;
 }
 
-void DrawHelpMessageWindowWithText(const u8 * text)
+void DrawHelpMessageWindowWithText(const u8* text)
 {
     LoadHelpMessageWindowGfx(CreateHelpMessageWindow(), DLG_WINDOW_BASE_TILE_NUM, BG_PLTT_ID(DLG_WINDOW_PALETTE_NUM));
     PrintTextOnHelpMessageWindow(text, 2);

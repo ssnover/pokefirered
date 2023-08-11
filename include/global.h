@@ -295,8 +295,8 @@ struct BattleTowerData // Leftover from R/S
     /*0x03DC, 0x048C*/ u8 defeatedByTrainerName[8];
     /*0x03E4, 0x0494*/ u8 firstMonNickname[POKEMON_NAME_LENGTH]; // nickname of the first pokemon in the player's battle tower party
     /*0x03F0, 0x04A0*/ struct BattleTowerEReaderTrainer ereaderTrainer;
-    /*0x04AC, 0x055C*/ u8 battleTowerLevelType:1; // 0 = level 50; 1 = level 100
-    /*0x04AC, 0x055C*/ u8 unk_554:1;
+    /*0x04AC, 0x055C*/ u8 battleTowerLevelType : 1; // 0 = level 50; 1 = level 100
+    /*0x04AC, 0x055C*/ u8 unk_554 : 1;
     /*0x04AD, 0x055D*/ u8 battleOutcome;
     /*0x04AE, 0x055E*/ u8 var_4AE[2];
     /*0x04B0, 0x0560*/ u16 curChallengeBattleNum[2]; // 1-based index of battle in the current challenge. (challenges consist of 7 battles)
@@ -324,12 +324,12 @@ struct SaveBlock2
     /*0x011*/ u8 playTimeSeconds;
     /*0x012*/ u8 playTimeVBlanks;
     /*0x013*/ u8 optionsButtonMode;  // OPTIONS_BUTTON_MODE_[NORMAL/LR/L_EQUALS_A]
-    /*0x014*/ u16 optionsTextSpeed:3; // OPTIONS_TEXT_SPEED_[SLOW/MID/FAST]
-              u16 optionsWindowFrameType:5; // Specifies one of the 20 decorative borders for text boxes
-    /*0x15*/  u16 optionsSound:1; // OPTIONS_SOUND_[MONO/STEREO]
-              u16 optionsBattleStyle:1; // OPTIONS_BATTLE_STYLE_[SHIFT/SET]
-              u16 optionsBattleSceneOff:1; // whether battle animations are disabled
-              u16 regionMapZoom:1; // whether the map is zoomed in
+    /*0x014*/ u16 optionsTextSpeed : 3; // OPTIONS_TEXT_SPEED_[SLOW/MID/FAST]
+    u16 optionsWindowFrameType : 5; // Specifies one of the 20 decorative borders for text boxes
+    /*0x15*/  u16 optionsSound : 1; // OPTIONS_SOUND_[MONO/STEREO]
+    u16 optionsBattleStyle : 1; // OPTIONS_BATTLE_STYLE_[SHIFT/SET]
+    u16 optionsBattleSceneOff : 1; // whether battle animations are disabled
+    u16 regionMapZoom : 1; // whether the map is zoomed in
     /*0x018*/ struct Pokedex pokedex;
     /*0x090*/ u8 filler_90[0x8];
     /*0x098*/ struct Time localTimeOffset;
@@ -347,7 +347,7 @@ struct SaveBlock2
     /*0xF20*/ u32 encryptionKey;
 }; // size: 0xF24
 
-extern struct SaveBlock2 *gSaveBlock2Ptr;
+extern struct SaveBlock2* gSaveBlock2Ptr;
 
 struct SecretBaseParty
 {
@@ -363,10 +363,10 @@ struct SecretBaseParty
 struct SecretBaseRecord
 {
     /*0x1A9C*/ u8 secretBaseId;
-    /*0x1A9D*/ u8 toRegister:4;
-    /*0x1A9D*/ u8 gender:1;
-    /*0x1A9D*/ u8 battledOwnerToday:1;
-    /*0x1A9D*/ u8 registryStatus:2;
+    /*0x1A9D*/ u8 toRegister : 4;
+    /*0x1A9D*/ u8 gender : 1;
+    /*0x1A9D*/ u8 battledOwnerToday : 1;
+    /*0x1A9D*/ u8 registryStatus : 2;
     /*0x1A9E*/ u8 trainerName[PLAYER_NAME_LENGTH];
     /*0x1AA5*/ u8 trainerId[TRAINER_ID_LENGTH]; // byte 0 is used for determining trainer class
     /*0x1AA9*/ u8 language;
@@ -438,9 +438,9 @@ struct RamScript
 // Leftover from R/S
 struct DewfordTrend
 {
-    u16 trendiness:7;
-    u16 maxTrendiness:7;
-    u16 gainingTrendiness:1;
+    u16 trendiness : 7;
+    u16 maxTrendiness : 7;
+    u16 gainingTrendiness : 1;
     u16 rand;
     u16 words[2];
 }; /*size = 0x8*/
@@ -524,8 +524,8 @@ struct DayCareMail
     struct Mail message;
     u8 OT_name[PLAYER_NAME_LENGTH + 1];
     u8 monName[POKEMON_NAME_LENGTH + 1];
-    u8 gameLanguage:4;
-    u8 monLanguage:4;
+    u8 gameLanguage : 4;
+    u8 monLanguage : 4;
 };
 
 struct DaycareMon
@@ -552,37 +552,37 @@ struct RecordMixingDayCareMail
 
 struct QuestLogNPCData
 {
-    u32 x:8;
-    u32 negx:1;
-    u32 y:8;
-    u32 negy:1;
-    u32 elevation:6;
-    u32 movementType:8;
+    u32 x : 8;
+    u32 negx : 1;
+    u32 y : 8;
+    u32 negy : 1;
+    u32 elevation : 6;
+    u32 movementType : 8;
 };
 
 struct QuestLogObjectEvent
 {
-    /*0x00*/ u8 active:1;
-    /*0x00*/ u8 triggerGroundEffectsOnStop:1;
-    /*0x00*/ u8 disableCoveringGroundEffects:1;
-    /*0x00*/ u8 landingJump:1;
-    /*0x00*/ u8 frozen:1;
-    /*0x00*/ u8 facingDirectionLocked:1;
-    /*0x00*/ u8 disableAnim:1;
-    /*0x00*/ u8 enableAnim:1;
-    /*0x01*/ u8 inanimate:1;
-    /*0x01*/ u8 invisible:1;
-    /*0x01*/ u8 offScreen:1;
-    /*0x01*/ u8 trackedByCamera:1;
-    /*0x01*/ u8 isPlayer:1;
-    /*0x01*/ u8 spriteAnimPausedBackup:1;
-    /*0x01*/ u8 spriteAffineAnimPausedBackup:1;
-    /*0x01*/ u8 disableJumpLandingGroundEffect:1;
-    /*0x02*/ u8 fixedPriority:1;
-    /*0x02*/ u8 mapobj_unk_18:4;
-    /*0x02*/ u8 unused_02_5:3;
-    /*0x03*/ u8 mapobj_unk_0B_0:4;
-    /*0x03*/ u8 elevation:4;
+    /*0x00*/ u8 active : 1;
+    /*0x00*/ u8 triggerGroundEffectsOnStop : 1;
+    /*0x00*/ u8 disableCoveringGroundEffects : 1;
+    /*0x00*/ u8 landingJump : 1;
+    /*0x00*/ u8 frozen : 1;
+    /*0x00*/ u8 facingDirectionLocked : 1;
+    /*0x00*/ u8 disableAnim : 1;
+    /*0x00*/ u8 enableAnim : 1;
+    /*0x01*/ u8 inanimate : 1;
+    /*0x01*/ u8 invisible : 1;
+    /*0x01*/ u8 offScreen : 1;
+    /*0x01*/ u8 trackedByCamera : 1;
+    /*0x01*/ u8 isPlayer : 1;
+    /*0x01*/ u8 spriteAnimPausedBackup : 1;
+    /*0x01*/ u8 spriteAffineAnimPausedBackup : 1;
+    /*0x01*/ u8 disableJumpLandingGroundEffect : 1;
+    /*0x02*/ u8 fixedPriority : 1;
+    /*0x02*/ u8 mapobj_unk_18 : 4;
+    /*0x02*/ u8 unused_02_5 : 3;
+    /*0x03*/ u8 mapobj_unk_0B_0 : 4;
+    /*0x03*/ u8 elevation : 4;
     /*0x04*/ u8 graphicsId;
     /*0x05*/ u8 animPattern;
     /*0x06*/ u8 trainerType;
@@ -620,16 +620,16 @@ struct QuestLog
 
 struct FameCheckerSaveData
 {
-    /*3a54*/ u16 pickState:2;
-    u16 flavorTextFlags:12;
-    u16 unk_0_E:2;
+    /*3a54*/ u16 pickState : 2;
+    u16 flavorTextFlags : 12;
+    u16 unk_0_E : 2;
 };
 
 struct WonderNewsMetadata
 {
-    u8 newsType:2;
-    u8 sentRewardCounter:3;
-    u8 rewardCounter:3;
+    u8 newsType : 2;
+    u8 sentRewardCounter : 3;
+    u8 rewardCounter : 3;
     u8 berry;
 };
 
@@ -647,9 +647,9 @@ struct WonderCard
     u16 flagId; // Event flag (sReceivedGiftFlags) + WONDER_CARD_FLAG_OFFSET
     u16 iconSpecies;
     u32 idNumber;
-    u8 type:2; // CARD_TYPE_*
-    u8 bgType:4;
-    u8 sendType:2; // SEND_TYPE_*
+    u8 type : 2; // CARD_TYPE_*
+    u8 bgType : 4;
+    u8 sendType : 2; // SEND_TYPE_*
     u8 maxStamps;
     u8 titleText[WONDER_CARD_TEXT_LENGTH];
     u8 subtitleText[WONDER_CARD_TEXT_LENGTH];
@@ -686,12 +686,12 @@ struct TrainerTower
     u32 bestTime;
     u8 floorsCleared;
     u8 unk9;
-    bool8 receivedPrize:1;
-    bool8 checkedFinalTime:1;
-    bool8 spokeToOwner:1;
-    bool8 hasLost:1;
-    bool8 unkA_4:1;
-    bool8 validated:1;
+    bool8 receivedPrize : 1;
+    bool8 checkedFinalTime : 1;
+    bool8 spokeToOwner : 1;
+    bool8 hasLost : 1;
+    bool8 unkA_4 : 1;
+    bool8 validated : 1;
 };
 
 struct TrainerNameRecord
@@ -705,14 +705,14 @@ struct TrainerNameRecord
 struct ExternalEventData
 {
     u8 unknownExternalDataFields1[7]; // if actually used, may be broken up into different fields.
-    u32 unknownExternalDataFields2:8;
-    u32 currentPokeCoupons:24; // PokéCoupons stored by Pokémon Colosseum and XD from Mt. Battle runs. Earned PokéCoupons are also added to totalEarnedPokeCoupons. Colosseum/XD caps this at 9,999,999, but will read up to 16,777,215.
-    u32 gotGoldPokeCouponTitleReward:1; // Master Ball from Jp Colosseum Bonus Disc; for reaching 30,000 totalEarnedPokeCoupons
-    u32 gotSilverPokeCouponTitleReward:1; // Light Ball Pikachu from JP Colosseum Bonus Disc; for reaching 5000 totalEarnedPokeCoupons
-    u32 gotBronzePokeCouponTitleReward:1; // PP Max from JP Colosseum Bonus Disc; for reaching 2500 totalEarnedPokeCoupons
-    u32 receivedAgetoCelebi:1; // from JP Colosseum Bonus Disc
-    u32 unknownExternalDataFields3:4;
-    u32 totalEarnedPokeCoupons:24; // Used by the JP Colosseum bonus disc. Determines PokéCoupon rank to distribute rewards. Unread in International games. Colosseum/XD caps this at 9,999,999.
+    u32 unknownExternalDataFields2 : 8;
+    u32 currentPokeCoupons : 24; // PokéCoupons stored by Pokémon Colosseum and XD from Mt. Battle runs. Earned PokéCoupons are also added to totalEarnedPokeCoupons. Colosseum/XD caps this at 9,999,999, but will read up to 16,777,215.
+    u32 gotGoldPokeCouponTitleReward : 1; // Master Ball from Jp Colosseum Bonus Disc; for reaching 30,000 totalEarnedPokeCoupons
+    u32 gotSilverPokeCouponTitleReward : 1; // Light Ball Pikachu from JP Colosseum Bonus Disc; for reaching 5000 totalEarnedPokeCoupons
+    u32 gotBronzePokeCouponTitleReward : 1; // PP Max from JP Colosseum Bonus Disc; for reaching 2500 totalEarnedPokeCoupons
+    u32 receivedAgetoCelebi : 1; // from JP Colosseum Bonus Disc
+    u32 unknownExternalDataFields3 : 4;
+    u32 totalEarnedPokeCoupons : 24; // Used by the JP Colosseum bonus disc. Determines PokéCoupon rank to distribute rewards. Unread in International games. Colosseum/XD caps this at 9,999,999.
     u8 unknownExternalDataFields4[5]; // if actually used, may be broken up into different fields.
 } __attribute__((packed)); /*size = 0x14*/
 
@@ -720,9 +720,9 @@ struct ExternalEventData
 // In FRLG, Jirachi cannot normally be received, but hacking the distribution discs allows FRLG to receive Jirachi and set the flag
 struct ExternalEventFlags
 {
-    u8 usedBoxRS:1; // Set by Pokémon Box: Ruby & Sapphire; denotes whether this save has connected to it and triggered the free False Swipe Swablu Egg giveaway.
-    u8 boxRSEggsUnlocked:2; // Set by Pokémon Box: Ruby & Sapphire; denotes the number of Eggs unlocked from deposits; 1 for ExtremeSpeed Zigzagoon (at 100 deposited), 2 for Pay Day Skitty (at 500 deposited), 3 for Surf Pichu (at 1499 deposited)
-    u8 padding:5;
+    u8 usedBoxRS : 1; // Set by Pokémon Box: Ruby & Sapphire; denotes whether this save has connected to it and triggered the free False Swipe Swablu Egg giveaway.
+    u8 boxRSEggsUnlocked : 2; // Set by Pokémon Box: Ruby & Sapphire; denotes the number of Eggs unlocked from deposits; 1 for ExtremeSpeed Zigzagoon (at 100 deposited), 2 for Pay Day Skitty (at 500 deposited), 3 for Surf Pichu (at 1499 deposited)
+    u8 padding : 5;
     u8 unknownFlag1;
     u8 receivedGCNJirachi; // Both the US Colosseum Bonus Disc and PAL/AUS Pokémon Channel use this field. One cannot receive a WISHMKR Jirachi and CHANNEL Jirachi with the same savefile.
     u8 unknownFlag3;

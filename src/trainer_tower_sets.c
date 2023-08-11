@@ -18,7 +18,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_4 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_WHITE_HERB,
 	.trainers = {
-	    {
+		{
 			.name = _("COLE"),
 			.facilityClass = FACILITY_CLASS_YOUNGSTER,
 			.textColor = 1,
@@ -173,7 +173,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_7 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_DRAGON_SCALE,
 	.trainers = {
-	    {
+		{
 			.name = _("JAC"),
 			.facilityClass = FACILITY_CLASS_BURGLAR,
 			.textColor = 1,
@@ -328,7 +328,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_Unused = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_IRON,
 	.trainers = {
-	    {
+		{
 			.name = _("MILY"),
 			.facilityClass = FACILITY_CLASS_PSYCHIC_F,
 			.textColor = 1,
@@ -483,7 +483,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_5 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_CHOICE_BAND,
 	.trainers = {
-	    {
+		{
 			.name = _("JOS & ANNE"),
 			.facilityClass = FACILITY_CLASS_COOL_COUPLE,
 			.textColor = 7,
@@ -780,7 +780,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_6 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_CALCIUM,
 	.trainers = {
-	    {
+		{
 			.name = _("EMY & ALEK"),
 			.facilityClass = FACILITY_CLASS_YOUNG_COUPLE,
 			.textColor = 1,
@@ -1077,7 +1077,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_2 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_HP_UP,
 	.trainers = {
-	    {
+		{
 			.name = _("JO & HALEY"),
 			.facilityClass = FACILITY_CLASS_CRUSH_KIN,
 			.textColor = 5,
@@ -1374,7 +1374,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_1 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_METAL_COAT,
 	.trainers = {
-	    {
+		{
 			.name = _("JORDY"),
 			.facilityClass = FACILITY_CLASS_BIKER,
 			.textColor = 3,
@@ -1813,7 +1813,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_2 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_UP_GRADE,
 	.trainers = {
-	    {
+		{
 			.name = _("MIKE"),
 			.facilityClass = FACILITY_CLASS_HIKER,
 			.textColor = 5,
@@ -2252,7 +2252,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_5 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_HP_UP,
 	.trainers = {
-	    {
+		{
 			.name = _("JOEY"),
 			.facilityClass = FACILITY_CLASS_CAMPER,
 			.textColor = 1,
@@ -2407,7 +2407,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_8 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_METAL_COAT,
 	.trainers = {
-	    {
+		{
 			.name = _("LILY"),
 			.facilityClass = FACILITY_CLASS_PKMN_BREEDER,
 			.textColor = 1,
@@ -2562,7 +2562,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_2 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_UP_GRADE,
 	.trainers = {
-	    {
+		{
 			.name = _("BRANDON"),
 			.facilityClass = FACILITY_CLASS_BUG_CATCHER,
 			.textColor = 1,
@@ -2717,7 +2717,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_3 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_IRON,
 	.trainers = {
-	    {
+		{
 			.name = _("RIC & RENE"),
 			.facilityClass = FACILITY_CLASS_CRUSH_KIN,
 			.textColor = 5,
@@ -3014,7 +3014,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_1 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_DRAGON_SCALE,
 	.trainers = {
-	    {
+		{
 			.name = _("JEN & KIRA"),
 			.facilityClass = FACILITY_CLASS_TWINS,
 			.textColor = 5,
@@ -3311,7 +3311,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_4 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_MENTAL_HERB,
 	.trainers = {
-	    {
+		{
 			.name = _("ISAC & MAG"),
 			.facilityClass = FACILITY_CLASS_COOL_COUPLE,
 			.textColor = 1,
@@ -3608,7 +3608,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_8 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_BRIGHT_POWDER,
 	.trainers = {
-	    {
+		{
 			.name = _("CHELSEA"),
 			.facilityClass = FACILITY_CLASS_PKMN_RANGER_F,
 			.textColor = 7,
@@ -4047,7 +4047,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_3 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_CALCIUM,
 	.trainers = {
-	    {
+		{
 			.name = _("CAMRYN"),
 			.facilityClass = FACILITY_CLASS_PICNICKER,
 			.textColor = 1,
@@ -4486,7 +4486,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_6 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_CARBOS,
 	.trainers = {
-	    {
+		{
 			.name = _("BRADEN"),
 			.facilityClass = FACILITY_CLASS_SWIMMER_M,
 			.textColor = 1,
@@ -4641,7 +4641,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Mixed_1 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_KINGS_ROCK,
 	.trainers = {
-	    {
+		{
 			.name = _("ALLYSON"),
 			.facilityClass = FACILITY_CLASS_COOLTRAINER_F,
 			.textColor = 7,
@@ -4796,7 +4796,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_1 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_UP_GRADE,
 	.trainers = {
-	    {
+		{
 			.name = _("ALBERTO"),
 			.facilityClass = FACILITY_CLASS_SAILOR,
 			.textColor = 5,
@@ -4951,7 +4951,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Mixed_5 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_METAL_COAT,
 	.trainers = {
-	    {
+		{
 			.name = _("KAT & KIPP"),
 			.facilityClass = FACILITY_CLASS_SIS_AND_BRO,
 			.textColor = 4,
@@ -5248,7 +5248,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_8 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_MENTAL_HERB,
 	.trainers = {
-	    {
+		{
 			.name = _("GEB&MEGAN"),
 			.facilityClass = FACILITY_CLASS_COOL_COUPLE,
 			.textColor = 7,
@@ -5545,7 +5545,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_Unused1 = {
 	.challengeType = CHALLENGE_TYPE_DOUBLE,
 	.prize = TTPRIZE_ZINC,
 	.trainers = {
-	    {
+		{
 			.name = _("LISA&LEAH"),
 			.facilityClass = FACILITY_CLASS_TWINS,
 			.textColor = 1,
@@ -5842,7 +5842,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_7 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_PROTEIN,
 	.trainers = {
-	    {
+		{
 			.name = _("PRISCILLA"),
 			.facilityClass = FACILITY_CLASS_TUBER,
 			.textColor = 1,
@@ -6281,7 +6281,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_4 = {
 	.challengeType = CHALLENGE_TYPE_KNOCKOUT,
 	.prize = TTPRIZE_DRAGON_SCALE,
 	.trainers = {
-	    {
+		{
 			.name = _("BRENNAN"),
 			.facilityClass = FACILITY_CLASS_SAILOR,
 			.textColor = 1,
@@ -6720,7 +6720,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_3 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_METAL_COAT,
 	.trainers = {
-	    {
+		{
 			.name = _("JARRETT"),
 			.facilityClass = FACILITY_CLASS_JUGGLER,
 			.textColor = 2,
@@ -6875,7 +6875,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Mixed_3 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_DRAGON_SCALE,
 	.trainers = {
-	    {
+		{
 			.name = _("OWEN"),
 			.facilityClass = FACILITY_CLASS_SUPER_NERD,
 			.textColor = 2,
@@ -7030,7 +7030,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Mixed_2 = {
 	.challengeType = CHALLENGE_TYPE_SINGLE,
 	.prize = TTPRIZE_PROTEIN,
 	.trainers = {
-	    {
+		{
 			.name = _("LORENZO"),
 			.facilityClass = FACILITY_CLASS_PSYCHIC_M,
 			.textColor = 1,
@@ -8949,49 +8949,49 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Knockout_5 = {
 };
 
 const struct EReaderTrainerTowerSetSubstruct gTrainerTowerLocalHeader = {
-    .numFloors = MAX_TRAINER_TOWER_FLOORS,
-    .id = 1
+	.numFloors = MAX_TRAINER_TOWER_FLOORS,
+	.id = 1
 };
 
-const struct TrainerTowerFloor *const gTrainerTowerFloors[NUM_TOWER_CHALLENGE_TYPES][MAX_TRAINER_TOWER_FLOORS] = {
-    [CHALLENGE_TYPE_SINGLE] = {
-        &sTrainerTowerFloor_Single_1,
-        &sTrainerTowerFloor_Single_2,
-        &sTrainerTowerFloor_Single_3,
-        &sTrainerTowerFloor_Single_4,
-        &sTrainerTowerFloor_Single_5,
-        &sTrainerTowerFloor_Single_6,
-        &sTrainerTowerFloor_Single_7,
-        &sTrainerTowerFloor_Single_8
-    },
-    [CHALLENGE_TYPE_DOUBLE] = {
-        &sTrainerTowerFloor_Double_1,
-        &sTrainerTowerFloor_Double_2,
-        &sTrainerTowerFloor_Double_3,
-        &sTrainerTowerFloor_Double_4,
-        &sTrainerTowerFloor_Double_5,
-        &sTrainerTowerFloor_Double_6,
-        &sTrainerTowerFloor_Double_7,
-        &sTrainerTowerFloor_Double_8
-    },
-    [CHALLENGE_TYPE_KNOCKOUT] = {
-        &sTrainerTowerFloor_Knockout_1,
-        &sTrainerTowerFloor_Knockout_2,
-        &sTrainerTowerFloor_Knockout_3,
-        &sTrainerTowerFloor_Knockout_4,
-        &sTrainerTowerFloor_Knockout_5,
-        &sTrainerTowerFloor_Knockout_6,
-        &sTrainerTowerFloor_Knockout_7,
-        &sTrainerTowerFloor_Knockout_8
-    },
-    [CHALLENGE_TYPE_MIXED] = {
-        &sTrainerTowerFloor_Mixed_1,
-        &sTrainerTowerFloor_Mixed_2,
-        &sTrainerTowerFloor_Mixed_3,
-        &sTrainerTowerFloor_Double_8,
-        &sTrainerTowerFloor_Mixed_5,
-        &sTrainerTowerFloor_Knockout_8,
-        &sTrainerTowerFloor_Double_3,
-        &sTrainerTowerFloor_Knockout_2
-    }
+const struct TrainerTowerFloor* const gTrainerTowerFloors[NUM_TOWER_CHALLENGE_TYPES][MAX_TRAINER_TOWER_FLOORS] = {
+	[CHALLENGE_TYPE_SINGLE] = {
+		&sTrainerTowerFloor_Single_1,
+		&sTrainerTowerFloor_Single_2,
+		&sTrainerTowerFloor_Single_3,
+		&sTrainerTowerFloor_Single_4,
+		&sTrainerTowerFloor_Single_5,
+		&sTrainerTowerFloor_Single_6,
+		&sTrainerTowerFloor_Single_7,
+		&sTrainerTowerFloor_Single_8
+	},
+	[CHALLENGE_TYPE_DOUBLE] = {
+		&sTrainerTowerFloor_Double_1,
+		&sTrainerTowerFloor_Double_2,
+		&sTrainerTowerFloor_Double_3,
+		&sTrainerTowerFloor_Double_4,
+		&sTrainerTowerFloor_Double_5,
+		&sTrainerTowerFloor_Double_6,
+		&sTrainerTowerFloor_Double_7,
+		&sTrainerTowerFloor_Double_8
+	},
+	[CHALLENGE_TYPE_KNOCKOUT] = {
+		&sTrainerTowerFloor_Knockout_1,
+		&sTrainerTowerFloor_Knockout_2,
+		&sTrainerTowerFloor_Knockout_3,
+		&sTrainerTowerFloor_Knockout_4,
+		&sTrainerTowerFloor_Knockout_5,
+		&sTrainerTowerFloor_Knockout_6,
+		&sTrainerTowerFloor_Knockout_7,
+		&sTrainerTowerFloor_Knockout_8
+	},
+	[CHALLENGE_TYPE_MIXED] = {
+		&sTrainerTowerFloor_Mixed_1,
+		&sTrainerTowerFloor_Mixed_2,
+		&sTrainerTowerFloor_Mixed_3,
+		&sTrainerTowerFloor_Double_8,
+		&sTrainerTowerFloor_Mixed_5,
+		&sTrainerTowerFloor_Knockout_8,
+		&sTrainerTowerFloor_Double_3,
+		&sTrainerTowerFloor_Knockout_2
+	}
 };

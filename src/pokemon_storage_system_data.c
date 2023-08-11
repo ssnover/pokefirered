@@ -36,7 +36,7 @@ static void SetPlacedMonData(u8 boxId, u8 cursorPos);
 static void PurgeMonOrBoxMon(u8 boxId, u8 cursorPos);
 static void SetShiftedMonData(u8 boxId, u8 cursorPos);
 static void TrySetDisplayMonData(void);
-static void SetDisplayMonData(void *pokemon, u8 mode);
+static void SetDisplayMonData(void* pokemon, u8 mode);
 static void ReshowDisplayMon(void);
 static u8 HandleInput_InBox_Normal(void);
 static u8 HandleInput_InBox_GrabbingMultiple(void);
@@ -97,13 +97,13 @@ void InitCursorOnReopen(void)
     }
 }
 
-static void GetCursorCoordsByPos(u8 cursorArea, u8 cursorPosition, u16 *x, u16 *y)
+static void GetCursorCoordsByPos(u8 cursorArea, u8 cursorPosition, u16* x, u16* y)
 {
     switch (cursorArea)
     {
     case CURSOR_AREA_IN_BOX:
         *x = (cursorPosition % IN_BOX_COLUMNS) * 24 + 100;
-        *y = (cursorPosition / IN_BOX_COLUMNS) * 24 +  32;
+        *y = (cursorPosition / IN_BOX_COLUMNS) * 24 + 32;
         break;
     case CURSOR_AREA_IN_PARTY:
         if (cursorPosition == 0)
@@ -405,8 +405,8 @@ u8 GetSavedCursorPos(void)
 
 void InitMonPlaceChange(u8 type)
 {
-    static bool8 (*const placeChangeFuncs[])(void) = {
-        [CHANGE_GRAB]  = MonPlaceChange_Grab,
+    static bool8(* const placeChangeFuncs[])(void) = {
+        [CHANGE_GRAB] = MonPlaceChange_Grab,
         [CHANGE_PLACE] = MonPlaceChange_Place,
         [CHANGE_SHIFT] = MonPlaceChange_Shift,
     };
@@ -767,7 +767,7 @@ void InitCanReleaseMonVars(void)
     gStorage->restrictedMoveList[0] = MOVE_SURF;
     gStorage->restrictedMoveList[1] = MOVE_DIVE;
     gStorage->restrictedMoveList[2] = MOVES_COUNT;
-    knownMoveFlags = GetMonData(&gStorage->tempMon, MON_DATA_KNOWN_MOVES, (u8 *)gStorage->restrictedMoveList);
+    knownMoveFlags = GetMonData(&gStorage->tempMon, MON_DATA_KNOWN_MOVES, (u8*)gStorage->restrictedMoveList);
     gStorage->isSurfMon = knownMoveFlags & 1;
     gStorage->isDiveMon = (knownMoveFlags >> 1) & 1;
     if (gStorage->isSurfMon || gStorage->isDiveMon)
@@ -796,7 +796,7 @@ s8 RunCanReleaseMon(void)
         {
             if (gStorage->releaseBoxId != TOTAL_BOXES_COUNT || gStorage->releaseBoxPos != i)
             {
-                knownMoveFlags = GetMonData(&gPlayerParty[i], MON_DATA_KNOWN_MOVES, (u8 *)gStorage->restrictedMoveList);
+                knownMoveFlags = GetMonData(&gPlayerParty[i], MON_DATA_KNOWN_MOVES, (u8*)gStorage->restrictedMoveList);
                 if (knownMoveFlags & 1)
                     gStorage->isSurfMon = FALSE;
                 if (knownMoveFlags & 2)
@@ -819,7 +819,7 @@ s8 RunCanReleaseMon(void)
         // for some reason, check only 5 mons in box each time this function is called
         for (i = 0; i < 5; i++)
         {
-            knownMoveFlags = GetAndCopyBoxMonDataAt(gStorage->releaseCheckBoxId, gStorage->releaseCheckBoxPos, MON_DATA_KNOWN_MOVES, (u8 *)gStorage->restrictedMoveList);
+            knownMoveFlags = GetAndCopyBoxMonDataAt(gStorage->releaseCheckBoxId, gStorage->releaseCheckBoxPos, MON_DATA_KNOWN_MOVES, (u8*)gStorage->restrictedMoveList);
             if (knownMoveFlags != 0
                 && !(gStorage->releaseBoxId == gStorage->releaseCheckBoxId && gStorage->releaseBoxPos == gStorage->releaseCheckBoxPos))
             {
@@ -1018,9 +1018,9 @@ static void ReshowDisplayMon(void)
 #define displayMonGenderAndLevelText  displayMonTexts[2]
 #define displayMonItemNameText        displayMonTexts[3]
 
-static void SetDisplayMonData(void *pokemon, u8 mode)
+static void SetDisplayMonData(void* pokemon, u8 mode)
 {
-    u8 *txtPtr;
+    u8* txtPtr;
     u16 gender;
     bool8 sanityIsBagEgg;
 
@@ -1029,7 +1029,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
     sanityIsBagEgg = FALSE;
     if (mode == MODE_PARTY)
     {
-        struct Pokemon *mon = (struct Pokemon *)pokemon;
+        struct Pokemon* mon = (struct Pokemon*)pokemon;
 
         gStorage->displayMonSpecies = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
         if (gStorage->displayMonSpecies != SPECIES_NONE)
@@ -1052,7 +1052,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
     }
     else if (mode == MODE_BOX)
     {
-        struct BoxPokemon *boxMon = (struct BoxPokemon *)pokemon;
+        struct BoxPokemon* boxMon = (struct BoxPokemon*)pokemon;
 
         gStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES_OR_EGG);
         if (gStorage->displayMonSpecies != SPECIES_NONE)
@@ -1712,7 +1712,7 @@ u8 HandleInput(void)
 {
     struct
     {
-        u8 (*func)(void);
+        u8(*func)(void);
         s8 area;
     }
     static const inputFuncs[] = {
@@ -1852,7 +1852,7 @@ static bool8 SetMenuTextsForItem(void)
     return TRUE;
 }
 
-static void SpriteCB_CursorShadow(struct Sprite *sprite)
+static void SpriteCB_CursorShadow(struct Sprite* sprite)
 {
     sprite->x = gStorage->cursorSprite->x;
     sprite->y = gStorage->cursorSprite->y + 20;
@@ -1903,11 +1903,11 @@ static void CreateCursorSprites(void)
         ANIMCMD_END
     };
 
-    static const union AnimCmd *const sAnims_Cursor[] = {
+    static const union AnimCmd* const sAnims_Cursor[] = {
         [CURSOR_ANIM_BOUNCE] = sAnim_Cursor_Bouncing,
-        [CURSOR_ANIM_STILL]  = sAnim_Cursor_Still,
-        [CURSOR_ANIM_OPEN]   = sAnim_Cursor_Open,
-        [CURSOR_ANIM_FIST]   = sAnim_Cursor_Fist,
+        [CURSOR_ANIM_STILL] = sAnim_Cursor_Still,
+        [CURSOR_ANIM_OPEN] = sAnim_Cursor_Open,
+        [CURSOR_ANIM_FIST] = sAnim_Cursor_Fist,
     };
 
     static const struct SpriteTemplate sSpriteTemplate_Cursor = {
@@ -1983,7 +1983,7 @@ u8 GetBoxCursorPosition(void)
     return sCursorPosition;
 }
 
-void GetCursorBoxColumnAndRow(u8 *column, u8 *row)
+void GetCursorBoxColumnAndRow(u8* column, u8* row)
 {
     if (sCursorArea == CURSOR_AREA_IN_BOX)
     {
@@ -2024,45 +2024,45 @@ void TryShowItemAtCursor(void)
         TryLoadItemIconAtPos(CURSOR_AREA_IN_BOX, sCursorPosition);
 }
 
-static const u8 *const sMenuTexts[] = {
-    [MENU_TEXT_CANCEL]     = gPCText_Cancel,
-    [MENU_TEXT_STORE]      = gPCText_Store,
-    [MENU_TEXT_WITHDRAW]   = gPCText_Withdraw,
-    [MENU_TEXT_MOVE]       = gPCText_Move,
-    [MENU_TEXT_SHIFT]      = gPCText_Shift,
-    [MENU_TEXT_PLACE]      = gPCText_Place,
-    [MENU_TEXT_SUMMARY]    = gPCText_Summary,
-    [MENU_TEXT_RELEASE]    = gPCText_Release,
-    [MENU_TEXT_MARK]       = gPCText_Mark,
-    [MENU_TEXT_JUMP]       = gPCText_Jump,
-    [MENU_TEXT_WALLPAPER]  = gPCText_Wallpaper,
-    [MENU_TEXT_NAME]       = gPCText_Name,
-    [MENU_TEXT_TAKE]       = gPCText_Take,
-    [MENU_TEXT_GIVE]       = gPCText_Give,
-    [MENU_TEXT_GIVE2]      = gPCText_Give,
-    [MENU_TEXT_SWITCH]     = gPCText_Switch,
-    [MENU_TEXT_BAG]        = gPCText_Bag,
-    [MENU_TEXT_INFO]       = gPCText_Info,
-    [MENU_TEXT_SCENERY_1]  = gPCText_Scenery1,
-    [MENU_TEXT_SCENERY_2]  = gPCText_Scenery2,
-    [MENU_TEXT_SCENERY_3]  = gPCText_Scenery3,
-    [MENU_TEXT_ETCETERA]   = gPCText_Etcetera,
-    [MENU_TEXT_FOREST]     = gPCText_Forest,
-    [MENU_TEXT_CITY]       = gPCText_City,
-    [MENU_TEXT_DESERT]     = gPCText_Desert,
-    [MENU_TEXT_SAVANNA]    = gPCText_Savanna,
-    [MENU_TEXT_CRAG]       = gPCText_Crag,
-    [MENU_TEXT_VOLCANO]    = gPCText_Volcano,
-    [MENU_TEXT_SNOW]       = gPCText_Snow,
-    [MENU_TEXT_CAVE]       = gPCText_Cave,
-    [MENU_TEXT_BEACH]      = gPCText_Beach,
-    [MENU_TEXT_SEAFLOOR]   = gPCText_Seafloor,
-    [MENU_TEXT_RIVER]      = gPCText_River,
-    [MENU_TEXT_SKY]        = gPCText_Sky,
-    [MENU_TEXT_POLKADOT]   = gPCText_PolkaDot,
+static const u8* const sMenuTexts[] = {
+    [MENU_TEXT_CANCEL] = gPCText_Cancel,
+    [MENU_TEXT_STORE] = gPCText_Store,
+    [MENU_TEXT_WITHDRAW] = gPCText_Withdraw,
+    [MENU_TEXT_MOVE] = gPCText_Move,
+    [MENU_TEXT_SHIFT] = gPCText_Shift,
+    [MENU_TEXT_PLACE] = gPCText_Place,
+    [MENU_TEXT_SUMMARY] = gPCText_Summary,
+    [MENU_TEXT_RELEASE] = gPCText_Release,
+    [MENU_TEXT_MARK] = gPCText_Mark,
+    [MENU_TEXT_JUMP] = gPCText_Jump,
+    [MENU_TEXT_WALLPAPER] = gPCText_Wallpaper,
+    [MENU_TEXT_NAME] = gPCText_Name,
+    [MENU_TEXT_TAKE] = gPCText_Take,
+    [MENU_TEXT_GIVE] = gPCText_Give,
+    [MENU_TEXT_GIVE2] = gPCText_Give,
+    [MENU_TEXT_SWITCH] = gPCText_Switch,
+    [MENU_TEXT_BAG] = gPCText_Bag,
+    [MENU_TEXT_INFO] = gPCText_Info,
+    [MENU_TEXT_SCENERY_1] = gPCText_Scenery1,
+    [MENU_TEXT_SCENERY_2] = gPCText_Scenery2,
+    [MENU_TEXT_SCENERY_3] = gPCText_Scenery3,
+    [MENU_TEXT_ETCETERA] = gPCText_Etcetera,
+    [MENU_TEXT_FOREST] = gPCText_Forest,
+    [MENU_TEXT_CITY] = gPCText_City,
+    [MENU_TEXT_DESERT] = gPCText_Desert,
+    [MENU_TEXT_SAVANNA] = gPCText_Savanna,
+    [MENU_TEXT_CRAG] = gPCText_Crag,
+    [MENU_TEXT_VOLCANO] = gPCText_Volcano,
+    [MENU_TEXT_SNOW] = gPCText_Snow,
+    [MENU_TEXT_CAVE] = gPCText_Cave,
+    [MENU_TEXT_BEACH] = gPCText_Beach,
+    [MENU_TEXT_SEAFLOOR] = gPCText_Seafloor,
+    [MENU_TEXT_RIVER] = gPCText_River,
+    [MENU_TEXT_SKY] = gPCText_Sky,
+    [MENU_TEXT_POLKADOT] = gPCText_PolkaDot,
     [MENU_TEXT_POKECENTER] = gPCText_Pokecenter,
-    [MENU_TEXT_MACHINE]    = gPCText_Machine,
-    [MENU_TEXT_SIMPLE]     = gPCText_Simple,
+    [MENU_TEXT_MACHINE] = gPCText_Machine,
+    [MENU_TEXT_SIMPLE] = gPCText_Simple,
 };
 
 void InitMenu(void)
@@ -2079,7 +2079,7 @@ void SetMenuText(u8 textId)
     if (gStorage->menuItemsCount < ARRAY_COUNT(gStorage->menuItems))
     {
         u8 len;
-        struct StorageMenu *menu = &gStorage->menuItems[gStorage->menuItemsCount];
+        struct StorageMenu* menu = &gStorage->menuItems[gStorage->menuItemsCount];
 
         menu->text = sMenuTexts[textId];
         menu->textId = textId;
@@ -2108,7 +2108,7 @@ void AddMenu(void)
     gStorage->menuWindowId = AddWindow(&gStorage->menuWindow);
     ClearWindowTilemap(gStorage->menuWindowId);
     DrawStdFrameWithCustomTileAndPalette(gStorage->menuWindowId, FALSE, 11, 14);
-    PrintTextArray(gStorage->menuWindowId, FONT_NORMAL_COPY_1, 8, 2, 16, gStorage->menuItemsCount, (void *)gStorage->menuItems);
+    PrintTextArray(gStorage->menuWindowId, FONT_NORMAL_COPY_1, 8, 2, 16, gStorage->menuItemsCount, (void*)gStorage->menuItems);
     Menu_InitCursor(gStorage->menuWindowId, FONT_NORMAL_COPY_1, 0, 2, 16, gStorage->menuItemsCount, 0);
     ScheduleBgCopyTilemapToVram(0);
     gStorage->menuUnusedField = 0;

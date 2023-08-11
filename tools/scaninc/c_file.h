@@ -36,7 +36,7 @@ public:
     const std::set<std::string>& GetIncludes() { return m_includes; }
 
 private:
-    char *m_buffer;
+    char* m_buffer;
     int m_pos;
     int m_size;
     int m_lineNum;

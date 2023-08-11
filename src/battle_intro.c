@@ -39,25 +39,25 @@ void SetAnimBgAttribute(u8 bgId, u8 attributeId, u8 value)
         switch (attributeId)
         {
         case BG_ANIM_SCREEN_SIZE:
-            ((struct BgCnt *)&sBgCnt)->screenSize = value;
+            ((struct BgCnt*)&sBgCnt)->screenSize = value;
             break;
         case BG_ANIM_AREA_OVERFLOW_MODE:
-            ((struct BgCnt *)&sBgCnt)->areaOverflowMode = value;
+            ((struct BgCnt*)&sBgCnt)->areaOverflowMode = value;
             break;
         case BG_ANIM_MOSAIC:
-            ((struct BgCnt *)&sBgCnt)->mosaic = value;
+            ((struct BgCnt*)&sBgCnt)->mosaic = value;
             break;
         case BG_ANIM_CHAR_BASE_BLOCK:
-            ((struct BgCnt *)&sBgCnt)->charBaseBlock = value;
+            ((struct BgCnt*)&sBgCnt)->charBaseBlock = value;
             break;
         case BG_ANIM_PRIORITY:
-            ((struct BgCnt *)&sBgCnt)->priority = value;
+            ((struct BgCnt*)&sBgCnt)->priority = value;
             break;
         case BG_ANIM_PALETTES_MODE:
-            ((struct BgCnt *)&sBgCnt)->palettes = value;
+            ((struct BgCnt*)&sBgCnt)->palettes = value;
             break;
         case BG_ANIM_SCREEN_BASE_BLOCK:
-            ((struct BgCnt *)&sBgCnt)->screenBaseBlock = value;
+            ((struct BgCnt*)&sBgCnt)->screenBaseBlock = value;
             break;
         }
         SetGpuReg(gBattleAnimRegOffsBgCnt[bgId], sBgCnt);
@@ -74,19 +74,19 @@ s32 GetAnimBgAttribute(u8 bgId, u8 attributeId)
         switch (attributeId)
         {
         case BG_ANIM_SCREEN_SIZE:
-            return ((struct BgCnt *)&bgCnt)->screenSize;
+            return ((struct BgCnt*)&bgCnt)->screenSize;
         case BG_ANIM_AREA_OVERFLOW_MODE:
-            return ((struct BgCnt *)&bgCnt)->areaOverflowMode;
+            return ((struct BgCnt*)&bgCnt)->areaOverflowMode;
         case BG_ANIM_MOSAIC:
-            return ((struct BgCnt *)&bgCnt)->mosaic;
+            return ((struct BgCnt*)&bgCnt)->mosaic;
         case BG_ANIM_CHAR_BASE_BLOCK:
-            return ((struct BgCnt *)&bgCnt)->charBaseBlock;
+            return ((struct BgCnt*)&bgCnt)->charBaseBlock;
         case BG_ANIM_PRIORITY:
-            return ((struct BgCnt *)&bgCnt)->priority;
+            return ((struct BgCnt*)&bgCnt)->priority;
         case BG_ANIM_PALETTES_MODE:
-            return ((struct BgCnt *)&bgCnt)->palettes;
+            return ((struct BgCnt*)&bgCnt)->palettes;
         case BG_ANIM_SCREEN_BASE_BLOCK:
-            return ((struct BgCnt *)&bgCnt)->screenBaseBlock;
+            return ((struct BgCnt*)&bgCnt)->screenBaseBlock;
         }
     }
     return 0;
@@ -182,7 +182,7 @@ static void BattleIntroSlide1(u8 taskId)
             }
             else if (gBattle_BG1_Y != 0xFFC8)
             {
-                    gBattle_BG1_Y -= 1;
+                gBattle_BG1_Y -= 1;
             }
         }
         if (gBattle_WIN0V & 0xFF00)
@@ -198,7 +198,7 @@ static void BattleIntroSlide1(u8 taskId)
         {
             gScanlineEffect.state = 3;
             ++gTasks[taskId].data[0];
-            CpuFill32(0, (void *)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
+            CpuFill32(0, (void*)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
             SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, 0);
             SetBgAttribute(2, BG_ATTR_CHARBASEINDEX, 0);
             SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_16COLOR | BGCNT_SCREENBASE(28) | BGCNT_TXT256x512);
@@ -280,8 +280,8 @@ static void BattleIntroSlide2(u8 taskId)
         }
         else if ((gTasks[taskId].data[4] & 0x1F) && --gTasks[taskId].data[5] == 0)
         {
-                gTasks[taskId].data[4] += 0xFF;
-                gTasks[taskId].data[5] = 4;
+            gTasks[taskId].data[4] += 0xFF;
+            gTasks[taskId].data[5] = 4;
         }
         if (gBattle_WIN0V & 0xFF00)
             gBattle_WIN0V -= 0x3FC;
@@ -297,7 +297,7 @@ static void BattleIntroSlide2(u8 taskId)
         {
             gScanlineEffect.state = 3;
             ++gTasks[taskId].data[0];
-            CpuFill32(0, (void *)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
+            CpuFill32(0, (void*)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
             SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, 0);
             SetBgAttribute(2, BG_ATTR_CHARBASEINDEX, 0);
             SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_16COLOR | BGCNT_SCREENBASE(28) | BGCNT_TXT256x512);
@@ -376,7 +376,7 @@ static void BattleIntroSlide3(u8 taskId)
         {
             gScanlineEffect.state = 3;
             ++gTasks[taskId].data[0];
-            CpuFill32(0, (void *)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
+            CpuFill32(0, (void*)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
             SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, 0);
             SetBgAttribute(2, BG_ATTR_CHARBASEINDEX, 0);
             SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_16COLOR | BGCNT_SCREENBASE(28) | BGCNT_TXT256x512);
@@ -406,8 +406,8 @@ static void BattleIntroSlideLink(u8 taskId)
         }
         else
         {
-            CpuFill32(0, (void *)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
-            CpuFill32(0, (void *)BG_SCREEN_ADDR(30), BG_SCREEN_SIZE);
+            CpuFill32(0, (void*)BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
+            CpuFill32(0, (void*)BG_SCREEN_ADDR(30), BG_SCREEN_SIZE);
             gTasks[taskId].data[4] = 1;
         }
     }
@@ -465,7 +465,7 @@ static void BattleIntroSlideLink(u8 taskId)
     }
 }
 
-void CopyBattlerSpriteToBg(s32 bgId, u8 x, u8 y, u8 battlerPosition, u8 palno, u8 *tilesDest, u16 *tilemapDest, u16 tilesOffset)
+void CopyBattlerSpriteToBg(s32 bgId, u8 x, u8 y, u8 battlerPosition, u8 palno, u8* tilesDest, u16* tilemapDest, u16 tilesOffset)
 {
     s32 i, j;
     u8 battler = GetBattlerAtPosition(battlerPosition);
@@ -484,9 +484,9 @@ static void DrawBattlerOnBgDMA(u8 arg0, u8 arg1, u8 battlerPosition, u8 arg3, u8
 {
     s32 i, j, offset;
 
-    DmaCopy16(3, gMonSpritesGfxPtr->sprites[battlerPosition] + BG_SCREEN_SIZE * arg3, (void *)BG_SCREEN_ADDR(0) + arg5, BG_SCREEN_SIZE);
+    DmaCopy16(3, gMonSpritesGfxPtr->sprites[battlerPosition] + BG_SCREEN_SIZE * arg3, (void*)BG_SCREEN_ADDR(0) + arg5, BG_SCREEN_SIZE);
     offset = (arg5 >> 5) - (arg7 << 9);
     for (i = arg1; i < arg1 + 8; ++i)
         for (j = arg0; j < arg0 + 8; ++j)
-            *((u16 *)(BG_VRAM) + (i * 32) + (j + (arg6 << 10))) = offset++ | (arg4 << 12);
+            *((u16*)(BG_VRAM)+(i * 32) + (j + (arg6 << 10))) = offset++ | (arg4 << 12);
 }

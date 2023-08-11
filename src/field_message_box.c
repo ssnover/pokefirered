@@ -8,7 +8,7 @@
 
 static EWRAM_DATA u8 sMessageBoxType = 0;
 
-static void ExpandStringAndStartDrawFieldMessageBox(const u8 *str);
+static void ExpandStringAndStartDrawFieldMessageBox(const u8* str);
 static void StartDrawFieldMessageBox(void);
 
 void InitFieldMessageBox(void)
@@ -21,7 +21,7 @@ void InitFieldMessageBox(void)
 
 static void Task_DrawFieldMessageBox(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
     case 0:
@@ -62,7 +62,7 @@ static void DestroyTask_DrawFieldMessageBox(void)
         DestroyTask(taskId);
 }
 
-bool8 ShowFieldMessage(const u8 *str)
+bool8 ShowFieldMessage(const u8* str)
 {
     if (sMessageBoxType != FIELD_MESSAGE_BOX_HIDDEN)
         return FALSE;
@@ -71,7 +71,7 @@ bool8 ShowFieldMessage(const u8 *str)
     return TRUE;
 }
 
-bool8 ShowFieldAutoScrollMessage(const u8 *str)
+bool8 ShowFieldAutoScrollMessage(const u8* str)
 {
     if (sMessageBoxType != FIELD_MESSAGE_BOX_HIDDEN)
         return FALSE;
@@ -81,7 +81,7 @@ bool8 ShowFieldAutoScrollMessage(const u8 *str)
 }
 
 // Unused
-static bool8 ForceShowFieldAutoScrollMessage(const u8 *str)
+static bool8 ForceShowFieldAutoScrollMessage(const u8* str)
 {
     sMessageBoxType = FIELD_MESSAGE_BOX_AUTO_SCROLL;
     ExpandStringAndStartDrawFieldMessageBox(str);
@@ -100,7 +100,7 @@ static bool8 ShowFieldMessageFromBuffer(void)
     return TRUE;
 }
 
-static void ExpandStringAndStartDrawFieldMessageBox(const u8 *str)
+static void ExpandStringAndStartDrawFieldMessageBox(const u8* str)
 {
     StringExpandPlaceholders(gStringVar4, str);
     AddTextPrinterDiffStyle(TRUE);
