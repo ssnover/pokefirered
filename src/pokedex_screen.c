@@ -64,11 +64,11 @@ struct PokedexScreenData
     u8 numericalOrderWindowId;
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
-    struct ListMenuItem * listItems;
+    struct ListMenuItem* listItems;
     u16 orderedDexCount;
     u8 windowIds[0x10];
     u16 dexSpecies;
-    u16 * bgBufsMem;
+    u16* bgBufsMem;
     u8 scrollArrowsTaskId;
     u8 categoryPageCursorTaskId;
     u16 modeSelectCursorPosBak;
@@ -81,17 +81,17 @@ struct PokedexScreenData
 
 struct PokedexScreenWindowGfx
 {
-    const u32 * tiles;
-    const u16 * pal;
+    const u32* tiles;
+    const u16* pal;
 };
 
 struct PokedexCategoryPage
 {
-    const u16 * species;
+    const u16* species;
     u8 count;
 };
 
-EWRAM_DATA static struct PokedexScreenData * sPokedexScreenData = NULL;
+EWRAM_DATA static struct PokedexScreenData* sPokedexScreenData = NULL;
 
 static void Task_PokedexScreen(u8 taskId);
 static void DexScreen_InitGfxForTopMenu(void);
@@ -100,7 +100,7 @@ static void DexScreen_InitGfxForNumericalOrderList(void);
 static void Task_DexScreen_CharacteristicOrder(u8 taskId);
 static void DexScreen_CreateCharacteristicListMenu(void);
 static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx);
-static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order);
+static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate* template, u8 order);
 static u8 DexScreen_CreateDexOrderScrollArrows(void);
 static void DexScreen_DestroyDexOrderListMenu(u8 order);
 static void Task_DexScreen_CategorySubmenu(u8 taskId);
@@ -108,12 +108,12 @@ static u8 DexScreen_CreateCategoryMenuScrollArrows(void);
 static int DexScreen_InputHandler_GetShoulderInput(void);
 static void Task_DexScreen_ShowMonPage(u8 taskId);
 static bool32 DexScreen_TryScrollMonsVertical(u8 direction);
-static void DexScreen_RemoveWindow(u8 *windowId_p);
-static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx);
+static void DexScreen_RemoveWindow(u8* windowId_p);
+static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 colorIdx);
 static void DexScreen_PrintNum3RightAlign(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx);
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y);
 static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex);
-static void DexScreen_PrintControlInfo(const u8 *src);
+static void DexScreen_PrintControlInfo(const u8* src);
 static void DexScreen_DestroyCategoryPageMonIconAndInfoWindows(void);
 static bool8 DexScreen_CreateCategoryListGfx(bool8 justRegistered);
 static void DexScreen_CreateCategoryPageSelectionCursor(u8 cursorPos);
@@ -131,8 +131,8 @@ u8 DexScreen_DestroyAreaScreenResources(void);
 void DexScreen_CreateCategoryPageSpeciesList(u8 category, u8 pageNum);
 static u8 DexScreen_PageNumberToRenderablePages(u16 page);
 void DexScreen_InputHandler_StartToCry(void);
-void DexScreen_PrintStringWithAlignment(const u8 *str, s32 mode);
-static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct ListMenu *list);
+void DexScreen_PrintStringWithAlignment(const u8* str, s32 mode);
+static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct ListMenu* list);
 static void ItemPrintFunc_DexModeSelect(u8 windowId, u32 itemId, u8 y);
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
@@ -436,63 +436,63 @@ static const struct ScrollArrowsTemplate sScrollArrowsTemplate_NatDex = {
 static const struct PokedexScreenWindowGfx sTopMenuSelectionIconGfxPtrs[] = {
     [DEX_CATEGORY_GRASSLAND] = {
         .tiles = sTopMenuIconTiles_Grassland,
-        .pal   = sTopMenuIconPals_Grassland
+        .pal = sTopMenuIconPals_Grassland
     },
     [DEX_CATEGORY_FOREST] = {
         .tiles = sTopMenuIconTiles_Forest,
-        .pal   = sTopMenuIconPals_Forest
+        .pal = sTopMenuIconPals_Forest
     },
     [DEX_CATEGORY_WATERS_EDGE] = {
         .tiles = sTopMenuIconTiles_WatersEdge,
-        .pal   = sTopMenuIconPals_WatersEdge
+        .pal = sTopMenuIconPals_WatersEdge
     },
     [DEX_CATEGORY_SEA] = {
         .tiles = sTopMenuIconTiles_Sea,
-        .pal   = sTopMenuIconPals_Sea
+        .pal = sTopMenuIconPals_Sea
     },
     [DEX_CATEGORY_CAVE] = {
         .tiles = sTopMenuIconTiles_Cave,
-        .pal   = sTopMenuIconPals_Cave
+        .pal = sTopMenuIconPals_Cave
     },
     [DEX_CATEGORY_MOUNTAIN] = {
         .tiles = sTopMenuIconTiles_Mountain,
-        .pal   = sTopMenuIconPals_Mountain
+        .pal = sTopMenuIconPals_Mountain
     },
     [DEX_CATEGORY_ROUGH_TERRAIN] = {
         .tiles = sTopMenuIconTiles_RoughTerrain,
-        .pal   = sTopMenuIconPals_RoughTerrain
+        .pal = sTopMenuIconPals_RoughTerrain
     },
     [DEX_CATEGORY_URBAN] = {
         .tiles = sTopMenuIconTiles_Urban,
-        .pal   = sTopMenuIconPals_Urban
+        .pal = sTopMenuIconPals_Urban
     },
     [DEX_CATEGORY_RARE] = {
         .tiles = sTopMenuIconTiles_Rare,
-        .pal   = sTopMenuIconPals_Rare
+        .pal = sTopMenuIconPals_Rare
     },
     [DEX_MODE(NUMERICAL_KANTO)] = {
         .tiles = sTopMenuIconTiles_Numerical,
-        .pal   = sTopMenuIconPals_Numerical
+        .pal = sTopMenuIconPals_Numerical
     },
     [DEX_MODE(ATOZ)] = {
         .tiles = gDexScreen_TopMenuIconTiles_AtoZ,
-        .pal   = gDexScreen_TopMenuIconPals_AtoZ
+        .pal = gDexScreen_TopMenuIconPals_AtoZ
     },
     [DEX_MODE(TYPE)] = {
         .tiles = sTopMenuIconTiles_Type,
-        .pal   = sTopMenuIconPals_Type
+        .pal = sTopMenuIconPals_Type
     },
     [DEX_MODE(LIGHTEST)] = {
         .tiles = sTopMenuIconTiles_Lightest,
-        .pal   = sTopMenuIconPals_Lightest
+        .pal = sTopMenuIconPals_Lightest
     },
     [DEX_MODE(SMALLEST)] = {
         .tiles = sTopMenuIconTiles_Smallest,
-        .pal   = sTopMenuIconPals_Smallest
+        .pal = sTopMenuIconPals_Smallest
     },
     [DEX_MODE(NUMERICAL_NATIONAL)] = {
         .tiles = sTopMenuIconTiles_Numerical,
-        .pal   = sTopMenuIconPals_Numerical
+        .pal = sTopMenuIconPals_Numerical
     },
 };
 
@@ -756,8 +756,8 @@ static const struct WindowTemplate sWindowTemplate_AreaMap_SevenIsland = {
 };
 
 struct {
-    const struct WindowTemplate * window;
-    const u32 * tiles;
+    const struct WindowTemplate* window;
+    const u32* tiles;
 } const sAreaMapStructs_SeviiIslands[] = {
     {&sWindowTemplate_AreaMap_OneIsland,   sTilemap_AreaMap_OneIsland},
     {&sWindowTemplate_AreaMap_TwoIsland,   sTilemap_AreaMap_TwoIsland},
@@ -793,14 +793,14 @@ static const u8 sPageIconCoords_4Mons[4][4] = {
     {22,  2, 15,  4}
 };
 
-const u8 (*const sCategoryPageIconCoords[])[4] = {
+const u8(* const sCategoryPageIconCoords[])[4] = {
     sPageIconCoords_1Mon,
     sPageIconCoords_2Mons,
     sPageIconCoords_3Mons,
     sPageIconCoords_4Mons,
 };
 
-static const u8 *const sDexCategoryNamePtrs[] = {
+static const u8* const sDexCategoryNamePtrs[] = {
     gText_DexCategory_GrasslandPkmn,
     gText_DexCategory_ForestPkmn,
     gText_DexCategory_WatersEdgePkmn,
@@ -889,14 +889,14 @@ void DexScreen_LoadResources(void)
     ScanlineEffect_Stop();
     ResetBgsAndClearDma3BusyFlags(TRUE);
     InitBgsFromTemplates(0, sBgTemplates, NELEMS(sBgTemplates));
-    SetBgTilemapBuffer(3, (u16 *)Alloc(BG_SCREEN_SIZE));
-    SetBgTilemapBuffer(2, (u16 *)Alloc(BG_SCREEN_SIZE));
-    SetBgTilemapBuffer(1, (u16 *)Alloc(BG_SCREEN_SIZE));
-    SetBgTilemapBuffer(0, (u16 *)Alloc(BG_SCREEN_SIZE));
+    SetBgTilemapBuffer(3, (u16*)Alloc(BG_SCREEN_SIZE));
+    SetBgTilemapBuffer(2, (u16*)Alloc(BG_SCREEN_SIZE));
+    SetBgTilemapBuffer(1, (u16*)Alloc(BG_SCREEN_SIZE));
+    SetBgTilemapBuffer(0, (u16*)Alloc(BG_SCREEN_SIZE));
     if (natDex)
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sNatDexTiles, BG_SCREEN_SIZE, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void*)sNatDexTiles, BG_SCREEN_SIZE, 0, 0);
     else
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sKantoDexTiles, BG_SCREEN_SIZE, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void*)sKantoDexTiles, BG_SCREEN_SIZE, 0, 0);
     InitWindows(sWindowTemplates);
     DeactivateAllTextPrinters();
     m4aSoundVSyncOn();
@@ -925,12 +925,12 @@ void DexScreen_LoadResources(void)
         LoadPalette(sNationalDexPalette, BG_PLTT_ID(0), sizeof(sNationalDexPalette));
     else
         LoadPalette(sKantoDexPalette, BG_PLTT_ID(0), sizeof(sKantoDexPalette));
-    FillBgTilemapBufferRect(3, 0x001, 0,  0, 32, 32, 0);
-    FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
-    FillBgTilemapBufferRect(1, 0x000, 0,  0, 32, 32, 17);
-    FillBgTilemapBufferRect(0, 0x003, 0,  0, 32,  2, 15);
-    FillBgTilemapBufferRect(0, 0x000, 0,  2, 32, 16, 17);
-    FillBgTilemapBufferRect(0, 0x003, 0, 18, 32,  2, 15);
+    FillBgTilemapBufferRect(3, 0x001, 0, 0, 32, 32, 0);
+    FillBgTilemapBufferRect(2, 0x000, 0, 0, 32, 32, 17);
+    FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
+    FillBgTilemapBufferRect(0, 0x003, 0, 0, 32, 2, 15);
+    FillBgTilemapBufferRect(0, 0x000, 0, 2, 32, 16, 17);
+    FillBgTilemapBufferRect(0, 0x003, 0, 18, 32, 2, 15);
 }
 
 void CB2_OpenPokedexFromStartMenu(void)
@@ -1170,7 +1170,7 @@ static void DexScreen_InitGfxForTopMenu(void)
     CopyWindowToVram(sPokedexScreenData->dexCountsWindowId, COPYWIN_GFX);
 }
 
-static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct ListMenu *list)
+static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct ListMenu* list)
 {
     if (!onInit)
         PlaySE(SE_SELECT);
@@ -1488,7 +1488,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
     return ret;
 }
 
-static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order)
+static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate* template, u8 order)
 {
     switch (order)
     {
@@ -1541,8 +1541,8 @@ static u8 DexScreen_CreateDexOrderScrollArrows(void)
 struct PokedexListItem
 {
     u16 species;
-    bool8 seen:1;
-    bool8 caught:1;
+    bool8 seen : 1;
+    bool8 caught : 1;
 };
 
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
@@ -1565,7 +1565,7 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
 static void Task_DexScreen_CategorySubmenu(u8 taskId)
 {
     int pageFlipCmd;
-    u8 *ptr;
+    u8* ptr;
     switch (sPokedexScreenData->state)
     {
     case 0:
@@ -2034,7 +2034,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
 static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
 {
     int selectedIndex;
-    u16 *itemsAbove_p, *cursorPos_p;
+    u16* itemsAbove_p, * cursorPos_p;
 
     switch (sPokedexScreenData->dexOrderId)
     {
@@ -2124,7 +2124,7 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
     return TRUE;
 }
 
-static void DexScreen_RemoveWindow(u8 *windowId_p)
+static void DexScreen_RemoveWindow(u8* windowId_p)
 {
     if (*windowId_p != 0xFF)
     {
@@ -2133,7 +2133,7 @@ static void DexScreen_RemoveWindow(u8 *windowId_p)
     }
 }
 
-static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx)
+static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 colorIdx)
 {
     u8 textColor[3];
     switch (colorIdx)
@@ -2294,7 +2294,7 @@ static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex)
     return count;
 }
 
-static void DexScreen_PrintControlInfo(const u8 *src)
+static void DexScreen_PrintControlInfo(const u8* src)
 {
     DexScreen_AddTextPrinterParameterized(1, FONT_SMALL, src, 236 - GetStringWidth(FONT_SMALL, src, 0), 2, 4);
 }
@@ -2357,7 +2357,7 @@ static void DexScreen_DestroyCategoryPageMonIconAndInfoWindows(void)
 static void DexScreen_PrintCategoryPageNumbers(u8 windowId, u16 currentPage, u16 totalPages, u16 x, u16 y)
 {
     u8 buffer[30];
-    u8 *ptr = StringCopy(buffer, gText_Page);
+    u8* ptr = StringCopy(buffer, gText_Page);
     ptr = ConvertIntToDecimalStringN(ptr, currentPage, STR_CONV_MODE_RIGHT_ALIGN, 2);
     *ptr++ = CHAR_SLASH;
     ptr = ConvertIntToDecimalStringN(ptr, totalPages, STR_CONV_MODE_RIGHT_ALIGN, 2);
@@ -2440,11 +2440,11 @@ static void DexScreen_UpdateCategoryPageCursorObject(u8 taskId, u8 cursorPos, u8
     ListMenuUpdateCursorObject(taskId, sCategoryPageIconCoords[numMonsInPage][cursorPos][2] * 8, sCategoryPageIconCoords[numMonsInPage][cursorPos][3] * 8, 0);
 }
 
-bool8 DexPage_TileBuffer_CopyCol(const u16 *srcBuf, u8 srcCol, u16 *dstBuf, u8 dstCol)
+bool8 DexPage_TileBuffer_CopyCol(const u16* srcBuf, u8 srcCol, u16* dstBuf, u8 dstCol)
 {
     int i;
-    const u16 *src = &srcBuf[srcCol];
-    u16 *dst = &dstBuf[dstCol];
+    const u16* src = &srcBuf[srcCol];
+    u16* dst = &dstBuf[dstCol];
     for (i = 0; i < 20; i++)
     {
         *dst = *src;
@@ -2454,10 +2454,10 @@ bool8 DexPage_TileBuffer_CopyCol(const u16 *srcBuf, u8 srcCol, u16 *dstBuf, u8 d
     return FALSE;
 }
 
-bool8 DexPage_TileBuffer_FillCol(u16 tileNo, u16 *tileBuf, u8 x)
+bool8 DexPage_TileBuffer_FillCol(u16 tileNo, u16* tileBuf, u8 x)
 {
     int i;
-    u16 *dst = &tileBuf[x];
+    u16* dst = &tileBuf[x];
     for (i = 0; i < 20; i++)
     {
         *dst = tileNo;
@@ -2470,12 +2470,12 @@ bool8 DexScreen_TurnCategoryPage_BgEffect(u8 page)
 {
     int dstCol;
     int srcCol;
-    u16 *bg1buff = GetBgTilemapBuffer(1);
-    u16 *bg2buff = GetBgTilemapBuffer(2);
-    u16 *bg3buff = GetBgTilemapBuffer(3);
-    u16 *bg1mem = sPokedexScreenData->bgBufsMem + 0x800;
-    u16 *bg2mem = sPokedexScreenData->bgBufsMem + 0x400;
-    u16 *bg3mem = sPokedexScreenData->bgBufsMem + 0x000;
+    u16* bg1buff = GetBgTilemapBuffer(1);
+    u16* bg2buff = GetBgTilemapBuffer(2);
+    u16* bg3buff = GetBgTilemapBuffer(3);
+    u16* bg1mem = sPokedexScreenData->bgBufsMem + 0x800;
+    u16* bg2mem = sPokedexScreenData->bgBufsMem + 0x400;
+    u16* bg3mem = sPokedexScreenData->bgBufsMem + 0x000;
     for (dstCol = 0; dstCol < 30; dstCol++)
     {
         srcCol = sDexScreenPageTurnColumns[page][dstCol];
@@ -2668,12 +2668,12 @@ void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale)
 
 void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
 {
-    u8 * categoryName;
+    u8* categoryName;
     u8 index, categoryStr[12];
 
     species = SpeciesToNationalPokedexNum(species);
 
-    categoryName = (u8 *)gPokedexEntries[species].categoryName;
+    categoryName = (u8*)gPokedexEntries[species].categoryName;
     index = 0;
     if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, FALSE))
     {
@@ -2707,7 +2707,7 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
 {
     u16 height;
     u32 inches, feet;
-    const u8 *labelText;
+    const u8* labelText;
     u8 buffer[32];
     u8 i;
 
@@ -2765,8 +2765,8 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     u16 weight;
     u32 lbs;
     bool8 output;
-    const u8 * labelText;
-    const u8 * lbsText;
+    const u8* labelText;
+    const u8* lbsText;
     u8 buffer[32];
     u8 i;
     u32 j;
@@ -2893,12 +2893,12 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 {
     u16 i, j, unused, tileIdx;
     u8 footprintPixel, footprintTile;
-    u8 * buffer;
-    u8 * footprint;
+    u8* buffer;
+    u8* footprint;
 
     if (!(DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE)))
         return;
-    footprint = (u8 *)(gMonFootprintTable[species]);
+    footprint = (u8*)(gMonFootprintTable[species]);
     buffer = gDecompressionBuffer;
     unused = 0;
     tileIdx = 0;
@@ -3033,9 +3033,9 @@ u8 DexScreen_DrawMonAreaPage(void)
             kantoMapVoff = 0;
 
     sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_AreaMap_Kanto);
-    CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[0], (void *)sTilemap_AreaMap_Kanto, 0, 0);
+    CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[0], (void*)sTilemap_AreaMap_Kanto, 0, 0);
     SetWindowAttribute(sPokedexScreenData->windowIds[0], WINDOW_TILEMAP_TOP,
-                       GetWindowAttribute(sPokedexScreenData->windowIds[0], WINDOW_TILEMAP_TOP) + kantoMapVoff);
+        GetWindowAttribute(sPokedexScreenData->windowIds[0], WINDOW_TILEMAP_TOP) + kantoMapVoff);
     PutWindowTilemap(sPokedexScreenData->windowIds[0]);
     for (i = 0; i < 7; i++)
         if ((sPokedexScreenData->unlockedSeviiAreas >> i) & 1)
@@ -3130,7 +3130,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     if (GetNumPokedexAreaMarkers(sPokedexScreenData->areaMarkersTaskId) == 0)
     {
         // No markers, display "Area Unknown"
-        BlitBitmapRectToWindow(sPokedexScreenData->windowIds[0], (void *)sBlitTiles_WideEllipse, 0, 0, 88, 16, 4, 28, 88, 16);
+        BlitBitmapRectToWindow(sPokedexScreenData->windowIds[0], (void*)sBlitTiles_WideEllipse, 0, 0, 88, 16, 4, 28, 88, 16);
         {
             s32 strWidth = GetStringWidth(FONT_SMALL, gText_AreaUnknown, 0);
             DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[0], FONT_SMALL, gText_AreaUnknown, (96 - strWidth) / 2, 29, 0);
@@ -3430,7 +3430,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
     }
 }
 
-void DexScreen_PrintStringWithAlignment(const u8 * str, s32 mode)
+void DexScreen_PrintStringWithAlignment(const u8* str, s32 mode)
 {
     u32 x;
 

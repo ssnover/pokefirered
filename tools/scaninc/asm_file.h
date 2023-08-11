@@ -39,7 +39,7 @@ public:
     IncDirectiveType ReadUntilIncDirective(std::string& path);
 
 private:
-    char *m_buffer;
+    char* m_buffer;
     int m_pos;
     int m_size;
     int m_lineNum;

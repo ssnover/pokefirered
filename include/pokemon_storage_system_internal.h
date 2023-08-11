@@ -213,23 +213,23 @@ enum
 
 struct Wallpaper
 {
-    const u32 *tiles;
-    const u32 *tileMap;
-    const u16 *palettes;
+    const u32* tiles;
+    const u32* tileMap;
+    const u16* palettes;
 };
 
 struct StorageMessage
 {
-    const u8 *text;
+    const u8* text;
     u8 format;
 };
 
 struct ChooseBoxMenu
 {
-    struct Sprite *menuSprite;
-    struct Sprite *menuCornerSprites[4];
+    struct Sprite* menuSprite;
+    struct Sprite* menuCornerSprites[4];
     u32 unused1[3];
-    struct Sprite *arrowSprites[2];
+    struct Sprite* arrowSprites[2];
     u8 buffer[0x200]; // passed but not used
     u8 strbuf[20];
     bool32 loadedPalette;
@@ -242,31 +242,31 @@ struct ChooseBoxMenu
 
 struct StorageMenu
 {
-    const u8 *text;
+    const u8* text;
     int textId;
 };
 
 struct UnkUtilData
 {
-    const u8 *src;
-    u8 *dest;
+    const u8* src;
+    u8* dest;
     u16 size;
     u16 unk;
     u16 height;
-    void (*func)(struct UnkUtilData *data);
+    void (*func)(struct UnkUtilData* data);
 };
 
 struct UnkUtil
 {
-    struct UnkUtilData *data;
+    struct UnkUtilData* data;
     u8 numActive;
     u8 max;
 };
 
 struct PokeStorageItemIcon
 {
-    struct Sprite *sprite;
-    u8 *tiles;
+    struct Sprite* sprite;
+    u8* tiles;
     u16 palIndex;
     u8 cursorArea;
     u8 cursorPos;
@@ -322,9 +322,9 @@ struct PokemonStorageSystemData
     u16 boxTitlePal[16];
     u16 boxTitlePalOffset;
     u16 boxTitleAltPalOffset;
-    struct Sprite *curBoxTitleSprites[2];
-    struct Sprite *nextBoxTitleSprites[2];
-    struct Sprite *arrowSprites[2];
+    struct Sprite* curBoxTitleSprites[2];
+    struct Sprite* nextBoxTitleSprites[2];
+    struct Sprite* arrowSprites[2];
     u32 wallpaperPalBits;
     u8 filler2[80]; // Unused
     u16 unusedField1; // Never read.
@@ -336,11 +336,11 @@ struct PokemonStorageSystemData
     u8 scrollToBoxId;
     s8 scrollDirection;
     // u8 *wallpaperTiles; // used only in Emerald for Walda
-    struct Sprite *movingMonSprite;
-    struct Sprite *partySprites[PARTY_SIZE];
-    struct Sprite *boxMonsSprites[IN_BOX_COUNT];
-    struct Sprite **shiftMonSpritePtr;
-    struct Sprite **releaseMonSpritePtr;
+    struct Sprite* movingMonSprite;
+    struct Sprite* partySprites[PARTY_SIZE];
+    struct Sprite* boxMonsSprites[IN_BOX_COUNT];
+    struct Sprite** shiftMonSpritePtr;
+    struct Sprite** releaseMonSpritePtr;
     u16 numIconsPerSpecies[MAX_MON_ICONS];
     u16 iconSpeciesList[MAX_MON_ICONS];
     u16 boxSpecies[IN_BOX_COUNT];
@@ -362,8 +362,8 @@ struct PokemonStorageSystemData
     u8 menuWidth;
     u8 menuUnusedField; // Never read.
     u16 menuWindowId;
-    struct Sprite *cursorSprite;
-    struct Sprite *cursorShadowSprite;
+    struct Sprite* cursorSprite;
+    struct Sprite* cursorShadowSprite;
     s32 cursorNewX;
     s32 cursorNewY;
     u32 cursorSpeedX;
@@ -378,7 +378,7 @@ struct PokemonStorageSystemData
     u8 cursorPrevPartyPos;
     u8 cursorFlipTimer;
     u8 cursorPalNums[2];
-    const u32 *displayMonPalette;
+    const u32* displayMonPalette;
     u32 displayMonPersonality;
     u16 displayMonSpecies;
     u16 displayMonItemId;
@@ -389,12 +389,12 @@ struct PokemonStorageSystemData
     bool8 displayMonIsEgg;
     u8 displayMonNickname[POKEMON_NAME_LENGTH + 1];
     u8 displayMonTexts[4][36]; // nickname, species name, gender and level, item name
-    bool8 (*monPlaceChangeFunc)(void);
+    bool8(*monPlaceChangeFunc)(void);
     u8 monPlaceChangeState;
     u8 shiftBoxId;
-    struct Sprite *markingComboSprite;
-    struct Sprite *waveformSprites[2];
-    u16 *markingComboTilesPtr;
+    struct Sprite* markingComboSprite;
+    struct Sprite* waveformSprites[2];
+    u16* markingComboTilesPtr;
     struct MonMarkingsMenu markMenu;
     struct ChooseBoxMenu chooseBoxMenu;
     struct Pokemon movingMon;
@@ -414,8 +414,8 @@ struct PokemonStorageSystemData
     u8 summaryScreenMode;
     union
     {
-        struct Pokemon *mon;
-        struct BoxPokemon *box;
+        struct Pokemon* mon;
+        struct BoxPokemon* box;
     } summaryMonPtr;
     u8 actionText[40];
     u8 boxTitleText[40];
@@ -429,8 +429,8 @@ struct PokemonStorageSystemData
     struct PokeStorageQuestLogData pokeStorageQuestLogData;
     u16 unusedField2;
     u16 displayMonPalOffset;
-    u16 *displayMonTilePtr;
-    struct Sprite *displayMonSprite;
+    u16* displayMonTilePtr;
+    struct Sprite* displayMonSprite;
     u16 displayMonPalBuffer[0x20];
     u8 unusedBuffer1[0x40];
     u8 tileBuffer[0x800];
@@ -441,25 +441,25 @@ struct PokemonStorageSystemData
     u8 menuTilemapBuffer[0x800];
 };
 
-extern struct PokemonStorageSystemData *gStorage;
+extern struct PokemonStorageSystemData* gStorage;
 
 void EnterPokeStorage(u8 boxOption);
 u8 GetCurrentBoxOption(void);
-struct Sprite *CreateChooseBoxArrows(u16 x, u16 y, u8 animId, u8 priority, u8 subpriority);
+struct Sprite* CreateChooseBoxArrows(u16 x, u16 y, u8 animId, u8 priority, u8 subpriority);
 void SetBoxWallpaper(u8 boxId, u8 wallpaperId);
 void SetCurrentBox(u8 boxId);
-void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon * dst);
-void SetBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon * src);
+void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon* dst);
+void SetBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon* src);
 
 void CB2_ExitPokeStorage(void);
 void FreeBoxSelectionPopupSpriteGfx(void);
 void CreateChooseBoxMenuSprites(u8 curBox);
 void DestroyChooseBoxMenuSprites(void);
 u8 HandleBoxChooseSelectionInput(void);
-void LoadChooseBoxMenuGfx(struct ChooseBoxMenu *menu, u16 tileTag, u16 palTag, u8 subpriority, bool32 loadPal);
-void SetCurrentBoxMonData(u8 boxPosition, s32 request, const void *value);
+void LoadChooseBoxMenuGfx(struct ChooseBoxMenu* menu, u16 tileTag, u16 palTag, u8 subpriority, bool32 loadPal);
+void SetCurrentBoxMonData(u8 boxPosition, s32 request, const void* value);
 u32 GetCurrentBoxMonData(u8 boxPosition, s32 request);
-u32 GetAndCopyBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request, void *dst);
+u32 GetAndCopyBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request, void* dst);
 
 void InitCursor(void);
 void InitCursorOnReopen(void);
@@ -493,11 +493,11 @@ void CreateItemIconSprites(void);
 void MoveItemFromCursorToBag(void);
 void MoveHeldItemWithPartyMenu(void);
 bool8 IsItemIconAnimActive(void);
-const u8 *GetMovingItemName(void);
+const u8* GetMovingItemName(void);
 void InitItemInfoWindow(void);
 bool8 UpdateItemInfoWindowSlideIn(void);
 bool8 UpdateItemInfoWindowSlideOut(void);
-void UnkUtil_Init(struct UnkUtil *arg0, struct UnkUtilData *arg1, u32 arg2);
+void UnkUtil_Init(struct UnkUtil* arg0, struct UnkUtilData* arg1, u32 arg2);
 void UnkUtil_Run(void);
 void AddMenu(void);
 bool8 CanMovePartyMon(void);
@@ -534,7 +534,7 @@ bool8 IsCursorOnBoxTitle(void);
 bool8 IsCursorInBox(void);
 
 void InitMonIconFields(void);
-struct Sprite *CreateMonIconSprite(u16 species, u32 pid, s16 x, s16 y, u8 priority, u8 subpriority);
+struct Sprite* CreateMonIconSprite(u16 species, u32 pid, s16 x, s16 y, u8 priority, u8 subpriority);
 void CreatePartyMonsSprites(bool8 species);
 void CompactPartySprites(void);
 u8 GetNumPartySpritesCompacting(void);
@@ -565,7 +565,7 @@ bool8 MultiMove_TryMoveGroup(u8 dir);
 u8 MultiMove_GetOriginPosition(void);
 bool8 MultiMove_CanPlaceSelection(void);
 void TryHideItemIconAtPos(u8 cursorArea, u8 cursorPos);
-void GetCursorBoxColumnAndRow(u8 *column, u8 *row);
+void GetCursorBoxColumnAndRow(u8* column, u8* row);
 void SetCursorPriorityTo1(void);
 void InitMultiMonPlaceChange(bool8 moveCursorUp);
 void DestroyBoxMonIconAtPosition(u8 boxPosition);

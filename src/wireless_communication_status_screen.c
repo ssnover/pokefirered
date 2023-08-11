@@ -39,12 +39,12 @@ static struct
     u8 taskId;
     u8 rfuTaskId;
     u8 filler[10];
-} * sStatusScreen;
+} *sStatusScreen;
 
 static void CB2_InitWirelessCommunicationScreen(void);
 static void Task_WirelessCommunicationScreen(u8 taskId);
-static void WCSS_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 * str, u8 x, u8 y, u8 palIdx);
-static bool32 UpdateCommunicationCounts(u32 * counts, u32 * lastCounts, u32 * activities, u8 taskId);
+static void WCSS_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 palIdx);
+static bool32 UpdateCommunicationCounts(u32* counts, u32* lastCounts, u32* activities, u8 taskId);
 
 static const u16 sPalettes[][16] = {
     INCBIN_U16("graphics/wireless_status_screen/default.gbapal"),
@@ -79,7 +79,7 @@ static const struct BgTemplate sBgTemplates[] = {
     }, {
         .bg = 1,
         .charBaseIndex = 0,
-        .mapBaseIndex =  8,
+        .mapBaseIndex = 8,
         .screenSize = 0,
         .paletteMode = 0,
         .priority = 1,
@@ -116,19 +116,19 @@ static const struct WindowTemplate sWindowTemplates[] = {
 };
 
 // Unused
-static const u8 *const sPlayersTextPtrs[] = {
+static const u8* const sPlayersTextPtrs[] = {
     gText_Dynamic0Players,
     gText_Dynamic1Players,
     gText_Dynamic2Players,
     gText_Dynamic3Players
 };
 
-static const u8 *const sHeaderTexts[NUM_GROUPTYPES + 1] = {
-    [0]                    = gText_WirelessCommunicationStatus,
-    [GROUPTYPE_TRADE + 1]  = gText_PeopleTrading,
+static const u8* const sHeaderTexts[NUM_GROUPTYPES + 1] = {
+    [0] = gText_WirelessCommunicationStatus,
+    [GROUPTYPE_TRADE + 1] = gText_PeopleTrading,
     [GROUPTYPE_BATTLE + 1] = gText_PeopleBattling,
-    [GROUPTYPE_UNION + 1]  = gText_PeopleInUnionRoom,
-    [GROUPTYPE_TOTAL + 1]  = gText_PeopleCommunicating
+    [GROUPTYPE_UNION + 1] = gText_PeopleInUnionRoom,
+    [GROUPTYPE_TOTAL + 1] = gText_PeopleCommunicating
 };
 
 // Activity, group type, number of players
@@ -237,7 +237,7 @@ static void ExitWirelessCommunicationStatusScreen(void)
 }
 
 // Cycle through palettes that relocate various shades of blue to create the wave effect at the bottom of the screen.
-static void CyclePalette(s16 * counter, s16 * palIdx)
+static void CyclePalette(s16* counter, s16* palIdx)
 {
     s32 idx;
     if (++(*counter) > 5)
@@ -335,7 +335,7 @@ static void Task_WirelessCommunicationScreen(u8 taskId)
     }
 }
 
-static void WCSS_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 * str, u8 x, u8 y, u8 mode)
+static void WCSS_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 mode)
 {
     u8 textColor[3];
     switch (mode)
@@ -365,19 +365,19 @@ static void WCSS_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 * 
         textColor[1] = TEXT_COLOR_WHITE;
         textColor[2] = TEXT_COLOR_DARK_GRAY;
         break;
-    // default: UB
+        // default: UB
     }
     AddTextPrinterParameterized4(windowId, fontId, x, y, fontId == FONT_SMALL ? 0 : 1, 0, textColor, TEXT_SKIP_DRAW, str);
 }
 
-static u32 CountPlayersInGroupAndGetActivity(struct RfuPlayer * player, u32 * groupCounts)
+static u32 CountPlayersInGroupAndGetActivity(struct RfuPlayer* player, u32* groupCounts)
 {
     u32 activity = player->rfu.data.activity;
     s32 i, j, k;
 
-    #define group_activity(i) (sActivityGroupInfo[(i)][0])
-    #define group_type(i)     (sActivityGroupInfo[(i)][1])
-    #define group_players(i)  (sActivityGroupInfo[(i)][2])
+#define group_activity(i) (sActivityGroupInfo[(i)][0])
+#define group_type(i)     (sActivityGroupInfo[(i)][1])
+#define group_players(i)  (sActivityGroupInfo[(i)][2])
 
     for (i = 0; i < ARRAY_COUNT(sActivityGroupInfo); i++)
     {
@@ -400,12 +400,12 @@ static u32 CountPlayersInGroupAndGetActivity(struct RfuPlayer * player, u32 * gr
 
     return activity;
 
-    #undef group_activity
-    #undef group_type
-    #undef group_players
+#undef group_activity
+#undef group_type
+#undef group_players
 }
 
-static bool32 HaveCountsChanged(const u32 * curCounts, const u32 * prevCounts)
+static bool32 HaveCountsChanged(const u32* curCounts, const u32* prevCounts)
 {
     s32 i;
 
@@ -418,11 +418,11 @@ static bool32 HaveCountsChanged(const u32 * curCounts, const u32 * prevCounts)
     return FALSE;
 }
 
-static bool32 UpdateCommunicationCounts(u32 * groupCounts, u32 * prevGroupCounts, u32 * activities, u8 taskId)
+static bool32 UpdateCommunicationCounts(u32* groupCounts, u32* prevGroupCounts, u32* activities, u8 taskId)
 {
     bool32 activitiesUpdated = FALSE;
-    u32 groupCountBuffer[NUM_GROUPTYPES] = {0, 0, 0, 0};
-    struct WirelessLink_Group * group = (void *)gTasks[taskId].data;
+    u32 groupCountBuffer[NUM_GROUPTYPES] = { 0, 0, 0, 0 };
+    struct WirelessLink_Group* group = (void*)gTasks[taskId].data;
     s32 i;
 
     for (i = 0; i < NUM_TASK_DATA; i++)
@@ -443,15 +443,15 @@ static bool32 UpdateCommunicationCounts(u32 * groupCounts, u32 * prevGroupCounts
             return FALSE;
     }
 
-    memcpy(groupCounts,     groupCountBuffer, sizeof(groupCountBuffer));
+    memcpy(groupCounts, groupCountBuffer, sizeof(groupCountBuffer));
     memcpy(prevGroupCounts, groupCountBuffer, sizeof(groupCountBuffer));
-    
+
     groupCounts[GROUPTYPE_TOTAL] = groupCounts[GROUPTYPE_TRADE]
-                                 + groupCounts[GROUPTYPE_BATTLE]
-                                 + groupCounts[GROUPTYPE_UNION]
-                            #ifdef BUGFIX
-                                 + groupCounts[GROUPTYPE_TOTAL] // Missing count for activities not in above groups
-                            #endif
-                                 ;
+        + groupCounts[GROUPTYPE_BATTLE]
+        + groupCounts[GROUPTYPE_UNION]
+#ifdef BUGFIX
+        + groupCounts[GROUPTYPE_TOTAL] // Missing count for activities not in above groups
+#endif
+        ;
     return TRUE;
 }

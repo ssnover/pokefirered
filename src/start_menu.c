@@ -59,7 +59,7 @@ enum SaveCBReturn
     SAVECB_RETURN_ERROR
 };
 
-static EWRAM_DATA bool8 (*sStartMenuCallback)(void) = NULL;
+static EWRAM_DATA bool8(*sStartMenuCallback)(void) = NULL;
 static EWRAM_DATA u8 sStartMenuCursorPos = 0;
 static EWRAM_DATA u8 sNumStartMenuItems = 0;
 static EWRAM_DATA u8 sStartMenuOrder[MAX_STARTMENU_ITEMS] = {};
@@ -67,7 +67,7 @@ static EWRAM_DATA s8 sDrawStartMenuState[2] = {};
 static EWRAM_DATA u8 sSafariZoneStatsWindowId = 0;
 static ALIGNED(4) EWRAM_DATA u8 sSaveStatsWindowId = 0;
 
-static u8 (*sSaveDialogCB)(void);
+static u8(*sSaveDialogCB)(void);
 static u8 sSaveDialogDelay;
 static bool8 sSaveDialogIsPrinting;
 
@@ -134,7 +134,7 @@ static const struct WindowTemplate sSafariZoneStatsWindowTemplate = {
     .baseBlock = 0x008
 };
 
-static const u8 *const sStartMenuDescPointers[] = {
+static const u8* const sStartMenuDescPointers[] = {
     gStartMenuDesc_Pokedex,
     gStartMenuDesc_Pokemon,
     gStartMenuDesc_Bag,
@@ -267,7 +267,7 @@ static void DestroySafariZoneStatsWindow(void)
     }
 }
 
-static s8 PrintStartMenuItems(s8 *cursor_p, u8 nitems)
+static s8 PrintStartMenuItems(s8* cursor_p, u8 nitems)
 {
     s16 i = *cursor_p;
     do
@@ -369,7 +369,7 @@ void SetUpReturnToStartMenu(void)
 
 void Task_StartMenuHandleInput(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     switch (data[0])
     {
     case 0:
@@ -439,8 +439,8 @@ static bool8 StartCB_HandleInput(void)
 static void StartMenu_FadeScreenIfLeavingOverworld(void)
 {
     if (sStartMenuCallback != StartMenuSaveCallback
-     && sStartMenuCallback != StartMenuExitCallback
-     && sStartMenuCallback != StartMenuSafariZoneRetireCallback)
+        && sStartMenuCallback != StartMenuExitCallback
+        && sStartMenuCallback != StartMenuSafariZoneRetireCallback)
     {
         StopPokemonLeagueLightingEffectTask();
         FadeScreen(FADE_TO_BLACK, 0);
@@ -617,7 +617,7 @@ void Field_AskSaveTheGame(void)
     CreateTask(task50_save_game, 80);
 }
 
-static void PrintSaveTextWithFollowupFunc(const u8 *str, bool8 (*saveDialogCB)(void))
+static void PrintSaveTextWithFollowupFunc(const u8* str, bool8(*saveDialogCB)(void))
 {
     StringExpandPlaceholders(gStringVar4, str);
     LoadMessageBoxAndFrameGfx(0, TRUE);
@@ -849,7 +849,7 @@ static void VBlankCB_WhileSavingAfterLinkBattle(void)
     TransferPlttBuffer();
 }
 
-bool32 DoSetUpSaveAfterLinkBattle(u8 *state)
+bool32 DoSetUpSaveAfterLinkBattle(u8* state)
 {
     switch (*state)
     {
@@ -857,8 +857,8 @@ bool32 DoSetUpSaveAfterLinkBattle(u8 *state)
         SetGpuReg(REG_OFFSET_DISPCNT, 0);
         SetVBlankCallback(NULL);
         ScanlineEffect_Stop();
-        DmaFill16Defvars(3, 0, (void *)PLTT, PLTT_SIZE);
-        DmaFillLarge16(3, 0, (void *)VRAM, VRAM_SIZE, 0x1000);
+        DmaFill16Defvars(3, 0, (void*)PLTT, PLTT_SIZE);
+        DmaFillLarge16(3, 0, (void*)VRAM, VRAM_SIZE, 0x1000);
         break;
     case 1:
         ResetSpriteData();
@@ -902,7 +902,7 @@ static void CB2_WhileSavingAfterLinkBattle(void)
 
 static void task50_after_link_battle_save(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (!gPaletteFade.active)
     {
         switch (data[0])
@@ -998,7 +998,7 @@ static void CloseStartMenu(void)
     UnlockPlayerFieldControls();
 }
 
-void AppendToList(u8 *list, u8 *cursor, u8 newEntry)
+void AppendToList(u8* list, u8* cursor, u8 newEntry)
 {
     list[*cursor] = newEntry;
     (*cursor)++;

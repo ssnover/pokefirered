@@ -78,7 +78,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gBattle_BG3_Y = 0;
         break;
     case 2:
-        CpuFastFill(0, (void *)VRAM, VRAM_SIZE);
+        CpuFastFill(0, (void*)VRAM, VRAM_SIZE);
         break;
     case 3:
         LoadBattleTextboxAndBackground();
@@ -242,8 +242,8 @@ static void CreateBattlerSprite(u8 battler)
         {
             SetMultiuseSpriteTemplateToTrainerBack(gSaveBlock2Ptr->playerGender, GetBattlerPosition(B_POSITION_PLAYER_LEFT));
             gBattlerSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate, 0x50,
-                                                      (8 - gTrainerBackPicCoords[gSaveBlock2Ptr->playerGender].size) * 4 + 80,
-                                                      GetBattlerSpriteSubpriority(0));
+                (8 - gTrainerBackPicCoords[gSaveBlock2Ptr->playerGender].size) * 4 + 80,
+                GetBattlerSpriteSubpriority(0));
             gSprites[gBattlerSpriteIds[battler]].oam.paletteNum = battler;
             gSprites[gBattlerSpriteIds[battler]].callback = SpriteCallbackDummy;
             gSprites[gBattlerSpriteIds[battler]].data[0] = battler;
@@ -252,8 +252,8 @@ static void CreateBattlerSprite(u8 battler)
         {
             SetMultiuseSpriteTemplateToTrainerBack(5, GetBattlerPosition(0));
             gBattlerSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate, 0x50,
-                                                      (8 - gTrainerBackPicCoords[5].size) * 4 + 80,
-                                                      GetBattlerSpriteSubpriority(0));
+                (8 - gTrainerBackPicCoords[5].size) * 4 + 80,
+                GetBattlerSpriteSubpriority(0));
             gSprites[gBattlerSpriteIds[battler]].oam.paletteNum = battler;
             gSprites[gBattlerSpriteIds[battler]].callback = SpriteCallbackDummy;
             gSprites[gBattlerSpriteIds[battler]].data[0] = battler;
@@ -307,7 +307,7 @@ static void CreateHealthboxSprite(u8 battler)
                 SetHealthboxSpriteInvisible(healthboxSpriteId);
         }
         else if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI) && GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0)
-        {    
+        {
             SetHealthboxSpriteInvisible(healthboxSpriteId);
         }
     }

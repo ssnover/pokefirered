@@ -5,14 +5,14 @@
 #include "global.h"
 #include "lz.h"
 
-unsigned char *LZDecompress(unsigned char *src, int srcSize, int *uncompressedSize)
+unsigned char* LZDecompress(unsigned char* src, int srcSize, int* uncompressedSize)
 {
 	if (srcSize < 4)
 		goto fail;
 
 	int destSize = (src[3] << 16) | (src[2] << 8) | src[1];
 
-	unsigned char *dest = malloc(destSize);
+	unsigned char* dest = malloc(destSize);
 
 	if (dest == NULL)
 		goto fail;
@@ -49,7 +49,8 @@ unsigned char *LZDecompress(unsigned char *src, int srcSize, int *uncompressedSi
 
 				for (int j = 0; j < blockSize; j++)
 					dest[destPos++] = dest[blockPos + j];
-			} else {
+			}
+			else {
 				if (srcPos >= srcSize || destPos >= destSize)
 					goto fail;
 
@@ -69,7 +70,7 @@ fail:
 	FATAL_ERROR("Fatal error while decompressing LZ file.\n");
 }
 
-unsigned char *LZCompress(unsigned char *src, int srcSize, int *compressedSize, const int minDistance)
+unsigned char* LZCompress(unsigned char* src, int srcSize, int* compressedSize, const int minDistance)
 {
 	if (srcSize <= 0)
 		goto fail;
@@ -79,7 +80,7 @@ unsigned char *LZCompress(unsigned char *src, int srcSize, int *compressedSize, 
 	// Round up to the next multiple of four.
 	worstCaseDestSize = (worstCaseDestSize + 3) & ~3;
 
-	unsigned char *dest = malloc(worstCaseDestSize);
+	unsigned char* dest = malloc(worstCaseDestSize);
 
 	if (dest == NULL)
 		goto fail;
@@ -94,7 +95,7 @@ unsigned char *LZCompress(unsigned char *src, int srcSize, int *compressedSize, 
 	int destPos = 4;
 
 	for (;;) {
-		unsigned char *flags = &dest[destPos++];
+		unsigned char* flags = &dest[destPos++];
 		*flags = 0;
 
 		for (int i = 0; i < 8; i++) {
@@ -107,8 +108,8 @@ unsigned char *LZCompress(unsigned char *src, int srcSize, int *compressedSize, 
 				int blockSize = 0;
 
 				while (blockSize < 18
-				    && srcPos + blockSize < srcSize
-				    && src[blockStart + blockSize] == src[srcPos + blockSize])
+					&& srcPos + blockSize < srcSize
+					&& src[blockStart + blockSize] == src[srcPos + blockSize])
 					blockSize++;
 
 				if (blockSize > bestBlockSize) {
@@ -129,7 +130,8 @@ unsigned char *LZCompress(unsigned char *src, int srcSize, int *compressedSize, 
 				bestBlockDistance--;
 				dest[destPos++] = (bestBlockSize << 4) | ((unsigned int)bestBlockDistance >> 8);
 				dest[destPos++] = (unsigned char)bestBlockDistance;
-			} else {
+			}
+			else {
 				dest[destPos++] = src[srcPos++];
 			}
 

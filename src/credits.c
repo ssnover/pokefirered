@@ -165,16 +165,16 @@ struct CreditsScrcmd
 
 struct CreditsTextHeader
 {
-    const u8 * title;
-    const u8 * names;
+    const u8* title;
+    const u8* names;
     bool8 unused;
 };
 
 struct CompressedGraphicsHeader
 {
-    const u8 * tiles;
-    const u8 * map;
-    const u16 * palette;
+    const u8* tiles;
+    const u8* map;
+    const u16* palette;
 };
 
 struct CreditsTaskData
@@ -188,7 +188,7 @@ struct CreditsTaskData
     u16 groundPalTag;
 };
 
-static EWRAM_DATA struct CreditsResources * sCreditsMgr = NULL;
+static EWRAM_DATA struct CreditsResources* sCreditsMgr = NULL;
 EWRAM_DATA bool8 gHasHallOfFameRecords = FALSE;
 
 static void CB2_Credits(void);
@@ -449,9 +449,9 @@ static const struct CreditsScrcmd sCreditsScript[] = {
     CREDITS_WAITBUTTON(600)
 };
 
-static const ALIGNED(4) u8 sTextColor_Unused[3] = {0, 1, 2};
-static const ALIGNED(4) u8 sTextColor_Header[3] = {0, 5, 2};
-static const ALIGNED(4) u8 sTextColor_Regular[3] = {0, 1, 2};
+static const ALIGNED(4) u8 sTextColor_Unused[3] = { 0, 1, 2 };
+static const ALIGNED(4) u8 sTextColor_Header[3] = { 0, 5, 2 };
+static const ALIGNED(4) u8 sTextColor_Regular[3] = { 0, 1, 2 };
 
 static const struct WindowTemplate sCreditsWindowTemplate = {
     .bg = 0,
@@ -463,18 +463,18 @@ static const struct WindowTemplate sCreditsWindowTemplate = {
     .baseBlock = 0x008
 };
 
-static const u16 sPlayerMale_Pal[]     = INCBIN_U16("graphics/credits/player_male.gbapal");
-static const u32 sPlayerMale_Tiles[]   = INCBIN_U32("graphics/credits/player_male.4bpp.lz");
-static const u16 sPlayerFemale_Pal[]   = INCBIN_U16("graphics/credits/player_female.gbapal");
+static const u16 sPlayerMale_Pal[] = INCBIN_U16("graphics/credits/player_male.gbapal");
+static const u32 sPlayerMale_Tiles[] = INCBIN_U32("graphics/credits/player_male.4bpp.lz");
+static const u16 sPlayerFemale_Pal[] = INCBIN_U16("graphics/credits/player_female.gbapal");
 static const u32 sPlayerFemale_Tiles[] = INCBIN_U32("graphics/credits/player_female.4bpp.lz");
-static const u16 sRival_Pal[]          = INCBIN_U16("graphics/credits/rival.gbapal");
-static const u32 sRival_Tiles[]        = INCBIN_U32("graphics/credits/rival.4bpp.lz");
-static const u16 sGround_Grass_Pal[]   = INCBIN_U16("graphics/credits/ground_grass.gbapal");
+static const u16 sRival_Pal[] = INCBIN_U16("graphics/credits/rival.gbapal");
+static const u32 sRival_Tiles[] = INCBIN_U32("graphics/credits/rival.4bpp.lz");
+static const u16 sGround_Grass_Pal[] = INCBIN_U16("graphics/credits/ground_grass.gbapal");
 static const u32 sGround_Grass_Tiles[] = INCBIN_U32("graphics/credits/ground_grass.4bpp.lz");
-static const u16 sGround_Dirt_Pal[]    = INCBIN_U16("graphics/credits/ground_dirt.gbapal");
-static const u32 sGround_Dirt_Tiles[]  = INCBIN_U32("graphics/credits/ground_dirt.4bpp.lz");
-static const u16 sGround_City_Pal[]    = INCBIN_U16("graphics/credits/ground_city.gbapal");
-static const u32 sGround_City_Tiles[]  = INCBIN_U32("graphics/credits/ground_city.4bpp.lz");
+static const u16 sGround_Dirt_Pal[] = INCBIN_U16("graphics/credits/ground_dirt.gbapal");
+static const u32 sGround_Dirt_Tiles[] = INCBIN_U32("graphics/credits/ground_dirt.4bpp.lz");
+static const u16 sGround_City_Pal[] = INCBIN_U16("graphics/credits/ground_city.gbapal");
+static const u32 sGround_City_Tiles[] = INCBIN_U32("graphics/credits/ground_city.4bpp.lz");
 
 static const u16 sPlayerRivalSpriteParams[][3] = {
     { 0, 3, 1 },
@@ -506,7 +506,7 @@ const union AnimCmd sAnimCmds_PlayerOrRival[] = {
     ANIMCMD_JUMP(0)
 };
 
-const union AnimCmd *const sAnimCmdTable_PlayerOrRival[] = {
+const union AnimCmd* const sAnimCmdTable_PlayerOrRival[] = {
     sAnimCmds_PlayerOrRival
 };
 
@@ -546,11 +546,11 @@ const union AnimCmd sAnimCmds_GroundStatic[] = {
     ANIMCMD_JUMP(0)
 };
 
-const union AnimCmd *const sAnimCmdTable_GroundRunning[] = {
+const union AnimCmd* const sAnimCmdTable_GroundRunning[] = {
     sAnimCmds_GroundRunning
 };
 
-const union AnimCmd *const sAnimCmdTable_GroundStatic[] = {
+const union AnimCmd* const sAnimCmdTable_GroundStatic[] = {
     sAnimCmds_GroundStatic
 };
 
@@ -646,7 +646,7 @@ static const struct CreditsOverworldCmd sOverworldCmd_Route21[] = {
     CREDITSOVWLDEND,
 };
 
-static const struct CreditsOverworldCmd *const sOverworldMapScenes[] = {
+static const struct CreditsOverworldCmd* const sOverworldMapScenes[] = {
     sOverworldCmd_Route23,
     sOverworldCmd_ViridianCity,
     sOverworldCmd_PewterCity,
@@ -862,7 +862,7 @@ static s32 RollCredits(void)
         {
             sCreditsMgr->timer--;
             return 0;
-            
+
         }
         sCreditsMgr->timer = 360;
         AddTextPrinterParameterized4(sCreditsMgr->windowId, FONT_NORMAL_COPY_1, 0x08, 0x29, 1, 2, sTextColor_Header, 0, TITLE_TEXT);
@@ -958,7 +958,8 @@ static s32 RollCredits(void)
             DestroyCreditsWindow();
             sCreditsMgr->subseqno = 0;
             while (!DoOverworldMapScrollScene(sCreditsMgr->whichMon))
-            {}
+            {
+            }
             switch (sCreditsMgr->whichMon)
             {
             case 3:
@@ -1051,29 +1052,29 @@ static void LoadCreditsMonPic(u8 whichMon)
         InitWindows(sWindowTemplates_Charizard);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
         LoadMonPicInWindow(SPECIES_CHARIZARD, SHINY_ODDS, 0, TRUE, 10, 0);
-        CopyToWindowPixelBuffer(1, (const void *)sCharizard1_Tiles, 0, 0);
-        CopyToWindowPixelBuffer(2, (const void *)sCharizard2_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(1, (const void*)sCharizard1_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(2, (const void*)sCharizard2_Tiles, 0, 0);
         break;
     case CREDITSMON_VENUSAUR:
         InitWindows(sWindowTemplates_Venusaur);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
         LoadMonPicInWindow(SPECIES_VENUSAUR, SHINY_ODDS, 0, TRUE, 10, 0);
-        CopyToWindowPixelBuffer(1, (const void *)sVenusaur1_Tiles, 0, 0);
-        CopyToWindowPixelBuffer(2, (const void *)sVenusaur2_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(1, (const void*)sVenusaur1_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(2, (const void*)sVenusaur2_Tiles, 0, 0);
         break;
     case CREDITSMON_BLASTOISE:
         InitWindows(sWindowTemplates_Blastoise);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
         LoadMonPicInWindow(SPECIES_BLASTOISE, SHINY_ODDS, 0, TRUE, 10, 0);
-        CopyToWindowPixelBuffer(1, (const void *)sBlastoise1_Tiles, 0, 0);
-        CopyToWindowPixelBuffer(2, (const void *)sBlastoise2_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(1, (const void*)sBlastoise1_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(2, (const void*)sBlastoise2_Tiles, 0, 0);
         break;
     case CREDITSMON_PIKACHU:
         InitWindows(sWindowTemplates_Pikachu);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
         LoadMonPicInWindow(SPECIES_PIKACHU, SHINY_ODDS, 0, TRUE, 10, 0);
-        CopyToWindowPixelBuffer(1, (const void *)sPikachu1_Tiles, 0, 0);
-        CopyToWindowPixelBuffer(2, (const void *)sPikachu2_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(1, (const void*)sPikachu1_Tiles, 0, 0);
+        CopyToWindowPixelBuffer(2, (const void*)sPikachu2_Tiles, 0, 0);
         break;
     }
     CopyWindowToVram(0, COPYWIN_GFX);
@@ -1279,7 +1280,7 @@ static bool32 DoCopyrightOrTheEndGfxScene(void)
 
 static void Task_MovePlayerAndGroundSprites(u8 taskId)
 {
-    struct CreditsTaskData * data = (void *)gTasks[taskId].data;
+    struct CreditsTaskData* data = (void*)gTasks[taskId].data;
     switch (data->spriteMoveCmd)
     {
     case 0:
@@ -1323,7 +1324,7 @@ static void DestroyPlayerOrRivalSprite(void)
 {
     if (sCreditsMgr->taskId != TASK_NONE)
     {
-        struct CreditsTaskData * data = (void *)gTasks[sCreditsMgr->taskId].data;
+        struct CreditsTaskData* data = (void*)gTasks[sCreditsMgr->taskId].data;
         FreeSpriteTilesByTag(data->characterTilesTag);
         DestroySprite(&gSprites[data->characterSpriteId]);
         FreeSpriteTilesByTag(data->groundTilesTag);
@@ -1336,7 +1337,7 @@ static void DestroyPlayerOrRivalSprite(void)
 static void LoadPlayerOrRivalSprite(u8 whichScene)
 {
     u8 taskId;
-    struct CreditsTaskData * data;
+    struct CreditsTaskData* data;
     s32 x, y;
     struct SpriteTemplate sprTemplate;
     struct CompressedSpriteSheet sprSheet;
@@ -1344,7 +1345,7 @@ static void LoadPlayerOrRivalSprite(u8 whichScene)
     if (sCreditsMgr->taskId == TASK_NONE)
     {
         taskId = CreateTask(Task_MovePlayerAndGroundSprites, 0);
-        data = (void *)gTasks[taskId].data;
+        data = (void*)gTasks[taskId].data;
         sCreditsMgr->taskId = taskId;
         switch (sPlayerRivalSpriteParams[whichScene][2])
         {

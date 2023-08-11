@@ -77,65 +77,65 @@ static void SafariBufferRunCommand(void);
 static void SafariBufferExecCompleted(void);
 static void CompleteWhenChosePokeblock(void);
 
-static void (*const sSafariBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
+static void (* const sSafariBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
 {
-    [CONTROLLER_GETMONDATA]               = SafariHandleGetMonData,
-    [CONTROLLER_GETRAWMONDATA]            = SafariHandleGetRawMonData,
-    [CONTROLLER_SETMONDATA]               = SafariHandleSetMonData,
-    [CONTROLLER_SETRAWMONDATA]            = SafariHandleSetRawMonData,
-    [CONTROLLER_LOADMONSPRITE]            = SafariHandleLoadMonSprite,
-    [CONTROLLER_SWITCHINANIM]             = SafariHandleSwitchInAnim,
-    [CONTROLLER_RETURNMONTOBALL]          = SafariHandleReturnMonToBall,
-    [CONTROLLER_DRAWTRAINERPIC]           = SafariHandleDrawTrainerPic,
-    [CONTROLLER_TRAINERSLIDE]             = SafariHandleTrainerSlide,
-    [CONTROLLER_TRAINERSLIDEBACK]         = SafariHandleTrainerSlideBack,
-    [CONTROLLER_FAINTANIMATION]           = SafariHandleFaintAnimation,
-    [CONTROLLER_PALETTEFADE]              = SafariHandlePaletteFade,
-    [CONTROLLER_SUCCESSBALLTHROWANIM]     = SafariHandleSuccessBallThrowAnim,
-    [CONTROLLER_BALLTHROWANIM]            = SafariHandleBallThrowAnim,
-    [CONTROLLER_PAUSE]                    = SafariHandlePause,
-    [CONTROLLER_MOVEANIMATION]            = SafariHandleMoveAnimation,
-    [CONTROLLER_PRINTSTRING]              = SafariHandlePrintString,
-    [CONTROLLER_PRINTSTRINGPLAYERONLY]    = SafariHandlePrintSelectionString,
-    [CONTROLLER_CHOOSEACTION]             = SafariHandleChooseAction,
-    [CONTROLLER_UNKNOWNYESNOBOX]          = SafariHandleUnknownYesNoBox,
-    [CONTROLLER_CHOOSEMOVE]               = SafariHandleChooseMove,
-    [CONTROLLER_OPENBAG]                  = SafariHandleChooseItem,
-    [CONTROLLER_CHOOSEPOKEMON]            = SafariHandleChoosePokemon,
-    [CONTROLLER_23]                       = SafariHandleCmd23,
-    [CONTROLLER_HEALTHBARUPDATE]          = SafariHandleHealthBarUpdate,
-    [CONTROLLER_EXPUPDATE]                = SafariHandleExpUpdate,
-    [CONTROLLER_STATUSICONUPDATE]         = SafariHandleStatusIconUpdate,
-    [CONTROLLER_STATUSANIMATION]          = SafariHandleStatusAnimation,
-    [CONTROLLER_STATUSXOR]                = SafariHandleStatusXor,
-    [CONTROLLER_DATATRANSFER]             = SafariHandleDataTransfer,
-    [CONTROLLER_DMA3TRANSFER]             = SafariHandleDMA3Transfer,
-    [CONTROLLER_PLAYBGM]                  = SafariHandlePlayBGM,
-    [CONTROLLER_32]                       = SafariHandleCmd32,
-    [CONTROLLER_TWORETURNVALUES]          = SafariHandleTwoReturnValues,
-    [CONTROLLER_CHOSENMONRETURNVALUE]     = SafariHandleChosenMonReturnValue,
-    [CONTROLLER_ONERETURNVALUE]           = SafariHandleOneReturnValue,
+    [CONTROLLER_GETMONDATA] = SafariHandleGetMonData,
+    [CONTROLLER_GETRAWMONDATA] = SafariHandleGetRawMonData,
+    [CONTROLLER_SETMONDATA] = SafariHandleSetMonData,
+    [CONTROLLER_SETRAWMONDATA] = SafariHandleSetRawMonData,
+    [CONTROLLER_LOADMONSPRITE] = SafariHandleLoadMonSprite,
+    [CONTROLLER_SWITCHINANIM] = SafariHandleSwitchInAnim,
+    [CONTROLLER_RETURNMONTOBALL] = SafariHandleReturnMonToBall,
+    [CONTROLLER_DRAWTRAINERPIC] = SafariHandleDrawTrainerPic,
+    [CONTROLLER_TRAINERSLIDE] = SafariHandleTrainerSlide,
+    [CONTROLLER_TRAINERSLIDEBACK] = SafariHandleTrainerSlideBack,
+    [CONTROLLER_FAINTANIMATION] = SafariHandleFaintAnimation,
+    [CONTROLLER_PALETTEFADE] = SafariHandlePaletteFade,
+    [CONTROLLER_SUCCESSBALLTHROWANIM] = SafariHandleSuccessBallThrowAnim,
+    [CONTROLLER_BALLTHROWANIM] = SafariHandleBallThrowAnim,
+    [CONTROLLER_PAUSE] = SafariHandlePause,
+    [CONTROLLER_MOVEANIMATION] = SafariHandleMoveAnimation,
+    [CONTROLLER_PRINTSTRING] = SafariHandlePrintString,
+    [CONTROLLER_PRINTSTRINGPLAYERONLY] = SafariHandlePrintSelectionString,
+    [CONTROLLER_CHOOSEACTION] = SafariHandleChooseAction,
+    [CONTROLLER_UNKNOWNYESNOBOX] = SafariHandleUnknownYesNoBox,
+    [CONTROLLER_CHOOSEMOVE] = SafariHandleChooseMove,
+    [CONTROLLER_OPENBAG] = SafariHandleChooseItem,
+    [CONTROLLER_CHOOSEPOKEMON] = SafariHandleChoosePokemon,
+    [CONTROLLER_23] = SafariHandleCmd23,
+    [CONTROLLER_HEALTHBARUPDATE] = SafariHandleHealthBarUpdate,
+    [CONTROLLER_EXPUPDATE] = SafariHandleExpUpdate,
+    [CONTROLLER_STATUSICONUPDATE] = SafariHandleStatusIconUpdate,
+    [CONTROLLER_STATUSANIMATION] = SafariHandleStatusAnimation,
+    [CONTROLLER_STATUSXOR] = SafariHandleStatusXor,
+    [CONTROLLER_DATATRANSFER] = SafariHandleDataTransfer,
+    [CONTROLLER_DMA3TRANSFER] = SafariHandleDMA3Transfer,
+    [CONTROLLER_PLAYBGM] = SafariHandlePlayBGM,
+    [CONTROLLER_32] = SafariHandleCmd32,
+    [CONTROLLER_TWORETURNVALUES] = SafariHandleTwoReturnValues,
+    [CONTROLLER_CHOSENMONRETURNVALUE] = SafariHandleChosenMonReturnValue,
+    [CONTROLLER_ONERETURNVALUE] = SafariHandleOneReturnValue,
     [CONTROLLER_ONERETURNVALUE_DUPLICATE] = SafariHandleOneReturnValue_Duplicate,
-    [CONTROLLER_CLEARUNKVAR]              = SafariHandleCmd37,
-    [CONTROLLER_SETUNKVAR]                = SafariHandleCmd38,
-    [CONTROLLER_CLEARUNKFLAG]             = SafariHandleCmd39,
-    [CONTROLLER_TOGGLEUNKFLAG]            = SafariHandleCmd40,
-    [CONTROLLER_HITANIMATION]             = SafariHandleHitAnimation,
-    [CONTROLLER_CANTSWITCH]               = SafariHandleCmd42,
-    [CONTROLLER_PLAYSE]                   = SafariHandlePlaySE,
-    [CONTROLLER_PLAYFANFARE]              = SafariHandlePlayFanfareOrBGM,
-    [CONTROLLER_FAINTINGCRY]              = SafariHandleFaintingCry,
-    [CONTROLLER_INTROSLIDE]               = SafariHandleIntroSlide,
-    [CONTROLLER_INTROTRAINERBALLTHROW]    = SafariHandleIntroTrainerBallThrow,
-    [CONTROLLER_DRAWPARTYSTATUSSUMMARY]   = SafariHandleDrawPartyStatusSummary,
-    [CONTROLLER_HIDEPARTYSTATUSSUMMARY]   = SafariHandleHidePartyStatusSummary,
-    [CONTROLLER_ENDBOUNCE]                = SafariHandleEndBounceEffect,
-    [CONTROLLER_SPRITEINVISIBILITY]       = SafariHandleSpriteInvisibility,
-    [CONTROLLER_BATTLEANIMATION]          = SafariHandleBattleAnimation,
-    [CONTROLLER_LINKSTANDBYMSG]           = SafariHandleLinkStandbyMsg,
+    [CONTROLLER_CLEARUNKVAR] = SafariHandleCmd37,
+    [CONTROLLER_SETUNKVAR] = SafariHandleCmd38,
+    [CONTROLLER_CLEARUNKFLAG] = SafariHandleCmd39,
+    [CONTROLLER_TOGGLEUNKFLAG] = SafariHandleCmd40,
+    [CONTROLLER_HITANIMATION] = SafariHandleHitAnimation,
+    [CONTROLLER_CANTSWITCH] = SafariHandleCmd42,
+    [CONTROLLER_PLAYSE] = SafariHandlePlaySE,
+    [CONTROLLER_PLAYFANFARE] = SafariHandlePlayFanfareOrBGM,
+    [CONTROLLER_FAINTINGCRY] = SafariHandleFaintingCry,
+    [CONTROLLER_INTROSLIDE] = SafariHandleIntroSlide,
+    [CONTROLLER_INTROTRAINERBALLTHROW] = SafariHandleIntroTrainerBallThrow,
+    [CONTROLLER_DRAWPARTYSTATUSSUMMARY] = SafariHandleDrawPartyStatusSummary,
+    [CONTROLLER_HIDEPARTYSTATUSSUMMARY] = SafariHandleHidePartyStatusSummary,
+    [CONTROLLER_ENDBOUNCE] = SafariHandleEndBounceEffect,
+    [CONTROLLER_SPRITEINVISIBILITY] = SafariHandleSpriteInvisibility,
+    [CONTROLLER_BATTLEANIMATION] = SafariHandleBattleAnimation,
+    [CONTROLLER_LINKSTANDBYMSG] = SafariHandleLinkStandbyMsg,
     [CONTROLLER_RESETACTIONMOVESELECTION] = SafariHandleResetActionMoveSelection,
-    [CONTROLLER_ENDLINKBATTLE]            = SafariHandleCmd55,
-    [CONTROLLER_TERMINATOR_NOP]           = SafariCmdEnd,
+    [CONTROLLER_ENDLINKBATTLE] = SafariHandleCmd55,
+    [CONTROLLER_TERMINATOR_NOP] = SafariCmdEnd,
 };
 
 // not used
@@ -342,9 +342,9 @@ static void SafariHandleDrawTrainerPic(void)
     DecompressTrainerBackPalette(gSaveBlock2Ptr->playerGender, gActiveBattler);
     SetMultiuseSpriteTemplateToTrainerBack(gSaveBlock2Ptr->playerGender, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
-                                                     80,
-                                                     (8 - gTrainerBackPicCoords[gSaveBlock2Ptr->playerGender].size) * 4 + 80,
-                                                     30);
+        80,
+        (8 - gTrainerBackPicCoords[gSaveBlock2Ptr->playerGender].size) * 4 + 80,
+        30);
     gSprites[gBattlerSpriteIds[gActiveBattler]].oam.paletteNum = gActiveBattler;
     gSprites[gBattlerSpriteIds[gActiveBattler]].x2 = DISPLAY_WIDTH;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[0] = -2;
@@ -402,11 +402,11 @@ static void SafariHandleMoveAnimation(void)
 
 static void SafariHandlePrintString(void)
 {
-    u16 *stringId;
+    u16* stringId;
 
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
-    stringId = (u16 *)(&gBattleBufferA[gActiveBattler][2]);
+    stringId = (u16*)(&gBattleBufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
     if (BattleStringShouldBeColored(*stringId))
         BattlePutTextOnWindow(gDisplayedStringBattle, (B_WIN_MSG | B_TEXT_FLAG_NPC_CONTEXT_FONT));

@@ -9,29 +9,29 @@
 #include "task.h"
 #include "trig.h"
 
-static void SpriteCB_BoxMonIconScrollOut(struct Sprite *sprite);
+static void SpriteCB_BoxMonIconScrollOut(struct Sprite* sprite);
 static void SetBoxSpeciesAndPersonalities(u8 boxId);
-static void MovePartySpriteToNextSlot(struct Sprite *sprite, u16 idx);
-static void SpriteCB_MovePartySpriteToNextSlot(struct Sprite *sprite);
-static void DestroyBoxMonIcon(struct Sprite *sprite);
-static void SpriteCB_HeldMon(struct Sprite *sprite);
+static void MovePartySpriteToNextSlot(struct Sprite* sprite, u16 idx);
+static void SpriteCB_MovePartySpriteToNextSlot(struct Sprite* sprite);
+static void DestroyBoxMonIcon(struct Sprite* sprite);
+static void SpriteCB_HeldMon(struct Sprite* sprite);
 static void Task_InitBox(u8 taskId);
 static s8 DetermineBoxScrollDirection(u8 boxId);
 static void LoadWallpaperGfx(u8 wallpaperId, s8 direction);
 static bool32 WaitForWallpaperGfxLoad(void);
-static void DrawWallpaper(void *unused, const void *tilemap, s8 direction, u8 offset);
-static void TrimOldWallpaper(void *buffer);
+static void DrawWallpaper(void* unused, const void* tilemap, s8 direction, u8 offset);
+static void TrimOldWallpaper(void* buffer);
 static void InitBoxTitle(u8 wallpaperId);
 static void CreateIncomingBoxTitle(u8 wallpaperId, s8 direction);
-static void SpriteCB_IncomingBoxTitle(struct Sprite *sprite);
-static void SpriteCB_OutgoingBoxTitle(struct Sprite *sprite);
-static s16 GetBoxTitleBaseX(const u8 *boxName);
+static void SpriteCB_IncomingBoxTitle(struct Sprite* sprite);
+static void SpriteCB_OutgoingBoxTitle(struct Sprite* sprite);
+static s16 GetBoxTitleBaseX(const u8* boxName);
 static void CycleBoxTitleSprites(void);
 static void CycleBoxTitleColor(void);
 static void CreateBoxScrollArrows(void);
 static void StartBoxScrollArrowsSlide(s8 direction);
 static void StopBoxScrollArrowsSlide(void);
-static void SpriteCB_BoxScrollArrow(struct Sprite *sprite);
+static void SpriteCB_BoxScrollArrow(struct Sprite* sprite);
 
 static const struct OamData sOamData_MonIcon;
 
@@ -71,8 +71,8 @@ static const union AffineAnimCmd sAffineAnim_ReleaseMon_ComeBack[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnims_ReleaseMon[] = {
-    [RELEASE_ANIM_RELEASE]   = sAffineAnim_ReleaseMon_Release,
+static const union AffineAnimCmd* const sAffineAnims_ReleaseMon[] = {
+    [RELEASE_ANIM_RELEASE] = sAffineAnim_ReleaseMon_Release,
     [RELEASE_ANIM_COME_BACK] = sAffineAnim_ReleaseMon_ComeBack,
 };
 
@@ -147,22 +147,22 @@ static const u16 sWallpaperTilemap_Unused[] = INCBIN_U16("graphics/pokemon_stora
 
 // Shadow color, text color
 static const u16 sBoxTitleColors[][2] = {
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE},
-    {RGB( 7,  7,  7), RGB_WHITE}
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE},
+    {RGB(7,  7,  7), RGB_WHITE}
 };
 
 static const struct Wallpaper sWallpapers[] = {
@@ -217,7 +217,7 @@ static const union AnimCmd sAnim_BoxTitle_Right[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_BoxTitle[] = {
+static const union AnimCmd* const sAnims_BoxTitle[] = {
     sAnim_BoxTitle_Left,
     sAnim_BoxTitle_Right,
 };
@@ -257,7 +257,7 @@ static const union AnimCmd sAnim_BoxScrollArrow_Right[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_BoxScrollArrow[] = {
+static const union AnimCmd* const sAnims_BoxScrollArrow[] = {
     sAnim_BoxScrollArrow_Left,
     sAnim_BoxScrollArrow_Right,
 };
@@ -379,7 +379,7 @@ static void StartBoxMonIconsScrollOut(s16 speed)
     }
 }
 
-static void SpriteCB_BoxMonIconScrollIn(struct Sprite *sprite)
+static void SpriteCB_BoxMonIconScrollIn(struct Sprite* sprite)
 {
     if (sprite->sDistance != 0)
     {
@@ -394,7 +394,7 @@ static void SpriteCB_BoxMonIconScrollIn(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_BoxMonIconScrollOut(struct Sprite *sprite)
+static void SpriteCB_BoxMonIconScrollOut(struct Sprite* sprite)
 {
     if (sprite->sDelay != 0)
         sprite->sDelay--;
@@ -442,8 +442,8 @@ static u8 CreateBoxMonIconsInColumn(u8 column, u16 distance, s16 speed)
             if (gStorage->boxSpecies[boxPosition] != SPECIES_NONE)
             {
                 gStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(gStorage->boxSpecies[boxPosition],
-                                                                            gStorage->boxPersonalities[boxPosition],
-                                                                            x, y, 2, subpriority);
+                    gStorage->boxPersonalities[boxPosition],
+                    x, y, 2, subpriority);
                 if (gStorage->boxMonsSprites[boxPosition] != NULL)
                 {
                     gStorage->boxMonsSprites[boxPosition]->sDistance = distance;
@@ -464,8 +464,8 @@ static u8 CreateBoxMonIconsInColumn(u8 column, u16 distance, s16 speed)
             if (gStorage->boxSpecies[boxPosition] != SPECIES_NONE)
             {
                 gStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(gStorage->boxSpecies[boxPosition],
-                                                                            gStorage->boxPersonalities[boxPosition],
-                                                                            x, y, 2, subpriority);
+                    gStorage->boxPersonalities[boxPosition],
+                    x, y, 2, subpriority);
                 if (gStorage->boxMonsSprites[boxPosition] != NULL)
                 {
                     gStorage->boxMonsSprites[boxPosition]->sDistance = distance;
@@ -608,7 +608,7 @@ void CreatePartyMonsSprites(bool8 visible)
         if (species != SPECIES_NONE)
         {
             personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
-            gStorage->partySprites[i] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (i - 1)) + 16, 1, 12);
+            gStorage->partySprites[i] = CreateMonIconSprite(species, personality, 152, 8 * (3 * (i - 1)) + 16, 1, 12);
             count++;
         }
         else
@@ -666,7 +666,7 @@ u8 GetNumPartySpritesCompacting(void)
 #define sSpeedY    data[5]
 #define sMoveSteps data[6]
 
-static void MovePartySpriteToNextSlot(struct Sprite *sprite, u16 partyId)
+static void MovePartySpriteToNextSlot(struct Sprite* sprite, u16 partyId)
 {
     s16 x, y;
 
@@ -684,7 +684,7 @@ static void MovePartySpriteToNextSlot(struct Sprite *sprite, u16 partyId)
     sprite->callback = SpriteCB_MovePartySpriteToNextSlot;
 }
 
-static void SpriteCB_MovePartySpriteToNextSlot(struct Sprite *sprite)
+static void SpriteCB_MovePartySpriteToNextSlot(struct Sprite* sprite)
 {
     if (sprite->sMoveSteps != 0)
     {
@@ -849,7 +849,7 @@ bool8 ShiftMons(void)
 
     if (gStorage->shiftTimer == 16)
     {
-        struct Sprite *sprite = gStorage->movingMonSprite;
+        struct Sprite* sprite = gStorage->movingMonSprite;
         gStorage->movingMonSprite = (*gStorage->shiftMonSpritePtr);
         *gStorage->shiftMonSpritePtr = sprite;
 
@@ -932,7 +932,7 @@ void SetMovingMonPriority(u8 priority)
     gStorage->movingMonSprite->oam.priority = priority;
 }
 
-static void SpriteCB_HeldMon(struct Sprite *sprite)
+static void SpriteCB_HeldMon(struct Sprite* sprite)
 {
     sprite->x = gStorage->cursorSprite->x;
     sprite->y = gStorage->cursorSprite->y + gStorage->cursorSprite->y2 + 4;
@@ -964,7 +964,7 @@ static u16 TryLoadMonIconTiles(u16 species)
     gStorage->iconSpeciesList[i] = species;
     gStorage->numIconsPerSpecies[i]++;
     offset = 16 * i;
-    CpuCopy32(GetMonIconTiles(species, TRUE), (void *)(OBJ_VRAM0) + offset * 32, 0x200);
+    CpuCopy32(GetMonIconTiles(species, TRUE), (void*)(OBJ_VRAM0)+offset * 32, 0x200);
 
     return offset;
 }
@@ -984,7 +984,7 @@ static void RemoveSpeciesFromIconList(u16 species)
     }
 }
 
-struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority)
+struct Sprite* CreateMonIconSprite(u16 species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority)
 {
     u16 tileNum;
     u8 spriteId;
@@ -1009,7 +1009,7 @@ struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s16 y, u
     return &gSprites[spriteId];
 }
 
-static void DestroyBoxMonIcon(struct Sprite *sprite)
+static void DestroyBoxMonIcon(struct Sprite* sprite)
 {
     RemoveSpeciesFromIconList(sprite->data[0]);
     DestroySprite(sprite);
@@ -1033,7 +1033,7 @@ bool8 IsInitBoxActive(void)
 
 static void Task_InitBox(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {
@@ -1188,7 +1188,7 @@ bool8 DoWallpaperGfxChange(void)
 static void LoadWallpaperGfx(u8 boxId, s8 direction)
 {
     u8 wallpaperId;
-    const struct Wallpaper *wallpaper;
+    const struct Wallpaper* wallpaper;
 
     gStorage->wallpaperLoadState = 0;
     gStorage->wallpaperLoadBoxId = boxId;
@@ -1222,7 +1222,7 @@ static bool32 WaitForWallpaperGfxLoad(void)
     return TRUE;
 }
 
-static void DrawWallpaper(void *unused, const void *tilemap, s8 direction, u8 offset)
+static void DrawWallpaper(void* unused, const void* tilemap, s8 direction, u8 offset)
 {
     s16 paletteNum = (offset * 2) + 3;
     s16 x = ((gStorage->bg2_X / 8 + 10) + (direction * 24)) & 0x3F;
@@ -1239,10 +1239,10 @@ static void DrawWallpaper(void *unused, const void *tilemap, s8 direction, u8 of
     FillBgTilemapBufferRect(2, 0, x, 2, 4, 18, 17);
 }
 
-static void TrimOldWallpaper(void *tilemapBuffer)
+static void TrimOldWallpaper(void* tilemapBuffer)
 {
     u16 i;
-    u16 *dest = tilemapBuffer;
+    u16* dest = tilemapBuffer;
     s16 right = ((gStorage->bg2_X / 8 + 10) + 20) & 0x3F;
 
     if (right < 32)
@@ -1267,7 +1267,7 @@ static void InitBoxTitle(u8 boxId)
     s16 x;
     u16 i;
 
-    struct SpriteSheet spriteSheet = {gStorage->boxTitleTiles, 0x200, GFXTAG_BOX_TITLE};
+    struct SpriteSheet spriteSheet = { gStorage->boxTitleTiles, 0x200, GFXTAG_BOX_TITLE };
     struct SpritePalette palettes[] = {
         {gStorage->boxTitlePal, PALTAG_BOX_TITLE},
         {}
@@ -1307,7 +1307,7 @@ static void CreateIncomingBoxTitle(u8 boxId, s8 direction)
     u16 palOffset;
     s16 x, adjustedX;
     u16 i;
-    struct SpriteSheet spriteSheet = {gStorage->boxTitleTiles, 0x200, GFXTAG_BOX_TITLE};
+    struct SpriteSheet spriteSheet = { gStorage->boxTitleTiles, 0x200, GFXTAG_BOX_TITLE };
     struct SpriteTemplate template = sSpriteTemplate_BoxTitle;
 
     gStorage->boxTitleCycleId = !gStorage->boxTitleCycleId;
@@ -1361,7 +1361,7 @@ static void CycleBoxTitleSprites(void)
     gStorage->curBoxTitleSprites[1] = gStorage->nextBoxTitleSprites[1];
 }
 
-static void SpriteCB_IncomingBoxTitle(struct Sprite *sprite)
+static void SpriteCB_IncomingBoxTitle(struct Sprite* sprite)
 {
     if (sprite->data[2] != 0)
         sprite->data[2]--;
@@ -1369,7 +1369,7 @@ static void SpriteCB_IncomingBoxTitle(struct Sprite *sprite)
         sprite->callback = SpriteCallbackDummy;
 }
 
-static void SpriteCB_OutgoingBoxTitle(struct Sprite *sprite)
+static void SpriteCB_OutgoingBoxTitle(struct Sprite* sprite)
 {
     if (sprite->data[1] != 0)
         sprite->data[1]--;
@@ -1392,7 +1392,7 @@ static void CycleBoxTitleColor(void)
         CpuCopy16(sBoxTitleColors[wallpaperId], &gPlttBufferUnfaded[gStorage->boxTitleAltPalOffset], PLTT_SIZEOF(2));
 }
 
-static s16 GetBoxTitleBaseX(const u8 *string)
+static s16 GetBoxTitleBaseX(const u8* string)
 {
     return DISPLAY_WIDTH - 64 - GetStringWidth(FONT_NORMAL_COPY_1, string, 0) / 2;
 }
@@ -1412,7 +1412,7 @@ static void CreateBoxScrollArrows(void)
         u8 spriteId = CreateSprite(&sSpriteTemplate_BoxScrollArrow, 92 + i * 136, 28, 22);
         if (spriteId != MAX_SPRITES)
         {
-            struct Sprite *sprite = &gSprites[spriteId];
+            struct Sprite* sprite = &gSprites[spriteId];
             StartSpriteAnim(sprite, i);
             sprite->sSpeed = (i == 0) ? -1 : 1;
             gStorage->arrowSprites[i] = sprite;
@@ -1488,7 +1488,7 @@ void AnimateBoxScrollArrows(bool8 animate)
     }
 }
 
-static void SpriteCB_BoxScrollArrow(struct Sprite *sprite)
+static void SpriteCB_BoxScrollArrow(struct Sprite* sprite)
 {
     switch (sprite->sState)
     {
@@ -1532,7 +1532,7 @@ static void SpriteCB_BoxScrollArrow(struct Sprite *sprite)
 #undef sSpeed
 
 // Arrows for Deposit/Jump Box selection
-struct Sprite *CreateChooseBoxArrows(u16 x, u16 y, u8 animId, u8 priority, u8 subpriority)
+struct Sprite* CreateChooseBoxArrows(u16 x, u16 y, u8 animId, u8 priority, u8 subpriority)
 {
     u8 spriteId = CreateSprite(&sSpriteTemplate_BoxScrollArrow, x, y, subpriority);
     if (spriteId == MAX_SPRITES)

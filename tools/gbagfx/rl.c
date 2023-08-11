@@ -5,14 +5,14 @@
 #include "global.h"
 #include "rl.h"
 
-unsigned char *RLDecompress(unsigned char *src, int srcSize, int *uncompressedSize)
+unsigned char* RLDecompress(unsigned char* src, int srcSize, int* uncompressedSize)
 {
     if (srcSize < 4)
         goto fail;
 
     int destSize = (src[3] << 16) | (src[2] << 8) | src[1];
 
-    unsigned char *dest = malloc(destSize);
+    unsigned char* dest = malloc(destSize);
 
     if (dest == NULL)
         goto fail;
@@ -61,7 +61,7 @@ fail:
     FATAL_ERROR("Fatal error while decompressing RL file.\n");
 }
 
-unsigned char *RLCompress(unsigned char *src, int srcSize, int *compressedSize)
+unsigned char* RLCompress(unsigned char* src, int srcSize, int* compressedSize)
 {
     if (srcSize <= 0)
         goto fail;
@@ -71,7 +71,7 @@ unsigned char *RLCompress(unsigned char *src, int srcSize, int *compressedSize)
     // Round up to the next multiple of four.
     worstCaseDestSize = (worstCaseDestSize + 3) & ~3;
 
-    unsigned char *dest = malloc(worstCaseDestSize);
+    unsigned char* dest = malloc(worstCaseDestSize);
 
     if (dest == NULL)
         goto fail;
@@ -101,7 +101,7 @@ unsigned char *RLCompress(unsigned char *src, int srcSize, int *compressedSize)
             srcPos++;
             uncompressedLength++;
         }
-        
+
         if (uncompressedLength > 0)
         {
             dest[destPos++] = uncompressedLength - 1;

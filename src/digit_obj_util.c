@@ -30,21 +30,21 @@ struct DigitPrinterAlloc
 
 // this file's functions
 static u8 GetFirstOamId(u8 oamCount);
-static void CopyWorkToOam(struct DigitPrinter *objWork);
-static void DrawNumObjsLeadingZeros(struct DigitPrinter *objWork, s32 num, bool32 sign);
-static void DrawNumObjsMinusInFront(struct DigitPrinter *objWork, s32 num, bool32 sign);
-static void DrawNumObjsMinusInBack(struct DigitPrinter *objWork, s32 num, bool32 sign);
+static void CopyWorkToOam(struct DigitPrinter* objWork);
+static void DrawNumObjsLeadingZeros(struct DigitPrinter* objWork, s32 num, bool32 sign);
+static void DrawNumObjsMinusInFront(struct DigitPrinter* objWork, s32 num, bool32 sign);
+static void DrawNumObjsMinusInBack(struct DigitPrinter* objWork, s32 num, bool32 sign);
 static bool32 SharesTileWithAnyActive(u32 id);
 static bool32 SharesPalWithAnyActive(u32 id);
 static u8 GetTilesPerImage(u32 shape, u32 size);
 
 // ewram
-static EWRAM_DATA struct DigitPrinterAlloc *sOamWork = {0};
+static EWRAM_DATA struct DigitPrinterAlloc* sOamWork = { 0 };
 
 // const rom data
 static const u8 sTilesPerImage[4][4] =
 {
-    [ST_OAM_SQUARE]      = {
+    [ST_OAM_SQUARE] = {
         [ST_OAM_SIZE_0] = 0x01, // SPRITE_SIZE_8x8
         [ST_OAM_SIZE_1] = 0x04, // SPRITE_SIZE_16x16
         [ST_OAM_SIZE_2] = 0x10, // SPRITE_SIZE_32x32
@@ -115,7 +115,7 @@ void DigitObjUtil_Free(void)
     }
 }
 
-bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate *template)
+bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate* template)
 {
     u32 i;
 
@@ -140,7 +140,7 @@ bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemp
             struct CompressedSpriteSheet compObjectPic;
 
             compObjectPic = *template->spriteSheet.compressed;
-            compObjectPic.size = GetDecompressedDataSize((const void *)template->spriteSheet.compressed->data);
+            compObjectPic.size = GetDecompressedDataSize((const void*)template->spriteSheet.compressed->data);
             sOamWork->array[id].tileStart = LoadCompressedSpriteSheet(&compObjectPic);
         }
 
@@ -176,7 +176,7 @@ bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemp
     return TRUE;
 }
 
-static void CopyWorkToOam(struct DigitPrinter *objWork)
+static void CopyWorkToOam(struct DigitPrinter* objWork)
 {
     u32 i;
     u32 oamId = objWork->firstOamId;
@@ -238,7 +238,7 @@ void DigitObjUtil_PrintNumOn(u32 id, s32 num)
     }
 }
 
-static void DrawNumObjsLeadingZeros(struct DigitPrinter *objWork, s32 num, bool32 sign)
+static void DrawNumObjsLeadingZeros(struct DigitPrinter* objWork, s32 num, bool32 sign)
 {
     u32 pow10 = objWork->pow10;
     u32 oamId = objWork->firstOamId;
@@ -259,7 +259,7 @@ static void DrawNumObjsLeadingZeros(struct DigitPrinter *objWork, s32 num, bool3
         gMain.oamBuffer[oamId].affineMode = ST_OAM_AFFINE_ERASE;
 }
 
-static void DrawNumObjsMinusInFront(struct DigitPrinter *objWork, s32 num, bool32 sign)
+static void DrawNumObjsMinusInFront(struct DigitPrinter* objWork, s32 num, bool32 sign)
 {
     u32 pow10 = objWork->pow10;
     static int oamId;
@@ -304,7 +304,7 @@ static void DrawNumObjsMinusInFront(struct DigitPrinter *objWork, s32 num, bool3
     }
 }
 
-static void DrawNumObjsMinusInBack(struct DigitPrinter *objWork, s32 num, bool32 sign)
+static void DrawNumObjsMinusInBack(struct DigitPrinter* objWork, s32 num, bool32 sign)
 {
     u32 pow10 = objWork->pow10;
     u32 oamId = objWork->firstOamId;

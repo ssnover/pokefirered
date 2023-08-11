@@ -44,7 +44,7 @@ enum MainMenuWindow
 
 static bool32 MainMenuGpuInit(u8 a0);
 static void Task_SetWin0BldRegsAndCheckSaveFile(u8 taskId);
-static void PrintSaveErrorStatus(u8 taskId, const u8 *str);
+static void PrintSaveErrorStatus(u8 taskId, const u8* str);
 static void Task_SaveErrorStatus_RunPrinterThenWaitButton(u8 taskId);
 static void Task_SetWin0BldRegsNoSaveFileCheck(u8 taskId);
 static void Task_WaitFadeAndPrintMainMenuText(u8 taskId);
@@ -57,7 +57,7 @@ static void Task_MysteryGiftError(u8 taskId);
 static void Task_ReturnToTileScreen(u8 taskId);
 static void MoveWindowByMenuTypeAndCursorPos(u8 menuType, u8 cursorPos);
 static bool8 HandleMenuInput(u8 taskId);
-static void PrintMessageOnWindow4(const u8 *str);
+static void PrintMessageOnWindow4(const u8* str);
 static void PrintContinueStats(void);
 static void PrintPlayerName(void);
 static void PrintPlayTime(void);
@@ -65,8 +65,8 @@ static void PrintDexCount(void);
 static void PrintBadgeCount(void);
 static void LoadUserFrameToBg(u8 bgId);
 static void SetStdFrame0OnBg(u8 bgId);
-static void MainMenu_DrawWindow(const struct WindowTemplate * template);
-static void MainMenu_EraseWindow(const struct WindowTemplate * template);
+static void MainMenu_DrawWindow(const struct WindowTemplate* template);
+static void MainMenu_EraseWindow(const struct WindowTemplate* template);
 
 static const u8 sString_Dummy[] = _("");
 static const u8 sString_Newline[] = _("\n");
@@ -80,7 +80,7 @@ static const struct WindowTemplate sWindowTemplate[] = {
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x001
-    }, 
+    },
     [MAIN_MENU_WINDOW_CONTINUE] = {
         .bg = 0,
         .tilemapLeft = 3,
@@ -89,7 +89,7 @@ static const struct WindowTemplate sWindowTemplate[] = {
         .height = 10,
         .paletteNum = 15,
         .baseBlock = 0x001
-    }, 
+    },
     [MAIN_MENU_WINDOW_NEWGAME] = {
         .bg = 0,
         .tilemapLeft = 3,
@@ -98,7 +98,7 @@ static const struct WindowTemplate sWindowTemplate[] = {
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x0f1
-    }, 
+    },
     [MAIN_MENU_WINDOW_MYSTERYGIFT] = {
         .bg = 0,
         .tilemapLeft = 3,
@@ -107,7 +107,7 @@ static const struct WindowTemplate sWindowTemplate[] = {
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x121
-    }, 
+    },
     [MAIN_MENU_WINDOW_ERROR] = {
         .bg = 0,
         .tilemapLeft = 3,
@@ -116,7 +116,7 @@ static const struct WindowTemplate sWindowTemplate[] = {
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x001
-    }, 
+    },
     [MAIN_MENU_WINDOW_COUNT] = DUMMY_WIN_TEMPLATE
 };
 
@@ -178,9 +178,9 @@ static bool32 MainMenuGpuInit(u8 a0)
     SetGpuReg(REG_OFFSET_BG1VOFS, 0);
     SetGpuReg(REG_OFFSET_BG0HOFS, 0);
     SetGpuReg(REG_OFFSET_BG0VOFS, 0);
-    DmaFill16(3, 0, (void *)VRAM, VRAM_SIZE);
-    DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
-    DmaFill16(3, 0, (void *)(PLTT + 2), PLTT_SIZE - 2);
+    DmaFill16(3, 0, (void*)VRAM, VRAM_SIZE);
+    DmaFill32(3, 0, (void*)OAM, OAM_SIZE);
+    DmaFill16(3, 0, (void*)(PLTT + 2), PLTT_SIZE - 2);
     ScanlineEffect_Stop();
     ResetTasks();
     ResetSpriteData();
@@ -276,7 +276,7 @@ static void Task_SetWin0BldRegsAndCheckSaveFile(u8 taskId)
     }
 }
 
-static void PrintSaveErrorStatus(u8 taskId, const u8 *str)
+static void PrintSaveErrorStatus(u8 taskId, const u8* str)
 {
     PrintMessageOnWindow4(str);
     gTasks[taskId].func = Task_SaveErrorStatus_RunPrinterThenWaitButton;
@@ -596,14 +596,14 @@ static bool8 HandleMenuInput(u8 taskId)
     return FALSE;
 }
 
-static void PrintMessageOnWindow4(const u8 *str)
+static void PrintMessageOnWindow4(const u8* str)
 {
     FillWindowPixelBuffer(MAIN_MENU_WINDOW_ERROR, PIXEL_FILL(10));
     MainMenu_DrawWindow(&sWindowTemplate[MAIN_MENU_WINDOW_ERROR]);
     AddTextPrinterParameterized3(MAIN_MENU_WINDOW_ERROR, FONT_NORMAL, 0, 2, sTextColor1, 2, str);
     PutWindowTilemap(MAIN_MENU_WINDOW_ERROR);
     CopyWindowToVram(MAIN_MENU_WINDOW_ERROR, COPYWIN_GFX);
-    SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE( 19, 221));
+    SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(19, 221));
     SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(115, 157));
 }
 
@@ -619,7 +619,7 @@ static void PrintPlayerName(void)
 {
     s32 i;
     u8 name[PLAYER_NAME_LENGTH + 1];
-    u8 *ptr;
+    u8* ptr;
     AddTextPrinterParameterized3(MAIN_MENU_WINDOW_CONTINUE, FONT_NORMAL, 2, 18, sTextColor2, -1, gText_Player);
     ptr = name;
     for (i = 0; i < PLAYER_NAME_LENGTH; i++)
@@ -631,7 +631,7 @@ static void PrintPlayerName(void)
 static void PrintPlayTime(void)
 {
     u8 strbuf[30];
-    u8 *ptr;
+    u8* ptr;
 
     AddTextPrinterParameterized3(MAIN_MENU_WINDOW_CONTINUE, FONT_NORMAL, 2, 34, sTextColor2, -1, gText_Time);
     ptr = ConvertIntToDecimalStringN(strbuf, gSaveBlock2Ptr->playTimeHours, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -643,7 +643,7 @@ static void PrintPlayTime(void)
 static void PrintDexCount(void)
 {
     u8 strbuf[30];
-    u8 *ptr;
+    u8* ptr;
     u16 dexcount;
     if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
     {
@@ -661,7 +661,7 @@ static void PrintDexCount(void)
 static void PrintBadgeCount(void)
 {
     u8 strbuf[30];
-    u8 *ptr;
+    u8* ptr;
     u32 flagId;
     u8 nbadges = 0;
     for (flagId = FLAG_BADGE01_GET; flagId < FLAG_BADGE01_GET + 8; flagId++)
@@ -688,81 +688,81 @@ static void SetStdFrame0OnBg(u8 bgId)
     MainMenu_EraseWindow(&sWindowTemplate[MAIN_MENU_WINDOW_ERROR]);
 }
 
-static void MainMenu_DrawWindow(const struct WindowTemplate * windowTemplate)
+static void MainMenu_DrawWindow(const struct WindowTemplate* windowTemplate)
 {
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B1, 
-        windowTemplate->tilemapLeft - 1, 
+        windowTemplate->bg,
+        0x1B1,
+        windowTemplate->tilemapLeft - 1,
         windowTemplate->tilemapTop - 1,
         1,
         1,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B2, 
-        windowTemplate->tilemapLeft, 
-        windowTemplate->tilemapTop - 1, 
-        windowTemplate->width, 
-        windowTemplate->height, 
+        windowTemplate->bg,
+        0x1B2,
+        windowTemplate->tilemapLeft,
+        windowTemplate->tilemapTop - 1,
+        windowTemplate->width,
+        windowTemplate->height,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B3, 
-        windowTemplate->tilemapLeft + 
-        windowTemplate->width, 
+        windowTemplate->bg,
+        0x1B3,
+        windowTemplate->tilemapLeft +
+        windowTemplate->width,
         windowTemplate->tilemapTop - 1,
         1,
         1,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B4, 
-        windowTemplate->tilemapLeft - 1, 
+        windowTemplate->bg,
+        0x1B4,
+        windowTemplate->tilemapLeft - 1,
         windowTemplate->tilemapTop,
-        1, 
+        1,
         windowTemplate->height,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B6, 
-        windowTemplate->tilemapLeft + 
-        windowTemplate->width, 
+        windowTemplate->bg,
+        0x1B6,
+        windowTemplate->tilemapLeft +
+        windowTemplate->width,
         windowTemplate->tilemapTop,
-        1, 
+        1,
         windowTemplate->height,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B7, 
-        windowTemplate->tilemapLeft - 1, 
-        windowTemplate->tilemapTop + 
+        windowTemplate->bg,
+        0x1B7,
+        windowTemplate->tilemapLeft - 1,
+        windowTemplate->tilemapTop +
         windowTemplate->height,
         1,
         1,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B8, 
-        windowTemplate->tilemapLeft, 
-        windowTemplate->tilemapTop + 
-        windowTemplate->height, 
+        windowTemplate->bg,
+        0x1B8,
+        windowTemplate->tilemapLeft,
+        windowTemplate->tilemapTop +
+        windowTemplate->height,
         windowTemplate->width,
         1,
         2
     );
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x1B9, 
-        windowTemplate->tilemapLeft + 
-        windowTemplate->width, 
-        windowTemplate->tilemapTop + 
+        windowTemplate->bg,
+        0x1B9,
+        windowTemplate->tilemapLeft +
+        windowTemplate->width,
+        windowTemplate->tilemapTop +
         windowTemplate->height,
         1,
         1,
@@ -771,16 +771,16 @@ static void MainMenu_DrawWindow(const struct WindowTemplate * windowTemplate)
     CopyBgTilemapBufferToVram(windowTemplate->bg);
 }
 
-static void MainMenu_EraseWindow(const struct WindowTemplate * windowTemplate)
+static void MainMenu_EraseWindow(const struct WindowTemplate* windowTemplate)
 {
     FillBgTilemapBufferRect(
-        windowTemplate->bg, 
-        0x000, 
-        windowTemplate->tilemapLeft - 1, 
-        windowTemplate->tilemapTop - 1,  
-        windowTemplate->tilemapLeft + 
-        windowTemplate->width + 1, 
-        windowTemplate->tilemapTop + 
+        windowTemplate->bg,
+        0x000,
+        windowTemplate->tilemapLeft - 1,
+        windowTemplate->tilemapTop - 1,
+        windowTemplate->tilemapLeft +
+        windowTemplate->width + 1,
+        windowTemplate->tilemapTop +
         windowTemplate->height + 1,
         2
     );

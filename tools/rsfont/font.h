@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include "gfx.h"
 
-void ReadFont(char *path, struct Image *image, int numGlyphs, int bpp, int layout);
-void WriteFont(char *path, struct Image *image, int numGlyphs, int bpp, int layout);
+void ReadFont(char* path, struct Image* image, int numGlyphs, int bpp, int layout);
+void WriteFont(char* path, struct Image* image, int numGlyphs, int bpp, int layout);
 
 #endif // FONT_H

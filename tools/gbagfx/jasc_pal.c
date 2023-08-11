@@ -24,7 +24,7 @@
 
 #define MAX_LINE_LENGTH 11
 
-void ReadJascPaletteLine(FILE *fp, char *line)
+void ReadJascPaletteLine(FILE* fp, char* line)
 {
     int c;
     int length = 0;
@@ -64,11 +64,11 @@ void ReadJascPaletteLine(FILE *fp, char *line)
     }
 }
 
-void ReadJascPalette(char *path, struct Palette *palette)
+void ReadJascPalette(char* path, struct Palette* palette)
 {
     char line[MAX_LINE_LENGTH + 1];
 
-    FILE *fp = fopen(path, "rb");
+    FILE* fp = fopen(path, "rb");
 
     if (fp == NULL)
         FATAL_ERROR("Failed to open JASC-PAL file \"%s\" for reading.\n", path);
@@ -95,8 +95,8 @@ void ReadJascPalette(char *path, struct Palette *palette)
     {
         ReadJascPaletteLine(fp, line);
 
-        char *s = line;
-        char *end;
+        char* s = line;
+        char* end;
 
         int red;
         int green;
@@ -154,9 +154,9 @@ void ReadJascPalette(char *path, struct Palette *palette)
     fclose(fp);
 }
 
-void WriteJascPalette(char *path, struct Palette *palette)
+void WriteJascPalette(char* path, struct Palette* palette)
 {
-    FILE *fp = fopen(path, "wb");
+    FILE* fp = fopen(path, "wb");
 
     fputs("JASC-PAL\r\n", fp);
     fputs("0100\r\n", fp);
@@ -164,7 +164,7 @@ void WriteJascPalette(char *path, struct Palette *palette)
 
     for (int i = 0; i < palette->numColors; i++)
     {
-        struct Color *color = &palette->colors[i];
+        struct Color* color = &palette->colors[i];
         fprintf(fp, "%d %d %d\r\n", color->red, color->green, color->blue);
     }
 

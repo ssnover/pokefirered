@@ -28,7 +28,7 @@ enum {
     BG_DIPLOMA,
 };
 
-static EWRAM_DATA struct Diploma *sDiploma = NULL;
+static EWRAM_DATA struct Diploma* sDiploma = NULL;
 
 static void DiplomaReset(void);
 static void DiplomaPrintText(void);
@@ -49,13 +49,13 @@ static const u8 sText_Sama[] = _("{HIGHLIGHT TRANSPARENT}さま");
 static const u8 sText_Hoenn[] = _("{HIGHLIGHT TRANSPARENT}ホウエン");
 static const u8 sText_National[] = _("{HIGHLIGHT TRANSPARENT}ぜんこく");
 static const u8 sText_CertifiesPokedexComplete[] = _("{HIGHLIGHT TRANSPARENT}　　　　　ポケモンずかんを\n"
-                                                     "みごと　かんせい　させた\n"
-                                                     "いだいなこうせきを　たたえ\n"
-                                                     "ここに　しょうめい　します");
+    "みごと　かんせい　させた\n"
+    "いだいなこうせきを　たたえ\n"
+    "ここに　しょうめい　します");
 static const u8 sText_GameFreak[] = _("{COLOR DARK_GRAY}{HIGHLIGHT TRANSPARENT}ゲームフリーク");
 static const u8 sText_Empty[] = _("{COLOR DARK_GRAY}{HIGHLIGHT TRANSPARENT}");
 
-static const ALIGNED(4) u8 sTextColors[3] = {0, 2, 3};
+static const ALIGNED(4) u8 sTextColors[3] = { 0, 2, 3 };
 
 static const struct BgTemplate sBgTemplates[] = {
     {
@@ -203,10 +203,10 @@ static void DiplomaReset(void)
 
 static void DiplomaInitScreen(void)
 {
-    void *vram = (void *)VRAM;
+    void* vram = (void*)VRAM;
     DmaClearLarge16(3, vram, VRAM_SIZE, 0x1000);
-    DmaClear32(3, (void *)OAM, OAM_SIZE);
-    DmaClear16(3, (void *)PLTT, PLTT_SIZE);
+    DmaClear32(3, (void*)OAM, OAM_SIZE);
+    DmaClear16(3, (void*)PLTT, PLTT_SIZE);
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));

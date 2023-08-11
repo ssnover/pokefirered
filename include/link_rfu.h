@@ -80,15 +80,15 @@ enum {
 // RfuTgtData.gname is read as these structs.
 struct RfuGameCompatibilityData
 {
-    u16 language:4;
-    u16 hasNews:1;
-    u16 hasCard:1;
-    u16 unknown:1; // Never read
-    u16 canLinkNationally:1;
-    u16 hasNationalDex:1;
-    u16 gameClear:1;
-    u16 version:4;
-    u16 unused:2;
+    u16 language : 4;
+    u16 hasNews : 1;
+    u16 hasCard : 1;
+    u16 unknown : 1; // Never read
+    u16 canLinkNationally : 1;
+    u16 hasNationalDex : 1;
+    u16 gameClear : 1;
+    u16 version : 4;
+    u16 unused : 2;
     u8 playerTrainerId[2];
 };
 
@@ -104,12 +104,12 @@ struct __attribute__((packed, aligned(2))) RfuGameData
 {
     struct RfuGameCompatibilityData compatibility;
     u8 partnerInfo[RFU_CHILD_MAX];
-    u16 tradeSpecies:10;
-    u16 tradeType:6;
-    u8 activity:7;
-    u8 startedActivity:1;
-    u8 playerGender:1;
-    u8 tradeLevel:7;
+    u16 tradeSpecies : 10;
+    u16 tradeType : 6;
+    u8 activity : 7;
+    u8 startedActivity : 1;
+    u8 playerGender : 1;
+    u8 tradeLevel : 7;
     u8 padding;
 };
 
@@ -128,7 +128,7 @@ struct RfuBlockSend
 {
     /* 0x00 */ u16 next;
     /* 0x02 */ u16 count; // max 21
-    /* 0x04 */ const u8 *payload;
+    /* 0x04 */ const u8* payload;
     /* 0x08 */ u32 receivedFlags;
     /* 0x0c */ u32 failedFlags;
     /* 0x10 */ u8 sending;
@@ -241,7 +241,7 @@ void DestroyWirelessStatusIndicatorSprite(void);
 void CreateTask_LinkMysteryGiftWithFriend(u32 activity);
 void CreateTask_LinkMysteryGiftOverWireless(u32 activity);
 void CreateTask_SendMysteryGift(u32 activity);
-void Rfu_SendPacket(void *data);
+void Rfu_SendPacket(void* data);
 u8 CreateTask_ListenToWireless(void);
 void DestroyTask_RfuIdle(void);
 void InitRFUAPI(void);
@@ -251,7 +251,7 @@ void ClearLinkRfuCallback(void);
 u8 Rfu_GetLinkPlayerCount(void);
 void StartSendingKeysToRfu(void);
 u8 Rfu_GetMultiplayerId(void);
-bool32 Rfu_InitBlockSend(const u8 * src, size_t size);
+bool32 Rfu_InitBlockSend(const u8* src, size_t size);
 bool8 Rfu_SendBlockRequest(u8 blockRequestType);
 u8 Rfu_GetBlockReceivedStatus(void);
 void Rfu_SetBlockReceivedFlag(u8 linkPlayerId);
@@ -266,23 +266,23 @@ void LinkRfu_Shutdown(void);
 void CreateTask_RfuIdle(void);
 bool8 Rfu_SetLinkRecovery(bool32 enable);
 void SetUsingUnionRoomStartMenu(void);
-struct RfuGameData *GetHostRfuGameData(void);
+struct RfuGameData* GetHostRfuGameData(void);
 void UpdateWirelessStatusIndicatorSprite(void);
 void InitRFU(void);
 bool32 RfuHasErrored(void);
 
-void RfuRecvQueue_Reset(struct RfuRecvQueue *queue);
-void RfuSendQueue_Reset(struct RfuSendQueue *queue);
+void RfuRecvQueue_Reset(struct RfuRecvQueue* queue);
+void RfuSendQueue_Reset(struct RfuSendQueue* queue);
 
 void RfuSetStatus(u8 status, u16 msg);
 u8 RfuGetStatus(void);
-void RfuRecvQueue_Enqueue(struct RfuRecvQueue *queue, u8 *src);
-bool8 RfuSendQueue_Dequeue(struct RfuSendQueue *queue, u8 *dest);
-bool8 RfuBackupQueue_Dequeue(struct RfuBackupQueue *queue, u8 *dest);
-void RfuBackupQueue_Enqueue(struct RfuBackupQueue *queue, const u8 *dest);
-bool8 RfuRecvQueue_Dequeue(struct RfuRecvQueue * queue, u8 *dest);
-void RfuSendQueue_Enqueue(struct RfuSendQueue * queue, u8 *src);
-void InitHostRfuGameData(struct RfuGameData *data, u8 activity, bool32 started, s32 partnerInfo);
+void RfuRecvQueue_Enqueue(struct RfuRecvQueue* queue, u8* src);
+bool8 RfuSendQueue_Dequeue(struct RfuSendQueue* queue, u8* dest);
+bool8 RfuBackupQueue_Dequeue(struct RfuBackupQueue* queue, u8* dest);
+void RfuBackupQueue_Enqueue(struct RfuBackupQueue* queue, const u8* dest);
+bool8 RfuRecvQueue_Dequeue(struct RfuRecvQueue* queue, u8* dest);
+void RfuSendQueue_Enqueue(struct RfuSendQueue* queue, u8* src);
+void InitHostRfuGameData(struct RfuGameData* data, u8 activity, bool32 started, s32 partnerInfo);
 void UpdateGameData_GroupLockedIn(bool8 started);
 bool32 IsRfuSerialNumberValid(u32 serialNo);
 bool8 IsRfuRecoveringFromLinkLoss(void);
@@ -291,16 +291,16 @@ void LinkRfu_StopManagerAndFinalizeSlots(void);
 bool32 RfuTryDisconnectLeavingChildren(void);
 bool32 IsRfuCommunicatingWithAllChildren(void);
 bool32 WaitRfuState(bool32 force);
-bool32 HasTrainerLeftPartnersList(u16 trainerId, const u8 *trainerName);
-void SendRfuStatusToPartner(u8 status, u16 trainerId, const u8 *name);
-u32 WaitSendRfuStatusToPartner(u16 trainerId, const u8 *name);
+bool32 HasTrainerLeftPartnersList(u16 trainerId, const u8* trainerName);
+void SendRfuStatusToPartner(u8 status, u16 trainerId, const u8* name);
+u32 WaitSendRfuStatusToPartner(u16 trainerId, const u8* name);
 void SetHostRfuGameData(u8 activity, u32 partnerInfo, bool32 startedActivity);
 void InitializeRfuLinkManager_LinkLeader(u32 availSlots);
-void RequestDisconnectSlotByTrainerNameAndId(const u8 *trainerName, u16 trainerId);
-void CopyHostRfuGameDataAndUsername(struct RfuGameData *gameData, u8 *username);
+void RequestDisconnectSlotByTrainerNameAndId(const u8* trainerName, u16 trainerId);
+void CopyHostRfuGameDataAndUsername(struct RfuGameData* gameData, u8* username);
 void InitializeRfuLinkManager_JoinGroup(void);
 void SendLeaveGroupNotice(void);
-void CreateTask_RfuReconnectWithParent(const u8 *src, u16 trainerId);
+void CreateTask_RfuReconnectWithParent(const u8* src, u16 trainerId);
 void UpdateGameData_SetActivity(u8 activity, u32 partnerInfo, u32 startedActivity);
 void SaveLinkTrainerNames(void);
 void LinkRfu_CreateConnectionAsParent();
@@ -312,10 +312,10 @@ void SetTradeBoardRegisteredMonInfo(u32 type, u32 species, u32 level);
 bool32 IsUnionRoomListenTaskActive(void);
 void InitializeRfuLinkManager_EnterUnionRoom(void);
 void Rfu_DisconnectPlayerById(u32 playerIdx);
-void TryConnectToUnionRoomParent(const u8 *name, struct RfuGameData *parent, u8 activity);
-bool32 PlayerHasMetTrainerBefore(u16 id, u8 *name);
-bool8 Rfu_GetCompatiblePlayerData(struct RfuGameData *gameData, u8 *username, u8 idx);
-bool8 Rfu_GetWonderDistributorPlayerData(struct RfuGameData *gameData, u8 *username, u8 idx);
+void TryConnectToUnionRoomParent(const u8* name, struct RfuGameData* parent, u8 activity);
+bool32 PlayerHasMetTrainerBefore(u16 id, u8* name);
+bool8 Rfu_GetCompatiblePlayerData(struct RfuGameData* gameData, u8* username, u8 idx);
+bool8 Rfu_GetWonderDistributorPlayerData(struct RfuGameData* gameData, u8* username, u8 idx);
 bool32 Rfu_IsPlayerExchangeActive(void);
 void Rfu_StopPartnerSearch(void);
 void RfuSetNormalDisconnectMode(void);

@@ -39,8 +39,8 @@ in order to read the next command correctly. refer to battle_ai_scripts.s for th
 AI scripts.
 */
 
-static EWRAM_DATA const u8 *sAIScriptPtr = NULL;
-extern u8 *gBattleAI_ScriptsTable[];
+static EWRAM_DATA const u8* sAIScriptPtr = NULL;
+extern u8* gBattleAI_ScriptsTable[];
 
 static void Cmd_if_random_less_than(void);
 static void Cmd_if_random_greater_than(void);
@@ -139,7 +139,7 @@ static void Cmd_if_target_not_taunted(void);
 
 static void RecordLastUsedMoveByTarget(void);
 static void BattleAI_DoAIProcessing(void);
-static void AIStackPushVar(const u8 *ptr);
+static void AIStackPushVar(const u8* ptr);
 static bool8 AIStackPop(void);
 
 typedef void (*BattleAICmdFunc)(void);
@@ -262,7 +262,7 @@ static const u16 sDiscouragedPowerfulMoveEffects[] =
 void BattleAI_HandleItemUseBeforeAISetup(void)
 {
     s32 i;
-    u8 *data = (u8 *)BATTLE_HISTORY;
+    u8* data = (u8*)BATTLE_HISTORY;
 
     for (i = 0; i < sizeof(struct BattleHistory); i++)
         data[i] = 0;
@@ -289,7 +289,7 @@ void BattleAI_HandleItemUseBeforeAISetup(void)
 void BattleAI_SetupAIData(void)
 {
     s32 i;
-    u8 *data = (u8 *)AI_THINKING_STRUCT;
+    u8* data = (u8*)AI_THINKING_STRUCT;
     u8 moveLimitations;
 
     // Clear AI data.
@@ -448,7 +448,7 @@ static void BattleAI_DoAIProcessing(void)
                 else
                     AI_THINKING_STRUCT->aiState++; // done processing.
                 AI_THINKING_STRUCT->aiAction &= (AI_ACTION_FLEE | AI_ACTION_WATCH | AI_ACTION_DO_NOT_ATTACK |
-                AI_ACTION_UNK5 | AI_ACTION_UNK6 | AI_ACTION_UNK7 | AI_ACTION_UNK8); // disable AI_ACTION_DONE.
+                    AI_ACTION_UNK5 | AI_ACTION_UNK6 | AI_ACTION_UNK7 | AI_ACTION_UNK8); // disable AI_ACTION_DONE.
             }
             break;
         }
@@ -772,7 +772,7 @@ static void Cmd_if_not_equal(void)
 
 static void Cmd_if_less_than_ptr(void)
 {
-    const u8 *value = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* value = T1_READ_PTR(sAIScriptPtr + 1);
 
     if (AI_THINKING_STRUCT->funcResult < *value)
         sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 5);
@@ -782,7 +782,7 @@ static void Cmd_if_less_than_ptr(void)
 
 static void Cmd_if_more_than_ptr(void)
 {
-    const u8 *value = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* value = T1_READ_PTR(sAIScriptPtr + 1);
 
     if (AI_THINKING_STRUCT->funcResult > *value)
         sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 5);
@@ -792,7 +792,7 @@ static void Cmd_if_more_than_ptr(void)
 
 static void Cmd_if_equal_ptr(void)
 {
-    const u8 *value = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* value = T1_READ_PTR(sAIScriptPtr + 1);
 
     if (AI_THINKING_STRUCT->funcResult == *value)
         sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 5);
@@ -802,7 +802,7 @@ static void Cmd_if_equal_ptr(void)
 
 static void Cmd_if_not_equal_ptr(void)
 {
-    const u8 *value = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* value = T1_READ_PTR(sAIScriptPtr + 1);
 
     if (AI_THINKING_STRUCT->funcResult != *value)
         sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 5);
@@ -832,7 +832,7 @@ static void Cmd_if_not_move(void)
 
 static void Cmd_if_in_bytes(void)
 {
-    const u8 *ptr = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* ptr = T1_READ_PTR(sAIScriptPtr + 1);
 
     while (*ptr != 0xFF)
     {
@@ -848,7 +848,7 @@ static void Cmd_if_in_bytes(void)
 
 static void Cmd_if_not_in_bytes(void)
 {
-    const u8 *ptr = T1_READ_PTR(sAIScriptPtr + 1);
+    const u8* ptr = T1_READ_PTR(sAIScriptPtr + 1);
 
     while (*ptr != 0xFF)
     {
@@ -864,7 +864,7 @@ static void Cmd_if_not_in_bytes(void)
 
 static void Cmd_if_in_hwords(void)
 {
-    const u16 *ptr = (const u16 *)T1_READ_PTR(sAIScriptPtr + 1);
+    const u16* ptr = (const u16*)T1_READ_PTR(sAIScriptPtr + 1);
 
     while (*ptr != 0xFFFF)
     {
@@ -880,7 +880,7 @@ static void Cmd_if_in_hwords(void)
 
 static void Cmd_if_not_in_hwords(void)
 {
-    const u16 *ptr = (const u16 *)T1_READ_PTR(sAIScriptPtr + 1);
+    const u16* ptr = (const u16*)T1_READ_PTR(sAIScriptPtr + 1);
 
     while (*ptr != 0xFFFF)
     {
@@ -918,7 +918,7 @@ static void Cmd_if_user_has_no_attacking_moves(void)
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         if (gBattleMons[gBattlerAttacker].moves[i] != 0
-         && gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].power != 0)
+            && gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].power != 0)
             break;
     }
 
@@ -1081,7 +1081,7 @@ static void Cmd_count_alive_pokemon(void)
 {
     u8 battlerId;
     u8 battlerOnField1, battlerOnField2;
-    struct Pokemon *party;
+    struct Pokemon* party;
     s32 i;
 
     AI_THINKING_STRUCT->funcResult = 0;
@@ -1112,9 +1112,9 @@ static void Cmd_count_alive_pokemon(void)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (i != battlerOnField1 && i != battlerOnField2
-         && GetMonData(&party[i], MON_DATA_HP) != 0
-         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
-         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
+            && GetMonData(&party[i], MON_DATA_HP) != 0
+            && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
+            && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
         {
             AI_THINKING_STRUCT->funcResult++;
         }
@@ -1157,8 +1157,8 @@ static void Cmd_get_ability(void)
 
         // abilities that prevent fleeing.
         if (gBattleMons[battlerId].ability == ABILITY_SHADOW_TAG
-        || gBattleMons[battlerId].ability == ABILITY_MAGNET_PULL
-        || gBattleMons[battlerId].ability == ABILITY_ARENA_TRAP)
+            || gBattleMons[battlerId].ability == ABILITY_MAGNET_PULL
+            || gBattleMons[battlerId].ability == ABILITY_ARENA_TRAP)
         {
             AI_THINKING_STRUCT->funcResult = gBattleMons[battlerId].ability;
             sAIScriptPtr += 2;
@@ -1182,7 +1182,7 @@ static void Cmd_get_ability(void)
         }
         else
         {
-             // AI can't actually reach this part since no pokemon has ability 2 and no ability 1.
+            // AI can't actually reach this part since no pokemon has ability 2 and no ability 1.
             AI_THINKING_STRUCT->funcResult = gSpeciesInfo[gBattleMons[battlerId].species].abilities[1];
         }
     }
@@ -1198,7 +1198,7 @@ static void Cmd_get_ability(void)
 static void Cmd_get_highest_type_effectiveness(void)
 {
     s32 i;
-    u8 *dynamicMoveType;
+    u8* dynamicMoveType;
 
     gDynamicBasePower = 0;
     dynamicMoveType = &gBattleStruct->dynamicMoveType;
@@ -1283,8 +1283,8 @@ static void Cmd_nullsub_33(void)
 
 static void Cmd_if_status_in_party(void)
 {
-    struct Pokemon *party;
-    struct Pokemon *partyPtr;
+    struct Pokemon* party;
+    struct Pokemon* partyPtr;
     int i;
     u32 statusToCompareTo;
     // u8 battlerId
@@ -1336,8 +1336,8 @@ static void Cmd_if_status_in_party(void)
 // bugged, doesnt return properly. also unused
 static void Cmd_if_status_not_in_party(void)
 {
-    struct Pokemon *party;
-    struct Pokemon *partyPtr;
+    struct Pokemon* party;
+    struct Pokemon* partyPtr;
     int i;
     u32 statusToCompareTo;
     //u8 battlerId
@@ -1364,9 +1364,9 @@ static void Cmd_if_status_not_in_party(void)
         if (species != SPECIES_NONE && species != SPECIES_EGG && hp != 0 && status == statusToCompareTo)
         {
             sAIScriptPtr += 10; // doesnt return?
-            #ifdef UBFIX
+#ifdef UBFIX
             return;
-            #endif
+#endif
         }
     }
     sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 6);
@@ -1531,7 +1531,7 @@ static void Cmd_if_cant_faint(void)
 static void Cmd_if_has_move(void)
 {
     int i;
-    const u16 *movePtr = (u16 *)(sAIScriptPtr + 2);
+    const u16* movePtr = (u16*)(sAIScriptPtr + 2);
 
     switch (sAIScriptPtr[1])
     {
@@ -1565,7 +1565,7 @@ static void Cmd_if_has_move(void)
 static void Cmd_if_doesnt_have_move(void)
 {
     int i;
-    const u16 *movePtr = (u16 *)(sAIScriptPtr + 2);
+    const u16* movePtr = (u16*)(sAIScriptPtr + 2);
 
     switch (sAIScriptPtr[1])
     {
@@ -1819,7 +1819,7 @@ static void Cmd_get_used_held_item(void)
     else
         battlerId = gBattlerTarget;
 
-    AI_THINKING_STRUCT->funcResult = ((u8 *)gBattleStruct->usedHeldItems)[battlerId * 2];
+    AI_THINKING_STRUCT->funcResult = ((u8*)gBattleStruct->usedHeldItems)[battlerId * 2];
     sAIScriptPtr += 2;
 }
 
@@ -1946,7 +1946,7 @@ static void Cmd_if_target_not_taunted(void)
         sAIScriptPtr += 5;
 }
 
-static void AIStackPushVar(const u8 *var)
+static void AIStackPushVar(const u8* var)
 {
     gBattleResources->AI_ScriptsStack->ptr[gBattleResources->AI_ScriptsStack->size++] = var;
 }

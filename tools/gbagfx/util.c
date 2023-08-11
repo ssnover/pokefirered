@@ -9,9 +9,9 @@
 #include "global.h"
 #include "util.h"
 
-bool ParseNumber(char *s, char **end, int radix, int *intValue)
+bool ParseNumber(char* s, char** end, int radix, int* intValue)
 {
-	char *localEnd;
+	char* localEnd;
 
 	if (end == NULL)
 		end = &localEnd;
@@ -37,9 +37,9 @@ bool ParseNumber(char *s, char **end, int radix, int *intValue)
 	return true;
 }
 
-char *GetFileExtension(char *path)
+char* GetFileExtension(char* path)
 {
-	char *extension = path;
+	char* extension = path;
 
 	while (*extension != 0)
 		extension++;
@@ -50,9 +50,9 @@ char *GetFileExtension(char *path)
 	return extension;
 }
 
-char *GetFileExtensionAfterDot(char *path)
+char* GetFileExtensionAfterDot(char* path)
 {
-	char *extension = GetFileExtension(path);
+	char* extension = GetFileExtension(path);
 
 	if (extension == path)
 		return NULL;
@@ -65,9 +65,9 @@ char *GetFileExtensionAfterDot(char *path)
 	return extension;
 }
 
-unsigned char *ReadWholeFile(char *path, int *size)
+unsigned char* ReadWholeFile(char* path, int* size)
 {
-	FILE *fp = fopen(path, "rb");
+	FILE* fp = fopen(path, "rb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for reading.\n", path);
@@ -76,7 +76,7 @@ unsigned char *ReadWholeFile(char *path, int *size)
 
 	*size = ftell(fp);
 
-	unsigned char *buffer = malloc(*size);
+	unsigned char* buffer = malloc(*size);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for reading \"%s\".\n", path);
@@ -91,9 +91,9 @@ unsigned char *ReadWholeFile(char *path, int *size)
 	return buffer;
 }
 
-unsigned char *ReadWholeFileZeroPadded(char *path, int *size, int padAmount)
+unsigned char* ReadWholeFileZeroPadded(char* path, int* size, int padAmount)
 {
-	FILE *fp = fopen(path, "rb");
+	FILE* fp = fopen(path, "rb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for reading.\n", path);
@@ -102,7 +102,7 @@ unsigned char *ReadWholeFileZeroPadded(char *path, int *size, int padAmount)
 
 	*size = ftell(fp);
 
-	unsigned char *buffer = calloc(*size + padAmount, 1);
+	unsigned char* buffer = calloc(*size + padAmount, 1);
 
 	if (buffer == NULL)
 		FATAL_ERROR("Failed to allocate memory for reading \"%s\".\n", path);
@@ -117,9 +117,9 @@ unsigned char *ReadWholeFileZeroPadded(char *path, int *size, int padAmount)
 	return buffer;
 }
 
-void WriteWholeFile(char *path, void *buffer, int bufferSize)
+void WriteWholeFile(char* path, void* buffer, int bufferSize)
 {
-	FILE *fp = fopen(path, "wb");
+	FILE* fp = fopen(path, "wb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for writing.\n", path);

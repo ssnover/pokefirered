@@ -16,8 +16,8 @@ static void AnimTask_FrozenIceCube_Step2(u8 taskId);
 static void AnimTask_FrozenIceCube_Step3(u8 taskId);
 static void AnimTask_FrozenIceCube_Step4(u8 taskId);
 static void Task_DoStatusAnimation(u8 taskId);
-static void AnimFlashingCircleImpact(struct Sprite *sprite);
-static void AnimFlashingCircleImpact_Step(struct Sprite *sprite);
+static void AnimFlashingCircleImpact(struct Sprite* sprite);
+static void AnimFlashingCircleImpact_Step(struct Sprite* sprite);
 
 static const union AnimCmd sAnim_FlickeringOrb[] =
 {
@@ -28,7 +28,7 @@ static const union AnimCmd sAnim_FlickeringOrb[] =
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_FlickeringOrb[] =
+static const union AnimCmd* const sAnims_FlickeringOrb[] =
 {
     sAnim_FlickeringOrb
 };
@@ -63,7 +63,7 @@ static const union AnimCmd sAnim_WeatherBallNormal[] =
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_WeatherBallNormal[] =
+static const union AnimCmd* const sAnims_WeatherBallNormal[] =
 {
     sAnim_WeatherBallNormal
 };
@@ -100,7 +100,7 @@ static const union AnimCmd sAnim_SpinningSparkle[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_SpinningSparkle[] =
+static const union AnimCmd* const sAnims_SpinningSparkle[] =
 {
     sAnim_SpinningSparkle
 };
@@ -146,7 +146,7 @@ static const union AnimCmd sAnim_FlickeringImpact_2[] =
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_FlickeringImpact[] =
+static const union AnimCmd* const sAnims_FlickeringImpact[] =
 {
     sAnim_FlickeringImpact_0,
     sAnim_FlickeringImpact_1,
@@ -171,7 +171,7 @@ static const union AnimCmd sAnim_FlickeringShrinkOrb[] =
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_FlickeringShrinkOrb[] =
+static const union AnimCmd* const sAnims_FlickeringShrinkOrb[] =
 {
     sAnim_FlickeringShrinkOrb
 };
@@ -183,7 +183,7 @@ static const union AffineAnimCmd sAffineAnim_FlickeringShrinkOrb[] =
     AFFINEANIMCMD_JUMP(1)
 };
 
-static const union AffineAnimCmd *const sAffineAnims_FlickeringShrinkOrb[] =
+static const union AffineAnimCmd* const sAffineAnims_FlickeringShrinkOrb[] =
 {
     sAffineAnim_FlickeringShrinkOrb
 };
@@ -205,10 +205,10 @@ static const u8 sText_TaskOver[] = _("TASK OVER\nタスクがオ-バ-しまし�
 
 static const struct Subsprite sFrozenIceCubeSubsprites[] =
 {
-    {.x = -16, .y = -16, .shape = SPRITE_SHAPE(64x64),  .size = SPRITE_SIZE(64x64), .tileOffset =   0, .priority = 2},
-    {.x = -16, .y =  48, .shape = SPRITE_SHAPE(64x32), .size = SPRITE_SIZE(64x32), .tileOffset =  64, .priority = 2},
-    {.x =  48, .y = -16, .shape = SPRITE_SHAPE(32x64), .size = SPRITE_SIZE(32x64), .tileOffset =  96, .priority = 2},
-    {.x =  48, .y =  48, .shape = SPRITE_SHAPE(32x32),  .size = SPRITE_SIZE(32x32), .tileOffset = 128, .priority = 2},
+    {.x = -16, .y = -16, .shape = SPRITE_SHAPE(64x64),  .size = SPRITE_SIZE(64x64), .tileOffset = 0, .priority = 2},
+    {.x = -16, .y = 48, .shape = SPRITE_SHAPE(64x32), .size = SPRITE_SIZE(64x32), .tileOffset = 64, .priority = 2},
+    {.x = 48, .y = -16, .shape = SPRITE_SHAPE(32x64), .size = SPRITE_SIZE(32x64), .tileOffset = 96, .priority = 2},
+    {.x = 48, .y = 48, .shape = SPRITE_SHAPE(32x32),  .size = SPRITE_SIZE(32x32), .tileOffset = 128, .priority = 2},
 };
 
 static const struct SubspriteTable sFrozenIceCubeSubspriteTable[] =
@@ -312,7 +312,7 @@ static void Task_UpdateFlashingCircleImpacts(u8 taskId)
     }
 }
 
-static void AnimFlashingCircleImpact(struct Sprite *sprite)
+static void AnimFlashingCircleImpact(struct Sprite* sprite)
 {
     if (sprite->data[6] == 0)
     {
@@ -326,7 +326,7 @@ static void AnimFlashingCircleImpact(struct Sprite *sprite)
     }
 }
 
-static void AnimFlashingCircleImpact_Step(struct Sprite *sprite)
+static void AnimFlashingCircleImpact_Step(struct Sprite* sprite)
 {
     sprite->x2 = Cos(sprite->data[0], 32);
     sprite->y2 = Sin(sprite->data[0], 8);
@@ -355,13 +355,13 @@ void AnimTask_FrozenIceCube(u8 taskId)
 
     if (IsContest())
         x -= 6;
-    
+
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
     spriteId = CreateSprite(&sFrozenIceCubeSpriteTemplate, x, y, 4);
     if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == 0xFFFF)
         gSprites[spriteId].invisible = TRUE;
-    
+
     SetSubspriteTables(&gSprites[spriteId], sFrozenIceCubeSubspriteTable);
     gTasks[taskId].data[15] = spriteId;
     gTasks[taskId].func = AnimTask_FrozenIceCube_Step1;
@@ -460,37 +460,37 @@ void AnimTask_StatsChange(u8 taskId)
 
     switch (gBattleSpritesDataPtr->animationData->animArg)
     {
-    CASE(PLUS1,  STAT_ATK):     goesDown = FALSE;  animStatId = 0;  break;
-    CASE(PLUS1,  STAT_DEF):     goesDown = FALSE;  animStatId = 1;  break;
-    CASE(PLUS1,  STAT_SPEED):   goesDown = FALSE;  animStatId = 3;  break;
-    CASE(PLUS1,  STAT_SPATK):   goesDown = FALSE;  animStatId = 5;  break;
-    CASE(PLUS1,  STAT_SPDEF):   goesDown = FALSE;  animStatId = 6;  break;
-    CASE(PLUS1,  STAT_ACC):     goesDown = FALSE;  animStatId = 2;  break;
-    CASE(PLUS1,  STAT_EVASION): goesDown = FALSE;  animStatId = 4;  break;
+        CASE(PLUS1, STAT_ATK) : goesDown = FALSE;  animStatId = 0;  break;
+        CASE(PLUS1, STAT_DEF) : goesDown = FALSE;  animStatId = 1;  break;
+        CASE(PLUS1, STAT_SPEED) : goesDown = FALSE;  animStatId = 3;  break;
+        CASE(PLUS1, STAT_SPATK) : goesDown = FALSE;  animStatId = 5;  break;
+        CASE(PLUS1, STAT_SPDEF) : goesDown = FALSE;  animStatId = 6;  break;
+        CASE(PLUS1, STAT_ACC) : goesDown = FALSE;  animStatId = 2;  break;
+        CASE(PLUS1, STAT_EVASION) : goesDown = FALSE;  animStatId = 4;  break;
 
-    CASE(MINUS1, STAT_ATK):     goesDown = TRUE;   animStatId = 0;  break;
-    CASE(MINUS1, STAT_DEF):     goesDown = TRUE;   animStatId = 1;  break;
-    CASE(MINUS1, STAT_SPEED):   goesDown = TRUE;   animStatId = 3;  break;
-    CASE(MINUS1, STAT_SPATK):   goesDown = TRUE;   animStatId = 5;  break;
-    CASE(MINUS1, STAT_SPDEF):   goesDown = TRUE;   animStatId = 6;  break;
-    CASE(MINUS1, STAT_ACC):     goesDown = TRUE;   animStatId = 2;  break;
-    CASE(MINUS1, STAT_EVASION): goesDown = TRUE;   animStatId = 4;  break;
+        CASE(MINUS1, STAT_ATK) : goesDown = TRUE;   animStatId = 0;  break;
+        CASE(MINUS1, STAT_DEF) : goesDown = TRUE;   animStatId = 1;  break;
+        CASE(MINUS1, STAT_SPEED) : goesDown = TRUE;   animStatId = 3;  break;
+        CASE(MINUS1, STAT_SPATK) : goesDown = TRUE;   animStatId = 5;  break;
+        CASE(MINUS1, STAT_SPDEF) : goesDown = TRUE;   animStatId = 6;  break;
+        CASE(MINUS1, STAT_ACC) : goesDown = TRUE;   animStatId = 2;  break;
+        CASE(MINUS1, STAT_EVASION) : goesDown = TRUE;   animStatId = 4;  break;
 
-    CASE(PLUS2,  STAT_ATK):     goesDown = FALSE;  animStatId = 0;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_DEF):     goesDown = FALSE;  animStatId = 1;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_SPEED):   goesDown = FALSE;  animStatId = 3;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_SPATK):   goesDown = FALSE;  animStatId = 5;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_SPDEF):   goesDown = FALSE;  animStatId = 6;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_ACC):     goesDown = FALSE;  animStatId = 2;     sharply = TRUE;   break;
-    CASE(PLUS2,  STAT_EVASION): goesDown = FALSE;  animStatId = 4;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_ATK) : goesDown = FALSE;  animStatId = 0;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_DEF) : goesDown = FALSE;  animStatId = 1;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_SPEED) : goesDown = FALSE;  animStatId = 3;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_SPATK) : goesDown = FALSE;  animStatId = 5;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_SPDEF) : goesDown = FALSE;  animStatId = 6;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_ACC) : goesDown = FALSE;  animStatId = 2;     sharply = TRUE;   break;
+        CASE(PLUS2, STAT_EVASION) : goesDown = FALSE;  animStatId = 4;     sharply = TRUE;   break;
 
-    CASE(MINUS2, STAT_ATK):     goesDown = TRUE;   animStatId = 0;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_DEF):     goesDown = TRUE;   animStatId = 1;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_SPEED):   goesDown = TRUE;   animStatId = 3;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_SPATK):   goesDown = TRUE;   animStatId = 5;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_SPDEF):   goesDown = TRUE;   animStatId = 6;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_ACC):     goesDown = TRUE;   animStatId = 2;     sharply = TRUE;   break;
-    CASE(MINUS2, STAT_EVASION): goesDown = TRUE;   animStatId = 4;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_ATK) : goesDown = TRUE;   animStatId = 0;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_DEF) : goesDown = TRUE;   animStatId = 1;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_SPEED) : goesDown = TRUE;   animStatId = 3;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_SPATK) : goesDown = TRUE;   animStatId = 5;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_SPDEF) : goesDown = TRUE;   animStatId = 6;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_ACC) : goesDown = TRUE;   animStatId = 2;     sharply = TRUE;   break;
+        CASE(MINUS2, STAT_EVASION) : goesDown = TRUE;   animStatId = 4;     sharply = TRUE;   break;
 
     case STAT_ANIM_MULTIPLE_PLUS1:  goesDown = FALSE;  animStatId = 0xFF;  sharply = FALSE;  break;
     case STAT_ANIM_MULTIPLE_PLUS2:  goesDown = FALSE;  animStatId = 0xFF;  sharply = TRUE;   break;

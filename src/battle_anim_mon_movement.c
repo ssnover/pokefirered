@@ -12,15 +12,15 @@ static void AnimTask_ShakeMon2Step(u8 taskId);
 static void AnimTask_ShakeMonInPlace_Step(u8 taskId);
 static void AnimTask_ShakeAndSinkMon_Step(u8 taskId);
 static void AnimTask_TranslateMonElliptical_Step(u8 taskId);
-static void DoHorizontalLunge(struct Sprite *sprite);
-static void ReverseHorizontalLungeDirection(struct Sprite *sprite);
-static void DoVerticalDip(struct Sprite *sprite);
-static void ReverseVerticalDipDirection(struct Sprite *sprite);
-static void SlideMonToOriginalPos(struct Sprite *sprite);
-static void SlideMonToOriginalPos_Step(struct Sprite *sprite);
-static void SlideMonToOffset(struct Sprite *sprite);
-static void SlideMonToOffsetAndBack(struct Sprite *sprite);
-static void SlideMonToOffsetAndBack_End(struct Sprite *sprite);
+static void DoHorizontalLunge(struct Sprite* sprite);
+static void ReverseHorizontalLungeDirection(struct Sprite* sprite);
+static void DoVerticalDip(struct Sprite* sprite);
+static void ReverseVerticalDipDirection(struct Sprite* sprite);
+static void SlideMonToOriginalPos(struct Sprite* sprite);
+static void SlideMonToOriginalPos_Step(struct Sprite* sprite);
+static void SlideMonToOffset(struct Sprite* sprite);
+static void SlideMonToOffsetAndBack(struct Sprite* sprite);
+static void SlideMonToOffsetAndBack_End(struct Sprite* sprite);
 static void AnimTask_WindUpLunge_Step1(u8 taskId);
 static void AnimTask_WindUpLunge_Step2(u8 taskId);
 static void AnimTask_SlideOffScreen_Step(u8 taskId);
@@ -385,13 +385,13 @@ void AnimTask_TranslateMonEllipticalRespectSide(u8 taskId)
 // horizontally, and then moves back in the opposite direction.
 // arg 0: duration of single lunge direction
 // arg 1: x pixel delta that is applied each frame
-static void DoHorizontalLunge(struct Sprite *sprite)
+static void DoHorizontalLunge(struct Sprite* sprite)
 {
     sprite->invisible = TRUE;
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
         sprite->data[1] = -gBattleAnimArgs[1];
     else
-        sprite->data[1] =  gBattleAnimArgs[1];
+        sprite->data[1] = gBattleAnimArgs[1];
     sprite->data[0] = gBattleAnimArgs[0];
     sprite->data[2] = 0;
     sprite->data[3] = gBattlerSpriteIds[gBattleAnimAttacker];
@@ -400,7 +400,7 @@ static void DoHorizontalLunge(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearById;
 }
 
-static void ReverseHorizontalLungeDirection(struct Sprite *sprite)
+static void ReverseHorizontalLungeDirection(struct Sprite* sprite)
 {
     sprite->data[0] = sprite->data[4];
     sprite->data[1] = -sprite->data[1];
@@ -413,7 +413,7 @@ static void ReverseHorizontalLungeDirection(struct Sprite *sprite)
 // arg 0: duration of single dip direction
 // arg 1: y pixel delta that is applied each frame
 // arg 2: battler
-static void DoVerticalDip(struct Sprite *sprite)
+static void DoVerticalDip(struct Sprite* sprite)
 {
     u8 spriteId;
     sprite->invisible = TRUE;
@@ -427,7 +427,7 @@ static void DoVerticalDip(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearById;
 }
 
-static void ReverseVerticalDipDirection(struct Sprite *sprite)
+static void ReverseVerticalDipDirection(struct Sprite* sprite)
 {
     sprite->data[0] = sprite->data[4];
     sprite->data[2] = -sprite->data[2];
@@ -440,7 +440,7 @@ static void ReverseVerticalDipDirection(struct Sprite *sprite)
 // arg 0: 1 = target or 0 = attacker
 // arg 1: direction (0 = horizontal and vertical, 1 = horizontal only, 2 = vertical only)
 // arg 2: duration
-static void SlideMonToOriginalPos(struct Sprite *sprite)
+static void SlideMonToOriginalPos(struct Sprite* sprite)
 {
     u8 spriteId;
     if (gBattleAnimArgs[0] == 0)
@@ -467,10 +467,10 @@ static void SlideMonToOriginalPos(struct Sprite *sprite)
     sprite->callback = SlideMonToOriginalPos_Step;
 }
 
-static void SlideMonToOriginalPos_Step(struct Sprite *sprite)
+static void SlideMonToOriginalPos_Step(struct Sprite* sprite)
 {
     u8 data7 = sprite->data[7];
-    struct Sprite *monSprite = &gSprites[sprite->data[7] >> 8];
+    struct Sprite* monSprite = &gSprites[sprite->data[7] >> 8];
     if (sprite->data[0] == 0)
     {
         if (data7 == 1 || data7 == 0)
@@ -497,7 +497,7 @@ static void SlideMonToOriginalPos_Step(struct Sprite *sprite)
 // arg 2: target y pixel offset
 // arg 3: mirror vertical translation for opposite battle side
 // arg 4: duration
-static void SlideMonToOffset(struct Sprite *sprite)
+static void SlideMonToOffset(struct Sprite* sprite)
 {
     u8 battlerId;
     u8 monSpriteId;
@@ -526,7 +526,7 @@ static void SlideMonToOffset(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearByIdFixedPoint;
 }
 
-static void SlideMonToOffsetAndBack(struct Sprite *sprite)
+static void SlideMonToOffsetAndBack(struct Sprite* sprite)
 {
     u8 battlerId;
     u8 spriteId;
@@ -559,7 +559,7 @@ static void SlideMonToOffsetAndBack(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearByIdFixedPoint;
 }
 
-static void SlideMonToOffsetAndBack_End(struct Sprite *sprite)
+static void SlideMonToOffsetAndBack_End(struct Sprite* sprite)
 {
     gSprites[sprite->data[5]].x2 = 0;
     gSprites[sprite->data[5]].y2 = 0;
@@ -833,7 +833,7 @@ void AnimTask_RotateMonToSideAndRestore(u8 taskId)
     gTasks[taskId].data[5] = spriteId;
     gTasks[taskId].data[6] = gBattleAnimArgs[3];
     gTasks[taskId].data[7] = 1;
-    if (gTasks[taskId].data[7] )
+    if (gTasks[taskId].data[7])
     {
         s16 tmp = gTasks[taskId].data[3];
         gTasks[taskId].data[3] = -tmp;
@@ -903,7 +903,7 @@ void AnimTask_ShakeTargetBasedOnMovePowerOrDmg(u8 taskId)
 
 static void AnimTask_ShakeTargetBasedOnMovePowerOrDmg_Step(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     if (++task->data[0] > task->data[1])
     {
         task->data[0] = 0;

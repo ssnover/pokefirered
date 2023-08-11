@@ -7,9 +7,9 @@
 #include "convert_png.h"
 #include "gfx.h"
 
-void ReadPng(char *path, struct Image *image)
+void ReadPng(char* path, struct Image* image)
 {
-	FILE *fp = fopen(path, "rb");
+	FILE* fp = fopen(path, "rb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for reading.\n", path);
@@ -82,7 +82,7 @@ void ReadPng(char *path, struct Image *image)
 	fclose(fp);
 }
 
-void SetPngPalette(png_structp png_ptr, png_infop info_ptr, struct Palette *palette)
+void SetPngPalette(png_structp png_ptr, png_infop info_ptr, struct Palette* palette)
 {
 	png_colorp colors = malloc(palette->numColors * sizeof(png_color));
 
@@ -100,9 +100,9 @@ void SetPngPalette(png_structp png_ptr, png_infop info_ptr, struct Palette *pale
 	free(colors);
 }
 
-void WritePng(char *path, struct Image *image)
+void WritePng(char* path, struct Image* image)
 {
-	FILE *fp = fopen(path, "wb");
+	FILE* fp = fopen(path, "wb");
 
 	if (fp == NULL)
 		FATAL_ERROR("Failed to open \"%s\" for writing.\n", path);

@@ -21,94 +21,94 @@
         .species = SPECIES_STARMIE, \
     }
 
-static const struct TrainerMonNoItemDefaultMoves sParty_AquaLeader[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_AquaGruntM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_AquaGruntF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSAromaLady[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSRuinManiac[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Interviewer[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSTuberF[] = {DUMMY_TRAINER_STARMIE};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSTuberM[] = {DUMMY_TRAINER_STARMIE};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSCooltrainerM[] = {DUMMY_TRAINER_MON_IV};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSCooltrainerF[] = {DUMMY_TRAINER_MON_IV};
-static const struct TrainerMonNoItemDefaultMoves sParty_HexManiac[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSLady[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSBeauty[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RichBoy[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPokemaniac[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSSwimmerM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSBlackBelt[] = {DUMMY_TRAINER_MON_IV};
-static const struct TrainerMonNoItemDefaultMoves sParty_Guitarist[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Kindler[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSCamper[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugManiac[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPsychicM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPsychicF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSGentleman[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourSidney[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourPhoebe[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderRoxanne[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderBrawly[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderTateLiza[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_SchoolKidM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_SchoolKidF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_SrAndJr[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PokefanM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PokefanF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_ExpertM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_ExpertF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSYoungster[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSChampion[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSFisherman[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_CyclingTriathleteM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_CyclingTriathleteF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RunningTriathleteM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RunningTriathleteF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_SwimmingTriathleteM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_SwimmingTriathleteF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_DragonTamer[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSBirdKeeper[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_NinjaBoy[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BattleGirl[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_ParasolLady[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSSwimmerF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPicnicker[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSTwins[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSSailor[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BoarderM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BoarderF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Collector[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Wally[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Brendan[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Brendan2[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_Brendan3[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_May[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_May2[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_May3[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnBreederM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnBreederF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnRangerM[] = {DUMMY_TRAINER_MON_IV};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnRangerF[] = {DUMMY_TRAINER_MON_IV};
-static const struct TrainerMonNoItemDefaultMoves sParty_MagmaLeader[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_MagmaGruntM[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_MagmaGruntF[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSLass[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSBugCatcher[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSHiker[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSYoungCouple[] = {DUMMY_TRAINER_MON, DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_OldCouple[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_RSSisAndBro[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_AquaAdminMatt[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_AquaAdminShelly[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_MagmaAdminTabitha[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_MagmaAdminCourtney[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWattson[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderFlannery[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderNorman[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWinona[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWallace[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourGlacia[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourDrake[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_AquaLeader[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_AquaGruntM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_AquaGruntF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSAromaLady[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSRuinManiac[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Interviewer[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSTuberF[] = { DUMMY_TRAINER_STARMIE };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSTuberM[] = { DUMMY_TRAINER_STARMIE };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSCooltrainerM[] = { DUMMY_TRAINER_MON_IV };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSCooltrainerF[] = { DUMMY_TRAINER_MON_IV };
+static const struct TrainerMonNoItemDefaultMoves sParty_HexManiac[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSLady[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSBeauty[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RichBoy[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPokemaniac[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSSwimmerM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSBlackBelt[] = { DUMMY_TRAINER_MON_IV };
+static const struct TrainerMonNoItemDefaultMoves sParty_Guitarist[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Kindler[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSCamper[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugManiac[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPsychicM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPsychicF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSGentleman[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourSidney[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourPhoebe[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderRoxanne[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderBrawly[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderTateLiza[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_SchoolKidM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_SchoolKidF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_SrAndJr[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PokefanM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PokefanF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_ExpertM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_ExpertF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSYoungster[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSChampion[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSFisherman[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_CyclingTriathleteM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_CyclingTriathleteF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RunningTriathleteM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RunningTriathleteF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_SwimmingTriathleteM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_SwimmingTriathleteF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_DragonTamer[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSBirdKeeper[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_NinjaBoy[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BattleGirl[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_ParasolLady[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSSwimmerF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPicnicker[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSTwins[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSSailor[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BoarderM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BoarderF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Collector[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Wally[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Brendan[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Brendan2[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_Brendan3[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_May[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_May2[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_May3[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnBreederM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnBreederF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnRangerM[] = { DUMMY_TRAINER_MON_IV };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSPkmnRangerF[] = { DUMMY_TRAINER_MON_IV };
+static const struct TrainerMonNoItemDefaultMoves sParty_MagmaLeader[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_MagmaGruntM[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_MagmaGruntF[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSLass[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSBugCatcher[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSHiker[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSYoungCouple[] = { DUMMY_TRAINER_MON, DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_OldCouple[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_RSSisAndBro[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_AquaAdminMatt[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_AquaAdminShelly[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_MagmaAdminTabitha[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_MagmaAdminCourtney[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWattson[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderFlannery[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderNorman[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWinona[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_LeaderWallace[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourGlacia[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_EliteFourDrake[] = { DUMMY_TRAINER_MON };
 
 // Start of actual trainer data
 static const struct TrainerMonNoItemDefaultMoves sParty_YoungsterBen[] = {
@@ -912,7 +912,7 @@ static const struct TrainerMonNoItemDefaultMoves sParty_CamperJeff[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_Camper2[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_Camper2[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_CamperChris[] = {
     {
@@ -1755,7 +1755,7 @@ static const struct TrainerMonNoItemCustomMoves sParty_BikerLao[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_Biker1[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_Biker1[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_BikerHideo[] = {
     {
@@ -2714,7 +2714,7 @@ static const struct TrainerMonNoItemDefaultMoves sParty_GamerStan[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_Gamer1[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_Gamer1[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_GamerRich[] = {
     {
@@ -6943,12 +6943,12 @@ static const struct TrainerMonNoItemDefaultMoves sParty_SisAndBroLilIan[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher3[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher4[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher5[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher6[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher7[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher8[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher3[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher4[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher5[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher6[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher7[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcher8[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_YoungsterBen3[] = {
     {
@@ -7134,11 +7134,11 @@ static const struct TrainerMonNoItemDefaultMoves sParty_HikerFranklin2[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_PkmnProfProfOak[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PlayerBrendan[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PlayerMay[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PlayerRed[] = {DUMMY_TRAINER_MON};
-static const struct TrainerMonNoItemDefaultMoves sParty_PlayerLeaf[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_PkmnProfProfOak[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PlayerBrendan[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PlayerMay[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PlayerRed[] = { DUMMY_TRAINER_MON };
+static const struct TrainerMonNoItemDefaultMoves sParty_PlayerLeaf[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_TeamRocketGrunt42[] = {
     {
@@ -7342,7 +7342,7 @@ static const struct TrainerMonNoItemDefaultMoves sParty_BikerGoon3[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_Biker2[] = {DUMMY_TRAINER_MON};
+static const struct TrainerMonNoItemDefaultMoves sParty_Biker2[] = { DUMMY_TRAINER_MON };
 
 static const struct TrainerMonNoItemDefaultMoves sParty_BugCatcherAnthony[] = {
     {

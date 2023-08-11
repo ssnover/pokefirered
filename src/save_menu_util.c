@@ -5,12 +5,12 @@
 #include "region_map.h"
 #include "save_menu_util.h"
 
-void SaveStatToString(u8 gameStatId, u8 *dest0, u8 color)
+void SaveStatToString(u8 gameStatId, u8* dest0, u8 color)
 {
     int nBadges;
     int flagId;
 
-    u8 *dest = dest0;
+    u8* dest = dest0;
     *dest++ = EXT_CTRL_CODE_BEGIN;
     *dest++ = EXT_CTRL_CODE_COLOR;
     *dest++ = color;

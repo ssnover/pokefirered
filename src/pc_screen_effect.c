@@ -52,7 +52,7 @@ static void BeginPCScreenEffect(TaskFunc func, u16 speed, u16 unused, u8 priorit
 
 static void Task_PCScreenEffect_TurnOn(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {
@@ -112,7 +112,7 @@ static void Task_PCScreenEffect_TurnOn(u8 taskId)
 
 static void Task_PCScreenEffect_TurnOff(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {

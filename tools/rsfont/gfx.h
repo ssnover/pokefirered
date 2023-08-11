@@ -41,7 +41,7 @@ struct Image {
 	int width;
 	int height;
 	int bitDepth;
-	unsigned char *pixels;
+	unsigned char* pixels;
 	bool hasPalette;
 	struct Palette palette;
 	bool hasTransparency;

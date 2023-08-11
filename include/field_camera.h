@@ -7,7 +7,7 @@
 
 struct CameraObject
 {
-    void (*callback)(struct CameraObject *);
+    void (*callback)(struct CameraObject*);
     u32 spriteId;
     s32 movementSpeedX;
     s32 movementSpeedY;
@@ -26,12 +26,12 @@ extern bool8 gBikeCameraAheadPanback;
 
 void DrawWholeMapView(void);
 void CurrentMapDrawMetatileAt(int x, int y);
-void FieldCameraGetPixelOffsetAtGround(s16 *x, s16 *y);
+void FieldCameraGetPixelOffsetAtGround(s16* x, s16* y);
 void SetCameraPanningCallback(void (*cb)(void));
 void SetCameraPanning(s16 x, s16 y);
 void UpdateCameraPanning(void);
 void InstallCameraPanAheadCallback(void);
-void DrawDoorMetatileAt(int x, int y, const u16 *data);
+void DrawDoorMetatileAt(int x, int y, const u16* data);
 void move_tilemap_camera_to_upper_left_corner(void);
 void CameraUpdate(void);
 void FieldUpdateBgTilemapScroll(void);

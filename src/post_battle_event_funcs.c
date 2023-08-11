@@ -10,7 +10,7 @@
 bool8 EnterHallOfFame(void)
 {
     bool8 ribbonState;
-    bool8 *r7;
+    bool8* r7;
     int i;
     bool8 gaveAtLeastOneRibbon;
     HealPlayerParty();

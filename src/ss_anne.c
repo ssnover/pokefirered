@@ -14,16 +14,16 @@ static void Task_SSAnneInit(u8 taskId);
 static void Task_SSAnneRun(u8 taskId);
 static void Task_SSAnneFinish(u8 taskId);
 static void CreateWakeBehindBoat(void);
-static void WakeSpriteCallback(struct Sprite *sprite);
+static void WakeSpriteCallback(struct Sprite* sprite);
 static void CreateSmokeSprite(void);
-static void SmokeSpriteCallback(struct Sprite *sprite);
+static void SmokeSpriteCallback(struct Sprite* sprite);
 
 static const u16 sWakeTiles[] = INCBIN_U16("graphics/ss_anne/wake.4bpp");
 static const u16 sSmokeTiles[] = INCBIN_U16("graphics/ss_anne/smoke.4bpp");
 
 static const struct SpriteSheet sSpriteSheets[] = {
-    {(const void *)sWakeTiles, sizeof(sWakeTiles), SPRITE_TAG_WAKE},
-    {(const void *)sSmokeTiles, sizeof(sSmokeTiles), SPRITE_TAG_SMOKE},
+    {(const void*)sWakeTiles, sizeof(sWakeTiles), SPRITE_TAG_WAKE},
+    {(const void*)sSmokeTiles, sizeof(sSmokeTiles), SPRITE_TAG_SMOKE},
     {0}
 };
 
@@ -33,7 +33,7 @@ static const union AnimCmd sWakeAnim[] = {
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sWakeAnimTable[] = {
+static const union AnimCmd* const sWakeAnimTable[] = {
     sWakeAnim
 };
 
@@ -53,14 +53,14 @@ static const struct SpriteTemplate sWakeSpriteTemplate = {
 };
 
 static const union AnimCmd sSmokeAnim[] = {
-    ANIMCMD_FRAME( 0, 10),
-    ANIMCMD_FRAME( 4, 20),
-    ANIMCMD_FRAME( 8, 20),
+    ANIMCMD_FRAME(0, 10),
+    ANIMCMD_FRAME(4, 20),
+    ANIMCMD_FRAME(8, 20),
     ANIMCMD_FRAME(12, 30),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSmokeAnimTable[] = {
+static const union AnimCmd* const sSmokeAnimTable[] = {
     sSmokeAnim
 };
 
@@ -90,7 +90,7 @@ void DoSSAnneDepartureCutscene(void)
 
 static void Task_SSAnneInit(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (--data[0] == 0)
     {
@@ -102,9 +102,9 @@ static void Task_SSAnneInit(u8 taskId)
 
 static void Task_SSAnneRun(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u8 objectEventId;
-    struct ObjectEvent * boatObject;
+    struct ObjectEvent* boatObject;
     s16 x;
 
     data[1]++;
@@ -130,7 +130,7 @@ static void Task_SSAnneRun(u8 taskId)
 
 static void Task_SSAnneFinish(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (++data[3] == 40)
     {
@@ -144,7 +144,7 @@ static void Task_SSAnneFinish(u8 taskId)
 static void CreateWakeBehindBoat(void)
 {
     u8 objectEventId;
-    struct ObjectEvent * boatObject;
+    struct ObjectEvent* boatObject;
     u16 x;
     u8 spriteId;
 
@@ -156,10 +156,10 @@ static void CreateWakeBehindBoat(void)
     gSprites[spriteId].oam.paletteNum = 10;
 }
 
-static void WakeSpriteCallback(struct Sprite *sprite)
+static void WakeSpriteCallback(struct Sprite* sprite)
 {
     u8 objectEventId;
-    struct ObjectEvent * boatObject;
+    struct ObjectEvent* boatObject;
     u16 x;
 
     TryGetObjectEventIdByLocalIdAndMap(1, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, &objectEventId);
@@ -176,7 +176,7 @@ static void WakeSpriteCallback(struct Sprite *sprite)
 static void CreateSmokeSprite(void)
 {
     u8 objectEventId;
-    struct ObjectEvent * boatObject;
+    struct ObjectEvent* boatObject;
     u16 x;
     u8 spriteId;
 
@@ -191,7 +191,7 @@ static void CreateSmokeSprite(void)
     }
 }
 
-static void SmokeSpriteCallback(struct Sprite *sprite)
+static void SmokeSpriteCallback(struct Sprite* sprite)
 {
     sprite->data[0]++;
     sprite->x2 = sprite->data[0] / 4;

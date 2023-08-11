@@ -48,8 +48,8 @@ struct Decoration
     u8 shape;
     u8 category;
     u16 price;
-    const u8 *description;
-    const u16 *tiles;
+    const u8* description;
+    const u16* tiles;
 };
 
 extern const struct Decoration gDecorations[];

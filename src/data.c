@@ -138,7 +138,7 @@ static const union AffineAnimCmd sAffineAnim_Battler_Return[] =
 static const union AffineAnimCmd sAffineAnim_Battler_HorizontalSquishLoop[] =
 {
     AFFINEANIMCMD_FRAME(0xA0, 0x100, 0, 0),
-    AFFINEANIMCMD_FRAME( 0x4,   0x0, 0, 8),
+    AFFINEANIMCMD_FRAME(0x4,   0x0, 0, 8),
     AFFINEANIMCMD_FRAME(-0x4,   0x0, 0, 8),
     AFFINEANIMCMD_JUMP(1),
 };
@@ -175,7 +175,7 @@ static const union AffineAnimCmd sAffineAnim_Battler_TipRight[] =
     AFFINEANIMCMD_END,
 };
 
-const union AffineAnimCmd *const gAffineAnims_BattleSpritePlayerSide[] =
+const union AffineAnimCmd* const gAffineAnims_BattleSpritePlayerSide[] =
 {
     [BATTLER_AFFINE_NORMAL] = sAffineAnim_Battler_Normal,
     [BATTLER_AFFINE_EMERGE] = sAffineAnim_Battler_Emerge,
@@ -215,7 +215,7 @@ static const union AffineAnimCmd sAffineAnim_Battler_Spin[] =
     AFFINEANIMCMD_END,
 };
 
-const union AffineAnimCmd *const gAffineAnims_BattleSpriteOpponentSide[] =
+const union AffineAnimCmd* const gAffineAnims_BattleSpriteOpponentSide[] =
 {
     [BATTLER_AFFINE_NORMAL] = sAffineAnim_Battler_Normal,
     [BATTLER_AFFINE_EMERGE] = sAffineAnim_Battler_Emerge,
@@ -230,7 +230,7 @@ const union AffineAnimCmd *const gAffineAnims_BattleSpriteOpponentSide[] =
     sAffineAnim_Battler_Spin,
 };
 
-const union AffineAnimCmd *const gAffineAnims_BattleSpriteContest[] =
+const union AffineAnimCmd* const gAffineAnims_BattleSpriteContest[] =
 {
     [BATTLER_AFFINE_NORMAL] = sAffineAnim_Battler_Flipped,
     [BATTLER_AFFINE_EMERGE] = sAffineAnim_Battler_Emerge,
@@ -269,7 +269,7 @@ static const union AnimCmd sAnim_MonPic_3[] =
     ANIMCMD_END,
 };
 
-const union AnimCmd *const gAnims_MonPic[] =
+const union AnimCmd* const gAnims_MonPic[] =
 {
     sAnim_MonPic_0,
     sAnim_MonPic_1,

@@ -33,7 +33,7 @@
 #define tWindowId       data[10]
 #define tListMenuTaskId data[11]
 
-static EWRAM_DATA const u8 *sItemOrder = NULL;
+static EWRAM_DATA const u8* sItemOrder = NULL;
 static EWRAM_DATA u8 sTopMenuItemCount = 0;
 EWRAM_DATA struct PlayerPCItemPageStruct gPlayerPcMenuManager = {};
 
@@ -45,7 +45,7 @@ static void Task_PlayerPcItemStorage(u8 taskId);
 static void Task_PlayerPcMailbox(u8 taskId);
 static void Task_PlayerPcTurnOff(u8 taskId);
 static void Task_CreateItemStorageSubmenu(u8 taskId, u8 cursorPos);
-static void PrintStringOnWindow0WithDialogueFrame(const u8 *str);
+static void PrintStringOnWindow0WithDialogueFrame(const u8* str);
 static void Task_TopMenu_ItemStorageSubmenu_HandleInput(u8 taskId);
 static void Task_PlayerPcDepositItem(u8 taskId);
 static void Task_DepositItem_WaitFadeAndGoToBag(u8 taskId);
@@ -76,7 +76,7 @@ static void Task_WaitFadeAndGoToPartyMenu(u8 taskId);
 static void Task_Error_NoPokemon(u8 taskId);
 static void Task_PlayerPcExitMailSubmenu(u8 taskId);
 
-static const u8 *const sItemStorageActionDescriptionPtrs[] = {
+static const u8* const sItemStorageActionDescriptionPtrs[] = {
     gText_TakeOutItemsFromThePC,
     gText_StoreItemsInThePC,
     gText_GoBackToThePreviousMenu
@@ -144,7 +144,7 @@ void NewGameInitPCItems(void)
     u8 i;
 
     for (i = 0, ClearPCItemSlots(); NEW_GAME_PC_ITEMS(i, PC_ITEM_ID) && NEW_GAME_PC_ITEMS(i, PC_QUANTITY) &&
-                                    AddPCItem(NEW_GAME_PC_ITEMS(i, PC_ITEM_ID), NEW_GAME_PC_ITEMS(i, PC_QUANTITY)) == TRUE; i++)
+        AddPCItem(NEW_GAME_PC_ITEMS(i, PC_ITEM_ID), NEW_GAME_PC_ITEMS(i, PC_QUANTITY)) == TRUE; i++)
         ;
 }
 
@@ -174,7 +174,7 @@ void PlayerPC(void)
 
 static void Task_DrawPlayerPcTopMenu(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (sTopMenuItemCount == 3)
         tWindowId = AddWindow(&sWindowTemplate_TopMenu_3Items);
     else
@@ -188,7 +188,7 @@ static void Task_DrawPlayerPcTopMenu(u8 taskId)
 
 static void Task_TopMenuHandleInput(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s8 input = Menu_ProcessInputNoWrapAround();
     switch (input)
     {
@@ -265,7 +265,7 @@ static void Task_PlayerPcTurnOff(u8 taskId)
 
 static void Task_CreateItemStorageSubmenu(u8 taskId, u8 cursorPos)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (gPlayerPcMenuManager.notInRoom == FALSE)
         SetHelpContext(HELPCONTEXT_BEDROOM_PC_ITEMS);
     else
@@ -278,7 +278,7 @@ static void Task_CreateItemStorageSubmenu(u8 taskId, u8 cursorPos)
     PrintStringOnWindow0WithDialogueFrame(sItemStorageActionDescriptionPtrs[cursorPos]);
 }
 
-static void PrintStringOnWindow0WithDialogueFrame(const u8 *str)
+static void PrintStringOnWindow0WithDialogueFrame(const u8* str)
 {
     DrawDialogueFrame(0, FALSE);
     AddTextPrinterParameterized(0, FONT_NORMAL, str, 0, 1, 0, NULL);
@@ -351,7 +351,7 @@ static void CB2_ReturnFromDepositMenu(void)
 
 static void Task_PlayerPcWithdrawItem(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     tCount = CountItemsInPC();
     if (tCount != 0)
     {
@@ -380,7 +380,7 @@ static void CB2_ReturnFromWithdrawMenu(void)
 
 static void Task_WithdrawItem_WaitFadeAndGoToItemStorage(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
@@ -398,7 +398,7 @@ static void Task_WithdrawItemBeginFade(u8 taskId)
 
 static void Task_PlayerPcCancel(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     ClearStdWindowAndFrameToTransparent(tWindowId, FALSE);
     ClearWindowTilemap(tWindowId);
     CopyWindowToVram(tWindowId, COPYWIN_MAP);
@@ -408,7 +408,7 @@ static void Task_PlayerPcCancel(u8 taskId)
 
 static void Task_SetPageItemVars(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (tCount >= 8)
         tPageItems = 8;
     else
@@ -463,7 +463,7 @@ static void Task_DrawMailboxPcMenu(u8 taskId)
 
 static void Task_MailboxPcHandleInput(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     s32 input;
     if (!gPaletteFade.active)
     {
@@ -495,7 +495,7 @@ static void Task_PrintWhatToDoWithSelectedMail(u8 taskId)
 {
     s32 length;
     s32 i;
-    u8 *ptr;
+    u8* ptr;
     StringCopy(gStringVar1, SELECTED_MAIL.playerName);
     length = StringLength(gStringVar1);
     if (length > 5)
@@ -517,7 +517,7 @@ static void Task_PrintWhatToDoWithSelectedMail(u8 taskId)
 
 static void Task_DestroyMailboxPcViewAndCancel(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     MailboxPC_RemoveWindow(0);
     MailboxPC_RemoveWindow(1);
     DestroyListMenuTask(tListMenuTaskId, NULL, NULL);
@@ -629,7 +629,7 @@ static void Task_MoveToBagYesNoMenuHandleInput(u8 taskId)
 
 static void Task_TryPutMailInBag_DestroyMsgIfSuccessful(u8 taskId)
 {
-    struct Mail * mail = &SELECTED_MAIL;
+    struct Mail* mail = &SELECTED_MAIL;
     if (!AddBagItem(mail->itemId, 1))
     {
         DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_BagIsFull, Task_PlayerPcExitMailSubmenu);

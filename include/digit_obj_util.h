@@ -3,20 +3,20 @@
 
 struct DigitObjUtilTemplate
 {
-    u8 strConvMode:2;
-    u8 shape:2;
-    u8 size:2;
-    u8 priority:2;
+    u8 strConvMode : 2;
+    u8 shape : 2;
+    u8 size : 2;
+    u8 priority : 2;
     u8 oamCount;
     u8 xDelta;
     s16 x;
     s16 y;
     union
     {
-        const struct SpriteSheet * uncompressed;
-        const struct CompressedSpriteSheet * compressed;
+        const struct SpriteSheet* uncompressed;
+        const struct CompressedSpriteSheet* compressed;
     } spriteSheet;
-    const struct SpritePalette * spritePal;
+    const struct SpritePalette* spritePal;
 };
 
 extern const u16 gMinigameDigits_Pal[];
@@ -24,7 +24,7 @@ extern const u32 gMinigameDigits_Gfx[];
 
 bool32 DigitObjUtil_Init(u32 count);
 void DigitObjUtil_Free(void);
-bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate *template);
+bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate* template);
 void DigitObjUtil_PrintNumOn(u32 id, s32 num);
 void DigitObjUtil_DeletePrinter(u32 id);
 void DigitObjUtil_HideOrShow(u32 id, bool32 hide);

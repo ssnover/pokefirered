@@ -16,7 +16,7 @@ static EWRAM_DATA u8 sSaveFailedScreenState = 0;
 static void BlankPalettes(void);
 static void UpdateMapBufferWithText(void);
 static void ClearMapBuffer(void);
-static void PrintTextOnSaveFailedScreen(const u8 *a0);
+static void PrintTextOnSaveFailedScreen(const u8* a0);
 static bool32 TryWipeDamagedSectors(void);
 static bool32 WipeDamagedSectors(u32 damagedSectors);
 
@@ -53,8 +53,8 @@ bool32 RunSaveFailedScreen(void)
         sSaveFailedScreenState = 2;
         break;
     case 2:
-        RequestDma3Fill(0, (void *)BG_CHAR_ADDR(3), BG_CHAR_SIZE, DMA3_16BIT);
-        RequestDma3Copy(sSaveFailedScreenPals, (void *)PLTT, 0x20, DMA3_16BIT);
+        RequestDma3Fill(0, (void*)BG_CHAR_ADDR(3), BG_CHAR_SIZE, DMA3_16BIT);
+        RequestDma3Copy(sSaveFailedScreenPals, (void*)PLTT, 0x20, DMA3_16BIT);
         sSaveFailedScreenState = 3;
         break;
     case 3:
@@ -111,19 +111,19 @@ static void BlankPalettes(void)
     int i;
     for (i = 0; i < BG_PLTT_SIZE; i += sizeof(u16))
     {
-        *((u16 *)(BG_PLTT + i)) = RGB_BLACK;
-        *((u16 *)(OBJ_PLTT + i)) = RGB_BLACK;
+        *((u16*)(BG_PLTT + i)) = RGB_BLACK;
+        *((u16*)(OBJ_PLTT + i)) = RGB_BLACK;
     }
 }
 
 static void RequestDmaCopyFromScreenBuffer(void)
 {
-    RequestDma3Copy(gDecompressionBuffer + 0x3800, (void *)BG_SCREEN_ADDR(31), 0x500, DMA3_16BIT);
+    RequestDma3Copy(gDecompressionBuffer + 0x3800, (void*)BG_SCREEN_ADDR(31), 0x500, DMA3_16BIT);
 }
 
 static void RequestDmaCopyFromCharBuffer(void)
 {
-    RequestDma3Copy(gDecompressionBuffer + 0x020, (void *)BG_CHAR_ADDR(3) + 0x20, 0x2300, DMA3_16BIT);
+    RequestDma3Copy(gDecompressionBuffer + 0x020, (void*)BG_CHAR_ADDR(3) + 0x20, 0x2300, DMA3_16BIT);
 }
 
 static void FillBgMapBufferRect(u16 baseBlock, u8 left, u8 top, u8 width, u8 height, u16 blockOffset)
@@ -134,7 +134,7 @@ static void FillBgMapBufferRect(u16 baseBlock, u8 left, u8 top, u8 width, u8 hei
     {
         for (j = left; j < left + width; j++)
         {
-            *((u16 *)(gDecompressionBuffer + 0x3800 + 64 * i + 2 * j)) = baseBlock;
+            *((u16*)(gDecompressionBuffer + 0x3800 + 64 * i + 2 * j)) = baseBlock;
             baseBlock += blockOffset;
         }
     }
@@ -151,7 +151,7 @@ static void ClearMapBuffer(void)
     FillBgMapBufferRect(0x000, 0, 0, 30, 20, 0x000);
 }
 
-static void PrintTextOnSaveFailedScreen(const u8 *str)
+static void PrintTextOnSaveFailedScreen(const u8* str)
 {
     GenerateFontHalfRowLookupTable(TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     CpuFill16(PIXEL_FILL(1) | (PIXEL_FILL(1) << 8), gDecompressionBuffer + 0x20, 0x2300);
@@ -177,7 +177,7 @@ static bool16 VerifySectorWipe(u32 sector)
 {
     u16 sector0 = sector;
     u16 i;
-    u32 *saveDataBuffer = (void *)&gSaveDataBuffer;
+    u32* saveDataBuffer = (void*)&gSaveDataBuffer;
     ReadFlash(sector0, 0, saveDataBuffer, 0x1000);
     for (i = 0; i < 0x1000 / sizeof(u32); i++, saveDataBuffer++)
     {

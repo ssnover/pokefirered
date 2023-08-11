@@ -40,16 +40,16 @@ struct ECWork
     u16 bg2ScrollRow;
     int tgtBgY;
     int deltaBgY;
-    struct Sprite *selectDestFieldCursorSprite;
-    struct Sprite *rectCursorSpriteRight;
-    struct Sprite *rectCursorSpriteLeft;
-    struct Sprite *selectWordCursorSprite;
-    struct Sprite *selectGroupHelpSprite;
-    struct Sprite *modeIconsSprite;
-    struct Sprite *upTriangleCursorSprite;
-    struct Sprite *downTriangleCursorSprite;
-    struct Sprite *startPgUpButtonSprite;
-    struct Sprite *selectPgDnButtonSprite;
+    struct Sprite* selectDestFieldCursorSprite;
+    struct Sprite* rectCursorSpriteRight;
+    struct Sprite* rectCursorSpriteLeft;
+    struct Sprite* selectWordCursorSprite;
+    struct Sprite* selectGroupHelpSprite;
+    struct Sprite* modeIconsSprite;
+    struct Sprite* upTriangleCursorSprite;
+    struct Sprite* downTriangleCursorSprite;
+    struct Sprite* startPgUpButtonSprite;
+    struct Sprite* selectPgDnButtonSprite;
     u16 bg1TilemapBuffer[BG_SCREEN_SIZE / 2];
     u16 bg3TilemapBuffer[BG_SCREEN_SIZE / 2];
 };
@@ -62,7 +62,7 @@ struct EasyChatPhraseFrameDimensions
     u8 height;
 };
 
-static EWRAM_DATA struct ECWork * sEasyChatGraphicsResources = NULL;
+static EWRAM_DATA struct ECWork* sEasyChatGraphicsResources = NULL;
 
 static bool8 ECInterfaceCmd_01(void);
 static bool8 ECInterfaceCmd_02(void);
@@ -90,13 +90,13 @@ static bool8 InitEasyChatGraphicsWork_Internal(void);
 static void SetGpuRegsForEasyChatInit(void);
 static void LoadEasyChatPals(void);
 static void PrintTitleText(void);
-static void EC_AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 left, u8 top, u8 speed, u8 bg, u8 fg, u8 shadow);
+static void EC_AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8* str, u8 left, u8 top, u8 speed, u8 bg, u8 fg, u8 shadow);
 static void PrintECInstructionsText(void);
 static void PrintECInterfaceTextById(u8 a0);
 static void EC_CreateYesNoMenuWithInitialCursorPos(u8 initialCursorPos);
 static void CreatePhraseFrameWindow(void);
 static void PrintECFields(void);
-static void DrawECFrameInTilemapBuffer(u16 *buffer);
+static void DrawECFrameInTilemapBuffer(u16* buffer);
 static void PutWin2TilemapAndCopyToVram(void);
 static void PrintECMenuById(u32 a0);
 static void PrintECGroupOrAlphaMenu(void);
@@ -121,7 +121,7 @@ static int GetBg2ScrollRow(void);
 static void SetRegWin0Coords(u8 left, u8 top, u8 right, u8 bottom);
 static void LoadSpriteGfx(void);
 static void CreateSelectDestFieldCursorSprite(void);
-static void SpriteCB_BounceCursor(struct Sprite *sprite);
+static void SpriteCB_BounceCursor(struct Sprite* sprite);
 static void SetSelectDestFieldCursorSpritePosAndResetAnim(u8 x, u8 y);
 static void FreezeSelectDestFieldCursorSprite(void);
 static void UnfreezeSelectDestFieldCursorSprite(void);
@@ -131,7 +131,7 @@ static void EC_MoveCursor(void);
 static void MoveCursor_Group(s8 a0, s8 a1);
 static void MoveCursor_Alpha(s8 a0, s8 a1);
 static void CreateSelectWordCursorSprite(void);
-static void SpriteCB_SelectWordCursorSprite(struct Sprite *sprite);
+static void SpriteCB_SelectWordCursorSprite(struct Sprite* sprite);
 static void SetSelectWordCursorSpritePos(void);
 static void SetSelectWordCursorSpritePosExplicit(u8 x, u8 y);
 static void DestroySelectWordCursorSprite(void);
@@ -281,7 +281,7 @@ static const struct WindowTemplate sEasyChatYesNoWindowTemplate = {
 static const u8 sText_Underscore[] = _("{UNDERSCORE}");
 static const u8 sText_Clear17[] = _("{CLEAR 17}");
 
-static const u8 *const sEasyChatKeyboardAlphabet[NUM_ALPHABET_ROWS] = {
+static const u8* const sEasyChatKeyboardAlphabet[NUM_ALPHABET_ROWS] = {
     gText_EasyChatKeyboard_ABCDEFothers,
     gText_EasyChatKeyboard_GHIJKL,
     gText_EasyChatKeyboard_MNOPQRS,
@@ -310,7 +310,7 @@ static const struct CompressedSpriteSheet sEasyChatCompressedSpriteSheets[] = {
     {.data = gEasyChatMode_Gfx,            .size = 0x1000, .tag = GFXTAG_MODE_WINDOW}
 };
 
-static const u8 sAlphabetKeyboardColumnOffsets[NUM_ALPHABET_COLUMNS] = {0, 12, 24, 56, 68, 80, 92};
+static const u8 sAlphabetKeyboardColumnOffsets[NUM_ALPHABET_COLUMNS] = { 0, 12, 24, 56, 68, 80, 92 };
 
 static const struct OamData sOamData_TriangleCursor = {
     .y = 0,
@@ -380,8 +380,8 @@ enum {
     RECTCURSOR_ANIM_ON_LETTER,
 };
 
-static const union AnimCmd *const sAnims_RectangleCursor[] = {
-    [RECTCURSOR_ANIM_ON_GROUP]  = sAnim_RectangleCursor_OnGroup,
+static const union AnimCmd* const sAnims_RectangleCursor[] = {
+    [RECTCURSOR_ANIM_ON_GROUP] = sAnim_RectangleCursor_OnGroup,
     [RECTCURSOR_ANIM_ON_BUTTON] = sAnim_RectangleCursor_OnButton,
     [RECTCURSOR_ANIM_ON_OTHERS] = sAnim_RectangleCursor_OnOthers,
     [RECTCURSOR_ANIM_ON_LETTER] = sAnim_RectangleCursor_OnLetter,
@@ -448,12 +448,12 @@ enum {
     MODEWINDOW_ANIM_TRANSITION,
 };
 
-static const union AnimCmd *const sAnims_ModeWindow[] = {
-    [MODEWINDOW_ANIM_HIDDEN]      = sAnim_ModeWindow_Hidden,
-    [MODEWINDOW_ANIM_TO_GROUP]    = sAnim_ModeWindow_ToGroup,
+static const union AnimCmd* const sAnims_ModeWindow[] = {
+    [MODEWINDOW_ANIM_HIDDEN] = sAnim_ModeWindow_Hidden,
+    [MODEWINDOW_ANIM_TO_GROUP] = sAnim_ModeWindow_ToGroup,
     [MODEWINDOW_ANIM_TO_ALPHABET] = sAnim_ModeWindow_ToAlphabet,
-    [MODEWINDOW_ANIM_TO_HIDDEN]   = sAnim_ModeWindow_ToHidden,
-    [MODEWINDOW_ANIM_TRANSITION]  = sAnim_ModeWindow_Transition,
+    [MODEWINDOW_ANIM_TO_HIDDEN] = sAnim_ModeWindow_ToHidden,
+    [MODEWINDOW_ANIM_TRANSITION] = sAnim_ModeWindow_Transition,
 };
 
 static const struct SpriteTemplate sSpriteTemplate_ModeWindow = {
@@ -532,7 +532,7 @@ static const union AnimCmd sAnim_Frame1[] = {
 };
 
 // Frame0 is Start button, Frame1 is Select button, both are identical for the scroll indicators
-static const union AnimCmd *const sAnims_TwoFrame[] = {
+static const union AnimCmd* const sAnims_TwoFrame[] = {
     sAnim_Frame0,
     sAnim_Frame1,
 };
@@ -578,7 +578,7 @@ bool8 LoadEasyChatGraphics(void)
         DeactivateAllTextPrinters();
         LoadEasyChatPals();
         SetGpuRegsForEasyChatInit();
-        CpuFastFill(0, (void *)VRAM + 0x1000000, 0x400);
+        CpuFastFill(0, (void*)VRAM + 0x1000000, 0x400);
         break;
     case 1:
         DecompressAndLoadBgGfxUsingHeap(3, gEasyChatWindow_Gfx, 0, 0, 0);
@@ -690,8 +690,8 @@ static bool8 ECInterfaceCmd_01(void)
 static bool8 ECInterfaceCmd_02(void)
 {
     u8 i;
-    u16 *ecWordBuffer;
-    u16 *ecWord;
+    u16* ecWordBuffer;
+    u16* ecWord;
     u8 frameId;
     u8 cursorColumn, cursorRow, numColumns;
     s16 var1;
@@ -1331,7 +1331,7 @@ static void LoadEasyChatPals(void)
 static void PrintTitleText(void)
 {
     int xOffset;
-    const u8 *titleText = GetTitleText();
+    const u8* titleText = GetTitleText();
     if (titleText == NULL)
         return;
 
@@ -1342,14 +1342,14 @@ static void PrintTitleText(void)
     CopyWindowToVram(0, COPYWIN_FULL);
 }
 
-static void EC_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16))
+static void EC_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 speed, void (*callback)(struct TextPrinterTemplate*, u16))
 {
     if (fontId == FONT_NORMAL_COPY_1)
         y += 2;
     AddTextPrinterParameterized(windowId, fontId, str, x, y, speed, callback);
 }
 
-static void EC_AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, u8 bg, u8 fg, u8 shadow)
+static void EC_AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 speed, u8 bg, u8 fg, u8 shadow)
 {
     u8 color[3];
     if (fontId == FONT_NORMAL_COPY_1)
@@ -1372,8 +1372,8 @@ static void PrintECInstructionsText(void)
 
 static void PrintECInterfaceTextById(u8 direction)
 {
-    const u8 *text2 = NULL;
-    const u8 *text1 = NULL;
+    const u8* text2 = NULL;
+    const u8* text1 = NULL;
     switch (direction)
     {
     case 0:
@@ -1424,9 +1424,9 @@ static void CreatePhraseFrameWindow(void)
 
 static void PrintECFields(void)
 {
-    u16 *ecWord;
+    u16* ecWord;
     u8 numColumns, numRows;
-    u8 *str;
+    u8* str;
     u8 frameId;
     int i, j, k;
 
@@ -1475,7 +1475,7 @@ static void PrintECFields(void)
     CopyWindowToVram(sEasyChatGraphicsResources->windowId, COPYWIN_FULL);
 }
 
-static void DrawECFrameInTilemapBuffer(u16 *tilemap)
+static void DrawECFrameInTilemapBuffer(u16* tilemap)
 {
     u8 frameId;
     int right, bottom;
@@ -1495,7 +1495,7 @@ static void DrawECFrameInTilemapBuffer(u16 *tilemap)
             for (; x < right; x++)
                 tilemap[y * 32 + x] = 0x1000;
 
-            tilemap[y* 32 + x] = 0x1007;
+            tilemap[y * 32 + x] = 0x1007;
         }
     }
     else
@@ -1519,7 +1519,7 @@ static void DrawECFrameInTilemapBuffer(u16 *tilemap)
             for (; x < right; x++)
                 tilemap[y * 32 + x] = 0x1000;
 
-            tilemap[y* 32 + x] = 0x1007;
+            tilemap[y * 32 + x] = 0x1007;
         }
 
         x = sPhraseFrameDimensions[frameId].left - 1;
@@ -1650,7 +1650,7 @@ static void PrintECRowsWin2(u8 row, u8 remrow)
 {
     int i, j;
     u16 easyChatWord;
-    u8 *str;
+    u8* str;
     int y;
     u8 y_;
     int ecWordIdx;
@@ -1838,7 +1838,7 @@ static void RedrawFrameByIndex(u8 direction)
 
 static void RedrawFrameByRect(int left, int top, int width, int height)
 {
-    u16 *tilemap;
+    u16* tilemap;
     int right;
     int bottom;
     int x, y;
@@ -1951,7 +1951,7 @@ static void CreateSelectDestFieldCursorSprite(void)
     gSprites[spriteId].data[1] = 1;
 }
 
-static void SpriteCB_BounceCursor(struct Sprite *sprite)
+static void SpriteCB_BounceCursor(struct Sprite* sprite)
 {
     if (sprite->data[1])
     {
@@ -2094,7 +2094,7 @@ static void CreateSelectWordCursorSprite(void)
     SetSelectWordCursorSpritePos();
 }
 
-static void SpriteCB_SelectWordCursorSprite(struct Sprite *sprite)
+static void SpriteCB_SelectWordCursorSprite(struct Sprite* sprite)
 {
     if (++sprite->data[0] > 2)
     {

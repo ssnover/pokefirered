@@ -74,9 +74,9 @@ u8 sVcountAfterSound;
 u8 sVcountAtIntr;
 u8 sVcountBeforeSound;
 
-static IntrFunc * const sTimerIntrFunc = gIntrTable + 0x7;
+static IntrFunc* const sTimerIntrFunc = gIntrTable + 0x7;
 
-EWRAM_DATA u8 gDecompressionBuffer[0x4000] = {0};
+EWRAM_DATA u8 gDecompressionBuffer[0x4000] = { 0 };
 EWRAM_DATA u16 gTrainerId = 0;
 
 static void UpdateLinkAndCallCallbacks(void);
@@ -116,13 +116,13 @@ void AgbMain()
         "\tcmp\tr1, r2\n"
         "\tbcc\t.LCU%=\n"
         :
-        :
+    :
         : "r0", "r1", "r2", "r3", "r4", "r5", "memory"
-    );
+        );
 #else
     RegisterRamReset(RESET_ALL);
 #endif //MODERN
-    *(vu16 *)BG_PLTT = RGB_WHITE;
+    * (vu16*)BG_PLTT = RGB_WHITE;
     InitGpuRegManager();
     REG_WAITCNT = WAITCNT_PREFETCH_ENABLE | WAITCNT_WS0_S_1 | WAITCNT_WS0_N_3;
     InitKeys();
@@ -145,7 +145,7 @@ void AgbMain()
 
 #ifndef NDEBUG
 #if (LOG_HANDLER == LOG_HANDLER_MGBA_PRINT)
-    (void) MgbaOpen();
+    (void)MgbaOpen();
 #elif (LOG_HANDLER == LOG_HANDLER_AGB_PRINT)
     AGBPrintInit();
 #endif
@@ -163,8 +163,8 @@ void AgbMain()
         ReadKeys();
 
         if (gSoftResetDisabled == FALSE
-         && (gMain.heldKeysRaw & A_BUTTON)
-         && (gMain.heldKeysRaw & B_START_SELECT) == B_START_SELECT)
+            && (gMain.heldKeysRaw & A_BUTTON)
+            && (gMain.heldKeysRaw & B_START_SELECT) == B_START_SELECT)
         {
             rfu_REQ_stopMode();
             rfu_waitREQComplete();
@@ -396,7 +396,7 @@ static void VBlankIntr(void)
 
 void InitFlashTimer(void)
 {
-    IntrFunc **func = (IntrFunc **)&sTimerIntrFunc;
+    IntrFunc** func = (IntrFunc**)&sTimerIntrFunc;
     SetFlashTimerIntr(2, *func);
 }
 
@@ -445,7 +445,7 @@ static void WaitForVBlank(void)
         ;
 }
 
-void SetVBlankCounter1Ptr(u32 *ptr)
+void SetVBlankCounter1Ptr(u32* ptr)
 {
     gMain.vblankCounter1 = ptr;
 }

@@ -26,7 +26,7 @@
 #include "constants/help_system.h"
 #include "constants/songs.h"
 
-EWRAM_DATA struct PokemonStorageSystemData *gStorage = NULL;
+EWRAM_DATA struct PokemonStorageSystemData* gStorage = NULL;
 static EWRAM_DATA bool8 sInPartyMenu = 0;
 static EWRAM_DATA u8 sCurrentBoxOption = 0;
 static EWRAM_DATA u8 sDepositBoxId = 0;
@@ -76,7 +76,7 @@ static void CreateMarkingComboSprite(void);
 static void CreateWaveformSprites(void);
 static void RefreshDisplayMonData(void);
 static void StartDisplayMonMosaic(void);
-static void SpriteCB_DisplayMonMosaic(struct Sprite *sprite);
+static void SpriteCB_DisplayMonMosaic(struct Sprite* sprite);
 static bool8 IsDisplayMonMosaicActive(void);
 static void CreateDisplayMonSprite(void);
 static void LoadDisplayMonGfx(u16 species, u32 personality);
@@ -166,21 +166,21 @@ enum
     MSG_FMT_ITEM_NAME,
 };
 
-static const u32 sScrollingBg_Gfx[]     = INCBIN_U32("graphics/pokemon_storage/scrolling_bg.4bpp.lz");
+static const u32 sScrollingBg_Gfx[] = INCBIN_U32("graphics/pokemon_storage/scrolling_bg.4bpp.lz");
 static const u32 sScrollingBg_Tilemap[] = INCBIN_U32("graphics/pokemon_storage/scrolling_bg.bin.lz");
 
 // Unused
 static const u16 sMenu_Pal[] = INCBIN_U16("graphics/pokemon_storage/menu.gbapal");
 
-static const u32 sMenu_Tilemap[]             = INCBIN_U32("graphics/pokemon_storage/menu.bin.lz");
-static const u16 sPkmnData_Tilemap[]         = INCBIN_U16("graphics/pokemon_storage/pkmn_data.bin");
-static const u16 sScrollingBg_Pal[]          = INCBIN_U16("graphics/pokemon_storage/scrolling_bg.gbapal");
+static const u32 sMenu_Tilemap[] = INCBIN_U32("graphics/pokemon_storage/menu.bin.lz");
+static const u16 sPkmnData_Tilemap[] = INCBIN_U16("graphics/pokemon_storage/pkmn_data.bin");
+static const u16 sScrollingBg_Pal[] = INCBIN_U16("graphics/pokemon_storage/scrolling_bg.gbapal");
 static const u16 sScrollingBgMoveItems_Pal[] = INCBIN_U16("graphics/pokemon_storage/scrolling_bg_move_items.gbapal");
-static const u16 sCloseBoxButton_Tilemap[]   = INCBIN_U16("graphics/pokemon_storage/close_box_button.bin");
-static const u16 sPartySlotFilled_Tilemap[]  = INCBIN_U16("graphics/pokemon_storage/party_slot_filled.bin");
-static const u16 sPartySlotEmpty_Tilemap[]   = INCBIN_U16("graphics/pokemon_storage/party_slot_empty.bin");
-static const u16 sPokeStorageMisc2Pal[]      = INCBIN_U16("graphics/pokemon_storage/misc2.gbapal");
-static const u16 sWaveform_Gfx[]             = INCBIN_U16("graphics/pokemon_storage/waveform.4bpp");
+static const u16 sCloseBoxButton_Tilemap[] = INCBIN_U16("graphics/pokemon_storage/close_box_button.bin");
+static const u16 sPartySlotFilled_Tilemap[] = INCBIN_U16("graphics/pokemon_storage/party_slot_filled.bin");
+static const u16 sPartySlotEmpty_Tilemap[] = INCBIN_U16("graphics/pokemon_storage/party_slot_empty.bin");
+static const u16 sPokeStorageMisc2Pal[] = INCBIN_U16("graphics/pokemon_storage/misc2.gbapal");
+static const u16 sWaveform_Gfx[] = INCBIN_U16("graphics/pokemon_storage/waveform.4bpp");
 
 // Unused
 static const u16 sUnused_Pal[] = INCBIN_U16("graphics/pokemon_storage/unused.gbapal");
@@ -273,37 +273,37 @@ static const struct SpriteTemplate sSpriteTemplate_DisplayMon = {
 };
 
 static const struct StorageMessage sMessages[] = {
-    [MSG_EXIT_BOX]             = {gText_ExitFromBox,             MSG_FMT_NONE},
-    [MSG_WHAT_YOU_DO]          = {gText_WhatDoYouWantToDo,       MSG_FMT_NONE},
-    [MSG_PICK_A_THEME]         = {gText_PleasePickATheme,        MSG_FMT_NONE},
-    [MSG_PICK_A_WALLPAPER]     = {gText_PickTheWallpaper,        MSG_FMT_NONE},
-    [MSG_IS_SELECTED]          = {gText_PkmnIsSelected,          MSG_FMT_MON_NAME_1},
-    [MSG_JUMP_TO_WHICH_BOX]    = {gText_JumpToWhichBox,          MSG_FMT_NONE},
+    [MSG_EXIT_BOX] = {gText_ExitFromBox,             MSG_FMT_NONE},
+    [MSG_WHAT_YOU_DO] = {gText_WhatDoYouWantToDo,       MSG_FMT_NONE},
+    [MSG_PICK_A_THEME] = {gText_PleasePickATheme,        MSG_FMT_NONE},
+    [MSG_PICK_A_WALLPAPER] = {gText_PickTheWallpaper,        MSG_FMT_NONE},
+    [MSG_IS_SELECTED] = {gText_PkmnIsSelected,          MSG_FMT_MON_NAME_1},
+    [MSG_JUMP_TO_WHICH_BOX] = {gText_JumpToWhichBox,          MSG_FMT_NONE},
     [MSG_DEPOSIT_IN_WHICH_BOX] = {gText_DepositInWhichBox,       MSG_FMT_NONE},
-    [MSG_WAS_DEPOSITED]        = {gText_PkmnWasDeposited,        MSG_FMT_MON_NAME_1},
-    [MSG_BOX_IS_FULL]          = {gText_BoxIsFull2,              MSG_FMT_NONE},
-    [MSG_RELEASE_POKE]         = {gText_ReleaseThisPokemon,      MSG_FMT_NONE},
-    [MSG_WAS_RELEASED]         = {gText_PkmnWasReleased,         MSG_FMT_RELEASE_MON_1},
-    [MSG_BYE_BYE]              = {gText_ByeByePkmn,              MSG_FMT_RELEASE_MON_3},
-    [MSG_MARK_POKE]            = {gText_MarkYourPkmn,            MSG_FMT_NONE},
-    [MSG_LAST_POKE]            = {gText_ThatsYourLastPkmn,       MSG_FMT_NONE},
-    [MSG_PARTY_FULL]           = {gText_YourPartysFull,          MSG_FMT_NONE},
-    [MSG_HOLDING_POKE]         = {gText_YoureHoldingAPkmn,       MSG_FMT_NONE},
-    [MSG_WHICH_ONE_WILL_TAKE]  = {gText_WhichOneWillYouTake,     MSG_FMT_NONE},
-    [MSG_CANT_RELEASE_EGG]     = {gText_YouCantReleaseAnEgg,     MSG_FMT_NONE},
-    [MSG_CONTINUE_BOX]         = {gText_ContinueBoxOperations,   MSG_FMT_NONE},
-    [MSG_CAME_BACK]            = {gText_PkmnCameBack,            MSG_FMT_MON_NAME_1},
-    [MSG_WORRIED]              = {gText_WasItWorriedAboutYou,    MSG_FMT_NONE},
-    [MSG_SURPRISE]             = {gText_FourEllipsesExclamation, MSG_FMT_NONE},
-    [MSG_PLEASE_REMOVE_MAIL]   = {gText_PleaseRemoveTheMail,     MSG_FMT_NONE},
-    [MSG_IS_SELECTED2]         = {gText_PkmnIsSelected,          MSG_FMT_ITEM_NAME},
-    [MSG_GIVE_TO_MON]          = {gText_GiveToAPkmn,             MSG_FMT_NONE},
-    [MSG_PLACED_IN_BAG]        = {gText_PlacedItemInBag,         MSG_FMT_ITEM_NAME},
-    [MSG_BAG_FULL]             = {gText_BagIsFull2,              MSG_FMT_NONE},
-    [MSG_PUT_IN_BAG]           = {gText_PutItemInBag,            MSG_FMT_NONE},
-    [MSG_ITEM_IS_HELD]         = {gText_ItemIsNowHeld,           MSG_FMT_ITEM_NAME},
-    [MSG_CHANGED_TO_ITEM]      = {gText_ChangedToNewItem,        MSG_FMT_ITEM_NAME},
-    [MSG_CANT_STORE_MAIL]      = {gText_MailCantBeStored,        MSG_FMT_NONE},
+    [MSG_WAS_DEPOSITED] = {gText_PkmnWasDeposited,        MSG_FMT_MON_NAME_1},
+    [MSG_BOX_IS_FULL] = {gText_BoxIsFull2,              MSG_FMT_NONE},
+    [MSG_RELEASE_POKE] = {gText_ReleaseThisPokemon,      MSG_FMT_NONE},
+    [MSG_WAS_RELEASED] = {gText_PkmnWasReleased,         MSG_FMT_RELEASE_MON_1},
+    [MSG_BYE_BYE] = {gText_ByeByePkmn,              MSG_FMT_RELEASE_MON_3},
+    [MSG_MARK_POKE] = {gText_MarkYourPkmn,            MSG_FMT_NONE},
+    [MSG_LAST_POKE] = {gText_ThatsYourLastPkmn,       MSG_FMT_NONE},
+    [MSG_PARTY_FULL] = {gText_YourPartysFull,          MSG_FMT_NONE},
+    [MSG_HOLDING_POKE] = {gText_YoureHoldingAPkmn,       MSG_FMT_NONE},
+    [MSG_WHICH_ONE_WILL_TAKE] = {gText_WhichOneWillYouTake,     MSG_FMT_NONE},
+    [MSG_CANT_RELEASE_EGG] = {gText_YouCantReleaseAnEgg,     MSG_FMT_NONE},
+    [MSG_CONTINUE_BOX] = {gText_ContinueBoxOperations,   MSG_FMT_NONE},
+    [MSG_CAME_BACK] = {gText_PkmnCameBack,            MSG_FMT_MON_NAME_1},
+    [MSG_WORRIED] = {gText_WasItWorriedAboutYou,    MSG_FMT_NONE},
+    [MSG_SURPRISE] = {gText_FourEllipsesExclamation, MSG_FMT_NONE},
+    [MSG_PLEASE_REMOVE_MAIL] = {gText_PleaseRemoveTheMail,     MSG_FMT_NONE},
+    [MSG_IS_SELECTED2] = {gText_PkmnIsSelected,          MSG_FMT_ITEM_NAME},
+    [MSG_GIVE_TO_MON] = {gText_GiveToAPkmn,             MSG_FMT_NONE},
+    [MSG_PLACED_IN_BAG] = {gText_PlacedItemInBag,         MSG_FMT_ITEM_NAME},
+    [MSG_BAG_FULL] = {gText_BagIsFull2,              MSG_FMT_NONE},
+    [MSG_PUT_IN_BAG] = {gText_PutItemInBag,            MSG_FMT_NONE},
+    [MSG_ITEM_IS_HELD] = {gText_ItemIsNowHeld,           MSG_FMT_ITEM_NAME},
+    [MSG_CHANGED_TO_ITEM] = {gText_ChangedToNewItem,        MSG_FMT_ITEM_NAME},
+    [MSG_CANT_STORE_MAIL] = {gText_MailCantBeStored,        MSG_FMT_NONE},
 };
 
 static const struct WindowTemplate sYesNoWindowTemplate = {
@@ -372,7 +372,7 @@ static const union AnimCmd sAnim_Waveform_RightOn[] = {
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_Waveform[] = {
+static const union AnimCmd* const sAnims_Waveform[] = {
     sAnim_Waveform_LeftOff,
     sAnim_Waveform_LeftOn,
     sAnim_Waveform_RightOff,
@@ -533,7 +533,7 @@ static void Task_InitPokeStorage(u8 taskId)
     case 2:
         PutWindowTilemap(0);
         ClearWindowTilemap(1);
-        CpuFill32(0, (void *)VRAM, 0x200);
+        CpuFill32(0, (void*)VRAM, 0x200);
         LoadUserWindowGfx(1, 0xB, BG_PLTT_ID(14));
         break;
     case 3:
@@ -2046,7 +2046,7 @@ static void Task_OnBPressed(u8 taskId)
 
 static void Task_ChangeScreen(u8 taskId)
 {
-    struct Pokemon *party;
+    struct Pokemon* party;
     u8 mode, cursorPos, lastIndex;
     u8 screenChangeType = gStorage->screenChangeType;
 
@@ -2112,7 +2112,7 @@ static void SetScrollingBackground(void)
 {
     SetGpuReg(REG_OFFSET_BG3CNT, BGCNT_PRIORITY(3) | BGCNT_CHARBASE(3) | BGCNT_16COLOR | BGCNT_SCREENBASE(31));
     DecompressAndLoadBgGfxUsingHeap(3, sScrollingBg_Gfx, 0, 0, 0);
-    LZ77UnCompVram(sScrollingBg_Tilemap, (void *)BG_SCREEN_ADDR(31));
+    LZ77UnCompVram(sScrollingBg_Tilemap, (void*)BG_SCREEN_ADDR(31));
 }
 
 static void ScrollBackground(void)
@@ -2169,7 +2169,7 @@ static void CreateMarkingComboSprite(void)
     gStorage->markingComboSprite->subpriority = 1;
     gStorage->markingComboSprite->x = 40;
     gStorage->markingComboSprite->y = 150;
-    gStorage->markingComboTilesPtr = (void *)OBJ_VRAM0 + 32 * GetSpriteTileStartByTag(GFXTAG_MARKING_COMBO);
+    gStorage->markingComboTilesPtr = (void*)OBJ_VRAM0 + 32 * GetSpriteTileStartByTag(GFXTAG_MARKING_COMBO);
 }
 
 static void CreateWaveformSprites(void)
@@ -2211,7 +2211,7 @@ static u8 IsDisplayMonMosaicActive(void)
     return gStorage->displayMonSprite->oam.mosaic;
 }
 
-static void SpriteCB_DisplayMonMosaic(struct Sprite *sprite)
+static void SpriteCB_DisplayMonMosaic(struct Sprite* sprite)
 {
     sprite->data[0] -= sprite->data[1];
     if (sprite->data[0] < 0)
@@ -2230,8 +2230,8 @@ static void CreateDisplayMonSprite(void)
     u16 tileStart;
     u8 palSlot;
     u8 spriteId;
-    struct SpriteSheet sheet = {gStorage->tileBuffer, MON_PIC_SIZE, GFXTAG_DISPLAY_MON};
-    struct SpritePalette palette = {gStorage->displayMonPalBuffer, PALTAG_DISPLAY_MON};
+    struct SpriteSheet sheet = { gStorage->tileBuffer, MON_PIC_SIZE, GFXTAG_DISPLAY_MON };
+    struct SpritePalette palette = { gStorage->displayMonPalBuffer, PALTAG_DISPLAY_MON };
     struct SpriteTemplate template = sSpriteTemplate_DisplayMon;
 
     for (i = 0; i < MON_PIC_SIZE; i++)
@@ -2257,7 +2257,7 @@ static void CreateDisplayMonSprite(void)
 
         gStorage->displayMonSprite = &gSprites[spriteId];
         gStorage->displayMonPalOffset = OBJ_PLTT_ID(palSlot);
-        gStorage->displayMonTilePtr = (void *)OBJ_VRAM0 + tileStart * 32;
+        gStorage->displayMonTilePtr = (void*)OBJ_VRAM0 + tileStart * 32;
     } while (FALSE);
 
     if (gStorage->displayMonSprite == NULL)
@@ -2482,7 +2482,7 @@ static void SetPartySlotTilemaps(void)
 static void SetPartySlotTilemap(u8 pos, bool8 isFilled)
 {
     u16 i, j, index;
-    const u16 *tilemap;
+    const u16* tilemap;
 
     if (isFilled)
         tilemap = sPartySlotFilled_Tilemap;
@@ -2552,7 +2552,7 @@ static void InitPokeStorageBg0(void)
 
 static void PrintStorageMessage(u8 id)
 {
-    u8 *txtPtr;
+    u8* txtPtr;
 
     DynamicPlaceholderTextUtil_Reset();
     switch (sMessages[id].format)
@@ -2672,7 +2672,7 @@ static void InitCursorItemIcon(void)
 static void SetPokeStorageQuestLogEvent(u8 action)
 {
     u16 event;
-    struct PokeStorageQuestLogData *questLogData;
+    struct PokeStorageQuestLogData* questLogData;
     u8 box1 = GetMovingMonOriginalBoxId();
     u16 species1 = gStorage->displayMonSpecies;
     u16 species2;
@@ -2757,7 +2757,7 @@ static void SetPokeStorageQuestLogEvent(u8 action)
         questLogData->box2 = box2;
         break;
     }
-    SetQuestLogEvent(event, (const u16 *)questLogData);
+    SetQuestLogEvent(event, (const u16*)questLogData);
 }
 
 static void UpdateBoxToSendMons(void)

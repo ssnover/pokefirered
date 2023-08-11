@@ -35,7 +35,7 @@ u16 GetPokedexCount(void)
     return IsNationalPokedexEnabled();
 }
 
-static const u8 *GetProfOaksRatingMessageByCount(u16 count)
+static const u8* GetProfOaksRatingMessageByCount(u16 count)
 {
     gSpecialVar_Result = FALSE;
 

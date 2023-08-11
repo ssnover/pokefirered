@@ -31,14 +31,14 @@ static EWRAM_DATA u16 sSpecialVar_0x8004_Copy = 0;
 
 static void ResetBattleTowerStreak(u8 levelType);
 static void SetBattleTowerTrainerGfxId(u8 trainerClass);
-static void CheckMonBattleTowerBanlist(u16 species, u16 heldItem, u16 hp, u8 battleTowerLevelType, u8 monLevel, u16 *validPartySpecies, u16 *validPartyHeldItems, u8 *numValid);
+static void CheckMonBattleTowerBanlist(u16 species, u16 heldItem, u16 hp, u8 battleTowerLevelType, u8 monLevel, u16* validPartySpecies, u16* validPartyHeldItems, u8* numValid);
 static void SaveCurrentWinStreak(void);
 static void ValidateBattleTowerRecordChecksums(void);
-static void SetBattleTowerRecordChecksum(struct BattleTowerRecord * record);
-static void ClearBattleTowerRecord(struct BattleTowerRecord * record);
+static void SetBattleTowerRecordChecksum(struct BattleTowerRecord* record);
+static void ClearBattleTowerRecord(struct BattleTowerRecord* record);
 static void PopulateBravoTrainerBattleTowerLostData(void);
 static u16 GetCurrentBattleTowerWinStreak(u8 levelType);
-static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer * eReaderTrainer);
+static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer* eReaderTrainer);
 static void PrintEReaderTrainerFarewellMessage(void);
 
 // unknown unused data
@@ -293,14 +293,14 @@ static bool8 ChooseSpecialBattleTowerTrainer(void)
         // Check if one of the battle tower trainers from record mixing should be the next trainer.
         for (recordIndex = 0; recordIndex < 5; recordIndex++)
         {
-            struct BattleTowerRecord *record = &gSaveBlock2Ptr->battleTower.records[recordIndex];
+            struct BattleTowerRecord* record = &gSaveBlock2Ptr->battleTower.records[recordIndex];
             u32 recordHasData = 0;
             u32 checksum = 0;
 
             for (i = 0; i < sizeof(struct BattleTowerRecord) / sizeof(u32) - 1; i++)
             {
-                recordHasData |= ((u32 *) record)[i];
-                checksum += ((u32 *) record)[i];
+                recordHasData |= ((u32*)record)[i];
+                checksum += ((u32*)record)[i];
             }
 
             if (gSaveBlock2Ptr->battleTower.records[recordIndex].winStreak == winStreak
@@ -352,8 +352,7 @@ void ChooseNextBattleTowerTrainer(void)
 
                 // Ensure trainer wasn't previously fought in this challenge.
                 for (i = 0; i < gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1 && gSaveBlock2Ptr->battleTower.battledTrainerIds[i] != trainerId; i++);
-            }
-            while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
+            } while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
             gSaveBlock2Ptr->battleTower.battleTowerTrainerId = trainerId;
         }
         else
@@ -365,8 +364,7 @@ void ChooseNextBattleTowerTrainer(void)
 
                 // Ensure trainer wasn't previously fought in this challenge.
                 for (i = 0; i < gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1 && gSaveBlock2Ptr->battleTower.battledTrainerIds[i] != trainerId; i++);
-            }
-            while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
+            } while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
             gSaveBlock2Ptr->battleTower.battleTowerTrainerId = trainerId;
         }
     }
@@ -378,8 +376,7 @@ void ChooseNextBattleTowerTrainer(void)
 
             // Ensure trainer wasn't previously fought in this challenge.
             for (i = 0; i < gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1 && gSaveBlock2Ptr->battleTower.battledTrainerIds[i] != trainerId; i++);
-        }
-        while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
+        } while (i != gSaveBlock2Ptr->battleTower.curChallengeBattleNum[levelType] - 1);
         gSaveBlock2Ptr->battleTower.battleTowerTrainerId = trainerId;
     }
 
@@ -400,13 +397,13 @@ void SetEReaderTrainerGfxId(void)
 }
 
 // Unreferenced; formerly used by Record Mixing in R/S
-static void UpdateOrInsertReceivedBattleTowerRecord(struct BattleTowerRecord * record0)
+static void UpdateOrInsertReceivedBattleTowerRecord(struct BattleTowerRecord* record0)
 {
     s32 i;
     s32 j;
     s32 k;
     s32 l = 0;
-    struct BattleTowerRecord * record = record0;
+    struct BattleTowerRecord* record = record0;
 
     u16 winStreaks[6];
     u16 indices[6];
@@ -516,7 +513,7 @@ u8 GetBattleTowerTrainerClassNameId(void)
     }
 }
 
-void GetBattleTowerTrainerName(u8 *dest)
+void GetBattleTowerTrainerName(u8* dest)
 {
     s32 i;
     if (gSaveBlock2Ptr->battleTower.battleTowerTrainerId == BATTLE_TOWER_EREADER_TRAINER_ID)
@@ -548,7 +545,7 @@ static void FillBattleTowerTrainerParty(void)
     u8 battleMonsOffset;
     u8 monPoolSize;
     u8 teamFlags;
-    const struct BattleTowerPokemonTemplate *battleTowerMons;
+    const struct BattleTowerPokemonTemplate* battleTowerMons;
 
     battleMonsOffset = 0;
     monPoolSize = 60;
@@ -739,7 +736,7 @@ static u8 AppendBattleTowerBannedSpeciesName(u16 species, u8 count)
     return count;
 }
 
-static void CheckMonBattleTowerBanlist(u16 species, u16 heldItem, u16 hp, u8 battleTowerLevelType, u8 monLevel, u16 *validPartySpecies, u16 *validPartyHeldItems, u8 *numValid)
+static void CheckMonBattleTowerBanlist(u16 species, u16 heldItem, u16 hp, u8 battleTowerLevelType, u8 monLevel, u16* validPartySpecies, u16* validPartyHeldItems, u8* numValid)
 {
     s32 i;
     u32 counter = 0;
@@ -764,13 +761,13 @@ static void CheckMonBattleTowerBanlist(u16 species, u16 heldItem, u16 hp, u8 bat
     if (battleTowerLevelType == 0 && monLevel > 50)
         return;
 
-    for (i = 0; i < *numValid && validPartySpecies[i] != species ; i++);
+    for (i = 0; i < *numValid && validPartySpecies[i] != species; i++);
     if (i != *numValid)
         return;
 
     if (heldItem != ITEM_NONE)
     {
-        for (i = 0; i < *numValid && validPartyHeldItems[i] != heldItem ; i++);
+        for (i = 0; i < *numValid && validPartyHeldItems[i] != heldItem; i++);
         if (i != *numValid)
             return;
     }
@@ -827,7 +824,7 @@ void CheckPartyBattleTowerBanlist(void)
     }
 }
 
-static void BufferBattleTowerTrainerMessage(const u16 *greeting)
+static void BufferBattleTowerTrainerMessage(const u16* greeting)
 {
     s32 i;
     if (EC_DoesEasyChatStringFitOnLine(greeting, 3, 2, 18))
@@ -1102,18 +1099,18 @@ static void SetPlayerBattleTowerRecord(void)
 {
     s32 i;
     u8 trainerClass;
-    struct BattleTowerRecord *playerRecord = &gSaveBlock2Ptr->battleTower.playerRecord;
+    struct BattleTowerRecord* playerRecord = &gSaveBlock2Ptr->battleTower.playerRecord;
     u8 battleTowerLevelType = gSaveBlock2Ptr->battleTower.battleTowerLevelType;
 
     if (gSaveBlock2Ptr->playerGender != MALE)
     {
         trainerClass = sFemaleTrainerClasses[(gSaveBlock2Ptr->playerTrainerId[0] + gSaveBlock2Ptr->playerTrainerId[1]
-                                              + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sFemaleTrainerClasses)];
+            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sFemaleTrainerClasses)];
     }
     else
     {
         trainerClass = sMaleTrainerClasses[(gSaveBlock2Ptr->playerTrainerId[0] + gSaveBlock2Ptr->playerTrainerId[1]
-                                            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sMaleTrainerClasses)];
+            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sMaleTrainerClasses)];
     }
 
     playerRecord->battleTowerLevelType = battleTowerLevelType;
@@ -1129,7 +1126,7 @@ static void SetPlayerBattleTowerRecord(void)
 
     for (i = 0; i < 3; i++)
         ConvertPokemonToBattleTowerPokemon(&gPlayerParty[gSaveBlock2Ptr->battleTower.selectedPartyMons[i] - 1],
-                                           &playerRecord->party[i]);
+            &playerRecord->party[i]);
 
     SetBattleTowerRecordChecksum(&gSaveBlock2Ptr->battleTower.playerRecord);
     SaveCurrentWinStreak();
@@ -1167,13 +1164,13 @@ static void ValidateBattleTowerRecordChecksums(void)
 {
     u32 i;
     s32 recordIndex;
-    struct BattleTowerRecord *record;
+    struct BattleTowerRecord* record;
     u32 checksum;
 
     record = &gSaveBlock2Ptr->battleTower.playerRecord;
     checksum = 0;
     for (i = 0; i < (sizeof(struct BattleTowerRecord) / sizeof(u32)) - 1; i++)
-        checksum += ((u32 *)record)[i];
+        checksum += ((u32*)record)[i];
 
     if (gSaveBlock2Ptr->battleTower.playerRecord.checksum != checksum)
         ClearBattleTowerRecord(&gSaveBlock2Ptr->battleTower.playerRecord);
@@ -1183,28 +1180,28 @@ static void ValidateBattleTowerRecordChecksums(void)
         record = &gSaveBlock2Ptr->battleTower.records[recordIndex];
         checksum = 0;
         for (i = 0; i < (sizeof(struct BattleTowerRecord) / sizeof(u32)) - 1; i++)
-            checksum += ((u32 *)record)[i];
+            checksum += ((u32*)record)[i];
 
         if (gSaveBlock2Ptr->battleTower.records[recordIndex].checksum != checksum)
             ClearBattleTowerRecord(&gSaveBlock2Ptr->battleTower.records[recordIndex]);
     }
 }
 
-static void SetBattleTowerRecordChecksum(struct BattleTowerRecord *record)
+static void SetBattleTowerRecordChecksum(struct BattleTowerRecord* record)
 {
     u32 i;
 
     record->checksum = 0;
     for (i = 0; i < (sizeof(struct BattleTowerRecord) / sizeof(u32)) - 1; i++)
-        record->checksum += ((u32 *)record)[i];
+        record->checksum += ((u32*)record)[i];
 }
 
-static void ClearBattleTowerRecord(struct BattleTowerRecord *record)
+static void ClearBattleTowerRecord(struct BattleTowerRecord* record)
 {
     u32 i;
 
     for (i = 0; i < sizeof(struct BattleTowerRecord) / sizeof(u32); i++)
-        ((u32 *)record)[i] = 0;
+        ((u32*)record)[i] = 0;
 }
 
 static void PopulateBravoTrainerBattleTowerLostData(void)
@@ -1222,7 +1219,7 @@ static void PopulateBravoTrainerBattleTowerLostData(void)
 static u16 GetCurrentBattleTowerWinStreak(u8 battleTowerLevelType)
 {
     u16 winStreak = ((gSaveBlock2Ptr->battleTower.curStreakChallengesNum[battleTowerLevelType] - 1) * 7 - 1)
-                    + gSaveBlock2Ptr->battleTower.curChallengeBattleNum[battleTowerLevelType];
+        + gSaveBlock2Ptr->battleTower.curChallengeBattleNum[battleTowerLevelType];
 
     if (winStreak > 9999)
         return 9999;
@@ -1260,7 +1257,7 @@ void AwardBattleTowerRibbons(void)
 {
     s32 i;
     u32 partyIndex;
-    struct Pokemon *pokemon;
+    struct Pokemon* pokemon;
     u8 ribbonType;
     u8 battleTowerLevelType = gSaveBlock2Ptr->battleTower.battleTowerLevelType;
 
@@ -1293,7 +1290,7 @@ void AwardBattleTowerRibbons(void)
 // trainer with the player's current data.
 static void Debug_FillEReaderTrainerWithPlayerData(void)
 {
-    struct BattleTowerEReaderTrainer *ereaderTrainer;
+    struct BattleTowerEReaderTrainer* ereaderTrainer;
     s32 i;
     s32 j;
 
@@ -1302,12 +1299,12 @@ static void Debug_FillEReaderTrainerWithPlayerData(void)
     if (gSaveBlock2Ptr->playerGender != MALE)
     {
         ereaderTrainer->trainerClass = sFemaleTrainerClasses[(gSaveBlock2Ptr->playerTrainerId[0] + gSaveBlock2Ptr->playerTrainerId[1]
-                                                              + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sFemaleTrainerClasses)];
+            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sFemaleTrainerClasses)];
     }
     else
     {
         ereaderTrainer->trainerClass = sMaleTrainerClasses[(gSaveBlock2Ptr->playerTrainerId[0] + gSaveBlock2Ptr->playerTrainerId[1]
-                                                            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sMaleTrainerClasses)];
+            + gSaveBlock2Ptr->playerTrainerId[2] + gSaveBlock2Ptr->playerTrainerId[3]) % NELEMS(sMaleTrainerClasses)];
     }
 
     CopyTrainerId(ereaderTrainer->trainerId, gSaveBlock2Ptr->playerTrainerId);
@@ -1340,7 +1337,7 @@ u8 GetEreaderTrainerClassId(void)
     return gFacilityClassToTrainerClass[gSaveBlock2Ptr->battleTower.ereaderTrainer.trainerClass];
 }
 
-void CopyEReaderTrainerName5(u8 *trainerName)
+void CopyEReaderTrainerName5(u8* trainerName)
 {
     s32 i;
 
@@ -1355,14 +1352,14 @@ void ValidateEReaderTrainer(void)
 {
     u32 i;
     u32 checksum;
-    struct BattleTowerEReaderTrainer *ereaderTrainer;
+    struct BattleTowerEReaderTrainer* ereaderTrainer;
 
     gSpecialVar_Result = 0;
     ereaderTrainer = &gSaveBlock2Ptr->battleTower.ereaderTrainer;
 
     checksum = 0;
     for (i = 0; i < sizeof(struct BattleTowerEReaderTrainer) / sizeof(u32) - 1; i++)
-        checksum |= ((u32 *)ereaderTrainer)[i];
+        checksum |= ((u32*)ereaderTrainer)[i];
 
     if (checksum == 0)
     {
@@ -1372,7 +1369,7 @@ void ValidateEReaderTrainer(void)
 
     checksum = 0;
     for (i = 0; i < sizeof(struct BattleTowerEReaderTrainer) / sizeof(u32) - 1; i++)
-        checksum += ((u32 *)ereaderTrainer)[i];
+        checksum += ((u32*)ereaderTrainer)[i];
 
     if (gSaveBlock2Ptr->battleTower.ereaderTrainer.checksum != checksum)
     {
@@ -1381,21 +1378,21 @@ void ValidateEReaderTrainer(void)
     }
 }
 
-static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer *ereaderTrainer)
+static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer* ereaderTrainer)
 {
     s32 i;
 
     ereaderTrainer->checksum = 0;
     for (i = 0; i < sizeof(struct BattleTowerEReaderTrainer) / sizeof(u32) - 1; i++)
-        ereaderTrainer->checksum += ((u32 *)ereaderTrainer)[i];
+        ereaderTrainer->checksum += ((u32*)ereaderTrainer)[i];
 }
 
-void ClearEReaderTrainer(struct BattleTowerEReaderTrainer *ereaderTrainer)
+void ClearEReaderTrainer(struct BattleTowerEReaderTrainer* ereaderTrainer)
 {
     u32 i;
 
     for (i = 0; i < sizeof(struct BattleTowerEReaderTrainer) / sizeof(u32); i++)
-        ((u32 *)ereaderTrainer)[i] = 0;
+        ((u32*)ereaderTrainer)[i] = 0;
 }
 
 void BufferEReaderTrainerGreeting(void)

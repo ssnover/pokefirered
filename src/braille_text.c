@@ -16,10 +16,10 @@ static const u16 sBrailleGlyphs[] = INCBIN_U16("graphics/fonts/braille.fwjpnfont
 
 static void DecompressGlyph_Braille(u16);
 
-u16 FontFunc_Braille(struct TextPrinter *textPrinter)
+u16 FontFunc_Braille(struct TextPrinter* textPrinter)
 {
     u16 char_;
-    struct TextPrinterSubStruct *sub = &textPrinter->subUnion.sub;
+    struct TextPrinterSubStruct* sub = &textPrinter->subUnion.sub;
 
     switch (textPrinter->state)
     {
@@ -127,7 +127,7 @@ u16 FontFunc_Braille(struct TextPrinter *textPrinter)
             TextPrinterInitDownArrowCounters(textPrinter);
             return RENDER_UPDATE;
         case CHAR_EXTRA_SYMBOL:
-            char_ = *textPrinter->printerTemplate.currentChar++| 0x100;
+            char_ = *textPrinter->printerTemplate.currentChar++ | 0x100;
             break;
         case CHAR_KEYPAD_ICON:
             textPrinter->printerTemplate.currentChar++;
@@ -195,13 +195,13 @@ u16 FontFunc_Braille(struct TextPrinter *textPrinter)
 
 static void DecompressGlyph_Braille(u16 glyph)
 {
-    const u16 *glyphs;
+    const u16* glyphs;
 
     glyphs = sBrailleGlyphs + 0x100 * (glyph / 8) + 0x10 * (glyph % 8);
-    DecompressGlyphTile(glyphs, (u16 *)gGlyphInfo.pixels);
-    DecompressGlyphTile(glyphs + 0x8, (u16 *)(gGlyphInfo.pixels + 0x20));
-    DecompressGlyphTile(glyphs + 0x80, (u16 *)(gGlyphInfo.pixels + 0x40));
-    DecompressGlyphTile(glyphs + 0x88, (u16 *)(gGlyphInfo.pixels + 0x60));
+    DecompressGlyphTile(glyphs, (u16*)gGlyphInfo.pixels);
+    DecompressGlyphTile(glyphs + 0x8, (u16*)(gGlyphInfo.pixels + 0x20));
+    DecompressGlyphTile(glyphs + 0x80, (u16*)(gGlyphInfo.pixels + 0x40));
+    DecompressGlyphTile(glyphs + 0x88, (u16*)(gGlyphInfo.pixels + 0x60));
     gGlyphInfo.width = 16;
     gGlyphInfo.height = 16;
 }

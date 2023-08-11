@@ -36,7 +36,7 @@ static void ResetMiniGamesResults(void);
 // EWRAM vars
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
 
-void SetTrainerId(u32 trainerId, u8 *dst)
+void SetTrainerId(u32 trainerId, u8* dst)
 {
     dst[0] = trainerId;
     dst[1] = trainerId >> 8;
@@ -44,7 +44,7 @@ void SetTrainerId(u32 trainerId, u8 *dst)
     dst[3] = trainerId >> 24;
 }
 
-void CopyTrainerId(u8 *dst, u8 *src)
+void CopyTrainerId(u8* dst, u8* src)
 {
     s32 i;
     for (i = 0; i < 4; i++)

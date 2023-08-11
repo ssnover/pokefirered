@@ -34,7 +34,7 @@ static const u8 sWhiteoutTextColors[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHI
 static void Task_EnableScriptAfterMusicFade(u8 taskId);
 static void Task_BarnDoorWipeChild(u8 taskId);
 
-static void SetFlashScanlineEffectWindowBoundary(u16 *dest, u32 y, s32 left, s32 right)
+static void SetFlashScanlineEffectWindowBoundary(u16* dest, u32 y, s32 left, s32 right)
 {
     if (y <= 160)
     {
@@ -87,7 +87,7 @@ static void SetFlashScanlineEffectWindowBoundary(u16 *dest, u32 y, s32 left, s32
  * doesn't change on every iteration, we will frequently overwrite
  * boundaries set in the previous iteration.
  */
-void SetFlashScanlineEffectWindowBoundaries(u16 *dest, s32 centerX, s32 centerY, s32 radius)
+void SetFlashScanlineEffectWindowBoundaries(u16* dest, s32 centerX, s32 centerY, s32 radius)
 {
     s32 xy = radius;
     s32 error = radius;
@@ -118,7 +118,7 @@ void SetFlashScanlineEffectWindowBoundaries(u16 *dest, s32 centerX, s32 centerY,
 
 static void UpdateFlashLevelEffect(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -168,7 +168,7 @@ static void StartWaitForFlashUpdate(void)
 static u8 StartUpdateFlashLevelEffect(s32 centerX, s32 centerY, s32 initialFlashRadius, s32 destFlashRadius, bool32 clearScanlineEffect, u8 delta)
 {
     u8 taskId = CreateTask(UpdateFlashLevelEffect, 80);
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     tCurFlashRadius = initialFlashRadius;
     tDestFlashRadius = destFlashRadius;
@@ -246,7 +246,7 @@ void DoOutwardBarnDoorWipe(void)
 
 static void BarnDoorWipeSaveGpuRegs(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     data[0] = GetGpuReg(REG_OFFSET_DISPCNT);
     data[1] = GetGpuReg(REG_OFFSET_WININ);
     data[2] = GetGpuReg(REG_OFFSET_WINOUT);
@@ -260,7 +260,7 @@ static void BarnDoorWipeSaveGpuRegs(u8 taskId)
 
 static void BarnDoorWipeLoadGpuRegs(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     SetGpuReg(REG_OFFSET_DISPCNT, data[0]);
     SetGpuReg(REG_OFFSET_WININ, data[1]);
     SetGpuReg(REG_OFFSET_WINOUT, data[2]);
@@ -274,52 +274,52 @@ static void BarnDoorWipeLoadGpuRegs(u8 taskId)
 
 void Task_BarnDoorWipe(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     switch (tState)
     {
-        case 0:
-            BarnDoorWipeSaveGpuRegs(taskId);
-            SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN0_ON);
-            SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN1_ON);
-            if (data[10] == 0)
-            {
-                SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, 0));
-                SetGpuReg(REG_OFFSET_WIN1H, WIN_RANGE(DISPLAY_WIDTH, 255));
-                SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, 255));
-                SetGpuReg(REG_OFFSET_WIN1V, WIN_RANGE(0, 255));
-            }
-            else
-            {
-                SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, DISPLAY_WIDTH / 2));
-                SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, 255));
-                SetGpuReg(REG_OFFSET_WIN1H, WIN_RANGE(DISPLAY_WIDTH / 2, 255));
-                SetGpuReg(REG_OFFSET_WIN1V, WIN_RANGE(0, 255));
-            }
-            SetGpuReg(REG_OFFSET_WININ, 0);
-            SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG_ALL | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
-            tState = 1;
-            break;
-        case 1:
-            CreateTask(Task_BarnDoorWipeChild, 80);
-            tState = 2;
-            break;
-        case 2:
-            if (!FuncIsActiveTask(Task_BarnDoorWipeChild))
-            {
-                tState = 3;
-            }
-            break;
-        case 3:
-            BarnDoorWipeLoadGpuRegs(taskId);
-            DestroyTask(taskId);
-            break;
+    case 0:
+        BarnDoorWipeSaveGpuRegs(taskId);
+        SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN0_ON);
+        SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN1_ON);
+        if (data[10] == 0)
+        {
+            SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, 0));
+            SetGpuReg(REG_OFFSET_WIN1H, WIN_RANGE(DISPLAY_WIDTH, 255));
+            SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, 255));
+            SetGpuReg(REG_OFFSET_WIN1V, WIN_RANGE(0, 255));
+        }
+        else
+        {
+            SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, DISPLAY_WIDTH / 2));
+            SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, 255));
+            SetGpuReg(REG_OFFSET_WIN1H, WIN_RANGE(DISPLAY_WIDTH / 2, 255));
+            SetGpuReg(REG_OFFSET_WIN1V, WIN_RANGE(0, 255));
+        }
+        SetGpuReg(REG_OFFSET_WININ, 0);
+        SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG_ALL | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
+        tState = 1;
+        break;
+    case 1:
+        CreateTask(Task_BarnDoorWipeChild, 80);
+        tState = 2;
+        break;
+    case 2:
+        if (!FuncIsActiveTask(Task_BarnDoorWipeChild))
+        {
+            tState = 3;
+        }
+        break;
+    case 3:
+        BarnDoorWipeLoadGpuRegs(taskId);
+        DestroyTask(taskId);
+        break;
     }
 }
 
 static void Task_BarnDoorWipeChild(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-	u8 parentTaskId = FindTaskIdByFunc(Task_BarnDoorWipe);
+    s16* data = gTasks[taskId].data;
+    u8 parentTaskId = FindTaskIdByFunc(Task_BarnDoorWipe);
     s16 lhs, rhs;
     if (gTasks[parentTaskId].tDirection == DIR_WIPE_IN)
     {
@@ -359,7 +359,7 @@ static void Task_BarnDoorWipeChild(u8 taskId)
 #define tWindowId   data[1]
 #define tPrintState data[2]
 
-static bool8 PrintWhiteOutRecoveryMessage(u8 taskId, const u8 *text, u8 x, u8 y)
+static bool8 PrintWhiteOutRecoveryMessage(u8 taskId, const u8* text, u8 x, u8 y)
 {
     u8 windowId = gTasks[taskId].tWindowId;
 
@@ -387,7 +387,7 @@ static bool8 PrintWhiteOutRecoveryMessage(u8 taskId, const u8 *text, u8 x, u8 y)
 static void Task_RushInjuredPokemonToCenter(u8 taskId)
 {
     u8 windowId;
-    const struct HealLocation *loc;
+    const struct HealLocation* loc;
 
     switch (gTasks[taskId].tState)
     {
@@ -402,10 +402,10 @@ static void Task_RushInjuredPokemonToCenter(u8 taskId)
         // Scene changes if last heal location was the player's house
         loc = GetHealLocation(SPAWN_PALLET_TOWN);
         if (gSaveBlock1Ptr->lastHealLocation.mapGroup == loc->group
-         && gSaveBlock1Ptr->lastHealLocation.mapNum == loc->map
-         && gSaveBlock1Ptr->lastHealLocation.warpId == WARP_ID_NONE
-         && gSaveBlock1Ptr->lastHealLocation.x == loc->x
-         && gSaveBlock1Ptr->lastHealLocation.y == loc->y)
+            && gSaveBlock1Ptr->lastHealLocation.mapNum == loc->map
+            && gSaveBlock1Ptr->lastHealLocation.warpId == WARP_ID_NONE
+            && gSaveBlock1Ptr->lastHealLocation.x == loc->x
+            && gSaveBlock1Ptr->lastHealLocation.y == loc->y)
             gTasks[taskId].tState = 4;
         else
             gTasks[taskId].tState = 1;

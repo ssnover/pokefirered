@@ -14,12 +14,12 @@
 
 static EWRAM_DATA u8 sBerryPowderVendorWindowId = 0;
 
-u32 DecryptBerryPowder(u32 *powder)
+u32 DecryptBerryPowder(u32* powder)
 {
     return *powder ^ gSaveBlock2Ptr->encryptionKey;
 }
 
-void SetBerryPowder(u32 *powder, u32 amount)
+void SetBerryPowder(u32* powder, u32 amount)
 {
     *powder = amount ^ gSaveBlock2Ptr->encryptionKey;
 }
@@ -47,7 +47,7 @@ bool8 Script_HasEnoughBerryPowder(void)
 
 bool8 GiveBerryPowder(u32 amountToAdd)
 {
-    u32 *powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
+    u32* powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
     u32 amount = DecryptBerryPowder(powder) + amountToAdd;
     if (amount > MAX_BERRY_POWDER)
     {
@@ -63,7 +63,7 @@ bool8 GiveBerryPowder(u32 amountToAdd)
 
 static bool8 TakeBerryPowder(u32 cost)
 {
-    u32 *powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
+    u32* powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
     if (!HasEnoughBerryPowder(cost))
         return FALSE;
     else
@@ -76,7 +76,7 @@ static bool8 TakeBerryPowder(u32 cost)
 
 bool8 Script_TakeBerryPowder(void)
 {
-    u32 *powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
+    u32* powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
     if (!HasEnoughBerryPowder(gSpecialVar_0x8004))
         return FALSE;
     else

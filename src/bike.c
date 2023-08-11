@@ -9,35 +9,35 @@
 #include "constants/map_types.h"
 #include "constants/songs.h"
 
-static u8 GetBikeTransitionId(u8 *, u16, u16);
+static u8 GetBikeTransitionId(u8*, u16, u16);
 static void Bike_SetBikeStill(void);
 static u8 CanBikeFaceDirectionOnRail(u8 direction, u8 metatileBehavior);
 static u8 GetBikeCollision(u8);
-static u8 GetBikeCollisionAt(struct ObjectEvent *playerObjEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior);
+static u8 GetBikeCollisionAt(struct ObjectEvent* playerObjEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior);
 static bool8 MetatileBehaviorForbidsBiking(u8);
 static void BikeTransition_FaceDirection(u8);
 static void BikeTransition_TurnDirection(u8);
 static void BikeTransition_MoveDirection(u8);
 static void BikeTransition_Downhill(u8);
 static void BikeTransition_Uphill(u8);
-static u8 BikeInputHandler_Normal(u8 *, u16, u16);
-static u8 BikeInputHandler_Turning(u8 *, u16, u16);
-static u8 BikeInputHandler_Slope(u8 *, u16, u16);
+static u8 BikeInputHandler_Normal(u8*, u16, u16);
+static u8 BikeInputHandler_Turning(u8*, u16, u16);
+static u8 BikeInputHandler_Slope(u8*, u16, u16);
 
-static void (*const sBikeTransitions[])(u8) =
+static void (* const sBikeTransitions[])(u8) =
 {
     [BIKE_TRANS_FACE_DIRECTION] = BikeTransition_FaceDirection,
-    [BIKE_TRANS_TURNING]        = BikeTransition_TurnDirection,
-    [BIKE_TRANS_MOVE]           = BikeTransition_MoveDirection,
-    [BIKE_TRANS_DOWNHILL]       = BikeTransition_Downhill,
-    [BIKE_TRANS_UPHILL]         = BikeTransition_Uphill,
+    [BIKE_TRANS_TURNING] = BikeTransition_TurnDirection,
+    [BIKE_TRANS_MOVE] = BikeTransition_MoveDirection,
+    [BIKE_TRANS_DOWNHILL] = BikeTransition_Downhill,
+    [BIKE_TRANS_UPHILL] = BikeTransition_Uphill,
 };
 
-static u8 (*const sBikeInputHandlers[])(u8 *, u16, u16) =
+static u8(* const sBikeInputHandlers[])(u8*, u16, u16) =
 {
-    [BIKE_STATE_NORMAL]  = BikeInputHandler_Normal,
+    [BIKE_STATE_NORMAL] = BikeInputHandler_Normal,
     [BIKE_STATE_TURNING] = BikeInputHandler_Turning,
-    [BIKE_STATE_SLOPE]   = BikeInputHandler_Slope,
+    [BIKE_STATE_SLOPE] = BikeInputHandler_Slope,
 };
 
 void MovePlayerOnBike(u8 direction, u16 newKeys, u16 heldKeys)
@@ -45,14 +45,14 @@ void MovePlayerOnBike(u8 direction, u16 newKeys, u16 heldKeys)
     sBikeTransitions[GetBikeTransitionId(&direction, newKeys, heldKeys)](direction);
 }
 
-static u8 GetBikeTransitionId(u8 *direction, u16 newKeys, u16 heldKeys)
+static u8 GetBikeTransitionId(u8* direction, u16 newKeys, u16 heldKeys)
 {
     return sBikeInputHandlers[gPlayerAvatar.acroBikeState](direction, newKeys, heldKeys);
 }
 
-static u8 BikeInputHandler_Normal(u8 *direction_p, u16 newKeys, u16 heldKeys)
+static u8 BikeInputHandler_Normal(u8* direction_p, u16 newKeys, u16 heldKeys)
 {
-    struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     u8 direction = GetPlayerMovementDirection();
 
     gPlayerAvatar.bikeFrameCounter = 0;
@@ -100,7 +100,7 @@ static u8 BikeInputHandler_Normal(u8 *direction_p, u16 newKeys, u16 heldKeys)
     }
 }
 
-static u8 BikeInputHandler_Turning(u8 *direction_p, u16 newKeys, u16 heldKeys)
+static u8 BikeInputHandler_Turning(u8* direction_p, u16 newKeys, u16 heldKeys)
 {
     *direction_p = gPlayerAvatar.newDirBackup;
     gPlayerAvatar.runningState = TURN_DIRECTION;
@@ -109,7 +109,7 @@ static u8 BikeInputHandler_Turning(u8 *direction_p, u16 newKeys, u16 heldKeys)
     return BIKE_TRANS_TURNING;
 }
 
-static u8 BikeInputHandler_Slope(u8 *direction_p, u16 newKeys, u16 heldKeys)
+static u8 BikeInputHandler_Slope(u8* direction_p, u16 newKeys, u16 heldKeys)
 {
     u8 direction = GetPlayerMovementDirection();
     u8 playerObjEventId = gPlayerAvatar.objectEventId;
@@ -153,7 +153,7 @@ static void BikeTransition_FaceDirection(u8 direction)
 
 static void BikeTransition_TurnDirection(u8 direction)
 {
-    struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
 
     if (!CanBikeFaceDirectionOnRail(direction, playerObjEvent->currentMetatileBehavior))
         direction = playerObjEvent->movementDirection;
@@ -162,8 +162,8 @@ static void BikeTransition_TurnDirection(u8 direction)
 
 static void BikeTransition_MoveDirection(u8 direction)
 {
-    struct ObjectEvent *playerObjEvent;
-    
+    struct ObjectEvent* playerObjEvent;
+
     playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     if (!CanBikeFaceDirectionOnRail(direction, playerObjEvent->currentMetatileBehavior))
     {
@@ -178,14 +178,14 @@ static void BikeTransition_MoveDirection(u8 direction)
             if (collision == COLLISION_LEDGE_JUMP)
                 PlayerJumpLedge(direction);
             else if (collision != COLLISION_STOP_SURFING
-                  && collision != COLLISION_LEDGE_JUMP
-                  && collision != COLLISION_PUSHED_BOULDER
-                  && collision != COLLISION_DIRECTIONAL_STAIR_WARP)
+                && collision != COLLISION_LEDGE_JUMP
+                && collision != COLLISION_PUSHED_BOULDER
+                && collision != COLLISION_DIRECTIONAL_STAIR_WARP)
                 PlayerOnBikeCollide(direction);
         }
         else
         {
-            
+
             if (collision == COLLISION_COUNT)
                 PlayerWalkFast(direction);
             else if (PlayerIsMovingOnRockStairs(direction))
@@ -214,7 +214,7 @@ static void BikeTransition_Uphill(u8 direction)
 
 static u8 GetBikeCollision(u8 direction)
 {
-    struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     s16 x, y;
     u8 metatileBehavior;
 
@@ -225,7 +225,7 @@ static u8 GetBikeCollision(u8 direction)
     return GetBikeCollisionAt(playerObjEvent, x, y, direction, metatileBehavior);
 }
 
-static u8 GetBikeCollisionAt(struct ObjectEvent *playerObjEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior)
+static u8 GetBikeCollisionAt(struct ObjectEvent* playerObjEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior)
 {
     u8 retVal = CheckForObjectEventCollision(playerObjEvent, x, y, direction, metatileBehavior);
 
@@ -343,7 +343,7 @@ void BikeClearState(u32 directionHistory, u32 abStartSelectHistory)
     gPlayerAvatar.abStartSelectHistory = abStartSelectHistory;
     gPlayerAvatar.lastSpinTile = 0;
     for (i = 0; i < NELEMS(gPlayerAvatar.dirTimerHistory); ++i)
-            gPlayerAvatar.dirTimerHistory[i] = 0;
+        gPlayerAvatar.dirTimerHistory[i] = 0;
 }
 
 void Bike_UpdateBikeCounterSpeed(u8 counter)
@@ -399,13 +399,13 @@ struct BikeHistoryInputInfo
     u32 abStartSelectHistoryMatch; // the button you need to press
     u32 dirHistoryMask; // mask applied so that way only the recent nybble (the recent input) is checked
     u32 abStartSelectHistoryMask; // mask applied so that way only the recent nybble (the recent input) is checked
-    const u8 *dirTimerHistoryList; // list of timers to check for direction before the button+dir combination can be verified.
-    const u8 *abStartSelectHistoryList; // list of timers to check for buttons before the button+dir combination can be verified.
+    const u8* dirTimerHistoryList; // list of timers to check for direction before the button+dir combination can be verified.
+    const u8* abStartSelectHistoryList; // list of timers to check for buttons before the button+dir combination can be verified.
     u32 direction; // direction to jump
 };
 
 // this is a list of timers to compare against later, terminated with 0. the only timer being compared against is 4 frames in this list.
-static const u8 sAcroBikeJumpTimerList[] = {4, 0};
+static const u8 sAcroBikeJumpTimerList[] = { 4, 0 };
 
 // this is a list of history inputs to do in order to do the check to retrieve a jump direction for acro bike. it seems to be an extensible list, so its possible that Game Freak may have intended for the Acro Bike to have more complex tricks at some point. The final list only has the acro jump.
 static const struct BikeHistoryInputInfo sAcroBikeTricksList[] =

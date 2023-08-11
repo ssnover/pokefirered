@@ -108,8 +108,8 @@ enum {
 
 struct UnusedControllerStruct
 {
-    u8 unk:7;
-    u8 flag:1;
+    u8 unk : 7;
+    u8 flag : 1;
 };
 
 struct HpAndStatus
@@ -205,11 +205,11 @@ void HandleLinkBattleSetup(void);
 void SetUpBattleVars(void);
 void InitBattleControllers(void);
 void TryReceiveLinkBattleData(void);
-void PrepareBufferDataTransferLink(u8 bufferId, u16 size, u8 *data);
+void PrepareBufferDataTransferLink(u8 bufferId, u16 size, u8* data);
 
 // emitters
 void BtlController_EmitGetMonData(u8 bufferId, u8 requestId, u8 monToCheck);
-void BtlController_EmitSetMonData(u8 bufferId, u8 requestId, u8 monToCheck, u8 bytes, void *data);
+void BtlController_EmitSetMonData(u8 bufferId, u8 requestId, u8 monToCheck, u8 bytes, void* data);
 void BtlController_EmitLoadMonSprite(u8 bufferId);
 void BtlController_EmitSwitchInAnim(u8 bufferId, u8 partyId, bool8 dontClearSubstituteBit);
 void BtlController_EmitReturnMonToBall(u8 bufferId, bool8 skipAnim);
@@ -218,20 +218,20 @@ void BtlController_EmitTrainerSlide(u8 bufferId);
 void BtlController_EmitTrainerSlideBack(u8 bufferId);
 void BtlController_EmitFaintAnimation(u8 bufferId);
 void BtlController_EmitBallThrowAnim(u8 bufferId, u8 caseId);
-void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct DisableStruct *disableStructPtr);
+void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct DisableStruct* disableStructPtr);
 void BtlController_EmitPrintString(u8 bufferId, u16 stringId);
 void BtlController_EmitPrintSelectionString(u8 bufferId, u16 stringId);
 void BtlController_EmitChooseAction(u8 bufferId, u8 action, u16 itemId);
-void BtlController_EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct ChooseMoveStruct *movePpData);
-void BtlController_EmitChooseItem(u8 bufferId, u8 *arg1);
-void BtlController_EmitChoosePokemon(u8 bufferId, u8 caseId, u8 arg2, u8 abilityId, u8 *arg4);
+void BtlController_EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct ChooseMoveStruct* movePpData);
+void BtlController_EmitChooseItem(u8 bufferId, u8* arg1);
+void BtlController_EmitChoosePokemon(u8 bufferId, u8 caseId, u8 arg2, u8 abilityId, u8* arg4);
 void BtlController_EmitHealthBarUpdate(u8 bufferId, u16 hpValue);
 void BtlController_EmitExpUpdate(u8 bufferId, u8 partyId, u16 expPoints);
 void BtlController_EmitStatusIconUpdate(u8 bufferId, u32 status1, u32 status2);
 void BtlController_EmitStatusAnimation(u8 bufferId, bool8 status2, u32 status);
-void BtlController_EmitDataTransfer(u8 bufferId, u16 size, void *data);
+void BtlController_EmitDataTransfer(u8 bufferId, u16 size, void* data);
 void BtlController_EmitTwoReturnValues(u8 bufferId, u8 arg1, u16 arg2);
-void BtlController_EmitChosenMonReturnValue(u8 bufferId, u8 b, u8 *c);
+void BtlController_EmitChosenMonReturnValue(u8 bufferId, u8 b, u8* c);
 void BtlController_EmitOneReturnValue(u8 bufferId, u16 arg1);
 void BtlController_EmitOneReturnValue_Duplicate(u8 bufferId, u16 b);
 void BtlController_EmitHitAnimation(u8 bufferId);
@@ -241,7 +241,7 @@ void BtlController_EmitPlayFanfare(u8 bufferId, u16 songId);
 void BtlController_EmitFaintingCry(u8 bufferId);
 void BtlController_EmitIntroSlide(u8 bufferId, u8 terrainId);
 void BtlController_EmitIntroTrainerBallThrow(u8 bufferId);
-void BtlController_EmitDrawPartyStatusSummary(u8 bufferId, struct HpAndStatus *hpAndStatus, u8 param);
+void BtlController_EmitDrawPartyStatusSummary(u8 bufferId, struct HpAndStatus* hpAndStatus, u8 param);
 void BtlController_EmitHidePartyStatusSummary(u8 bufferId);
 void BtlController_EmitEndBounceEffect(u8 bufferId);
 void BtlController_EmitSpriteInvisibility(u8 bufferId, bool8 isInvisible);
@@ -254,7 +254,7 @@ void BtlController_EmitEndLinkBattle(u8 bufferId, u8 battleOutcome);
 void BattleControllerDummy(void);
 void SetControllerToPlayer(void);
 void PlayerHandleGetRawMonData(void);
-void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite *sprite);
+void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite* sprite);
 void SetCB2ToReshowScreenAfterMenu(void);
 void SetCB2ToReshowScreenAfterMenu2(void);
 void Task_PlayerController_RestoreBgmAfterCry(u8 taskId);

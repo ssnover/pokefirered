@@ -87,8 +87,8 @@ void Overworld_ChangeMusicTo(u16);
 bool32 IsUpdateLinkStateCBActive(void);
 
 void ClearLinkPlayerObjectEvents(void);
-const struct MapHeader *const Overworld_GetMapHeaderByGroupAndId(u16, u16);
-void ObjectEventMoveDestCoords(struct ObjectEvent *, u32, s16 *, s16 *);
+const struct MapHeader* const Overworld_GetMapHeaderByGroupAndId(u16, u16);
+void ObjectEventMoveDestCoords(struct ObjectEvent*, u32, s16*, s16*);
 void CB2_ReturnToField(void);
 void CB2_ReturnToFieldContinueScriptPlayMapMusic(void);
 void WarpIntoMap(void);
@@ -100,7 +100,7 @@ u32 GetGameStat(u8 statId);
 void SetGameStat(u8 statId, u32 value);
 
 void CB2_ContinueSavedGame(void);
-void Overworld_SetWarpDestinationFromWarp(struct WarpData *);
+void Overworld_SetWarpDestinationFromWarp(struct WarpData*);
 void CB2_SetUpOverworldForQLPlayback(void);
 void CB2_SetUpOverworldForQLPlaybackWithWarpExit(void);
 void CB2_EnterFieldFromQuestLog(void);
@@ -118,7 +118,7 @@ u32 ComputeWhiteOutMoneyLoss(void);
 extern u8 gDisableMapMusicChangeOnMapLoad;
 extern u8 gGlobalFieldTintMode;
 
-extern bool8 (* gFieldCallback2)(void);
+extern bool8(*gFieldCallback2)(void);
 
 void SetLastHealLocationWarp(u8 healLocaionId);
 void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum);
@@ -139,13 +139,13 @@ bool32 Overworld_LinkRecvQueueLengthMoreThan2(void);
 u8 GetCurrentMapType(void);
 
 u8 GetLastUsedWarpMapType(void);
-const struct MapHeader *const GetDestinationWarpMapHeader(void);
+const struct MapHeader* const GetDestinationWarpMapHeader(void);
 void TryFadeOutOldMapMusic(void);
 void CB2_ReturnToFieldCableClub(void);
 void ResetGameStats(void);
 
 void Overworld_CreditsMainCB(void);
-bool32 Overworld_DoScrollSceneForCredits(u8 *, const struct CreditsOverworldCmd *, u8);
+bool32 Overworld_DoScrollSceneForCredits(u8*, const struct CreditsOverworldCmd*, u8);
 
 bool32 IsSendingKeysOverCable(void);
 
@@ -157,7 +157,7 @@ void SetContinueGameWarpToDynamicWarp(int);
 
 void SetContinueGameWarpToHealLocation(u8 loc);
 
-void UpdateAmbientCry(s16 *state, u16 *delayCounter);
+void UpdateAmbientCry(s16* state, u16* delayCounter);
 void SetWarpDestinationToHealLocation(u8 a0);
 bool32 Overworld_SendKeysToLinkIsRunning(void);
 bool32 Overworld_RecvKeysFromLinkIsRunning(void);
@@ -180,9 +180,9 @@ void UpdateEscapeWarp(s16 x, s16 y);
 bool8 SetDiveWarpEmerge(u16 x, u16 y);
 bool8 SetDiveWarpDive(u16 x, u16 y);
 
-extern u16 *gBGTilemapBuffers1;
-extern u16 *gBGTilemapBuffers2;
-extern u16 *gBGTilemapBuffers3;
+extern u16* gBGTilemapBuffers1;
+extern u16* gBGTilemapBuffers2;
+extern u16* gBGTilemapBuffers3;
 extern u16 gHeldKeyCodeToSend;
 
 #endif //GUARD_OVERWORLD_H

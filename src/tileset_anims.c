@@ -1,10 +1,10 @@
 #include "global.h"
 
 static EWRAM_DATA struct {
-    const u16 *src;
-    u16 *dest;
+    const u16* src;
+    u16* dest;
     u16 size;
-} sTilesetDMA3TransferBuffer[20] = {0};
+} sTilesetDMA3TransferBuffer[20] = { 0 };
 
 static u8 sTilesetDMA3TransferBufferSize;
 static u16 sPrimaryTilesetAnimCounter;
@@ -24,7 +24,7 @@ static const u16 sTilesetAnims_General_Flower_Frame2[] = INCBIN_U16("data/tilese
 static const u16 sTilesetAnims_General_Flower_Frame3[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/3.4bpp");
 static const u16 sTilesetAnims_General_Flower_Frame4[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/4.4bpp");
 
-static const u16 *const sTilesetAnims_General_Flower[] = {
+static const u16* const sTilesetAnims_General_Flower[] = {
     sTilesetAnims_General_Flower_Frame0,
     sTilesetAnims_General_Flower_Frame1,
     sTilesetAnims_General_Flower_Frame2,
@@ -42,7 +42,7 @@ static const u16 sTilesetAnims_General_Water_Current_LandWatersEdge_Frame5[] = I
 static const u16 sTilesetAnims_General_Water_Current_LandWatersEdge_Frame6[] = INCBIN_U16("data/tilesets/primary/general/anim/water_current_landwatersedge/6.4bpp");
 static const u16 sTilesetAnims_General_Water_Current_LandWatersEdge_Frame7[] = INCBIN_U16("data/tilesets/primary/general/anim/water_current_landwatersedge/7.4bpp");
 
-static const u16 *const sTilesetAnims_General_Water_Current_LandWatersEdge[] = {
+static const u16* const sTilesetAnims_General_Water_Current_LandWatersEdge[] = {
     sTilesetAnims_General_Water_Current_LandWatersEdge_Frame0,
     sTilesetAnims_General_Water_Current_LandWatersEdge_Frame1,
     sTilesetAnims_General_Water_Current_LandWatersEdge_Frame2,
@@ -63,7 +63,7 @@ static const u16 sTilesetAnims_General_SandWatersEdge_Frame5[] = INCBIN_U16("dat
 static const u16 sTilesetAnims_General_SandWatersEdge_Frame6[] = INCBIN_U16("data/tilesets/primary/general/anim/sandwatersedge/6.4bpp");
 static const u16 sTilesetAnims_General_SandWatersEdge_Frame7[] = INCBIN_U16("data/tilesets/primary/general/anim/sandwatersedge/7.4bpp");
 
-static const u16 *const sTilesetAnims_General_SandWatersEdge[] = {
+static const u16* const sTilesetAnims_General_SandWatersEdge[] = {
     sTilesetAnims_General_SandWatersEdge_Frame0,
     sTilesetAnims_General_SandWatersEdge_Frame1,
     sTilesetAnims_General_SandWatersEdge_Frame2,
@@ -82,7 +82,7 @@ static const u16 sTilesetAnims_CeladonCity_Fountain_Frame3[] = INCBIN_U16("data/
 static const u16 sTilesetAnims_CeladonCity_Fountain_Frame4[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/4.4bpp");
 static const u16 sTilesetAnims_CeladonCity_Fountain_Empty[16] = {};
 
-static const u16 *const sTilesetAnims_CeladonCity_Fountain[] = {
+static const u16* const sTilesetAnims_CeladonCity_Fountain[] = {
     sTilesetAnims_CeladonCity_Fountain_Frame0,
     sTilesetAnims_CeladonCity_Fountain_Frame1,
     sTilesetAnims_CeladonCity_Fountain_Frame2,
@@ -96,7 +96,7 @@ static const u16 sTilesetAnims_SilphCo_Fountain_Frame2[] = INCBIN_U16("data/tile
 static const u16 sTilesetAnims_SilphCo_Fountain_Frame3[] = INCBIN_U16("data/tilesets/secondary/silph_co/anim/fountain/3.4bpp");
 static const u16 sTilesetAnims_SilphCo_Fountain_Empty[16] = {};
 
-static const u16 *const sTilesetAnims_SilphCo_Fountain[] = {
+static const u16* const sTilesetAnims_SilphCo_Fountain[] = {
     sTilesetAnims_SilphCo_Fountain_Frame0,
     sTilesetAnims_SilphCo_Fountain_Frame1,
     sTilesetAnims_SilphCo_Fountain_Frame2,
@@ -108,7 +108,7 @@ static const u16 sTilesetAnims_MtEmber_Steam_Frame1[] = INCBIN_U16("data/tileset
 static const u16 sTilesetAnims_MtEmber_Steam_Frame2[] = INCBIN_U16("data/tilesets/secondary/mt_ember/anim/steam/2.4bpp");
 static const u16 sTilesetAnims_MtEmber_Steam_Frame3[] = INCBIN_U16("data/tilesets/secondary/mt_ember/anim/steam/3.4bpp");
 
-static const u16 *const sTilesetAnims_MtEmber_Steam[] = {
+static const u16* const sTilesetAnims_MtEmber_Steam[] = {
     sTilesetAnims_MtEmber_Steam_Frame0,
     sTilesetAnims_MtEmber_Steam_Frame1,
     sTilesetAnims_MtEmber_Steam_Frame2,
@@ -118,7 +118,7 @@ static const u16 *const sTilesetAnims_MtEmber_Steam[] = {
 static const u16 sTilesetAnims_VermilionGym_MotorizedDoor_Frame0[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/anim/motorizeddoor/0.4bpp");
 static const u16 sTilesetAnims_VermilionGym_MotorizedDoor_Frame1[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/anim/motorizeddoor/1.4bpp");
 
-static const u16 *const sTilesetAnims_VermilionGym_MotorizedDoor[] = {
+static const u16* const sTilesetAnims_VermilionGym_MotorizedDoor[] = {
     sTilesetAnims_VermilionGym_MotorizedDoor_Frame0,
     sTilesetAnims_VermilionGym_MotorizedDoor_Frame1
 };
@@ -127,7 +127,7 @@ static const u16 sTilesetAnims_CeladonGym_Flowers_Frame0[] = INCBIN_U16("data/ti
 static const u16 sTilesetAnims_CeladonGym_Flowers_Frame1[] = INCBIN_U16("data/tilesets/secondary/celadon_gym/anim/flowers/1.4bpp");
 static const u16 sTilesetAnims_CeladonGym_Flowers_Frame2[] = INCBIN_U16("data/tilesets/secondary/celadon_gym/anim/flowers/2.4bpp");
 
-static const u16 *const sTilesetAnims_CeladonGym_Flowers[] = {
+static const u16* const sTilesetAnims_CeladonGym_Flowers[] = {
     sTilesetAnims_CeladonGym_Flowers_Frame0,
     sTilesetAnims_CeladonGym_Flowers_Frame1,
     sTilesetAnims_CeladonGym_Flowers_Frame2,
@@ -140,7 +140,7 @@ static void ResetTilesetAnimBuffer(void)
     CpuFill32(0, sTilesetDMA3TransferBuffer, sizeof sTilesetDMA3TransferBuffer);
 }
 
-static void AppendTilesetAnimToBuffer(const u16 *src, u16 *dest, u16 size)
+static void AppendTilesetAnimToBuffer(const u16* src, u16* dest, u16 size)
 {
     if (sTilesetDMA3TransferBufferSize < 20)
     {
@@ -207,17 +207,17 @@ static void _InitSecondaryTilesetAnimation(void)
 
 static void QueueAnimTiles_General_Flower(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_General_Flower[timer % ARRAY_COUNT(sTilesetAnims_General_Flower)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(508)), 4 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_General_Flower[timer % ARRAY_COUNT(sTilesetAnims_General_Flower)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(508)), 4 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_General_Water_Current_LandWatersEdge(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_General_Water_Current_LandWatersEdge[timer % ARRAY_COUNT(sTilesetAnims_General_Water_Current_LandWatersEdge)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(416)), 48 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_General_Water_Current_LandWatersEdge[timer % ARRAY_COUNT(sTilesetAnims_General_Water_Current_LandWatersEdge)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(416)), 48 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_General_SandWatersEdge(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_General_SandWatersEdge[timer % ARRAY_COUNT(sTilesetAnims_General_SandWatersEdge)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(464)), 18 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_General_SandWatersEdge[timer % ARRAY_COUNT(sTilesetAnims_General_SandWatersEdge)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(464)), 18 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_General(u16 timer)
@@ -239,7 +239,7 @@ void InitTilesetAnim_General(void)
 
 static void QueueAnimTiles_CeladonCity_Fountain(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_CeladonCity_Fountain[timer % ARRAY_COUNT(sTilesetAnims_CeladonCity_Fountain)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(744)), 8 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_CeladonCity_Fountain[timer % ARRAY_COUNT(sTilesetAnims_CeladonCity_Fountain)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(744)), 8 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_CeladonCity(u16 timer)
@@ -257,7 +257,7 @@ void InitTilesetAnim_CeladonCity(void)
 
 static void QueueAnimTiles_SilphCo_Fountain(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_SilphCo_Fountain[timer % ARRAY_COUNT(sTilesetAnims_SilphCo_Fountain)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(976)), 8 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_SilphCo_Fountain[timer % ARRAY_COUNT(sTilesetAnims_SilphCo_Fountain)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(976)), 8 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_SilphCo(u16 timer)
@@ -275,7 +275,7 @@ void InitTilesetAnim_SilphCo(void)
 
 static void QueueAnimTiles_MtEmber_Steam(u16 timer)
 {
-    AppendTilesetAnimToBuffer(sTilesetAnims_MtEmber_Steam[timer % ARRAY_COUNT(sTilesetAnims_MtEmber_Steam)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(896)), 8 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_MtEmber_Steam[timer % ARRAY_COUNT(sTilesetAnims_MtEmber_Steam)], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(896)), 8 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_MtEmber(u16 timer)
@@ -295,7 +295,7 @@ static void QueueAnimTiles_VermilionGym_MotorizedDoor(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(sTilesetAnims_VermilionGym_MotorizedDoor);
 
-    AppendTilesetAnimToBuffer(sTilesetAnims_VermilionGym_MotorizedDoor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(880)), 7 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(sTilesetAnims_VermilionGym_MotorizedDoor[i], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(880)), 7 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_VermilionGym(u16 timer)
@@ -314,8 +314,8 @@ void InitTilesetAnim_VermilionGym(void)
 static void QueueAnimTiles_CeladonGym_Flowers(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(sTilesetAnims_CeladonGym_Flowers);
-    
-    AppendTilesetAnimToBuffer(sTilesetAnims_CeladonGym_Flowers[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(739)), 4 * TILE_SIZE_4BPP);
+
+    AppendTilesetAnimToBuffer(sTilesetAnims_CeladonGym_Flowers[i], (u16*)(BG_VRAM + TILE_OFFSET_4BPP(739)), 4 * TILE_SIZE_4BPP);
 }
 
 static void TilesetAnim_CeladonGym(u16 timer)

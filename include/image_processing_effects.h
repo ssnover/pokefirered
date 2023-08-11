@@ -30,10 +30,10 @@ enum
 struct ImageProcessingContext
 {
     u8 effect;
-    void *canvasPixels;
-    u16 *canvasPalette;
+    void* canvasPixels;
+    u16* canvasPalette;
     u8 fillerC[0x4];
-    void *dest;
+    void* dest;
     u16 quantizeEffect;
     u16 var_16;
     u8 paletteStart;
@@ -46,8 +46,8 @@ struct ImageProcessingContext
     u8 personality;
 };
 
-void ApplyImageProcessingEffects(struct ImageProcessingContext *);
-void ApplyImageProcessingQuantization(struct ImageProcessingContext *);
-void ConvertImageProcessingToGBA(struct ImageProcessingContext *);
+void ApplyImageProcessingEffects(struct ImageProcessingContext*);
+void ApplyImageProcessingQuantization(struct ImageProcessingContext*);
+void ConvertImageProcessingToGBA(struct ImageProcessingContext*);
 
 #endif

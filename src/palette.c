@@ -19,31 +19,31 @@ enum
 struct PaletteStructTemplate
 {
     u16 id;
-    u16 *src;
-    bool16 pst_field_8_0:1;
-    u16 unused:9;
-    u16 size:5;
+    u16* src;
+    bool16 pst_field_8_0 : 1;
+    u16 unused : 9;
+    u16 size : 5;
     u8 time1;
-    u8 srcCount:5;
-    u8 state:3;
+    u8 srcCount : 5;
+    u8 state : 3;
     u8 time2;
 };
 
 struct PaletteStruct
 {
-    const struct PaletteStructTemplate *template;
-    bool32 active:1;
-    bool32 flag:1;
-    u32 baseDestOffset:9;
-    u16 destOffset:10;
-    u16 srcIndex:7;
+    const struct PaletteStructTemplate* template;
+    bool32 active : 1;
+    bool32 flag : 1;
+    u32 baseDestOffset : 9;
+    u16 destOffset : 10;
+    u16 srcIndex : 7;
     u8 countdown1;
     u8 countdown2;
 };
 
-static void PaletteStruct_Copy(struct PaletteStruct *, u32 *);
-static void PaletteStruct_Blend(struct PaletteStruct *, u32 *);
-static void PaletteStruct_TryEnd(struct PaletteStruct *);
+static void PaletteStruct_Copy(struct PaletteStruct*, u32*);
+static void PaletteStruct_Blend(struct PaletteStruct*, u32*);
+static void PaletteStruct_TryEnd(struct PaletteStruct*);
 static void PaletteStruct_Reset(u8 paletteNum);
 static u8 PaletteStruct_GetPalNum(u16);
 static u8 UpdateNormalPaletteFade(void);
@@ -54,12 +54,12 @@ static void UpdateBlendRegisters(void);
 static bool8 IsSoftwarePaletteFadeFinishing(void);
 static void Task_BlendPalettesGradually(u8 taskId);
 
-ALIGNED(4) EWRAM_DATA u16 gPlttBufferUnfaded[PLTT_BUFFER_SIZE] = {0};
-ALIGNED(4) EWRAM_DATA u16 gPlttBufferFaded[PLTT_BUFFER_SIZE] = {0};
-static EWRAM_DATA struct PaletteStruct sPaletteStructs[NUM_PALETTE_STRUCTS] = {0};
-EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
+ALIGNED(4) EWRAM_DATA u16 gPlttBufferUnfaded[PLTT_BUFFER_SIZE] = { 0 };
+ALIGNED(4) EWRAM_DATA u16 gPlttBufferFaded[PLTT_BUFFER_SIZE] = { 0 };
+static EWRAM_DATA struct PaletteStruct sPaletteStructs[NUM_PALETTE_STRUCTS] = { 0 };
+EWRAM_DATA struct PaletteFadeControl gPaletteFade = { 0 };
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
-EWRAM_DATA u8 gPaletteDecompressionBuffer[PLTT_SIZE] = {0};
+EWRAM_DATA u8 gPaletteDecompressionBuffer[PLTT_SIZE] = { 0 };
 
 static const struct PaletteStructTemplate sDummyPaletteStructTemplate =
 {
@@ -78,14 +78,14 @@ static const u8 sRoundedDownGrayscaleMap[] =
     31, 31
 };
 
-void LoadCompressedPalette(const u32 *src, u16 offset, u16 size)
+void LoadCompressedPalette(const u32* src, u16 offset, u16 size)
 {
     LZDecompressWram(src, gPaletteDecompressionBuffer);
     CpuCopy16(gPaletteDecompressionBuffer, &gPlttBufferUnfaded[offset], size);
     CpuCopy16(gPaletteDecompressionBuffer, &gPlttBufferFaded[offset], size);
 }
 
-void LoadPalette(const void *src, u16 offset, u16 size)
+void LoadPalette(const void* src, u16 offset, u16 size)
 {
     CpuCopy16(src, &gPlttBufferUnfaded[offset], size);
     CpuCopy16(src, &gPlttBufferFaded[offset], size);
@@ -101,8 +101,8 @@ void TransferPlttBuffer(void)
 {
     if (!gPaletteFade.bufferTransferDisabled)
     {
-        void *src = gPlttBufferFaded;
-        void *dest = (void *)PLTT;
+        void* src = gPlttBufferFaded;
+        void* dest = (void*)PLTT;
         DmaCopy16(3, src, dest, PLTT_SIZE);
         sPlttBufferTransferPending = FALSE;
         if (gPaletteFade.mode == HARDWARE_FADE && gPaletteFade.active)
@@ -139,7 +139,7 @@ void ResetPaletteFade(void)
 void ReadPlttIntoBuffers(void)
 {
     u16 i;
-    u16 *pltt = (u16 *)PLTT;
+    u16* pltt = (u16*)PLTT;
 
     for (i = 0; i < PLTT_BUFFER_SIZE; ++i)
     {
@@ -180,7 +180,7 @@ bool8 BeginNormalPaletteFade(u32 selectedPalettes, s8 delay, u8 startY, u8 targe
         UpdatePaletteFade();
         temp = gPaletteFade.bufferTransferDisabled;
         gPaletteFade.bufferTransferDisabled = FALSE;
-        CpuCopy32(gPlttBufferFaded, (void *)PLTT, PLTT_SIZE);
+        CpuCopy32(gPlttBufferFaded, (void*)PLTT, PLTT_SIZE);
         sPlttBufferTransferPending = FALSE;
         if (gPaletteFade.mode == HARDWARE_FADE && gPaletteFade.active)
             UpdateBlendRegisters();
@@ -197,13 +197,13 @@ static bool8 BeginPlttFade(u32 selectedPalettes, u8 delay, u8 startY, u8 targetY
 }
 
 // Unused
-static void PaletteStruct_Run(u8 a1, u32 *unkFlags)
+static void PaletteStruct_Run(u8 a1, u32* unkFlags)
 {
     u8 i;
 
     for (i = 0; i < NUM_PALETTE_STRUCTS; ++i)
     {
-        struct PaletteStruct *palstruct = &sPaletteStructs[i];
+        struct PaletteStruct* palstruct = &sPaletteStructs[i];
 
         if (palstruct->active)
         {
@@ -228,7 +228,7 @@ static void PaletteStruct_Run(u8 a1, u32 *unkFlags)
     }
 }
 
-static void PaletteStruct_Copy(struct PaletteStruct *palStruct, u32 *unkFlags)
+static void PaletteStruct_Copy(struct PaletteStruct* palStruct, u32* unkFlags)
 {
     s32 srcIndex;
     s32 srcCount;
@@ -270,7 +270,7 @@ static void PaletteStruct_Copy(struct PaletteStruct *palStruct, u32 *unkFlags)
     *unkFlags |= 1 << (palStruct->baseDestOffset >> 4);
 }
 
-static void PaletteStruct_Blend(struct PaletteStruct *palStruct, u32 *unkFlags)
+static void PaletteStruct_Blend(struct PaletteStruct* palStruct, u32* unkFlags)
 {
     if (gPaletteFade.active && ((1 << (palStruct->baseDestOffset >> 4)) & gPaletteFade_selectedPalettes))
     {
@@ -278,9 +278,9 @@ static void PaletteStruct_Blend(struct PaletteStruct *palStruct, u32 *unkFlags)
         {
             if (gPaletteFade.delayCounter != gPaletteFade_delay)
                 BlendPalette(palStruct->baseDestOffset,
-                             palStruct->template->size,
-                             gPaletteFade.y,
-                             gPaletteFade.blendColor);
+                    palStruct->template->size,
+                    gPaletteFade.y,
+                    gPaletteFade.blendColor);
         }
         else
         {
@@ -299,7 +299,7 @@ static void PaletteStruct_Blend(struct PaletteStruct *palStruct, u32 *unkFlags)
     }
 }
 
-static void PaletteStruct_TryEnd(struct PaletteStruct *palStruct)
+static void PaletteStruct_TryEnd(struct PaletteStruct* palStruct)
 {
     if (!palStruct->countdown2)
     {
@@ -426,9 +426,9 @@ static u8 UpdateNormalPaletteFade(void)
         {
             if (selectedPalettes & 1)
                 BlendPalette(paletteOffset,
-                             16,
-                             gPaletteFade.y,
-                             gPaletteFade.blendColor);
+                    16,
+                    gPaletteFade.y,
+                    gPaletteFade.blendColor);
             selectedPalettes >>= 1;
             paletteOffset += 16;
         }
@@ -498,8 +498,8 @@ void TintPlttBuffer(u32 selectedPalettes, s8 r, s8 g, s8 b)
 
             for (i = 0; i < 16; ++i)
             {
-                struct PlttData *data = (struct PlttData *)&gPlttBufferFaded[paletteOffset + i];
-                
+                struct PlttData* data = (struct PlttData*)&gPlttBufferFaded[paletteOffset + i];
+
                 data->r += r;
                 data->g += g;
                 data->b += b;
@@ -572,14 +572,14 @@ static u8 UpdateFastPaletteFade(void)
     case FAST_FADE_IN_FROM_WHITE:
         for (i = paletteOffsetStart; i < paletteOffsetEnd; ++i)
         {
-            struct PlttData *unfaded;
-            struct PlttData *faded;
+            struct PlttData* unfaded;
+            struct PlttData* faded;
 
-            unfaded = (struct PlttData *)&gPlttBufferUnfaded[i];
+            unfaded = (struct PlttData*)&gPlttBufferUnfaded[i];
             r0 = unfaded->r;
             g0 = unfaded->g;
             b0 = unfaded->b;
-            faded = (struct PlttData *)&gPlttBufferFaded[i];
+            faded = (struct PlttData*)&gPlttBufferFaded[i];
             r = faded->r - 2;
             g = faded->g - 2;
             b = faded->b - 2;
@@ -595,7 +595,7 @@ static u8 UpdateFastPaletteFade(void)
     case FAST_FADE_OUT_TO_WHITE:
         for (i = paletteOffsetStart; i < paletteOffsetEnd; ++i)
         {
-            struct PlttData *data = (struct PlttData *)&gPlttBufferFaded[i];
+            struct PlttData* data = (struct PlttData*)&gPlttBufferFaded[i];
 
             r = data->r + 2;
             g = data->g + 2;
@@ -612,14 +612,14 @@ static u8 UpdateFastPaletteFade(void)
     case FAST_FADE_IN_FROM_BLACK:
         for (i = paletteOffsetStart; i < paletteOffsetEnd; ++i)
         {
-            struct PlttData *unfaded;
-            struct PlttData *faded;
+            struct PlttData* unfaded;
+            struct PlttData* faded;
 
-            unfaded = (struct PlttData *)&gPlttBufferUnfaded[i];
+            unfaded = (struct PlttData*)&gPlttBufferUnfaded[i];
             r0 = unfaded->r;
             g0 = unfaded->g;
             b0 = unfaded->b;
-            faded = (struct PlttData *)&gPlttBufferFaded[i];
+            faded = (struct PlttData*)&gPlttBufferFaded[i];
             r = faded->r + 2;
             g = faded->g + 2;
             b = faded->b + 2;
@@ -635,7 +635,7 @@ static u8 UpdateFastPaletteFade(void)
     case FAST_FADE_OUT_TO_BLACK:
         for (i = paletteOffsetStart; i < paletteOffsetEnd; ++i)
         {
-            struct PlttData *data = (struct PlttData *)&gPlttBufferFaded[i];
+            struct PlttData* data = (struct PlttData*)&gPlttBufferFaded[i];
 
             r = data->r - 2;
             g = data->g - 2;
@@ -795,7 +795,7 @@ void BlendPalettesUnfaded(u32 selectedPalettes, u8 coeff, u16 color)
     BlendPalettes(selectedPalettes, coeff, color);
 }
 
-void TintPalette_GrayScale(u16 *palette, u16 count)
+void TintPalette_GrayScale(u16* palette, u16 count)
 {
     s32 r, g, b, i;
     u32 gray;
@@ -810,7 +810,7 @@ void TintPalette_GrayScale(u16 *palette, u16 count)
     }
 }
 
-void TintPalette_GrayScale2(u16 *palette, u16 count)
+void TintPalette_GrayScale2(u16* palette, u16 count)
 {
     s32 r, g, b, i;
     u32 gray;
@@ -829,7 +829,7 @@ void TintPalette_GrayScale2(u16 *palette, u16 count)
     }
 }
 
-void TintPalette_SepiaTone(u16 *palette, u16 count)
+void TintPalette_SepiaTone(u16* palette, u16 count)
 {
     s32 r, g, b, i;
     u32 gray;
@@ -849,7 +849,7 @@ void TintPalette_SepiaTone(u16 *palette, u16 count)
     }
 }
 
-void TintPalette_CustomTone(u16 *palette, u16 count, u16 rTone, u16 gTone, u16 bTone)
+void TintPalette_CustomTone(u16* palette, u16 count, u16 rTone, u16 gTone, u16 bTone)
 {
     s32 r, g, b, i;
     u32 gray;
@@ -873,7 +873,7 @@ void TintPalette_CustomTone(u16 *palette, u16 count, u16 rTone, u16 gTone, u16 b
     }
 }
 
-void CopyPaletteInvertedTint(const u16 *src, u16 *dst, u16 count, u8 tone)
+void CopyPaletteInvertedTint(const u16* src, u16* dst, u16 count, u8 tone)
 {
     s32 r, g, b, i;
     u32 gray;
@@ -940,8 +940,8 @@ bool32 IsBlendPalettesGraduallyTaskActive(u8 id)
 
     for (i = 0; i < NUM_TASKS; ++i)
         if (gTasks[i].isActive == TRUE
-         && gTasks[i].func == Task_BlendPalettesGradually
-         && gTasks[i].tId == id)
+            && gTasks[i].func == Task_BlendPalettesGradually
+            && gTasks[i].tId == id)
             return TRUE;
     return FALSE;
 }
@@ -962,7 +962,7 @@ void DestroyBlendPalettesGraduallyTask(void)
 static void Task_BlendPalettesGradually(u8 taskId)
 {
     u32 palettes;
-    s16 *data;
+    s16* data;
     s16 target;
 
     data = gTasks[taskId].data;

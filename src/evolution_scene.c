@@ -39,8 +39,8 @@ struct EvoInfo
 };
 
 // EWRAM vars
-static EWRAM_DATA struct EvoInfo *sEvoStructPtr = NULL;
-static EWRAM_DATA u16 *sBgAnimPal = NULL;
+static EWRAM_DATA struct EvoInfo* sEvoStructPtr = NULL;
+static EWRAM_DATA u16* sBgAnimPal = NULL;
 
 // IWRAM common
 void (*gCB2_AfterEvolution)(void);
@@ -217,7 +217,7 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
 
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
-    CpuFill32(0, (void *)(VRAM), VRAM_SIZE);
+    CpuFill32(0, (void*)(VRAM), VRAM_SIZE);
 
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
@@ -261,8 +261,8 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
     trainerId = GetMonData(mon, MON_DATA_OT_ID);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
     DecompressPicFromTable(&gMonFrontPicTable[currSpecies],
-                             gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_LEFT],
-                             currSpecies);
+        gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_LEFT],
+        currSpecies);
     pokePal = GetMonSpritePalStructFromOtIdPersonality(currSpecies, trainerId, personality);
     LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
 
@@ -276,8 +276,8 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
 
     // postEvo sprite
     DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                             gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
-                             postEvoSpecies);
+        gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
+        postEvoSpecies);
     pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
     LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 
@@ -324,7 +324,7 @@ static void CB2_EvolutionSceneLoadGraphics(void)
 
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
-    CpuFill32(0, (void *)(VRAM), VRAM_SIZE);
+    CpuFill32(0, (void*)(VRAM), VRAM_SIZE);
 
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
@@ -354,8 +354,8 @@ static void CB2_EvolutionSceneLoadGraphics(void)
     gReservedSpritePaletteCount = 4;
 
     DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                             gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
-                             postEvoSpecies);
+        gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
+        postEvoSpecies);
     pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
 
     LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
@@ -421,32 +421,32 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
         gMain.state++;
         break;
     case 4:
-        {
-            const struct CompressedSpritePalette* pokePal;
-            u32 trainerId = GetMonData(mon, MON_DATA_OT_ID);
-            u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
-            DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                                     gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
-                                     postEvoSpecies);
-            pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
-            LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
-            gMain.state++;
-        }
-        break;
+    {
+        const struct CompressedSpritePalette* pokePal;
+        u32 trainerId = GetMonData(mon, MON_DATA_OT_ID);
+        u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
+        DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
+            gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
+            postEvoSpecies);
+        pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
+        LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+        gMain.state++;
+    }
+    break;
     case 5:
-        {
-            u8 id;
+    {
+        u8 id;
 
-            SetMultiuseSpriteTemplateToPokemon(postEvoSpecies, B_POSITION_OPPONENT_LEFT);
-            gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
-            sEvoStructPtr->postEvoSpriteId = id = CreateSprite(&gMultiuseSpriteTemplate, 120, 64, 30);
+        SetMultiuseSpriteTemplateToPokemon(postEvoSpecies, B_POSITION_OPPONENT_LEFT);
+        gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
+        sEvoStructPtr->postEvoSpriteId = id = CreateSprite(&gMultiuseSpriteTemplate, 120, 64, 30);
 
-            gSprites[id].callback = SpriteCallbackDummy_2;
-            gSprites[id].oam.paletteNum = 2;
-            gMain.state++;
-            LinkTradeDrawWindow();
-        }
-        break;
+        gSprites[id].callback = SpriteCallbackDummy_2;
+        gSprites[id].oam.paletteNum = 2;
+        gMain.state++;
+        LinkTradeDrawWindow();
+    }
+    break;
     case 6:
         if (gWirelessCommType)
         {
@@ -490,8 +490,8 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSprit
     sEvoStructPtr->preEvoSpriteId = preEvoSpriteId;
 
     DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                            gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_LEFT],
-                            postEvoSpecies);
+        gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_LEFT],
+        postEvoSpecies);
 
     pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
     LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
@@ -580,7 +580,7 @@ static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
         if (GetMonData(shedinja, MON_DATA_SPECIES) == SPECIES_SHEDINJA
             && GetMonData(shedinja, MON_DATA_LANGUAGE) == LANGUAGE_JAPANESE
             && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NINJASK)
-                SetMonData(shedinja, MON_DATA_NICKNAME, sText_ShedinjaJapaneseName);
+            SetMonData(shedinja, MON_DATA_NICKNAME, sText_ShedinjaJapaneseName);
     }
 }
 
@@ -776,7 +776,7 @@ static void Task_EvolutionScene(u8 taskId)
             BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
             PlayBGM(MUS_EVOLVED);
             gTasks[taskId].tState++;
-            SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
+            SetMonData(mon, MON_DATA_SPECIES, (void*)(&gTasks[taskId].tPostEvoSpecies));
             CalculateMonStats(mon);
             EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
@@ -969,8 +969,8 @@ static void Task_EvolutionScene(u8 taskId)
             {
                 FreeAllWindowBuffers();
                 ShowSelectMovePokemonSummaryScreen(gPlayerParty, gTasks[taskId].tPartyId,
-                            gPlayerPartyCount - 1, CB2_EvolutionSceneLoadGraphics,
-                            gMoveToLearn);
+                    gPlayerPartyCount - 1, CB2_EvolutionSceneLoadGraphics,
+                    gMoveToLearn);
                 gTasks[taskId].tLearnMoveState++;
             }
             break;
@@ -999,7 +999,7 @@ static void Task_EvolutionScene(u8 taskId)
                         // Forget move
                         PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
 
-                        RemoveMonPPBonus(mon, var);
+                            RemoveMonPPBonus(mon, var);
                         SetMonMoveSlot(mon, gMoveToLearn, var);
                         gTasks[taskId].tLearnMoveState++;
                     }
@@ -1197,7 +1197,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
          */
         if (IsSEPlaying())
         {
-//            Free(sBgAnimPal);
+            //            Free(sBgAnimPal);
             PlayCry_Normal(gTasks[taskId].tPostEvoSpecies, 0);
             memcpy(&gPlttBufferUnfaded[BG_PLTT_ID(2)], sEvoStructPtr->savedPalette, sizeof(sEvoStructPtr->savedPalette));
             gTasks[taskId].tState++;
@@ -1370,8 +1370,8 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 FreeAllWindowBuffers();
 
                 ShowSelectMovePokemonSummaryScreen(gPlayerParty, gTasks[taskId].tPartyId,
-                            gPlayerPartyCount - 1, CB2_TradeEvolutionSceneLoadGraphics,
-                            gMoveToLearn);
+                    gPlayerPartyCount - 1, CB2_TradeEvolutionSceneLoadGraphics,
+                    gMoveToLearn);
                 gTasks[taskId].tLearnMoveState++;
             }
             break;
@@ -1400,7 +1400,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                         // Forget move
                         PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
 
-                        RemoveMonPPBonus(mon, var);
+                            RemoveMonPPBonus(mon, var);
                         SetMonMoveSlot(mon, gMoveToLearn, var);
                         BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_123POOF - BATTLESTRINGS_TABLE_START]);
                         DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
@@ -1513,7 +1513,7 @@ static void VBlankCB_TradeEvolutionScene(void)
 // of stages, each stage having a different palette range and timing
 static void Task_UpdateBgPalette(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (tPaused)
         return;
@@ -1571,10 +1571,10 @@ static void CreateBgAnimTask(bool8 isLink)
 
 static void Task_AnimateBg(u8 taskId)
 {
-    u16 *outer_X, *outer_Y;
+    u16* outer_X, * outer_Y;
 
-    u16 *inner_X = &gBattle_BG1_X;
-    u16 *inner_Y = &gBattle_BG1_Y;
+    u16* inner_X = &gBattle_BG1_X;
+    u16* inner_Y = &gBattle_BG1_Y;
 
     if (!gTasks[taskId].data[2])
     {
@@ -1610,7 +1610,7 @@ static void Task_AnimateBg(u8 taskId)
 
 #undef tIsLink
 
-static void InitMovingBgPalette(u16 *palette)
+static void InitMovingBgPalette(u16* palette)
 {
     s32 i, j;
 

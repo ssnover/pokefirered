@@ -7,14 +7,14 @@ static const union AnimCmd sAnim_Shadow[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_Shadow[] =
+static const union AnimCmd* const sAnimTable_Shadow[] =
 {
     sAnim_Shadow,
 };
 
-static const struct SpriteFrameImage sPicTable_ShadowSmall[] = {obj_frame_tiles(gFieldEffectObjectPic_ShadowSmall) };
-static const struct SpriteFrameImage sPicTable_ShadowMedium[] = {obj_frame_tiles(gFieldEffectObjectPic_ShadowMedium) };
-static const struct SpriteFrameImage sPicTable_ShadowLarge[] = {obj_frame_tiles(gFieldEffectObjectPic_ShadowLarge) };
+static const struct SpriteFrameImage sPicTable_ShadowSmall[] = { obj_frame_tiles(gFieldEffectObjectPic_ShadowSmall) };
+static const struct SpriteFrameImage sPicTable_ShadowMedium[] = { obj_frame_tiles(gFieldEffectObjectPic_ShadowMedium) };
+static const struct SpriteFrameImage sPicTable_ShadowLarge[] = { obj_frame_tiles(gFieldEffectObjectPic_ShadowLarge) };
 static const struct SpriteFrameImage sPicTable_ShadowExtraLarge[] = { obj_frame_tiles(gFieldEffectObjectPic_ShadowExtraLarge) };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall =
@@ -80,7 +80,7 @@ static const union AnimCmd sAnim_TallGrass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_TallGrass[] =
+static const union AnimCmd* const sAnimTable_TallGrass[] =
 {
     sAnim_TallGrass,
 };
@@ -118,7 +118,7 @@ static const union AnimCmd sAnim_Ripple[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_Ripple[] =
+static const union AnimCmd* const sAnimTable_Ripple[] =
 {
     sAnim_Ripple,
 };
@@ -153,7 +153,7 @@ static const union AnimCmd sAnim_Ash[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_Ash[] =
+static const union AnimCmd* const sAnimTable_Ash[] =
 {
     sAnim_Ash,
 };
@@ -207,12 +207,12 @@ static const union AnimCmd sSurfBlobAnim_FaceEast[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_SurfBlob[] =
+static const union AnimCmd* const sAnimTable_SurfBlob[] =
 {
     [DIR_SOUTH - 1] = sSurfBlobAnim_FaceSouth,
     [DIR_NORTH - 1] = sSurfBlobAnim_FaceNorth,
-    [DIR_WEST  - 1] = sSurfBlobAnim_FaceWest,
-    [DIR_EAST  - 1] = sSurfBlobAnim_FaceEast,
+    [DIR_WEST - 1] = sSurfBlobAnim_FaceWest,
+    [DIR_EAST - 1] = sSurfBlobAnim_FaceEast,
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_SurfBlob =
@@ -266,12 +266,12 @@ static const union AnimCmd sArrowAnim_East[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_Arrow[] =
+static const union AnimCmd* const sAnimTable_Arrow[] =
 {
     [DIR_SOUTH - 1] = sArrowAnim_South,
     [DIR_NORTH - 1] = sArrowAnim_North,
-    [DIR_WEST  - 1] = sArrowAnim_West,
-    [DIR_EAST  - 1] = sArrowAnim_East,
+    [DIR_WEST - 1] = sArrowAnim_West,
+    [DIR_EAST - 1] = sArrowAnim_East,
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Arrow =
@@ -300,7 +300,7 @@ static const union AnimCmd sAnim_GroundImpactDust[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_GroundImpactDust[] =
+static const union AnimCmd* const sAnimTable_GroundImpactDust[] =
 {
     sAnim_GroundImpactDust,
 };
@@ -333,7 +333,7 @@ static const union AnimCmd sAnim_JumpTallGrass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_JumpTallGrass[] =
+static const union AnimCmd* const sAnimTable_JumpTallGrass[] =
 {
     sAnim_JumpTallGrass,
 };
@@ -379,13 +379,13 @@ static const union AnimCmd sSandFootprintsAnim_East[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_SandFootprints[] =
+static const union AnimCmd* const sAnimTable_SandFootprints[] =
 {
-    [DIR_NONE]  = sSandFootprintsAnim_South,
+    [DIR_NONE] = sSandFootprintsAnim_South,
     [DIR_SOUTH] = sSandFootprintsAnim_South,
     [DIR_NORTH] = sSandFootprintsAnim_North,
-    [DIR_WEST]  = sSandFootprintsAnim_West,
-    [DIR_EAST]  = sSandFootprintsAnim_East,
+    [DIR_WEST] = sSandFootprintsAnim_West,
+    [DIR_EAST] = sSandFootprintsAnim_East,
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_SandFootprints =
@@ -429,13 +429,13 @@ static const union AnimCmd sDeepSandFootprintsAnim_East[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_DeepSandFootprints[] =
+static const union AnimCmd* const sAnimTable_DeepSandFootprints[] =
 {
-    [DIR_NONE]  = sDeepSandFootprintsAnim_South,
+    [DIR_NONE] = sDeepSandFootprintsAnim_South,
     [DIR_SOUTH] = sDeepSandFootprintsAnim_South,
     [DIR_NORTH] = sDeepSandFootprintsAnim_North,
-    [DIR_WEST]  = sDeepSandFootprintsAnim_West,
-    [DIR_EAST]  = sDeepSandFootprintsAnim_East,
+    [DIR_WEST] = sDeepSandFootprintsAnim_West,
+    [DIR_EAST] = sDeepSandFootprintsAnim_East,
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_DeepSandFootprints =
@@ -505,13 +505,13 @@ static const union AnimCmd sBikeTireTracksAnim_NECornerTurn[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_BikeTireTracks[] =
+static const union AnimCmd* const sAnimTable_BikeTireTracks[] =
 {
-    [DIR_NONE]      = sBikeTireTracksAnim_South,
-    [DIR_SOUTH]     = sBikeTireTracksAnim_South,
-    [DIR_NORTH]     = sBikeTireTracksAnim_North,
-    [DIR_WEST]      = sBikeTireTracksAnim_West,
-    [DIR_EAST]      = sBikeTireTracksAnim_East,
+    [DIR_NONE] = sBikeTireTracksAnim_South,
+    [DIR_SOUTH] = sBikeTireTracksAnim_South,
+    [DIR_NORTH] = sBikeTireTracksAnim_North,
+    [DIR_WEST] = sBikeTireTracksAnim_West,
+    [DIR_EAST] = sBikeTireTracksAnim_East,
     [DIR_SOUTHWEST] = sBikeTireTracksAnim_SECornerTurn,
     [DIR_SOUTHEAST] = sBikeTireTracksAnim_SWCornerTurn,
     [DIR_NORTHWEST] = sBikeTireTracksAnim_NWCornerTurn,
@@ -546,7 +546,7 @@ static const union AnimCmd sAnim_JumpBigSplash[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_JumpBigSplash[] =
+static const union AnimCmd* const sAnimTable_JumpBigSplash[] =
 {
     sAnim_JumpBigSplash,
 };
@@ -588,7 +588,7 @@ static const union AnimCmd sAnim_Splash_1[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_Splash[] =
+static const union AnimCmd* const sAnimTable_Splash[] =
 {
     sAnim_Splash_0,
     sAnim_Splash_1,
@@ -620,7 +620,7 @@ static const union AnimCmd sAnim_JumpSmallSplash[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_JumpSmallSplash[] =
+static const union AnimCmd* const sAnimTable_JumpSmallSplash[] =
 {
     sAnim_JumpSmallSplash,
 };
@@ -656,7 +656,7 @@ static const union AnimCmd sAnim_LongGrass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_LongGrass[] =
+static const union AnimCmd* const sAnimTable_LongGrass[] =
 {
     sAnim_LongGrass,
 };
@@ -693,7 +693,7 @@ static const union AnimCmd sAnim_JumpLongGrass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_JumpLongGrass[] =
+static const union AnimCmd* const sAnimTable_JumpLongGrass[] =
 {
     sAnim_JumpLongGrass,
 };
@@ -736,7 +736,7 @@ static const union AnimCmd sAnim_UnusedGrass[] =
     ANIMCMD_JUMP(7),
 };
 
-static const union AnimCmd *const sAnimTable_UnusedGrass[] =
+static const union AnimCmd* const sAnimTable_UnusedGrass[] =
 {
     sAnim_UnusedGrass,
 };
@@ -771,7 +771,7 @@ static const union AnimCmd sAnim_UnusedGrass2[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_UnusedGrass2[] =
+static const union AnimCmd* const sAnimTable_UnusedGrass2[] =
 {
     sAnim_UnusedGrass2,
 };
@@ -804,7 +804,7 @@ static const union AnimCmd sAnim_UnusedSand[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_UnusedSand[] =
+static const union AnimCmd* const sAnimTable_UnusedSand[] =
 {
     sAnim_UnusedSand,
 };
@@ -835,7 +835,7 @@ static const union AnimCmd sAnim_SandPile[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_SandPile[] =
+static const union AnimCmd* const sAnimTable_SandPile[] =
 {
     sAnim_SandPile,
 };
@@ -870,7 +870,7 @@ static const union AnimCmd sAnim_WaterSurfacing[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_WaterSurfacing[] =
+static const union AnimCmd* const sAnimTable_WaterSurfacing[] =
 {
     sAnim_WaterSurfacing,
 };
@@ -914,7 +914,7 @@ const union AffineAnimCmd sAffineAnim_ReflectionDistortion_1[] =
     AFFINEANIMCMD_JUMP(1),
 };
 
-const union AffineAnimCmd *const sAffineAnims_ReflectionDistortion[] =
+const union AffineAnimCmd* const sAffineAnims_ReflectionDistortion[] =
 {
     sAffineAnim_ReflectionDistortion_0,
     sAffineAnim_ReflectionDistortion_1,
@@ -1011,7 +1011,7 @@ static const union AnimCmd sAnim_TreeDisguiseReveal[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_TreeDisguise[] =
+static const union AnimCmd* const sAnimTable_TreeDisguise[] =
 {
     sAnim_TreeDisguise,
     sAnim_TreeDisguiseReveal,
@@ -1057,7 +1057,7 @@ static const union AnimCmd sAnim_MountainDisguiseReveal[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_MountainDisguise[] =
+static const union AnimCmd* const sAnimTable_MountainDisguise[] =
 {
     sAnim_MountainDisguise,
     sAnim_MountainDisguiseReveal,
@@ -1135,7 +1135,7 @@ static const union AnimCmd sAnim_Bird_Green_FlyIn[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_Bird[] =
+static const union AnimCmd* const sAnimTable_Bird[] =
 {
     sAnim_Bird_WithoutPlayer,
     sAnim_Bird_Red_FlyOut,
@@ -1168,7 +1168,7 @@ static const union AnimCmd sAnim_ShortGrass[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_ShortGrass[] =
+static const union AnimCmd* const sAnimTable_ShortGrass[] =
 {
     sAnim_ShortGrass,
 };
@@ -1195,7 +1195,7 @@ static const union AnimCmd sAnim_HotSpringsWater[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_HotSpringsWater[] =
+static const union AnimCmd* const sAnimTable_HotSpringsWater[] =
 {
     sAnim_HotSpringsWater,
 };
@@ -1230,7 +1230,7 @@ static const union AnimCmd sAnim_AshPuff[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_AshPuff[] =
+static const union AnimCmd* const sAnimTable_AshPuff[] =
 {
     sAnim_AshPuff,
 };
@@ -1267,7 +1267,7 @@ static const union AnimCmd sAnim_AshLaunch[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_AshLaunch[] =
+static const union AnimCmd* const sAnimTable_AshLaunch[] =
 {
     sAnim_AshLaunch,
 };
@@ -1308,7 +1308,7 @@ static const union AnimCmd sAnim_Bubbles[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_Bubbles[] =
+static const union AnimCmd* const sAnimTable_Bubbles[] =
 {
     sAnim_Bubbles,
 };
@@ -1338,7 +1338,7 @@ static const union AnimCmd sAnim_SmallSparkle[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnimTable_SmallSparkle[] =
+static const union AnimCmd* const sAnimTable_SmallSparkle[] =
 {
     sAnim_SmallSparkle,
 };

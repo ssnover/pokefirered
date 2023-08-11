@@ -18,17 +18,17 @@
 
 struct BattleBackground
 {
-    const void *tileset;
-    const void *tilemap;
-    const void *entryTileset;
-    const void *entryTilemap;
-    const void *palette;
+    const void* tileset;
+    const void* tilemap;
+    const void* entryTileset;
+    const void* entryTilemap;
+    const void* palette;
 };
 
 static void CB2_unused(void);
 static u8 GetBattleTerrainOverride(void);
 
-static const u8 sUnused[] = {1, 2};
+static const u8 sUnused[] = { 1, 2 };
 
 static const struct OamData sVsLetter_V_OamData = {
     .y = 0,
@@ -74,7 +74,7 @@ static const union AffineAnimCmd sVsLetterAffineAnimCmds1[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sVsLetterAffineAnimTable[] = {
+static const union AffineAnimCmd* const sVsLetterAffineAnimTable[] = {
     sVsLetterAffineAnimCmds0,
     sVsLetterAffineAnimCmds1
 };
@@ -646,8 +646,8 @@ static void LoadBattleTerrainGfx(u16 terrain)
     if (terrain >= NELEMS(sBattleTerrainTable))
         terrain = BATTLE_TERRAIN_PLAIN;
     // Copy to bg3
-    LZDecompressVram(sBattleTerrainTable[terrain].tileset, (void *)BG_CHAR_ADDR(2));
-    LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void *)BG_SCREEN_ADDR(26));
+    LZDecompressVram(sBattleTerrainTable[terrain].tileset, (void*)BG_CHAR_ADDR(2));
+    LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void*)BG_SCREEN_ADDR(26));
     LoadCompressedPalette(sBattleTerrainTable[terrain].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
 }
 
@@ -656,12 +656,12 @@ static void LoadBattleTerrainEntryGfx(u16 terrain)
     if (terrain >= NELEMS(sBattleTerrainTable))
         terrain = BATTLE_TERRAIN_PLAIN;
     // Copy to bg1
-    LZDecompressVram(sBattleTerrainTable[terrain].entryTileset, (void *)BG_CHAR_ADDR(1));
-    LZDecompressVram(sBattleTerrainTable[terrain].entryTilemap, (void *)BG_SCREEN_ADDR(28));
+    LZDecompressVram(sBattleTerrainTable[terrain].entryTileset, (void*)BG_CHAR_ADDR(1));
+    LZDecompressVram(sBattleTerrainTable[terrain].entryTilemap, (void*)BG_SCREEN_ADDR(28));
 }
 
 // Unused
-void GetBattleTerrainGfxPtrs(u8 terrain, const u32 **tilesPtr, const u32 **mapPtr, const u32 **palPtr)
+void GetBattleTerrainGfxPtrs(u8 terrain, const u32** tilesPtr, const u32** mapPtr, const u32** palPtr)
 {
     if (terrain > BATTLE_TERRAIN_PLAIN)
         terrain = BATTLE_TERRAIN_PLAIN;
@@ -693,10 +693,10 @@ void LoadBattleMenuWindowGfx(void)
     LoadUserWindowGfx(2, 0x012, BG_PLTT_ID(1));
     LoadUserWindowGfx(2, 0x022, BG_PLTT_ID(1));
 
-    gPlttBufferUnfaded[BG_PLTT_ID(5) + 12] = RGB( 9,  9,  9);
-    gPlttBufferUnfaded[BG_PLTT_ID(5) + 13] = RGB( 9,  9,  9);
+    gPlttBufferUnfaded[BG_PLTT_ID(5) + 12] = RGB(9, 9, 9);
+    gPlttBufferUnfaded[BG_PLTT_ID(5) + 13] = RGB(9, 9, 9);
     gPlttBufferUnfaded[BG_PLTT_ID(5) + 14] = RGB(31, 31, 31);
-    gPlttBufferUnfaded[BG_PLTT_ID(5) + 15] = RGB( 26,  26,  25);
+    gPlttBufferUnfaded[BG_PLTT_ID(5) + 15] = RGB(26, 26, 25);
     CpuCopy16(&gPlttBufferUnfaded[BG_PLTT_ID(5) + 12], &gPlttBufferFaded[BG_PLTT_ID(5) + 12], PLTT_SIZEOF(4));
 
     if (gBattleTypeFlags & (BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_POKEDUDE))
@@ -704,7 +704,7 @@ void LoadBattleMenuWindowGfx(void)
         Menu_LoadStdPalAt(BG_PLTT_ID(7));
         LoadMenuMessageWindowGfx(0, 0x030, BG_PLTT_ID(7));
 
-        gPlttBufferUnfaded[BG_PLTT_ID(7) + 6] = RGB( 0,  0,  0);
+        gPlttBufferUnfaded[BG_PLTT_ID(7) + 6] = RGB(0, 0, 0);
         CpuCopy16(&gPlttBufferUnfaded[BG_PLTT_ID(7) + 6], &gPlttBufferFaded[BG_PLTT_ID(7) + 6], PLTT_SIZEOF(1));
     }
 }
@@ -716,7 +716,7 @@ void DrawMainBattleBackground(void)
 
 void LoadBattleTextboxAndBackground(void)
 {
-    LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
+    LZDecompressVram(gBattleInterface_Textbox_Gfx, (void*)BG_CHAR_ADDR(0));
     CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
     CopyBgTilemapBufferToVram(0);
     LoadCompressedPalette(gBattleInterface_Textbox_Pal, BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP);
@@ -873,8 +873,8 @@ static void DrawLinkBattleVsScreenOutcomeText(void)
 
 void InitLinkBattleVsScreen(u8 taskId)
 {
-    struct LinkPlayer *linkPlayer;
-    u8 *name;
+    struct LinkPlayer* linkPlayer;
+    u8* name;
     s32 i, palId;
 
     switch (gTasks[taskId].data[0])
@@ -983,8 +983,8 @@ void DrawBattleEntryBackground(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
-        LZDecompressVram(gFile_graphics_battle_transitions_vs_frame_sheet, (void *)(BG_CHAR_ADDR(1)));
-        LZDecompressVram(gVsLettersGfx, (void *)(VRAM + 0x10000));
+        LZDecompressVram(gFile_graphics_battle_transitions_vs_frame_sheet, (void*)(BG_CHAR_ADDR(1)));
+        LZDecompressVram(gVsLettersGfx, (void*)(VRAM + 0x10000));
         LoadCompressedPalette(gFile_graphics_battle_transitions_vs_frame_palette, BG_PLTT_ID(6), PLTT_SIZE_4BPP);
         SetBgAttribute(1, BG_ATTR_SCREENSIZE, 1);
         SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(1) | BGCNT_16COLOR | BGCNT_SCREENBASE(28) | BGCNT_TXT512x256);
@@ -1079,7 +1079,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
     switch (caseId)
     {
     case 0:
-        LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
+        LZDecompressVram(gBattleInterface_Textbox_Gfx, (void*)BG_CHAR_ADDR(0));
         break;
     case 1:
         CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
@@ -1090,11 +1090,11 @@ bool8 LoadChosenBattleElement(u8 caseId)
         break;
     case 3:
         battleScene = GetBattleTerrainOverride();
-        LZDecompressVram(sBattleTerrainTable[battleScene].tileset, (void *)BG_CHAR_ADDR(2));
+        LZDecompressVram(sBattleTerrainTable[battleScene].tileset, (void*)BG_CHAR_ADDR(2));
         // fallthrough
     case 4:
         battleScene = GetBattleTerrainOverride();
-        LZDecompressVram(sBattleTerrainTable[battleScene].tilemap, (void *)BG_SCREEN_ADDR(26));
+        LZDecompressVram(sBattleTerrainTable[battleScene].tilemap, (void*)BG_SCREEN_ADDR(26));
         break;
     case 5:
         battleScene = GetBattleTerrainOverride();

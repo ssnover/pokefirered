@@ -34,7 +34,7 @@ unsigned char gFontPalette[][3] =
     {0xD8, 0xD8, 0xD8}, // shadow (light grey)
 };
 
-void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, int layout)
+void ConvertFromTiles1Bpp(unsigned char* src, unsigned char* dest, int numGlyphs, int layout)
 {
     for (int glyph = 0; glyph < numGlyphs; glyph++)
     {
@@ -86,7 +86,7 @@ void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int numGlyphs
     }
 }
 
-void ConvertToTiles1Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, int layout)
+void ConvertToTiles1Bpp(unsigned char* src, unsigned char* dest, int numGlyphs, int layout)
 {
     for (int glyph = 0; glyph < numGlyphs; glyph++)
     {
@@ -162,7 +162,7 @@ void ConvertToTiles1Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, 
     }
 }
 
-void ConvertFromTiles4Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, int layout)
+void ConvertFromTiles4Bpp(unsigned char* src, unsigned char* dest, int numGlyphs, int layout)
 {
     static unsigned char table[16] =
     {
@@ -248,7 +248,7 @@ void ConvertFromTiles4Bpp(unsigned char *src, unsigned char *dest, int numGlyphs
     }
 }
 
-void ConvertToTiles4Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, int layout)
+void ConvertToTiles4Bpp(unsigned char* src, unsigned char* dest, int numGlyphs, int layout)
 {
     static unsigned char table[3] =
     {
@@ -355,7 +355,7 @@ void ConvertToTiles4Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, 
     }
 }
 
-static void SetFontPalette(struct Image *image)
+static void SetFontPalette(struct Image* image)
 {
     image->hasPalette = true;
 
@@ -394,10 +394,10 @@ int CalcFileSize(int numGlyphs, int bpp, int layout)
     }
 }
 
-void ReadFont(char *path, struct Image *image, int numGlyphs, int bpp, int layout)
+void ReadFont(char* path, struct Image* image, int numGlyphs, int bpp, int layout)
 {
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(path, &fileSize);
+    unsigned char* buffer = ReadWholeFile(path, &fileSize);
 
     int expectedFileSize = CalcFileSize(numGlyphs, bpp, layout);
 
@@ -425,7 +425,7 @@ void ReadFont(char *path, struct Image *image, int numGlyphs, int bpp, int layou
     SetFontPalette(image);
 }
 
-void WriteFont(char *path, struct Image *image, int numGlyphs, int bpp, int layout)
+void WriteFont(char* path, struct Image* image, int numGlyphs, int bpp, int layout)
 {
     if (image->width != 128)
         FATAL_ERROR("The width of the font image (%d) is not 128.\n", image->width);
@@ -439,7 +439,7 @@ void WriteFont(char *path, struct Image *image, int numGlyphs, int bpp, int layo
 
     int fileSize = CalcFileSize(numGlyphs, bpp, layout);
 
-    unsigned char *buffer = calloc(fileSize, 1);
+    unsigned char* buffer = calloc(fileSize, 1);
 
     if (buffer == NULL)
         FATAL_ERROR("Failed to allocate memory for font.\n");

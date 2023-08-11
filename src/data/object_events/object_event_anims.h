@@ -991,12 +991,12 @@ static const union AffineAnimCmd sAffineAnim_KyogreGroudon_GoSouth[] = {
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_Inanimate[] = {
+static const union AnimCmd* const sAnimTable_Inanimate[] = {
     [ANIM_STAY_STILL] = sAnim_StayStill
 };
 
 // Leftover from Ruby/Sapphire
-static const union AnimCmd *const sAnimTable_QuintyPlump[] = {
+static const union AnimCmd* const sAnimTable_QuintyPlump[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_QuintyPlumpFaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_QuintyPlumpFaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_QuintyPlumpFaceWest,
@@ -1019,7 +1019,7 @@ static const union AnimCmd *const sAnimTable_QuintyPlump[] = {
     [ANIM_STD_GO_FASTEST_EAST] = sAnim_QuintyPlumpGoFastestEast,
 };
 
-static const union AnimCmd *const sAnimTable_Standard[] = {
+static const union AnimCmd* const sAnimTable_Standard[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
@@ -1043,7 +1043,7 @@ static const union AnimCmd *const sAnimTable_Standard[] = {
     [ANIM_RAISE_HAND] = sAnim_RaiseHand,
 };
 
-static const union AnimCmd *const sAnimTable_HoOh[] = {
+static const union AnimCmd* const sAnimTable_HoOh[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
@@ -1067,7 +1067,7 @@ static const union AnimCmd *const sAnimTable_HoOh[] = {
     [ANIM_RAISE_HAND] = sAnim_RaiseHand,
 };
 
-static const union AnimCmd *const sAnimTable_Unknown[] = {
+static const union AnimCmd* const sAnimTable_Unknown[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_UnknownFaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_UnknownFaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_UnknownFaceWest,
@@ -1094,7 +1094,7 @@ static const union AnimCmd *const sAnimTable_Unknown[] = {
     [ANIM_RUN_EAST] = sAnim_RunEast,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenNormal[] = {
+static const union AnimCmd* const sAnimTable_RedGreenNormal[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
@@ -1127,7 +1127,7 @@ static const union AnimCmd *const sAnimTable_RedGreenNormal[] = {
 };
 
 // Leftover from Ruby/Sapphire
-static const union AnimCmd *const sAnimTable_AcroBike[] = {
+static const union AnimCmd* const sAnimTable_AcroBike[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
@@ -1170,7 +1170,7 @@ static const union AnimCmd *const sAnimTable_AcroBike[] = {
     [ANIM_MOVING_WHEELIE_EAST] = sAnim_MovingWheelieEast,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenSurf[] = {
+static const union AnimCmd* const sAnimTable_RedGreenSurf[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_SurfFaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_SurfFaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_SurfFaceWest,
@@ -1197,7 +1197,7 @@ static const union AnimCmd *const sAnimTable_RedGreenSurf[] = {
     [ANIM_GET_ON_OFF_POKEMON_EAST] = sAnim_GetOnOffSurfEast,
 };
 
-static const union AnimCmd *const sAnimTable_Nurse[] = {
+static const union AnimCmd* const sAnimTable_Nurse[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
     [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
@@ -1212,8 +1212,8 @@ static const union AnimCmd *const sAnimTable_Nurse[] = {
     [ANIM_STD_GO_FAST_EAST] = sAnim_GoFastEast,
     [ANIM_STD_GO_FASTER_SOUTH] = sAnim_GoFasterSouth,
     [ANIM_STD_GO_FASTER_NORTH] = sAnim_GoFasterNorth,
-    [ANIM_STD_GO_FASTER_WEST]  = sAnim_GoFasterWest,
-    [ANIM_STD_GO_FASTER_EAST]  = sAnim_GoFasterEast,
+    [ANIM_STD_GO_FASTER_WEST] = sAnim_GoFasterWest,
+    [ANIM_STD_GO_FASTER_EAST] = sAnim_GoFasterEast,
     [ANIM_STD_GO_FASTEST_SOUTH] = sAnim_GoFastestSouth,
     [ANIM_STD_GO_FASTEST_NORTH] = sAnim_GoFastestNorth,
     [ANIM_STD_GO_FASTEST_WEST] = sAnim_GoFastestWest,
@@ -1221,20 +1221,20 @@ static const union AnimCmd *const sAnimTable_Nurse[] = {
     [ANIM_NURSE_BOW] = sAnim_NurseBow,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenFieldMove[] = {
+static const union AnimCmd* const sAnimTable_RedGreenFieldMove[] = {
     [ANIM_FIELD_MOVE] = sAnim_FieldMove,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenVSSeeker[] = {
+static const union AnimCmd* const sAnimTable_RedGreenVSSeeker[] = {
     [ANIM_VS_SEEKER] = sAnim_VSSeeker,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenVSSeekerBike[] = {
+static const union AnimCmd* const sAnimTable_RedGreenVSSeekerBike[] = {
     [ANIM_VS_SEEKER] = sAnim_VSSeekerBike,
 };
 
 // Unused
-static const union AnimCmd *const sAnimTable_BerryTree[] = {
+static const union AnimCmd* const sAnimTable_BerryTree[] = {
     sAnim_BerryTreeStage0,
     sAnim_BerryTreeStage1,
     sAnim_BerryTreeStage2,
@@ -1242,17 +1242,17 @@ static const union AnimCmd *const sAnimTable_BerryTree[] = {
     sAnim_BerryTreeStage4,
 };
 
-static const union AnimCmd *const sAnimTable_RockSmashRock[] = {
+static const union AnimCmd* const sAnimTable_RockSmashRock[] = {
     [ANIM_STAY_STILL] = sAnim_StayStill,
     [ANIM_REMOVE_OBSTACLE] = sAnim_RockBreak,
 };
 
-static const union AnimCmd *const sAnimTable_CutTree[] = {
+static const union AnimCmd* const sAnimTable_CutTree[] = {
     [ANIM_STAY_STILL] = sAnim_StayStill,
     [ANIM_REMOVE_OBSTACLE] = sAnim_TreeCut,
 };
 
-static const union AnimCmd *const sAnimTable_RedGreenFish[] = {
+static const union AnimCmd* const sAnimTable_RedGreenFish[] = {
     [ANIM_TAKE_OUT_ROD_SOUTH] = sAnim_TakeOutRodSouth,
     [ANIM_TAKE_OUT_ROD_NORTH] = sAnim_TakeOutRodNorth,
     [ANIM_TAKE_OUT_ROD_WEST] = sAnim_TakeOutRodWest,

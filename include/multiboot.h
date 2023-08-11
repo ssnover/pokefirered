@@ -14,10 +14,10 @@
 #define MULTIBOOT_CLIENT_CRCREADY        0x75
 #define MULTIBOOT_MASTER_VERIFY_CRC      0x66
 
-void MultiBootInit(struct MultiBootParam *mp);
-int MultiBootMain(struct MultiBootParam *mp);
-void MultiBootStartProbe(struct MultiBootParam *mp);
-void MultiBootStartMaster(struct MultiBootParam *mp, const u8 *srcp, int length, u8 palette_color, s8 palette_speed);
-bool32 MultiBootCheckComplete(struct MultiBootParam *mp);
+void MultiBootInit(struct MultiBootParam* mp);
+int MultiBootMain(struct MultiBootParam* mp);
+void MultiBootStartProbe(struct MultiBootParam* mp);
+void MultiBootStartMaster(struct MultiBootParam* mp, const u8* srcp, int length, u8 palette_color, s8 palette_speed);
+bool32 MultiBootCheckComplete(struct MultiBootParam* mp);
 
 #endif // GUARD_MULTIBOOT_H

@@ -16,45 +16,45 @@
 #include "constants/help_system.h"
 
 static EWRAM_DATA u8 sPreviousBoxOption = 0;
-static EWRAM_DATA struct ChooseBoxMenu *sChooseBoxMenu = NULL;
+static EWRAM_DATA struct ChooseBoxMenu* sChooseBoxMenu = NULL;
 
-static void CreatePCMainMenu(u8 whichMenu, s16 *windowIdPtr);
+static void CreatePCMainMenu(u8 whichMenu, s16* windowIdPtr);
 static void ChooseBoxMenu_CreateSprites(u8 curBox);
 static void ChooseBoxMenu_DestroySprites(void);
 static void ChooseBoxMenu_MoveRight(void);
 static void ChooseBoxMenu_MoveLeft(void);
 static void ChooseBoxMenu_PrintBoxNameAndCount(void);
-static void ChooseBoxMenu_PrintTextToSprite(const u8 *a0, u16 x, u16 y);
-static void SpriteCB_ChooseBoxArrow(struct Sprite *sprite);
+static void ChooseBoxMenu_PrintTextToSprite(const u8* a0, u16 x, u16 y);
+static void SpriteCB_ChooseBoxArrow(struct Sprite* sprite);
 
 static const u16 sChooseBoxMenu_Pal[];
 static const u8 sChooseBoxMenuCenter_Gfx[];
 static const u8 sChooseBoxMenuCorners_Gfx[];
 
 struct {
-    const u8 *text;
-    const u8 *desc;
+    const u8* text;
+    const u8* desc;
 } static const sMainMenuTexts[OPTIONS_COUNT] = {
-    [OPTION_WITHDRAW]   = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
-    [OPTION_DEPOSIT]    = {gText_DepositPokemon,  gText_DepositMonDescription},
-    [OPTION_MOVE_MONS]  = {gText_MovePokemon,     gText_MoveMonDescription},
+    [OPTION_WITHDRAW] = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
+    [OPTION_DEPOSIT] = {gText_DepositPokemon,  gText_DepositMonDescription},
+    [OPTION_MOVE_MONS] = {gText_MovePokemon,     gText_MoveMonDescription},
     [OPTION_MOVE_ITEMS] = {gText_MoveItems,       gText_MoveItemsDescription},
-    [OPTION_EXIT]       = {gText_SeeYa,           gText_SeeYaDescription}
+    [OPTION_EXIT] = {gText_SeeYa,           gText_SeeYaDescription}
 };
 
-void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, u8 *unused, s32 bytesToBuffer)
+void DrawTextWindowAndBufferTiles(const u8* string, void* dst, u8 zero1, u8 zero2, u8* unused, s32 bytesToBuffer)
 {
     s32 i, tileBytesToBuffer, remainingBytes;
     u16 windowId;
     u8 txtColor[3];
-    u8 *tileData1, *tileData2;
-    struct WindowTemplate winTemplate = {0};
+    u8* tileData1, * tileData2;
+    struct WindowTemplate winTemplate = { 0 };
 
     winTemplate.width = 24;
     winTemplate.height = 2;
     windowId = AddWindow(&winTemplate);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(zero2));
-    tileData1 = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+    tileData1 = (u8*)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
     tileData2 = (winTemplate.width * TILE_SIZE_4BPP) + tileData1;
 
     if (!zero1)
@@ -88,20 +88,20 @@ void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero
     RemoveWindow(windowId);
 }
 
-static void PrintStringToBufferCopyNow(const u8 *string, void *dst, u16 offset, u8 bgColor, u8 fgColor, u8 shadowColor, u8 *unused)
+static void PrintStringToBufferCopyNow(const u8* string, void* dst, u16 offset, u8 bgColor, u8 fgColor, u8 shadowColor, u8* unused)
 {
     u32 var;
     u8 windowId;
     u8 txtColor[3];
-    u8 *tileData1, *tileData2;
-    struct WindowTemplate winTemplate = {0};
+    u8* tileData1, * tileData2;
+    struct WindowTemplate winTemplate = { 0 };
 
     winTemplate.width = StringLength_Multibyte(string);
     winTemplate.height = 2;
     var = winTemplate.width * 32;
     windowId = AddWindow(&winTemplate);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(bgColor));
-    tileData1 = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+    tileData1 = (u8*)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
     tileData2 = (winTemplate.width * 32) + tileData1;
     txtColor[0] = bgColor;
     txtColor[1] = fgColor;
@@ -145,7 +145,7 @@ u8 CountPartyNonEggMons(void)
     for (i = 0, count = 0; i < PARTY_SIZE; i++)
     {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+            && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
             count++;
     }
 
@@ -159,9 +159,9 @@ u8 CountPartyAliveNonEggMonsExcept(u8 slotToIgnore)
     for (i = 0, count = 0; i < PARTY_SIZE; i++)
     {
         if (i != slotToIgnore
-                && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)
-                && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
+            && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
+            && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)
+            && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
             count++;
     }
 
@@ -186,9 +186,9 @@ u8 CountPartyMons(void)
     return count;
 }
 
-static u8 *StringCopyAndFillWithSpaces(u8 *dst, const u8 *src, u16 n)
+static u8* StringCopyAndFillWithSpaces(u8* dst, const u8* src, u16 n)
 {
-    u8 *str;
+    u8* str;
 
     for (str = StringCopy(dst, src); str < dst + n; str++)
         *str = CHAR_SPACE;
@@ -198,7 +198,7 @@ static u8 *StringCopyAndFillWithSpaces(u8 *dst, const u8 *src, u16 n)
 }
 
 // Unused
-static void UnusedWriteRectCpu(u16 *dest, u16 dest_left, u16 dest_top, const u16 *src, u16 src_left, u16 src_top, u16 dest_width, u16 dest_height, u16 src_width)
+static void UnusedWriteRectCpu(u16* dest, u16 dest_left, u16 dest_top, const u16* src, u16 src_left, u16 src_top, u16 dest_width, u16 dest_height, u16 src_width)
 {
     u16 i;
 
@@ -214,7 +214,7 @@ static void UnusedWriteRectCpu(u16 *dest, u16 dest_left, u16 dest_top, const u16
 }
 
 // Unused
-static void UnusedWriteRectDma(u16 *dest, u16 dest_left, u16 dest_top, u16 width, u16 height)
+static void UnusedWriteRectDma(u16* dest, u16 dest_left, u16 dest_top, u16 width, u16 height)
 {
     u16 i;
 
@@ -240,7 +240,7 @@ enum {
 
 static void Task_PCMainMenu(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {
@@ -262,7 +262,7 @@ static void Task_PCMainMenu(u8 taskId)
         break;
     case STATE_HANDLE_INPUT:
         task->tInput = Menu_ProcessInput();
-        switch(task->tInput)
+        switch (task->tInput)
         {
         case MENU_NOTHING_CHOSEN:
             task->tNextOption = task->tSelectedOption;
@@ -383,12 +383,12 @@ static const struct WindowTemplate sWindowTemplate_MainMenu = {
     .baseBlock = 0x001
 };
 
-static void CreatePCMainMenu(u8 whichMenu, s16 *windowIdPtr)
+static void CreatePCMainMenu(u8 whichMenu, s16* windowIdPtr)
 {
     s16 windowId = AddWindow(&sWindowTemplate_MainMenu);
 
     DrawStdWindowFrame(windowId, FALSE);
-    PrintTextArray(windowId, FONT_NORMAL, GetMenuCursorDimensionByFont(FONT_NORMAL, 0), 2, 16, ARRAY_COUNT(sMainMenuTexts), (void *)sMainMenuTexts);
+    PrintTextArray(windowId, FONT_NORMAL, GetMenuCursorDimensionByFont(FONT_NORMAL, 0), 2, 16, ARRAY_COUNT(sMainMenuTexts), (void*)sMainMenuTexts);
     Menu_InitCursor(windowId, FONT_NORMAL, 0, 2, 16, ARRAY_COUNT(sMainMenuTexts), whichMenu);
     *windowIdPtr = windowId;
 }
@@ -412,7 +412,7 @@ void ResetPokemonStorageSystem(void)
     }
     for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
     {
-        u8 *dest = StringCopy(GetBoxNamePtr(boxId), gText_Box);
+        u8* dest = StringCopy(GetBoxNamePtr(boxId), gText_Box);
         ConvertIntToDecimalStringN(dest, boxId + 1, STR_CONV_MODE_LEFT_ALIGN, 2);
     }
 
@@ -420,7 +420,7 @@ void ResetPokemonStorageSystem(void)
         SetBoxWallpaper(boxId, boxId % (MAX_DEFAULT_WALLPAPER + 1));
 }
 
-void LoadChooseBoxMenuGfx(struct ChooseBoxMenu *menu, u16 tileTag, u16 palTag, u8 subpriority, bool32 loadPal)
+void LoadChooseBoxMenuGfx(struct ChooseBoxMenu* menu, u16 tileTag, u16 palTag, u8 subpriority, bool32 loadPal)
 {
     struct SpritePalette palette = {
         sChooseBoxMenu_Pal, palTag
@@ -486,17 +486,17 @@ u8 HandleBoxChooseSelectionInput(void)
 }
 
 static const union AnimCmd sAnim_ChooseBoxMenu_TopLeft[] = {
-    ANIMCMD_FRAME( 0, 5),
+    ANIMCMD_FRAME(0, 5),
     ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_ChooseBoxMenu_BottomLeft[] = {
-    ANIMCMD_FRAME( 4, 5),
+    ANIMCMD_FRAME(4, 5),
     ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_ChooseBoxMenu_TopRight[] = {
-    ANIMCMD_FRAME( 6, 5),
+    ANIMCMD_FRAME(6, 5),
     ANIMCMD_END
 };
 
@@ -505,7 +505,7 @@ static const union AnimCmd sAnim_ChooseBoxMenu_BottomRight[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_ChooseBoxMenu[] = {
+static const union AnimCmd* const sAnims_ChooseBoxMenu[] = {
     sAnim_ChooseBoxMenu_TopLeft,
     sAnim_ChooseBoxMenu_BottomLeft,
     sAnim_ChooseBoxMenu_TopRight,
@@ -518,7 +518,7 @@ static const union AffineAnimCmd sAffineAnim_ChooseBoxMenu[] = {
 };
 
 // Unused
-static const union AffineAnimCmd *const sAffineAnims_ChooseBoxMenu[] = {
+static const union AffineAnimCmd* const sAffineAnims_ChooseBoxMenu[] = {
     sAffineAnim_ChooseBoxMenu
 };
 
@@ -534,50 +534,50 @@ static void ChooseBoxMenu_CreateSprites(u8 curBox)
         0, 0, &oamData, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
     };
     {
-    const u8 sText_OutOf30[] = _("/30");
+        const u8 sText_OutOf30[] = _("/30");
 
-    sChooseBoxMenu->curBox = curBox;
-    template.tileTag = sChooseBoxMenu->tileTag;
-    template.paletteTag = sChooseBoxMenu->paletteTag;
+        sChooseBoxMenu->curBox = curBox;
+        template.tileTag = sChooseBoxMenu->tileTag;
+        template.paletteTag = sChooseBoxMenu->paletteTag;
 
-    spriteId = CreateSprite(&template, 160, 96, 0);
-    sChooseBoxMenu->menuSprite = gSprites + spriteId;
+        spriteId = CreateSprite(&template, 160, 96, 0);
+        sChooseBoxMenu->menuSprite = gSprites + spriteId;
 
-    oamData.shape = SPRITE_SHAPE(8x32);
-    oamData.size = SPRITE_SIZE(8x32);
-    template.tileTag = sChooseBoxMenu->tileTag + 1;
-    template.anims = sAnims_ChooseBoxMenu;
-    for (i = 0; i < ARRAY_COUNT(sChooseBoxMenu->menuCornerSprites); i++)
-    {
-        // corner sprites are created in order of top left, bottom left, top right, bottom right
-        u16 animNum;
-        spriteId = CreateSprite(&template, 124, 80, sChooseBoxMenu->subpriority); // place at top left
-        sChooseBoxMenu->menuCornerSprites[i] = &gSprites[spriteId];
-        animNum = 0;
-        if (i & 2)
+        oamData.shape = SPRITE_SHAPE(8x32);
+        oamData.size = SPRITE_SIZE(8x32);
+        template.tileTag = sChooseBoxMenu->tileTag + 1;
+        template.anims = sAnims_ChooseBoxMenu;
+        for (i = 0; i < ARRAY_COUNT(sChooseBoxMenu->menuCornerSprites); i++)
         {
-            sChooseBoxMenu->menuCornerSprites[i]->x = 196; // move to bottom
-            animNum = 2;
+            // corner sprites are created in order of top left, bottom left, top right, bottom right
+            u16 animNum;
+            spriteId = CreateSprite(&template, 124, 80, sChooseBoxMenu->subpriority); // place at top left
+            sChooseBoxMenu->menuCornerSprites[i] = &gSprites[spriteId];
+            animNum = 0;
+            if (i & 2)
+            {
+                sChooseBoxMenu->menuCornerSprites[i]->x = 196; // move to bottom
+                animNum = 2;
+            }
+            if (i & 1)
+            {
+                sChooseBoxMenu->menuCornerSprites[i]->y = 112; // move to right
+                sChooseBoxMenu->menuCornerSprites[i]->oam.size = SPRITE_SIZE(8x16);
+                animNum++;
+            }
+            StartSpriteAnim(sChooseBoxMenu->menuCornerSprites[i], animNum);
         }
-        if (i & 1)
+        for (i = 0; i < ARRAY_COUNT(sChooseBoxMenu->arrowSprites); i++)
         {
-            sChooseBoxMenu->menuCornerSprites[i]->y = 112; // move to right
-            sChooseBoxMenu->menuCornerSprites[i]->oam.size = SPRITE_SIZE(8x16);
-            animNum++;
+            sChooseBoxMenu->arrowSprites[i] = CreateChooseBoxArrows(72 * i + 124, 88, i, 0, sChooseBoxMenu->subpriority);
+            if (sChooseBoxMenu->arrowSprites[i])
+            {
+                sChooseBoxMenu->arrowSprites[i]->data[0] = (i == 0 ? -1 : 1);
+                sChooseBoxMenu->arrowSprites[i]->callback = SpriteCB_ChooseBoxArrow;
+            }
         }
-        StartSpriteAnim(sChooseBoxMenu->menuCornerSprites[i], animNum);
-    }
-    for (i = 0; i < ARRAY_COUNT(sChooseBoxMenu->arrowSprites); i++)
-    {
-        sChooseBoxMenu->arrowSprites[i] = CreateChooseBoxArrows(72 * i + 124, 88, i, 0, sChooseBoxMenu->subpriority);
-        if (sChooseBoxMenu->arrowSprites[i])
-        {
-            sChooseBoxMenu->arrowSprites[i]->data[0] = (i == 0 ? -1 : 1);
-            sChooseBoxMenu->arrowSprites[i]->callback = SpriteCB_ChooseBoxArrow;
-        }
-    }
-    ChooseBoxMenu_PrintBoxNameAndCount();
-    ChooseBoxMenu_PrintTextToSprite(sText_OutOf30, 5, 3);
+        ChooseBoxMenu_PrintBoxNameAndCount();
+        ChooseBoxMenu_PrintTextToSprite(sText_OutOf30, 5, 3);
     }
 }
 
@@ -620,7 +620,7 @@ static void ChooseBoxMenu_MoveLeft(void)
 static void ChooseBoxMenu_PrintBoxNameAndCount(void)
 {
     u8 numMonInBox = CountMonsInBox(sChooseBoxMenu->curBox);
-    u8 *boxName = StringCopy(sChooseBoxMenu->strbuf, GetBoxNamePtr(sChooseBoxMenu->curBox));
+    u8* boxName = StringCopy(sChooseBoxMenu->strbuf, GetBoxNamePtr(sChooseBoxMenu->curBox));
 
     while (boxName < sChooseBoxMenu->strbuf + BOX_NAME_LENGTH)
         *boxName++ = CHAR_SPACE;
@@ -633,13 +633,13 @@ static void ChooseBoxMenu_PrintBoxNameAndCount(void)
     ChooseBoxMenu_PrintTextToSprite(sChooseBoxMenu->strbuf, 3, 3);
 }
 
-static void ChooseBoxMenu_PrintTextToSprite(const u8 *str, u16 x, u16 y)
+static void ChooseBoxMenu_PrintTextToSprite(const u8* str, u16 x, u16 y)
 {
-    void *dst = (void *)(OBJ_VRAM0 + GetSpriteTileStartByTag(sChooseBoxMenu->tileTag) * 32 + 256 * y + 32 * x);
+    void* dst = (void*)(OBJ_VRAM0 + GetSpriteTileStartByTag(sChooseBoxMenu->tileTag) * 32 + 256 * y + 32 * x);
     PrintStringToBufferCopyNow(str, dst, 0x100, TEXT_COLOR_RED, TEXT_DYNAMIC_COLOR_6, TEXT_DYNAMIC_COLOR_5, sChooseBoxMenu->buffer);
 }
 
-static void SpriteCB_ChooseBoxArrow(struct Sprite *sprite)
+static void SpriteCB_ChooseBoxArrow(struct Sprite* sprite)
 {
     if (++sprite->data[1] > 3)
     {

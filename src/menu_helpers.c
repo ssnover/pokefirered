@@ -12,13 +12,13 @@
 #include "constants/items.h"
 #include "constants/maps.h"
 
-static EWRAM_DATA const struct YesNoFuncTable *sYesNo = NULL;
+static EWRAM_DATA const struct YesNoFuncTable* sYesNo = NULL;
 static EWRAM_DATA TaskFunc sMessageNextTask = NULL;
-static EWRAM_DATA u8 sMessageWindowId = {0};
+static EWRAM_DATA u8 sMessageWindowId = { 0 };
 
 static void Task_ContinueTaskAfterMessagePrints(u8 taskId);
 
-void DisplayMessageAndContinueTask(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed, const u8 *string, void *taskFunc)
+void DisplayMessageAndContinueTask(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed, const u8* string, void* taskFunc)
 {
     sMessageWindowId = windowId;
     DrawDialogFrameWithCustomTileAndPalette(windowId, TRUE, tileNum, paletteNum);
@@ -60,7 +60,7 @@ static void Task_CallYesOrNoCallback(u8 taskId)
     }
 }
 
-void CreateYesNoMenuWithCallbacks(u8 taskId, const struct WindowTemplate *template, u8 fontId, u8 left, u8 top, u16 tileStart, u8 palette, const struct YesNoFuncTable *yesNo)
+void CreateYesNoMenuWithCallbacks(u8 taskId, const struct WindowTemplate* template, u8 fontId, u8 left, u8 top, u16 tileStart, u8 palette, const struct YesNoFuncTable* yesNo)
 {
     CreateYesNoMenu(template, fontId, left, top, tileStart, palette, 0);
     sYesNo = yesNo;
@@ -95,9 +95,9 @@ bool8 IsHoldingItemAllowed(u16 itemId)
 {
     // Enigma Berry can't be held in link areas
     if (itemId == ITEM_ENIGMA_BERRY
-     && ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRADE_CENTER)
-       && gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRADE_CENTER))
-       || InUnionRoom() == TRUE))
+        && ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRADE_CENTER)
+            && gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRADE_CENTER))
+            || InUnionRoom() == TRUE))
         return FALSE;
     else
         return TRUE;
@@ -144,9 +144,9 @@ void SetVBlankHBlankCallbacksToNull(void)
 void ResetVramOamAndBgCntRegs(void)
 {
     ResetAllBgsCoordinatesAndBgCntRegs();
-    CpuFill16(0, (void *) VRAM, VRAM_SIZE);
-    CpuFill32(0, (void *) OAM, OAM_SIZE);
-    CpuFill16(0, (void *) PLTT, PLTT_SIZE);
+    CpuFill16(0, (void*)VRAM, VRAM_SIZE);
+    CpuFill32(0, (void*)OAM, OAM_SIZE);
+    CpuFill16(0, (void*)PLTT, PLTT_SIZE);
 }
 
 void ResetAllBgsCoordinatesAndBgCntRegs(void)
@@ -166,7 +166,7 @@ void ResetAllBgsCoordinatesAndBgCntRegs(void)
     ChangeBgY(3, 0, 0);
 }
 
-bool8 AdjustQuantityAccordingToDPadInput(s16 *quantity_p, u16 qmax)
+bool8 AdjustQuantityAccordingToDPadInput(s16* quantity_p, u16 qmax)
 {
     s16 valBefore = (*quantity_p);
 

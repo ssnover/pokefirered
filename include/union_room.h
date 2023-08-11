@@ -30,8 +30,8 @@ struct RfuPlayer
 {
     struct RfuPlayerData rfu;
     u16 timeoutCounter;
-    u8 groupScheduledAnim:2;
-    bool8 useRedText:1; // Never set
+    u8 groupScheduledAnim : 2;
+    bool8 useRedText : 1; // Never set
     u8 newPlayerCountdown;
     u8 unused;
 };
@@ -44,7 +44,7 @@ struct RfuPlayerList
 struct RfuIncomingPlayer
 {
     struct RfuPlayerData rfu;
-    u8 active:1;
+    u8 active : 1;
 };
 
 struct RfuIncomingPlayerList
@@ -54,9 +54,9 @@ struct RfuIncomingPlayerList
 
 struct WirelessLink_Leader
 {
-    struct RfuPlayerList * playerList;
-    struct RfuIncomingPlayerList * incomingPlayerList;
-    struct RfuPlayerList * playerListBackup;
+    struct RfuPlayerList* playerList;
+    struct RfuIncomingPlayerList* incomingPlayerList;
+    struct RfuPlayerList* playerListBackup;
     u8 state;
     u8 textState;
     u8 delayTimerAfterOk;
@@ -75,8 +75,8 @@ struct WirelessLink_Leader
 
 struct WirelessLink_Group
 {
-    struct RfuPlayerList * playerList;
-    struct RfuIncomingPlayerList * incomingPlayerList;
+    struct RfuPlayerList* playerList;
+    struct RfuIncomingPlayerList* incomingPlayerList;
     u8 state;
     u8 textState;
     u8 delayTimerAfterOk; // unused
@@ -103,10 +103,10 @@ struct UnionRoomObject
 
 struct WirelessLink_URoom
 {
-    struct RfuPlayerList * playerList;
-    struct RfuIncomingPlayerList * incomingChildList;
-    struct RfuPlayerList * spawnPlayer;
-    struct RfuIncomingPlayerList * incomingParentList;
+    struct RfuPlayerList* playerList;
+    struct RfuIncomingPlayerList* incomingChildList;
+    struct RfuPlayerList* spawnPlayer;
+    struct RfuIncomingPlayerList* incomingParentList;
     u16 unknown; // Never read
     u16 unreadPlayerId;
     u8 state;
@@ -122,7 +122,7 @@ struct WirelessLink_URoom
     u8 spriteIds[NUM_UNION_ROOM_SPRITES];
     u8 unused2;
     u8 tradeBoardListMenuId;
-// For communication with potential link partners
+    // For communication with potential link partners
     u16 playerSendBuffer[6];
     u8 activityRequestStrbufs[4][11];
     u16 partnerYesNoResponse;

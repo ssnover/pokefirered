@@ -62,15 +62,15 @@ struct TrainerEncounterMusicPairs
     u8 musicId;
 };
 
-static EWRAM_DATA struct TrainerTowerState * sTrainerTowerState = NULL;
-static EWRAM_DATA struct TrainerTowerOpponent * sTrainerTowerOpponent = NULL;
+static EWRAM_DATA struct TrainerTowerState* sTrainerTowerState = NULL;
+static EWRAM_DATA struct TrainerTowerOpponent* sTrainerTowerOpponent = NULL;
 static EWRAM_DATA u8 sUnused = 0;
 
 static void SetUpTrainerTowerDataStruct(void);
 static void FreeTrainerTowerDataStruct(void);
 static void InitTrainerTowerFloor(void);
 static void SetTrainerTowerNPCGraphics(void);
-static void TT_ConvertEasyChatMessageToString(u16 *ecWords, u8 *dest);
+static void TT_ConvertEasyChatMessageToString(u16* ecWords, u8* dest);
 static void BufferTowerOpponentSpeech(void);
 static void TrainerTowerGetOpponentTextColor(u8 battleType, u8 facilityClass);
 static void DoTrainerTowerBattle(void);
@@ -95,12 +95,12 @@ static void HasSpokenToOwner(void);
 static void BuildEnemyParty(void);
 static s32 GetPartyMaxLevel(void);
 static void ValidateOrResetCurTrainerTowerRecord(void);
-static u32 GetTrainerTowerRecordTime(u32 *);
-static void SetTrainerTowerRecordTime(u32 *, u32);
+static u32 GetTrainerTowerRecordTime(u32*);
+static void SetTrainerTowerRecordTime(u32*, u32);
 
 extern const u8 gText_TimeBoard[];
 extern const u8 gText_XMinYZSec[];
-extern const u8 *const gTrainerTowerChallengeTypeTexts[];
+extern const u8* const gTrainerTowerChallengeTypeTexts[];
 
 static const struct SinglesTrainerInfo sSingleBattleTrainerInfo[] = {
     {OBJ_EVENT_GFX_WOMAN_2,        FACILITY_CLASS_RS_AROMA_LADY,     FEMALE},
@@ -323,30 +323,30 @@ static const struct WindowTemplate sTimeBoardWindowTemplate[] = {
 
 static const u32 sUnusedValue = 112;
 
-static const u8 sTextColors[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+static const u8 sTextColors[3] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY };
 
-static void (*const sTrainerTowerFunctions[])(void) = {
-    [TRAINER_TOWER_FUNC_INIT_FLOOR]             = InitTrainerTowerFloor,
-    [TRAINER_TOWER_FUNC_GET_SPEECH]             = BufferTowerOpponentSpeech,
-    [TRAINER_TOWER_FUNC_DO_BATTLE]              = DoTrainerTowerBattle,
-    [TRAINER_TOWER_FUNC_GET_CHALLENGE_TYPE]     = TrainerTowerGetChallengeType,
-    [TRAINER_TOWER_FUNC_CLEARED_FLOOR]          = TrainerTowerAddFloorCleared,
-    [TRAINER_TOWER_FUNC_GET_FLOOR_CLEARED]      = GetFloorAlreadyCleared,
-    [TRAINER_TOWER_FUNC_START_CHALLENGE]        = StartTrainerTowerChallenge,
-    [TRAINER_TOWER_FUNC_GET_OWNER_STATE]        = GetOwnerState,
-    [TRAINER_TOWER_FUNC_GIVE_PRIZE]             = GiveChallengePrize,
-    [TRAINER_TOWER_FUNC_CHECK_FINAL_TIME]       = CheckFinalTime,
-    [TRAINER_TOWER_FUNC_RESUME_TIMER]           = TrainerTowerResumeTimer,
-    [TRAINER_TOWER_FUNC_SET_LOST]               = TrainerTowerSetPlayerLost,
-    [TRAINER_TOWER_FUNC_GET_CHALLENGE_STATUS]   = GetTrainerTowerChallengeStatus,
-    [TRAINER_TOWER_FUNC_GET_TIME]               = GetCurrentTime,
-    [TRAINER_TOWER_FUNC_SHOW_RESULTS]           = ShowResultsBoard,
-    [TRAINER_TOWER_FUNC_CLOSE_RESULTS]          = CloseResultsBoard,
-    [TRAINER_TOWER_FUNC_CHECK_DOUBLES]          = TrainerTowerGetDoublesEligiblity,
-    [TRAINER_TOWER_FUNC_GET_NUM_FLOORS]         = TrainerTowerGetNumFloors,
+static void (* const sTrainerTowerFunctions[])(void) = {
+    [TRAINER_TOWER_FUNC_INIT_FLOOR] = InitTrainerTowerFloor,
+    [TRAINER_TOWER_FUNC_GET_SPEECH] = BufferTowerOpponentSpeech,
+    [TRAINER_TOWER_FUNC_DO_BATTLE] = DoTrainerTowerBattle,
+    [TRAINER_TOWER_FUNC_GET_CHALLENGE_TYPE] = TrainerTowerGetChallengeType,
+    [TRAINER_TOWER_FUNC_CLEARED_FLOOR] = TrainerTowerAddFloorCleared,
+    [TRAINER_TOWER_FUNC_GET_FLOOR_CLEARED] = GetFloorAlreadyCleared,
+    [TRAINER_TOWER_FUNC_START_CHALLENGE] = StartTrainerTowerChallenge,
+    [TRAINER_TOWER_FUNC_GET_OWNER_STATE] = GetOwnerState,
+    [TRAINER_TOWER_FUNC_GIVE_PRIZE] = GiveChallengePrize,
+    [TRAINER_TOWER_FUNC_CHECK_FINAL_TIME] = CheckFinalTime,
+    [TRAINER_TOWER_FUNC_RESUME_TIMER] = TrainerTowerResumeTimer,
+    [TRAINER_TOWER_FUNC_SET_LOST] = TrainerTowerSetPlayerLost,
+    [TRAINER_TOWER_FUNC_GET_CHALLENGE_STATUS] = GetTrainerTowerChallengeStatus,
+    [TRAINER_TOWER_FUNC_GET_TIME] = GetCurrentTime,
+    [TRAINER_TOWER_FUNC_SHOW_RESULTS] = ShowResultsBoard,
+    [TRAINER_TOWER_FUNC_CLOSE_RESULTS] = CloseResultsBoard,
+    [TRAINER_TOWER_FUNC_CHECK_DOUBLES] = TrainerTowerGetDoublesEligiblity,
+    [TRAINER_TOWER_FUNC_GET_NUM_FLOORS] = TrainerTowerGetNumFloors,
     [TRAINER_TOWER_FUNC_SHOULD_WARP_TO_COUNTER] = ShouldWarpToCounter,
-    [TRAINER_TOWER_FUNC_ENCOUNTER_MUSIC]        = PlayTrainerTowerEncounterMusic,
-    [TRAINER_TOWER_FUNC_GET_BEAT_CHALLENGE]     = HasSpokenToOwner
+    [TRAINER_TOWER_FUNC_ENCOUNTER_MUSIC] = PlayTrainerTowerEncounterMusic,
+    [TRAINER_TOWER_FUNC_GET_BEAT_CHALLENGE] = HasSpokenToOwner
 };
 
 // - 1 excludes Mixed challenge, which just uses one of the 3 other types
@@ -380,20 +380,20 @@ static const u16 sPrizeList[] = {
 };
 
 static const u16 sTrainerTowerEncounterMusic[] = {
-    [TRAINER_ENCOUNTER_MUSIC_MALE]        = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_FEMALE]      = MUS_ENCOUNTER_GIRL,
-    [TRAINER_ENCOUNTER_MUSIC_GIRL]        = MUS_ENCOUNTER_GIRL,
-    [TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS]  = MUS_ENCOUNTER_ROCKET,
-    [TRAINER_ENCOUNTER_MUSIC_INTENSE]     = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_COOL]        = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_AQUA]        = MUS_ENCOUNTER_ROCKET,
-    [TRAINER_ENCOUNTER_MUSIC_MAGMA]       = MUS_ENCOUNTER_ROCKET,
-    [TRAINER_ENCOUNTER_MUSIC_SWIMMER]     = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_TWINS]       = MUS_ENCOUNTER_GIRL,
-    [TRAINER_ENCOUNTER_MUSIC_ELITE_FOUR]  = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_HIKER]       = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_MALE] = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_FEMALE] = MUS_ENCOUNTER_GIRL,
+    [TRAINER_ENCOUNTER_MUSIC_GIRL] = MUS_ENCOUNTER_GIRL,
+    [TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS] = MUS_ENCOUNTER_ROCKET,
+    [TRAINER_ENCOUNTER_MUSIC_INTENSE] = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_COOL] = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_AQUA] = MUS_ENCOUNTER_ROCKET,
+    [TRAINER_ENCOUNTER_MUSIC_MAGMA] = MUS_ENCOUNTER_ROCKET,
+    [TRAINER_ENCOUNTER_MUSIC_SWIMMER] = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_TWINS] = MUS_ENCOUNTER_GIRL,
+    [TRAINER_ENCOUNTER_MUSIC_ELITE_FOUR] = MUS_ENCOUNTER_BOY,
+    [TRAINER_ENCOUNTER_MUSIC_HIKER] = MUS_ENCOUNTER_BOY,
     [TRAINER_ENCOUNTER_MUSIC_INTERVIEWER] = MUS_ENCOUNTER_BOY,
-    [TRAINER_ENCOUNTER_MUSIC_RICH]        = MUS_ENCOUNTER_BOY
+    [TRAINER_ENCOUNTER_MUSIC_RICH] = MUS_ENCOUNTER_BOY
 };
 
 // The trainer only uses two Pokemon from the encoded pool, based on the current floor
@@ -433,7 +433,7 @@ static const u8 sKnockoutChallengeMonIdxs[MAX_TRAINER_TOWER_FLOORS][3] = {
 };
 
 extern const struct EReaderTrainerTowerSetSubstruct gTrainerTowerLocalHeader;
-extern const struct TrainerTowerFloor *const gTrainerTowerFloors[][MAX_TRAINER_TOWER_FLOORS];
+extern const struct TrainerTowerFloor* const gTrainerTowerFloors[][MAX_TRAINER_TOWER_FLOORS];
 
 void CallTrainerTowerFunc(void)
 {
@@ -447,7 +447,7 @@ u8 GetTrainerTowerOpponentClass(void)
     return gFacilityClassToTrainerClass[sTrainerTowerOpponent->facilityClass];
 }
 
-void GetTrainerTowerOpponentName(u8 *dest)
+void GetTrainerTowerOpponentName(u8* dest)
 {
     StringCopyN(dest, sTrainerTowerOpponent->name, 11);
 }
@@ -491,7 +491,7 @@ void FreeTrainerTowerBattleStruct(void)
     FREE_AND_SET_NULL(sTrainerTowerOpponent);
 }
 
-void GetTrainerTowerOpponentWinText(u8 *dest, u8 opponentIdx)
+void GetTrainerTowerOpponentWinText(u8* dest, u8 opponentIdx)
 {
     VarSet(VAR_TEMP_3, opponentIdx);
     TrainerTowerGetOpponentTextColor(sTrainerTowerOpponent->battleType, sTrainerTowerOpponent->facilityClass);
@@ -501,7 +501,7 @@ void GetTrainerTowerOpponentWinText(u8 *dest, u8 opponentIdx)
         TT_ConvertEasyChatMessageToString(sTrainerTowerOpponent->speechWin2, dest);
 }
 
-void GetTrainerTowerOpponentLoseText(u8 *dest, u8 opponentIdx)
+void GetTrainerTowerOpponentLoseText(u8* dest, u8 opponentIdx)
 {
     VarSet(VAR_TEMP_3, opponentIdx);
     TrainerTowerGetOpponentTextColor(sTrainerTowerOpponent->battleType, sTrainerTowerOpponent->facilityClass);
@@ -515,7 +515,7 @@ static void SetUpTrainerTowerDataStruct(void)
 {
     u32 challengeType = gSaveBlock1Ptr->towerChallengeId;
     s32 i;
-    const struct TrainerTowerFloor *const * floors_p;
+    const struct TrainerTowerFloor* const* floors_p;
 
     sTrainerTowerState = AllocZeroed(sizeof(*sTrainerTowerState));
     sTrainerTowerState->floorIdx = gMapHeader.mapLayoutId - LAYOUT_TRAINER_TOWER_1F;
@@ -523,15 +523,15 @@ static void SetUpTrainerTowerDataStruct(void)
         CEReaderTool_LoadTrainerTower(&sTrainerTowerState->data);
     else
     {
-        struct TrainerTowerState * ttstate_p = sTrainerTowerState;
-        const struct EReaderTrainerTowerSetSubstruct * header_p = &gTrainerTowerLocalHeader;
+        struct TrainerTowerState* ttstate_p = sTrainerTowerState;
+        const struct EReaderTrainerTowerSetSubstruct* header_p = &gTrainerTowerLocalHeader;
         memcpy(&ttstate_p->data, header_p, sizeof(struct EReaderTrainerTowerSetSubstruct));
         floors_p = gTrainerTowerFloors[challengeType];
         for (i = 0; i < MAX_TRAINER_TOWER_FLOORS; i++)
         {
             *(sTrainerTowerState->data.floors + i) = *(floors_p[i]); // manual pointer arithmetic needed to match
         }
-        sTrainerTowerState->data.checksum = CalcByteArraySum((void *)sTrainerTowerState->data.floors, sizeof(sTrainerTowerState->data.floors));
+        sTrainerTowerState->data.checksum = CalcByteArraySum((void*)sTrainerTowerState->data.floors, sizeof(sTrainerTowerState->data.floors));
         ValidateOrResetCurTrainerTowerRecord();
     }
 }
@@ -586,12 +586,12 @@ static void SetTrainerTowerNPCGraphics(void)
         }
         if (i != NELEMS(sDoubleBattleTrainerInfo))
         {
-            trainerGfx1  = sDoubleBattleTrainerInfo[i].objGfx1;
+            trainerGfx1 = sDoubleBattleTrainerInfo[i].objGfx1;
             trainerGfx2 = sDoubleBattleTrainerInfo[i].objGfx2;
         }
         else
         {
-            trainerGfx1  = OBJ_EVENT_GFX_YOUNGSTER;
+            trainerGfx1 = OBJ_EVENT_GFX_YOUNGSTER;
             trainerGfx2 = OBJ_EVENT_GFX_YOUNGSTER;
         }
         VarSet(VAR_OBJ_GFX_ID_0, trainerGfx1);
@@ -628,7 +628,7 @@ static void SetTrainerTowerNPCGraphics(void)
     }
 }
 
-static void TT_ConvertEasyChatMessageToString(u16 *ecWords, u8 *dest)
+static void TT_ConvertEasyChatMessageToString(u16* ecWords, u8* dest)
 {
     s32 i;
     ConvertEasyChatWordsToString(dest, ecWords, 3, 2);
@@ -653,7 +653,7 @@ static void BufferTowerOpponentSpeech(void)
     u16 trainerId = gSpecialVar_0x8006;
     u8 facilityClass;
     u8 challengeType = CURR_FLOOR.challengeType;
-    
+
     if (challengeType != CHALLENGE_TYPE_DOUBLE)
         facilityClass = CURR_FLOOR.trainers[trainerId].facilityClass;
     else
@@ -759,8 +759,8 @@ static void TrainerTowerAddFloorCleared(void)
 static void GetFloorAlreadyCleared(void)
 {
     u16 mapLayoutId = gMapHeader.mapLayoutId;
-    if (mapLayoutId - LAYOUT_TRAINER_TOWER_1F == TRAINER_TOWER.floorsCleared 
-     && mapLayoutId - LAYOUT_TRAINER_TOWER_LOBBY <= CURR_FLOOR.floorIdx)
+    if (mapLayoutId - LAYOUT_TRAINER_TOWER_1F == TRAINER_TOWER.floorsCleared
+        && mapLayoutId - LAYOUT_TRAINER_TOWER_LOBBY <= CURR_FLOOR.floorIdx)
         gSpecialVar_Result = FALSE;
     else
         gSpecialVar_Result = TRUE;
@@ -1074,12 +1074,12 @@ void PrintTrainerTowerRecords(void)
     FreeTrainerTowerDataStruct();
 }
 
-static u32 GetTrainerTowerRecordTime(u32 *counter)
+static u32 GetTrainerTowerRecordTime(u32* counter)
 {
     return *counter ^ gSaveBlock2Ptr->encryptionKey;
 }
 
-static void SetTrainerTowerRecordTime(u32 *counter, u32 value)
+static void SetTrainerTowerRecordTime(u32* counter, u32 value)
 {
     *counter = value ^ gSaveBlock2Ptr->encryptionKey;
 }

@@ -20,18 +20,18 @@ static void QL_GfxTransition_StopSurfSouth(void);
 static void QL_GfxTransition_StopSurfNorth(void);
 static void QL_GfxTransition_StopSurfWest(void);
 static void QL_GfxTransition_StopSurfEast(void);
-static void QL_SetObjectGraphicsId(struct ObjectEvent *object, u8 graphicsId);
+static void QL_SetObjectGraphicsId(struct ObjectEvent* object, u8 graphicsId);
 
-static void (*const sQLGfxTransitions[])(void) = {
-    [QL_PLAYER_GFX_NORMAL]      = QL_GfxTransition_Normal,
-    [QL_PLAYER_GFX_BIKE]        = QL_GfxTransition_Bike,
-    [QL_PLAYER_GFX_FISH]        = QL_GfxTransition_Fish,
-    [QL_PLAYER_GFX_SURF]        = QL_GfxTransition_StartSurf,
+static void (* const sQLGfxTransitions[])(void) = {
+    [QL_PLAYER_GFX_NORMAL] = QL_GfxTransition_Normal,
+    [QL_PLAYER_GFX_BIKE] = QL_GfxTransition_Bike,
+    [QL_PLAYER_GFX_FISH] = QL_GfxTransition_Fish,
+    [QL_PLAYER_GFX_SURF] = QL_GfxTransition_StartSurf,
     [QL_PLAYER_GFX_STOP_SURF_S] = QL_GfxTransition_StopSurfSouth,
     [QL_PLAYER_GFX_STOP_SURF_N] = QL_GfxTransition_StopSurfNorth,
     [QL_PLAYER_GFX_STOP_SURF_W] = QL_GfxTransition_StopSurfWest,
     [QL_PLAYER_GFX_STOP_SURF_E] = QL_GfxTransition_StopSurfEast,
-    [QL_PLAYER_GFX_VSSEEKER]    = QL_GfxTransition_VSSeeker
+    [QL_PLAYER_GFX_VSSEEKER] = QL_GfxTransition_VSSeeker
 };
 
 void QuestLogUpdatePlayerSprite(u8 state)
@@ -57,7 +57,7 @@ void QuestLogCallUpdatePlayerSprite(u8 state)
 
 static void QL_GfxTransition_Normal(void)
 {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_NORMAL));
     ObjectEventTurn(objectEvent, objectEvent->movementDirection);
     SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_ON_FOOT);
@@ -65,7 +65,7 @@ static void QL_GfxTransition_Normal(void)
 
 static void QL_GfxTransition_Bike(void)
 {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_BIKE));
     ObjectEventTurn(objectEvent, objectEvent->movementDirection);
     SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_MACH_BIKE);
@@ -74,8 +74,8 @@ static void QL_GfxTransition_Bike(void)
 
 static void QL_GfxTransition_Fish(void)
 {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
-    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct Sprite* sprite = &gSprites[objectEvent->spriteId];
 
     if (gQuestLogPlaybackState == 1 || gQuestLogPlaybackState == 3)
     {
@@ -94,51 +94,51 @@ static void QL_GfxTransition_Fish(void)
 
 static void Task_QLFishMovement(u8 taskId)
 {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
-    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct Sprite* sprite = &gSprites[objectEvent->spriteId];
 
     switch (gTasks[taskId].data[0])
     {
-        case 0:
-            ObjectEventClearHeldMovementIfActive(objectEvent);
-            objectEvent->enableAnim = TRUE;
-            QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_FISH));
-            StartSpriteAnim(sprite, GetFishingDirectionAnimNum(objectEvent->facingDirection));
+    case 0:
+        ObjectEventClearHeldMovementIfActive(objectEvent);
+        objectEvent->enableAnim = TRUE;
+        QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_FISH));
+        StartSpriteAnim(sprite, GetFishingDirectionAnimNum(objectEvent->facingDirection));
+        gTasks[taskId].data[0]++;
+        gTasks[taskId].data[1] = 0;
+        break;
+    case 1:
+        AlignFishingAnimationFrames(sprite);
+        if (gTasks[taskId].data[1] < 60)
+            gTasks[taskId].data[1]++;
+        else
             gTasks[taskId].data[0]++;
-            gTasks[taskId].data[1] = 0;
-            break;
-        case 1:
-            AlignFishingAnimationFrames(sprite);
-            if (gTasks[taskId].data[1] < 60)
-                gTasks[taskId].data[1]++;
+        break;
+    case 2:
+        StartSpriteAnim(sprite, GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
+        gTasks[taskId].data[0]++;
+        break;
+    case 3:
+        AlignFishingAnimationFrames(sprite);
+        if (sprite->animEnded)
+        {
+            if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING))
+                QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_NORMAL));
             else
-                gTasks[taskId].data[0]++;
-            break;
-        case 2:
-            StartSpriteAnim(sprite, GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
-            gTasks[taskId].data[0]++;
-            break;
-        case 3:
-            AlignFishingAnimationFrames(sprite);
-            if (sprite->animEnded)
-            {
-                if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING))
-                    QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_NORMAL));
-                else
-                    QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_RIDE));
-                ObjectEventTurn(objectEvent, objectEvent->movementDirection);
-                sprite->x2 = 0;
-                sprite->y2 = 0;
-                UnlockPlayerFieldControls();
-                DestroyTask(taskId);
-            }
-            break;
+                QL_SetObjectGraphicsId(objectEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_GFX_RIDE));
+            ObjectEventTurn(objectEvent, objectEvent->movementDirection);
+            sprite->x2 = 0;
+            sprite->y2 = 0;
+            UnlockPlayerFieldControls();
+            DestroyTask(taskId);
+        }
+        break;
     }
 }
 
 static void QL_GfxTransition_StartSurf(void)
 {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     u8 fieldEffectId;
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING))
@@ -171,7 +171,7 @@ static void Task_QLVSSeekerMovement(u8 taskId)
     }
 }
 
-static void QL_SetObjectGraphicsId(struct ObjectEvent * object, u8 graphicsId)
+static void QL_SetObjectGraphicsId(struct ObjectEvent* object, u8 graphicsId)
 {
     ObjectEventSetGraphicsId(object, graphicsId);
 }

@@ -37,9 +37,9 @@ static EWRAM_DATA bool8 sWildEncountersDisabled = FALSE;
 static bool8 UnlockedTanobyOrAreNotInTanoby(void);
 static u32 GenerateUnownPersonalityByLetter(u8 letter);
 static bool8 IsWildLevelAllowedByRepel(u8 level);
-static void ApplyFluteEncounterRateMod(u32 *rate);
+static void ApplyFluteEncounterRateMod(u32* rate);
 static u8 GetFluteEncounterRateModType(void);
-static void ApplyCleanseTagEncounterRateMod(u32 *rate);
+static void ApplyCleanseTagEncounterRateMod(u32* rate);
 static bool8 IsLeadMonHoldingCleanseTag(void);
 static u16 WildEncounterRandom(void);
 static void AddToWildEncounterRateBuff(u8 encouterRate);
@@ -47,20 +47,20 @@ static void AddToWildEncounterRateBuff(u8 encouterRate);
 #include "data/wild_encounters.h"
 
 static const u8 sUnownLetterSlots[][LAND_WILD_COUNT] = {
-  //  A   A   A   A   A   A   A   A   A   A   A   ?
-    { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 27},
-  //  C   C   C   D   D   D   H   H   H   U   U   O
-    { 2,  2,  2,  3,  3,  3,  7,  7,  7, 20, 20, 14},
-  //  N   N   N   N   S   S   S   S   I   I   E   E
-    {13, 13, 13, 13, 18, 18, 18, 18,  8,  8,  4,  4},
-  //  P   P   L   L   J   J   R   R   R   Q   Q   Q
-    {15, 15, 11, 11,  9,  9, 17, 17, 17, 16, 16, 16},
-  //  Y   Y   T   T   G   G   G   F   F   F   K   K
-    {24, 24, 19, 19,  6,  6,  6,  5,  5,  5, 10, 10},
-  //  V   V   V   W   W   W   X   X   M   M   B   B
-    {21, 21, 21, 22, 22, 22, 23, 23, 12, 12,  1,  1},
-  //  Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   !
-    {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26},
+    //  A   A   A   A   A   A   A   A   A   A   A   ?
+      { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 27},
+      //  C   C   C   D   D   D   H   H   H   U   U   O
+        { 2,  2,  2,  3,  3,  3,  7,  7,  7, 20, 20, 14},
+        //  N   N   N   N   S   S   S   S   I   I   E   E
+          {13, 13, 13, 13, 18, 18, 18, 18,  8,  8,  4,  4},
+          //  P   P   L   L   J   J   R   R   R   Q   Q   Q
+            {15, 15, 11, 11,  9,  9, 17, 17, 17, 16, 16, 16},
+            //  Y   Y   T   T   G   G   G   F   F   F   K   K
+              {24, 24, 19, 19,  6,  6,  6,  5,  5,  5, 10, 10},
+              //  V   V   V   W   W   W   X   X   M   M   B   B
+                {21, 21, 21, 22, 22, 22, 23, 23, 12, 12,  1,  1},
+                //  Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   !
+                  {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26},
 };
 
 void DisableWildEncounters(bool8 state)
@@ -118,7 +118,7 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
 {
     u8 wildMonIndex = 0;
     u8 rand = Random() % max(max(ENCOUNTER_CHANCE_FISHING_MONS_OLD_ROD_TOTAL, ENCOUNTER_CHANCE_FISHING_MONS_GOOD_ROD_TOTAL),
-                             ENCOUNTER_CHANCE_FISHING_MONS_SUPER_ROD_TOTAL);
+        ENCOUNTER_CHANCE_FISHING_MONS_SUPER_ROD_TOTAL);
 
     switch (rod)
     {
@@ -152,7 +152,7 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
     return wildMonIndex;
 }
 
-static u8 ChooseWildMonLevel(const struct WildPokemon * info)
+static u8 ChooseWildMonLevel(const struct WildPokemon* info)
 {
     u8 lo;
     u8 hi;
@@ -179,7 +179,7 @@ static u16 GetCurrentMapWildMonHeaderId(void)
 
     for (i = 0; ; i++)
     {
-        const struct WildPokemonHeader * wildHeader = &gWildMonHeaders[i];
+        const struct WildPokemonHeader* wildHeader = &gWildMonHeaders[i];
         if (wildHeader->mapGroup == MAP_GROUP(UNDEFINED))
             break;
 
@@ -212,13 +212,13 @@ static bool8 UnlockedTanobyOrAreNotInTanoby(void)
     if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER))
         return TRUE;
     if (!(gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER)
-    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER)
-    ))
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER)
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER)
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER)
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER)
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER)
+        || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER)
+        ))
         return TRUE;
     return FALSE;
 }
@@ -266,7 +266,7 @@ enum
 #define WILD_CHECK_REPEL    0x1
 #define WILD_CHECK_KEEN_EYE 0x2
 
-static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8 flags)
+static bool8 TryGenerateWildMon(const struct WildPokemonInfo* info, u8 area, u8 flags)
 {
     u8 slot = 0;
     u8 level;
@@ -291,7 +291,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8
     return TRUE;
 }
 
-static u16 GenerateFishingEncounter(const struct WildPokemonInfo * info, u8 rod)
+static u16 GenerateFishingEncounter(const struct WildPokemonInfo* info, u8 rod)
 {
     u8 slot = ChooseWildMonIndex_Fishing(rod);
     u8 level = ChooseWildMonLevel(&info->wildPokemon[slot]);
@@ -355,7 +355,7 @@ static bool8 DoGlobalWildEncounterDiceRoll(void)
 bool8 StandardWildEncounter(u32 currMetatileAttrs, u16 previousMetatileBehavior)
 {
     u16 headerId;
-    struct Roamer * roamer;
+    struct Roamer* roamer;
 
     if (sWildEncountersDisabled == TRUE)
         return FALSE;
@@ -402,7 +402,7 @@ bool8 StandardWildEncounter(u32 currMetatileAttrs, u16 previousMetatileBehavior)
             }
         }
         else if (ExtractMetatileAttribute(currMetatileAttrs, METATILE_ATTRIBUTE_ENCOUNTER_TYPE) == TILE_ENCOUNTER_WATER
-                 || (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && MetatileBehavior_IsBridge(ExtractMetatileAttribute(currMetatileAttrs, METATILE_ATTRIBUTE_BEHAVIOR)) == TRUE))
+            || (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && MetatileBehavior_IsBridge(ExtractMetatileAttribute(currMetatileAttrs, METATILE_ATTRIBUTE_BEHAVIOR)) == TRUE))
         {
             if (gWildMonHeaders[headerId].waterMonsInfo == NULL)
                 return FALSE;
@@ -523,11 +523,11 @@ void FishingWildEncounter(u8 rod)
     StartWildBattle();
 }
 
-u16 GetLocalWildMon(bool8 *isWaterMon)
+u16 GetLocalWildMon(bool8* isWaterMon)
 {
     u16 headerId;
-    const struct WildPokemonInfo * landMonsInfo;
-    const struct WildPokemonInfo * waterMonsInfo;
+    const struct WildPokemonInfo* landMonsInfo;
+    const struct WildPokemonInfo* waterMonsInfo;
 
     *isWaterMon = FALSE;
     headerId = GetCurrentMapWildMonHeaderId();
@@ -538,10 +538,10 @@ u16 GetLocalWildMon(bool8 *isWaterMon)
     // Neither
     if (landMonsInfo == NULL && waterMonsInfo == NULL)
         return SPECIES_NONE;
-        // Land Pokemon
+    // Land Pokemon
     else if (landMonsInfo != NULL && waterMonsInfo == NULL)
         return landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
-        // Water Pokemon
+    // Water Pokemon
     else if (landMonsInfo == NULL && waterMonsInfo != NULL)
     {
         *isWaterMon = TRUE;
@@ -565,7 +565,7 @@ u16 GetLocalWaterMon(void)
 
     if (headerId != HEADER_NONE)
     {
-        const struct WildPokemonInfo * waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
+        const struct WildPokemonInfo* waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
 
         if (waterMonsInfo)
             return waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
@@ -621,7 +621,7 @@ static bool8 IsWildLevelAllowedByRepel(u8 wildLevel)
     return FALSE;
 }
 
-static void ApplyFluteEncounterRateMod(u32 *encounterRate)
+static void ApplyFluteEncounterRateMod(u32* encounterRate)
 {
     switch (GetFluteEncounterRateModType())
     {
@@ -644,7 +644,7 @@ static u8 GetFluteEncounterRateModType(void)
         return 0;
 }
 
-static void ApplyCleanseTagEncounterRateMod(u32 *encounterRate)
+static void ApplyCleanseTagEncounterRateMod(u32* encounterRate)
 {
     if (IsLeadMonHoldingCleanseTag())
         *encounterRate = *encounterRate * 2 / 3;

@@ -23,14 +23,14 @@ struct QuestLogStruct_WildBattleRecord
     u8 mapSec;
 };
 
-static void sub_812C334(s32 *, s32 *);
+static void sub_812C334(s32*, s32*);
 
 void TrySetQuestLogBattleEvent(void)
 {
     if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_POKEDUDE)) && (gBattleOutcome == B_OUTCOME_WON || gBattleOutcome == B_OUTCOME_CAUGHT))
     {
-        struct QuestLogStruct_TrainerBattleRecord * questLogTrainerBattleRecord = Alloc(sizeof(struct QuestLogStruct_TrainerBattleRecord));
-        struct QuestLogStruct_WildBattleRecord * questLogWildBattleRecord = Alloc(sizeof(struct QuestLogStruct_WildBattleRecord));
+        struct QuestLogStruct_TrainerBattleRecord* questLogTrainerBattleRecord = Alloc(sizeof(struct QuestLogStruct_TrainerBattleRecord));
+        struct QuestLogStruct_WildBattleRecord* questLogWildBattleRecord = Alloc(sizeof(struct QuestLogStruct_WildBattleRecord));
         u16 eventId;
         u16 playerEndingHP;
         u16 playerMaxHP;
@@ -78,7 +78,7 @@ void TrySetQuestLogBattleEvent(void)
                 questLogTrainerBattleRecord->v6 = 1;
             if (playerEndingHP < playerMaxHP / 3)
                 questLogTrainerBattleRecord->v6++;
-            SetQuestLogEvent(eventId, (const u16 *)questLogTrainerBattleRecord);
+            SetQuestLogEvent(eventId, (const u16*)questLogTrainerBattleRecord);
         }
         else
         {
@@ -93,7 +93,7 @@ void TrySetQuestLogBattleEvent(void)
                 questLogWildBattleRecord->caughtSpecies = GetMonData(gEnemyParty, MON_DATA_SPECIES);
             }
             questLogWildBattleRecord->mapSec = GetCurrentRegionMapSectionId();
-            SetQuestLogEvent(QL_EVENT_DEFEATED_WILD_MON, (const u16 *)questLogWildBattleRecord);
+            SetQuestLogEvent(QL_EVENT_DEFEATED_WILD_MON, (const u16*)questLogWildBattleRecord);
         }
         Free(questLogTrainerBattleRecord);
         Free(questLogWildBattleRecord);
@@ -116,7 +116,7 @@ void TrySetQuestLogLinkBattleEvent(void)
 
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
-        struct QuestLogStruct_LinkBattleRecord * r5 = Alloc(sizeof(struct QuestLogStruct_LinkBattleRecord));
+        struct QuestLogStruct_LinkBattleRecord* r5 = Alloc(sizeof(struct QuestLogStruct_LinkBattleRecord));
         r5->v0 = gBattleOutcome - 1; // 0 = won, 1 = lost, 2 = drew
         if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
         {
@@ -137,7 +137,7 @@ void TrySetQuestLogLinkBattleEvent(void)
             {
                 inUnionRoom = InUnionRoom();
                 eventId = QL_EVENT_LINK_BATTLED_SINGLE;
-                
+
                 if (inUnionRoom == TRUE)
                     eventId = QL_EVENT_LINK_BATTLED_UNION;
             }
@@ -146,12 +146,12 @@ void TrySetQuestLogLinkBattleEvent(void)
                 r5->v1[0][r3] = gLinkPlayers[gBattleStruct->multiplayerId ^ 1].name[r3];
             }
         }
-        SetQuestLogEvent(eventId, (const u16 *)r5);
+        SetQuestLogEvent(eventId, (const u16*)r5);
         Free(r5);
     }
 }
 
-static void sub_812C334(s32 * a0, s32 * a1)
+static void sub_812C334(s32* a0, s32* a1)
 {
     s32 r5;
     s32 _optimized_out = 0;

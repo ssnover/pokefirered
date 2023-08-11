@@ -4,7 +4,7 @@
 #include "field_player_avatar.h"
 #include "metatile_behavior.h"
 
-void SetQuestLogObjectEventsData(struct QuestLog * questLog)
+void SetQuestLogObjectEventsData(struct QuestLog* questLog)
 {
     u32 i;
 
@@ -45,10 +45,10 @@ void SetQuestLogObjectEventsData(struct QuestLog * questLog)
     }
 }
 
-void SetSav1ObjectEventsFromQuestLog(const struct QuestLog * questLog, const struct ObjectEventTemplate * templates)
+void SetSav1ObjectEventsFromQuestLog(const struct QuestLog* questLog, const struct ObjectEventTemplate* templates)
 {
     u32 i, j;
-    const struct QuestLogObjectEvent * questLogObjectEvents = questLog->unk_008;
+    const struct QuestLogObjectEvent* questLogObjectEvents = questLog->unk_008;
 
     CpuFill16(0, gObjectEvents, sizeof(gObjectEvents));
 
@@ -138,7 +138,7 @@ void sub_815A540(void)
         PlayerGetDestCoords(&x, &y);
         if (!MetatileBehavior_IsSurfable(MapGridGetMetatileBehaviorAt(x, y)) && TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
         {
-            struct ObjectEvent * objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+            struct ObjectEvent* objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
             SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ON_FOOT);
             DestroySprite(&gSprites[objectEvent->fieldEffectSpriteId]);
         }

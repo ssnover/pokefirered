@@ -340,7 +340,7 @@ const u32 gUnusedPal_ColorFrames[] = INCBIN_U32("graphics/unused/color_frames.gb
 
 const u32 gBattleAnimSpriteGfx_RainDrops[] = INCBIN_U32("graphics/battle_anims/sprites/rain_drops.4bpp.lz");
 
-const u32 gUnusedGfx8bpp_WaterSplash [] = INCBIN_U32("graphics/unused/water_splash.8bpp.lz");
+const u32 gUnusedGfx8bpp_WaterSplash[] = INCBIN_U32("graphics/unused/water_splash.8bpp.lz");
 const u32 gUnusedTilemap_WaterSplash[] = INCBIN_U32("graphics/unused/water_splash.bin.lz");
 const u32 gUnusedPalette_WaterSplash[] = INCBIN_U32("graphics/unused/water_splash.gbapal.lz");
 
@@ -615,7 +615,7 @@ const u32 gBattleAnimSpritePal_Tendrils[] = INCBIN_U32("graphics/battle_anims/sp
 
 const u32 gHealthboxSinglesPlayerGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_player.4bpp.lz");
 const u32 gHealthboxSinglesOpponentGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_opponent.4bpp.lz");
-const u32 gHealthboxDoublesPlayerGfx[] = INCBIN_U32( "graphics/battle_interface/healthbox_doubles_player.4bpp.lz");
+const u32 gHealthboxDoublesPlayerGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_doubles_player.4bpp.lz");
 const u32 gHealthboxDoublesOpponentGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_doubles_opponent.4bpp.lz");
 const u32 gHealthboxSafariGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_safari.4bpp.lz");
 
@@ -1146,7 +1146,7 @@ const u32 gMoveRelearner_Gfx[] = INCBIN_U32("graphics/interface/learn_move.4bpp.
 const u32 gMoveRelearner_Tilemap[] = INCBIN_U32("graphics/interface/learn_move.bin.lz");
 
 const u16 gNamingScreenKeyboard_Pal[] = INCBIN_U16("graphics/naming_screen/keyboard.gbapal");
-const u16 gNamingScreenRival_Pal[]    = INCBIN_U16("graphics/naming_screen/rival.gbapal");
+const u16 gNamingScreenRival_Pal[] = INCBIN_U16("graphics/naming_screen/rival.gbapal");
 const u16 gNamingScreenMenu_Pal[6][16] =
 {
     INCBIN_U16("graphics/naming_screen/menu.gbapal"),
@@ -1157,24 +1157,24 @@ const u16 gNamingScreenMenu_Pal[6][16] =
     INCBIN_U16("graphics/naming_screen/cursor.gbapal"),
 };
 
-const u32 gNamingScreenMenu_Gfx[]                = INCBIN_U32("graphics/naming_screen/menu.4bpp.lz");
-const u32 gNamingScreenBackground_Tilemap[]      = INCBIN_U32("graphics/naming_screen/background.bin.lz");
-const u32 gNamingScreenKeyboardUpper_Tilemap[]   = INCBIN_U32("graphics/naming_screen/keyboard_upper.bin.lz");
-const u32 gNamingScreenKeyboardLower_Tilemap[]   = INCBIN_U32("graphics/naming_screen/keyboard_lower.bin.lz");
+const u32 gNamingScreenMenu_Gfx[] = INCBIN_U32("graphics/naming_screen/menu.4bpp.lz");
+const u32 gNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/naming_screen/background.bin.lz");
+const u32 gNamingScreenKeyboardUpper_Tilemap[] = INCBIN_U32("graphics/naming_screen/keyboard_upper.bin.lz");
+const u32 gNamingScreenKeyboardLower_Tilemap[] = INCBIN_U32("graphics/naming_screen/keyboard_lower.bin.lz");
 const u32 gNamingScreenKeyboardSymbols_Tilemap[] = INCBIN_U32("graphics/naming_screen/keyboard_symbols.bin.lz");
 
-const u32 gNamingScreenPageSwapFrame_Gfx[]  = INCBIN_U32("graphics/naming_screen/page_swap_frame.4bpp");
-const u32 gNamingScreenBackButton_Gfx[]     = INCBIN_U32("graphics/naming_screen/back_button.4bpp");
-const u32 gNamingScreenOKButton_Gfx[]       = INCBIN_U32("graphics/naming_screen/ok_button.4bpp");
-const u32 gNamingScreenPageSwapUpper_Gfx[]  = INCBIN_U32("graphics/naming_screen/page_swap_upper.4bpp");
-const u32 gNamingScreenPageSwapLower_Gfx[]  = INCBIN_U32("graphics/naming_screen/page_swap_lower.4bpp");
+const u32 gNamingScreenPageSwapFrame_Gfx[] = INCBIN_U32("graphics/naming_screen/page_swap_frame.4bpp");
+const u32 gNamingScreenBackButton_Gfx[] = INCBIN_U32("graphics/naming_screen/back_button.4bpp");
+const u32 gNamingScreenOKButton_Gfx[] = INCBIN_U32("graphics/naming_screen/ok_button.4bpp");
+const u32 gNamingScreenPageSwapUpper_Gfx[] = INCBIN_U32("graphics/naming_screen/page_swap_upper.4bpp");
+const u32 gNamingScreenPageSwapLower_Gfx[] = INCBIN_U32("graphics/naming_screen/page_swap_lower.4bpp");
 const u32 gNamingScreenPageSwapOthers_Gfx[] = INCBIN_U32("graphics/naming_screen/page_swap_others.4bpp");
-const u32 gNamingScreenCursor_Gfx[]         = INCBIN_U32("graphics/naming_screen/cursor.4bpp");
+const u32 gNamingScreenCursor_Gfx[] = INCBIN_U32("graphics/naming_screen/cursor.4bpp");
 const u32 gNamingScreenCursorSquished_Gfx[] = INCBIN_U32("graphics/naming_screen/cursor_squished.4bpp");
-const u32 gNamingScreenCursorFilled_Gfx[]   = INCBIN_U32("graphics/naming_screen/cursor_filled.4bpp");
+const u32 gNamingScreenCursorFilled_Gfx[] = INCBIN_U32("graphics/naming_screen/cursor_filled.4bpp");
 const u32 gNamingScreenPageSwapButton_Gfx[] = INCBIN_U32("graphics/naming_screen/page_swap_button.4bpp");
-const u32 gNamingScreenInputArrow_Gfx[]     = INCBIN_U32("graphics/naming_screen/input_arrow.4bpp");
-const u32 gNamingScreenUnderscore_Gfx[]     = INCBIN_U32("graphics/naming_screen/underscore.4bpp");
+const u32 gNamingScreenInputArrow_Gfx[] = INCBIN_U32("graphics/naming_screen/input_arrow.4bpp");
+const u32 gNamingScreenUnderscore_Gfx[] = INCBIN_U32("graphics/naming_screen/underscore.4bpp");
 
 const u8 gTMCaseHM_Gfx[] = INCBIN_U8("graphics/tm_case/hm.4bpp");
 
@@ -1373,7 +1373,7 @@ const u32 gTradeGba_Pal[] = INCBIN_U32("graphics/trade/gba.gbapal");
 const u32 gTradeGba2_Pal[] = INCBIN_U32("graphics/trade/gba_pal2.gbapal");
 const u32 gTradeGba_Gfx[] = INCBIN_U32("graphics/trade/gba.4bpp");
 
-const u16 sEmptyPal[16] = {0};
+const u16 sEmptyPal[16] = { 0 };
 
 const u16 gBerryCrush_Crusher_Pal[] = INCBIN_U16("graphics/berry_crush/crusher.gbapal");
 const u32 gBerryCrush_Crusher_Gfx[] = INCBIN_U32("graphics/berry_crush/crusher.4bpp.lz");

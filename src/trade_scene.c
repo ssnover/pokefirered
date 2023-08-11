@@ -117,14 +117,14 @@ struct {
     /*0x10A*/ u8 win0top;
     /*0x10B*/ u8 win0right;
     /*0x10C*/ u8 win0bottom;
-} static EWRAM_DATA * sTradeAnim = NULL;
+} static EWRAM_DATA* sTradeAnim = NULL;
 
-static void SpriteCB_LinkMonGlow(struct Sprite *sprite);
-static void SpriteCB_LinkMonGlowWireless(struct Sprite *sprite);
-static void SpriteCB_LinkMonShadow(struct Sprite *sprite);
-static void SpriteCB_CableEndSending(struct Sprite *sprite);
-static void SpriteCB_CableEndReceiving(struct Sprite *sprite);
-static void SpriteCB_GbaScreen(struct Sprite *sprite);
+static void SpriteCB_LinkMonGlow(struct Sprite* sprite);
+static void SpriteCB_LinkMonGlowWireless(struct Sprite* sprite);
+static void SpriteCB_LinkMonShadow(struct Sprite* sprite);
+static void SpriteCB_CableEndSending(struct Sprite* sprite);
+static void SpriteCB_CableEndReceiving(struct Sprite* sprite);
+static void SpriteCB_GbaScreen(struct Sprite* sprite);
 static void TradeAnimInit_LoadGfx(void);
 static void CB2_InGameTrade(void);
 static void SetTradeSequenceBgGpuRegs(u8 idx);
@@ -133,12 +133,12 @@ static void TradeBufferOTnameAndNicknames(void);
 static u8 DoTradeAnim(void);
 static u8 DoTradeAnim_Cable(void);
 static u8 DoTradeAnim_Wireless(void);
-static void SpriteCB_BouncingPokeball(struct Sprite *sprite);
-static void SpriteCB_BouncingPokeballDepart(struct Sprite *sprite);
-static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite *sprite);
-static void SpriteCB_BouncingPokeballArrive(struct Sprite *sprite);
+static void SpriteCB_BouncingPokeball(struct Sprite* sprite);
+static void SpriteCB_BouncingPokeballDepart(struct Sprite* sprite);
+static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite* sprite);
+static void SpriteCB_BouncingPokeballArrive(struct Sprite* sprite);
 static void BufferInGameTradeMonName(void);
-static void GetInGameTradeMail(struct Mail * mail, const struct InGameTrade * inGameTrade);
+static void GetInGameTradeMail(struct Mail* mail, const struct InGameTrade* inGameTrade);
 static void CB2_UpdateLinkTrade(void);
 static void CB2_WaitTradeComplete(void);
 static void CB2_SaveAndEndTrade(void);
@@ -149,33 +149,33 @@ static void Task_AnimateWirelessSignal(u8 taskId);
 static void Task_OpenCenterWhiteColumn(u8 taskId);
 static void Task_CloseCenterWhiteColumn(u8 taskId);
 
-static const u16 sPokeball_Pal[]                    = INCBIN_U16("graphics/trade/pokeball.gbapal");
-static const u8 sPokeball_Gfx[]                     = INCBIN_U8("graphics/trade/pokeball.4bpp");
-static const u8 sPokeballSymbol_Gfx[]               = INCBIN_U8("graphics/trade/pokeball_symbol.8bpp"); // Unused
-static const u16 sCableCloseup_Map[]                = INCBIN_U16("graphics/trade/cable_closeup_map.bin");
-static const u16 sPokeballSymbol_Map[]              = INCBIN_U16("graphics/trade/pokeball_symbol_map.bin");
-static const u16 sUnusedPal1[]                      = INCBIN_U16("graphics/trade/unused1.gbapal");
-static const u16 sGba_Pal[]                         = INCBIN_U16("graphics/trade/gba.gbapal");
-static const u16 sShadowPalette[]                   = INCBIN_U16("graphics/trade/shadow.gbapal");
-static const u16 sBlackPalette[]                    = INCBIN_U16("graphics/trade/black.gbapal");
-static const u16 sLinkMon_Pal[]                     = INCBIN_U16("graphics/trade/link_mon.gbapal");
-static const u8 sLinkMonGlow_Gfx[]                  = INCBIN_U8("graphics/trade/link_mon_glow.4bpp");
-static const u8 sLinkMonShadow_Gfx[]                = INCBIN_U8("graphics/trade/link_mon_shadow.4bpp");
-static const u8 sCableEnd_Gfx[]                     = INCBIN_U8("graphics/trade/cable_end.4bpp");
-static const u8 sGbaScreen_Gfx[]                    = INCBIN_U8("graphics/trade/gba_screen.4bpp");
-const u16 gTradeOrHatchMonShadowTilemap[]           = INCBIN_U16("graphics/trade/shadow_map.bin");
-static const u8 sGbaAffine_Gfx[]                    = INCBIN_U8("graphics/trade/gba_affine.8bpp");
-static const u8 sEmptyGfx[64]                       = {};
-static const u8 sGbaAffineMapCable[]                = INCBIN_U8("graphics/trade/gba_affine_map_cable.bin");
-static const u8 sGbaAffineMapWireless[]             = INCBIN_U8("graphics/trade/gba_affine_map_wireless.bin");
-static const u16 sGbaMapWireless[]                  = INCBIN_U16("graphics/trade/gba_map_wireless.bin");
-static const u16 sGbaMapCable[]                     = INCBIN_U16("graphics/trade/gba_map_cable.bin");
-static const u32 sWirelessCloseup_Map[]             = INCBIN_U32("graphics/trade/wireless_signal_closeup.bin.lz");
+static const u16 sPokeball_Pal[] = INCBIN_U16("graphics/trade/pokeball.gbapal");
+static const u8 sPokeball_Gfx[] = INCBIN_U8("graphics/trade/pokeball.4bpp");
+static const u8 sPokeballSymbol_Gfx[] = INCBIN_U8("graphics/trade/pokeball_symbol.8bpp"); // Unused
+static const u16 sCableCloseup_Map[] = INCBIN_U16("graphics/trade/cable_closeup_map.bin");
+static const u16 sPokeballSymbol_Map[] = INCBIN_U16("graphics/trade/pokeball_symbol_map.bin");
+static const u16 sUnusedPal1[] = INCBIN_U16("graphics/trade/unused1.gbapal");
+static const u16 sGba_Pal[] = INCBIN_U16("graphics/trade/gba.gbapal");
+static const u16 sShadowPalette[] = INCBIN_U16("graphics/trade/shadow.gbapal");
+static const u16 sBlackPalette[] = INCBIN_U16("graphics/trade/black.gbapal");
+static const u16 sLinkMon_Pal[] = INCBIN_U16("graphics/trade/link_mon.gbapal");
+static const u8 sLinkMonGlow_Gfx[] = INCBIN_U8("graphics/trade/link_mon_glow.4bpp");
+static const u8 sLinkMonShadow_Gfx[] = INCBIN_U8("graphics/trade/link_mon_shadow.4bpp");
+static const u8 sCableEnd_Gfx[] = INCBIN_U8("graphics/trade/cable_end.4bpp");
+static const u8 sGbaScreen_Gfx[] = INCBIN_U8("graphics/trade/gba_screen.4bpp");
+const u16 gTradeOrHatchMonShadowTilemap[] = INCBIN_U16("graphics/trade/shadow_map.bin");
+static const u8 sGbaAffine_Gfx[] = INCBIN_U8("graphics/trade/gba_affine.8bpp");
+static const u8 sEmptyGfx[64] = {};
+static const u8 sGbaAffineMapCable[] = INCBIN_U8("graphics/trade/gba_affine_map_cable.bin");
+static const u8 sGbaAffineMapWireless[] = INCBIN_U8("graphics/trade/gba_affine_map_wireless.bin");
+static const u16 sGbaMapWireless[] = INCBIN_U16("graphics/trade/gba_map_wireless.bin");
+static const u16 sGbaMapCable[] = INCBIN_U16("graphics/trade/gba_map_cable.bin");
+static const u32 sWirelessCloseup_Map[] = INCBIN_U32("graphics/trade/wireless_signal_closeup.bin.lz");
 static const u16 sWirelessSignalAnimPals_Outbound[] = INCBIN_U16("graphics/trade/wireless_signal_send.gbapal");
-static const u16 sWirelessSignalAnimPals_Inbound[]  = INCBIN_U16("graphics/trade/wireless_signal_receive.gbapal");
-static const u16 sWirelessSignalAnimPals_Off[]      = INCBIN_U16("graphics/trade/black.gbapal");
-static const u32 sWirelessSignal4bpp[]              = INCBIN_U32("graphics/trade/wireless_signal.4bpp.lz");
-static const u32 sWirelessSignalTilemap[]           = INCBIN_U32("graphics/trade/wireless_signal.bin.lz");
+static const u16 sWirelessSignalAnimPals_Inbound[] = INCBIN_U16("graphics/trade/wireless_signal_receive.gbapal");
+static const u16 sWirelessSignalAnimPals_Off[] = INCBIN_U16("graphics/trade/black.gbapal");
+static const u32 sWirelessSignal4bpp[] = INCBIN_U32("graphics/trade/wireless_signal.4bpp.lz");
+static const u32 sWirelessSignalTilemap[] = INCBIN_U32("graphics/trade/wireless_signal.bin.lz");
 
 static const struct OamData sOamData_Pokeball = {
     .affineMode = ST_OAM_AFFINE_NORMAL,
@@ -184,9 +184,9 @@ static const struct OamData sOamData_Pokeball = {
 };
 
 static const union AnimCmd sAnim_Pokeball_SpinOnce[] = {
-    ANIMCMD_FRAME( 0, 3),
-    ANIMCMD_FRAME( 4, 3),
-    ANIMCMD_FRAME( 8, 3),
+    ANIMCMD_FRAME(0, 3),
+    ANIMCMD_FRAME(4, 3),
+    ANIMCMD_FRAME(8, 3),
     ANIMCMD_FRAME(12, 3),
     ANIMCMD_FRAME(16, 3),
     ANIMCMD_FRAME(20, 3),
@@ -197,14 +197,14 @@ static const union AnimCmd sAnim_Pokeball_SpinOnce[] = {
     ANIMCMD_FRAME(40, 3),
     ANIMCMD_FRAME(44, 3),
     ANIMCMD_LOOP(1),
-    ANIMCMD_FRAME( 0, 3),
+    ANIMCMD_FRAME(0, 3),
     ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_Pokeball_SpinTwice[] = {
-    ANIMCMD_FRAME( 0, 3),
-    ANIMCMD_FRAME( 4, 3),
-    ANIMCMD_FRAME( 8, 3),
+    ANIMCMD_FRAME(0, 3),
+    ANIMCMD_FRAME(4, 3),
+    ANIMCMD_FRAME(8, 3),
     ANIMCMD_FRAME(12, 3),
     ANIMCMD_FRAME(16, 3),
     ANIMCMD_FRAME(20, 3),
@@ -215,11 +215,11 @@ static const union AnimCmd sAnim_Pokeball_SpinTwice[] = {
     ANIMCMD_FRAME(40, 3),
     ANIMCMD_FRAME(44, 3),
     ANIMCMD_LOOP(2),
-    ANIMCMD_FRAME( 0, 3),
+    ANIMCMD_FRAME(0, 3),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_Pokeball[] = {
+static const union AnimCmd* const sAnims_Pokeball[] = {
     sAnim_Pokeball_SpinOnce,
     sAnim_Pokeball_SpinTwice
 };
@@ -241,7 +241,7 @@ static const union AffineAnimCmd sAffineAnim_Pokeball_Unsquish[] = {
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd *const sAffineAnims_Pokeball[] = {
+static const union AffineAnimCmd* const sAffineAnims_Pokeball[] = {
     sAffineAnim_Pokeball_Normal,
     sAffineAnim_Pokeball_Squish,
     sAffineAnim_Pokeball_Unsquish
@@ -280,17 +280,17 @@ static const union AnimCmd sAnim_LinkMonGlow[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_LinkMonGlow[] = {
+static const union AnimCmd* const sAnims_LinkMonGlow[] = {
     sAnim_LinkMonGlow
 };
 
 static const union AffineAnimCmd sAffineAnim_LinkMonGlow[] = {
     AFFINEANIMCMD_FRAME(-10, -10, 0, 5),
-    AFFINEANIMCMD_FRAME( 10,  10, 0, 5),
+    AFFINEANIMCMD_FRAME(10,  10, 0, 5),
     AFFINEANIMCMD_JUMP(0)
 };
 
-static const union AffineAnimCmd *const sAffineAnims_LinkMonGlow[] = {
+static const union AffineAnimCmd* const sAffineAnims_LinkMonGlow[] = {
     sAffineAnim_LinkMonGlow
 };
 
@@ -340,8 +340,8 @@ enum {
     ANIM_LINKMON_SMALL,
 };
 
-static const union AnimCmd *const sAnims_LinkMonShadow[] = {
-    [ANIM_LINKMON_BIG]   = sAnim_LinkMonShadow_Big,
+static const union AnimCmd* const sAnims_LinkMonShadow[] = {
+    [ANIM_LINKMON_BIG] = sAnim_LinkMonShadow_Big,
     [ANIM_LINKMON_SMALL] = sAnim_LinkMonShadow_Small,
 };
 
@@ -371,7 +371,7 @@ static const union AnimCmd sAnim_CableEnd[] = {
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_CableEnd[] = {
+static const union AnimCmd* const sAnims_CableEnd[] = {
     sAnim_CableEnd
 };
 
@@ -397,34 +397,34 @@ static const struct OamData sOamData_GbaScreen = {
 };
 
 static const union AnimCmd sAnim_GbaScreen_Long[] = {
-    ANIMCMD_FRAME( 0, 2, .hFlip = TRUE, .vFlip = TRUE),
+    ANIMCMD_FRAME(0, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(32, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(64, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(96, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(64, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(32, 2, .hFlip = TRUE, .vFlip = TRUE),
-    ANIMCMD_FRAME( 0, 2, .hFlip = TRUE, .vFlip = TRUE),
+    ANIMCMD_FRAME(0, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_LOOP(8),
     ANIMCMD_END
 };
 
 static const union AnimCmd sAnim_GbaScreen_Short[] = {
-    ANIMCMD_FRAME( 0, 2, .hFlip = TRUE, .vFlip = TRUE),
+    ANIMCMD_FRAME(0, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(32, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(64, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(96, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(64, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_FRAME(32, 2, .hFlip = TRUE, .vFlip = TRUE),
-    ANIMCMD_FRAME( 0, 2, .hFlip = TRUE, .vFlip = TRUE),
+    ANIMCMD_FRAME(0, 2, .hFlip = TRUE, .vFlip = TRUE),
     ANIMCMD_LOOP(2),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_GbaScreen_Long[] = {
+static const union AnimCmd* const sAnims_GbaScreen_Long[] = {
     sAnim_GbaScreen_Long
 };
 
-static const union AnimCmd *const sAnims_GbaScreen_Short[] = {
+static const union AnimCmd* const sAnims_GbaScreen_Short[] = {
     sAnim_GbaScreen_Short
 };
 
@@ -472,7 +472,7 @@ static const union AffineAnimCmd sAffineAnim_CrossingMonPic[] = {
     AFFINEANIMCMD_JUMP(0)
 };
 
-static const union AffineAnimCmd *const sAffineAnims_CrossingMonPics[] = {
+static const union AffineAnimCmd* const sAffineAnims_CrossingMonPics[] = {
     sAffineAnim_CrossingMonPic
 };
 
@@ -602,7 +602,7 @@ static const u8 sWirelessSignalAnimParams[][2] = {
     {16, -1}
 };
 
-static void SpriteCB_LinkMonGlow(struct Sprite *sprite)
+static void SpriteCB_LinkMonGlow(struct Sprite* sprite)
 {
     if (++sprite->data[0] == 10)
     {
@@ -611,7 +611,7 @@ static void SpriteCB_LinkMonGlow(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_LinkMonGlowWireless(struct Sprite *sprite)
+static void SpriteCB_LinkMonGlowWireless(struct Sprite* sprite)
 {
     if (!sprite->invisible && ++sprite->data[0] == 10)
     {
@@ -621,7 +621,7 @@ static void SpriteCB_LinkMonGlowWireless(struct Sprite *sprite)
 }
 
 // Palette flash for trade glow core
-static void SpriteCB_LinkMonShadow(struct Sprite *sprite)
+static void SpriteCB_LinkMonShadow(struct Sprite* sprite)
 {
     if (sprite->data[1] == 0)
     {
@@ -632,7 +632,7 @@ static void SpriteCB_LinkMonShadow(struct Sprite *sprite)
 }
 
 // Move cable down offscreen
-static void SpriteCB_CableEndSending(struct Sprite *sprite)
+static void SpriteCB_CableEndSending(struct Sprite* sprite)
 {
     sprite->data[0]++;
     sprite->y2++;
@@ -642,7 +642,7 @@ static void SpriteCB_CableEndSending(struct Sprite *sprite)
 }
 
 // Move cable up onscreen
-static void SpriteCB_CableEndReceiving(struct Sprite *sprite)
+static void SpriteCB_CableEndReceiving(struct Sprite* sprite)
 {
     sprite->data[0]++;
     sprite->y2--;
@@ -651,7 +651,7 @@ static void SpriteCB_CableEndReceiving(struct Sprite *sprite)
         DestroySprite(sprite);
 }
 
-static void SpriteCB_GbaScreen(struct Sprite *sprite)
+static void SpriteCB_GbaScreen(struct Sprite* sprite)
 {
     if (++sprite->data[0] == 15)
     {
@@ -735,7 +735,7 @@ static u32 TradeGetMultiplayerId(void)
 static void LoadTradeMonPic(u8 whichParty, u8 state)
 {
     int pos = 0;
-    struct Pokemon * mon = NULL;
+    struct Pokemon* mon = NULL;
     u16 species;
     u32 personality;
 
@@ -1032,7 +1032,7 @@ static void CB2_InitInGameTrade(void)
 
 static void UpdatePokedexForReceivedMon(u8 partyIdx)
 {
-    struct Pokemon * mon = &gPlayerParty[partyIdx];
+    struct Pokemon* mon = &gPlayerParty[partyIdx];
 
     if (!GetMonData(mon, MON_DATA_IS_EGG))
     {
@@ -1057,10 +1057,10 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
     u8 friendship;
 
     // Get whether the offered Pokemon have mail
-    struct Pokemon * playerMon = &gPlayerParty[playerPartyIdx];
+    struct Pokemon* playerMon = &gPlayerParty[playerPartyIdx];
     u16 playerMail = GetMonData(playerMon, MON_DATA_MAIL);
 
-    struct Pokemon * partnerMon = &gEnemyParty[partnerPartyIdx];
+    struct Pokemon* partnerMon = &gEnemyParty[partnerPartyIdx];
     u16 partnerMail = GetMonData(partnerMon, MON_DATA_MAIL);
 
     // The mail attached to the sent Pokemon no longer exists in your file.
@@ -1121,8 +1121,8 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG0_ON | DISPCNT_BG2_ON | DISPCNT_OBJ_ON);
         SetGpuReg(REG_OFFSET_BG2CNT, BGCNT_PRIORITY(2) | BGCNT_CHARBASE(1) | BGCNT_SCREENBASE(18) | BGCNT_TXT512x256);
         LoadPalette(gTradeGba2_Pal, BG_PLTT_ID(1), 3 * PLTT_SIZE_4BPP);
-        DmaCopyLarge16(3, gTradeGba_Gfx, (void *)BG_CHAR_ADDR(1), 0x1420, 0x1000);
-        DmaCopy16Defvars(3, gTradeOrHatchMonShadowTilemap, (void *)BG_SCREEN_ADDR(18), 0x1000);
+        DmaCopyLarge16(3, gTradeGba_Gfx, (void*)BG_CHAR_ADDR(1), 0x1420, 0x1000);
+        DmaCopy16Defvars(3, gTradeOrHatchMonShadowTilemap, (void*)BG_SCREEN_ADDR(18), 0x1000);
         break;
     case 1:
         sTradeAnim->bg1hofs = 0;
@@ -1132,13 +1132,13 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         SetGpuReg(REG_OFFSET_BG2CNT, BGCNT_PRIORITY(2) | BGCNT_CHARBASE(1) | BGCNT_SCREENBASE(18) | BGCNT_TXT256x512);
         if (sTradeAnim->isCableTrade)
         {
-            DmaCopy16Defvars(3, sGbaMapCable, (void *)BG_SCREEN_ADDR(5), 0x1000);
+            DmaCopy16Defvars(3, sGbaMapCable, (void*)BG_SCREEN_ADDR(5), 0x1000);
         }
         else
         {
-            DmaCopy16Defvars(3, sGbaMapWireless, (void *)BG_SCREEN_ADDR(5), 0x1000);
+            DmaCopy16Defvars(3, sGbaMapWireless, (void*)BG_SCREEN_ADDR(5), 0x1000);
         }
-        DmaCopyLarge16(3, gTradeGba_Gfx, (void *)BG_CHAR_ADDR(0), 0x1420, 0x1000);
+        DmaCopyLarge16(3, gTradeGba_Gfx, (void*)BG_CHAR_ADDR(0), 0x1420, 0x1000);
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG1_ON | DISPCNT_OBJ_ON);
         break;
     case 2:
@@ -1147,13 +1147,13 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         if (!sTradeAnim->isCableTrade)
         {
             SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_1 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG1_ON | DISPCNT_OBJ_ON);
-            LZ77UnCompVram(sWirelessCloseup_Map, (void *)BG_SCREEN_ADDR(5));
+            LZ77UnCompVram(sWirelessCloseup_Map, (void*)BG_SCREEN_ADDR(5));
             BlendPalettes(0x000000008, 0x10, RGB_BLACK);
         }
         else
         {
             SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_1 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG1_ON | DISPCNT_OBJ_ON);
-            DmaCopy16Defvars(3, sCableCloseup_Map, (void *)BG_SCREEN_ADDR(5), 0x800);
+            DmaCopy16Defvars(3, sCableCloseup_Map, (void*)BG_SCREEN_ADDR(5), 0x800);
             BlendPalettes(0x00000001, 0x10, RGB_BLACK);
         }
         break;
@@ -1172,14 +1172,14 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         sTradeAnim->sXY = 0x20;
         sTradeAnim->bg2Zoom = 0x400;
         sTradeAnim->bg2alpha = 0;
-        DmaCopyLarge16(3, sGbaAffine_Gfx, (void *)BG_CHAR_ADDR(1), 0x2840, 0x1000);
+        DmaCopyLarge16(3, sGbaAffine_Gfx, (void*)BG_CHAR_ADDR(1), 0x2840, 0x1000);
         if (sTradeAnim->isCableTrade)
         {
-            DmaCopy16Defvars(3, sGbaAffineMapCable, (void *)BG_SCREEN_ADDR(18), 0x100);
+            DmaCopy16Defvars(3, sGbaAffineMapCable, (void*)BG_SCREEN_ADDR(18), 0x100);
         }
         else
         {
-            DmaCopy16Defvars(3, sGbaAffineMapWireless, (void *)BG_SCREEN_ADDR(18), 0x100);
+            DmaCopy16Defvars(3, sGbaAffineMapWireless, (void*)BG_SCREEN_ADDR(18), 0x100);
         }
         break;
     case 5:
@@ -1199,11 +1199,11 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         DmaCopyLarge16(3, sGbaAffine_Gfx, BG_CHAR_ADDR(1), 0x2840, 0x1000);
         if (sTradeAnim->isCableTrade)
         {
-            DmaCopy16Defvars(3, sGbaAffineMapCable, (void *)BG_SCREEN_ADDR(18), 0x100);
+            DmaCopy16Defvars(3, sGbaAffineMapCable, (void*)BG_SCREEN_ADDR(18), 0x100);
         }
         else
         {
-            DmaCopy16Defvars(3, sGbaAffineMapWireless, (void *)BG_SCREEN_ADDR(18), 0x100);
+            DmaCopy16Defvars(3, sGbaAffineMapWireless, (void*)BG_SCREEN_ADDR(18), 0x100);
         }
         break;
     case 7:
@@ -1212,8 +1212,8 @@ static void SetTradeSequenceBgGpuRegs(u8 state)
         SetGpuReg(REG_OFFSET_BLDCNT, 0);
         SetGpuReg(REG_OFFSET_BG2CNT, BGCNT_PRIORITY(2) | BGCNT_CHARBASE(1) | BGCNT_SCREENBASE(18) | BGCNT_TXT512x256);
         LoadPalette(gTradeGba2_Pal, BG_PLTT_ID(1), 3 * PLTT_SIZE_4BPP);
-        DmaCopyLarge16(3, gTradeGba_Gfx, (void *)BG_CHAR_ADDR(1), 0x1420, 0x1000);
-        DmaCopy16Defvars(3, gTradeOrHatchMonShadowTilemap, (void *)BG_SCREEN_ADDR(18), 0x1000);
+        DmaCopyLarge16(3, gTradeGba_Gfx, (void*)BG_CHAR_ADDR(1), 0x1420, 0x1000);
+        DmaCopy16Defvars(3, gTradeOrHatchMonShadowTilemap, (void*)BG_SCREEN_ADDR(18), 0x1000);
         break;
     }
 }
@@ -1232,7 +1232,7 @@ static void TradeBufferOTnameAndNicknames(void)
 {
     u8 nickname[20];
     u8 mpId;
-    const struct InGameTrade * inGameTrade;
+    const struct InGameTrade* inGameTrade;
     if (sTradeAnim->isLinkTrade)
     {
         mpId = GetMultiplayerId();
@@ -1443,8 +1443,8 @@ static bool8 DoTradeAnim_Cable(void)
         {
             DestroySprite(&gSprites[sTradeAnim->connectionSpriteId2]);
             SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND |
-                                         BLDCNT_TGT2_BG1 |
-                                         BLDCNT_TGT2_BG2);
+                BLDCNT_TGT2_BG1 |
+                BLDCNT_TGT2_BG2);
             SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(12, 4));
             sTradeAnim->state++;
         }
@@ -1466,9 +1466,9 @@ static bool8 DoTradeAnim_Cable(void)
         if ((sTradeAnim->bg1vofs -= 2) == 166)
             sTradeAnim->state = STATE_LINK_MON_TRAVEL_OFFSCREEN;
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_1 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG1_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG1_ON |
+            DISPCNT_OBJ_ON);
         break;
     case STATE_LINK_MON_TRAVEL_OFFSCREEN:
         gSprites[sTradeAnim->connectionSpriteId1].y -= 2;
@@ -1551,7 +1551,7 @@ static bool8 DoTradeAnim_Cable(void)
         gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 -= 3;
         gSprites[sTradeAnim->monSpriteIds[TRADE_PARTNER]].y2 += 3;
         if (gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 < -DISPLAY_HEIGHT
-         && gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 >= -DISPLAY_HEIGHT - 3)
+            && gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 >= -DISPLAY_HEIGHT - 3)
         {
             PlaySE(SE_WARP_IN);
         }
@@ -1593,9 +1593,9 @@ static bool8 DoTradeAnim_Cable(void)
         break;
     case STATE_WAIT_FADE_OUT_TO_GBA_RECV:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG1_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG1_ON |
+            DISPCNT_OBJ_ON);
         if (!gPaletteFade.active)
             sTradeAnim->state++;
         break;
@@ -1680,9 +1680,9 @@ static bool8 DoTradeAnim_Cable(void)
         break;
     case STATE_WAIT_FADE_IN_TO_NEW_MON:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG2_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG2_ON |
+            DISPCNT_OBJ_ON);
         if (!gPaletteFade.active)
         {
             sTradeAnim->state++;
@@ -1706,9 +1706,9 @@ static bool8 DoTradeAnim_Cable(void)
         if (gSprites[sTradeAnim->bouncingPokeballSpriteId].callback == SpriteCallbackDummy)
         {
             HandleLoadSpecialPokePic(&gMonFrontPicTable[sTradeAnim->monSpecies[TRADE_PARTNER]],
-                                      gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
-                                      sTradeAnim->monSpecies[TRADE_PARTNER],
-                                      sTradeAnim->monPersonalities[TRADE_PARTNER]);
+                gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
+                sTradeAnim->monSpecies[TRADE_PARTNER],
+                sTradeAnim->monPersonalities[TRADE_PARTNER]);
             sTradeAnim->state++;
         }
         break;
@@ -1725,10 +1725,10 @@ static bool8 DoTradeAnim_Cable(void)
         break;
     case STATE_NEW_MON_MSG:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG0_ON |
-                                      DISPCNT_BG2_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG0_ON |
+            DISPCNT_BG2_ON |
+            DISPCNT_OBJ_ON);
         StringExpandPlaceholders(gStringVar4, gText_XSentOverY);
         DrawTextOnTradeWindow(0, gStringVar4, 0);
         sTradeAnim->state = STATE_DELAY_FOR_MON_ANIM;
@@ -1918,11 +1918,11 @@ static bool8 DoTradeAnim_Wireless(void)
         {
             DestroySprite(&gSprites[sTradeAnim->connectionSpriteId2]);
             SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG1 |
-                                         BLDCNT_TGT1_OBJ |
-                                         BLDCNT_EFFECT_BLEND |
-                                         BLDCNT_TGT2_BG2);
+                BLDCNT_TGT1_OBJ |
+                BLDCNT_EFFECT_BLEND |
+                BLDCNT_TGT2_BG2);
             SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 4));
-            
+
             // Start wireless signal effect
             CreateTask(Task_AnimateWirelessSignal, 5);
             sTradeAnim->state++;
@@ -1948,9 +1948,9 @@ static bool8 DoTradeAnim_Wireless(void)
             sTradeAnim->state = STATE_LINK_MON_TRAVEL_OFFSCREEN;
 
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_1 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG1_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG1_ON |
+            DISPCNT_OBJ_ON);
         break;
     case STATE_LINK_MON_TRAVEL_OFFSCREEN:
         gSprites[sTradeAnim->connectionSpriteId1].y -= 2;
@@ -2034,7 +2034,7 @@ static bool8 DoTradeAnim_Wireless(void)
         gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 -= 3;
         gSprites[sTradeAnim->monSpriteIds[TRADE_PARTNER]].y2 += 3;
         if (gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 < -DISPLAY_HEIGHT
-         && gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 >= -DISPLAY_HEIGHT - 3)
+            && gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 >= -DISPLAY_HEIGHT - 3)
         {
             PlaySE(SE_WARP_IN);
         }
@@ -2079,9 +2079,9 @@ static bool8 DoTradeAnim_Wireless(void)
         break;
     case STATE_WAIT_FADE_OUT_TO_GBA_RECV:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG1_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG1_ON |
+            DISPCNT_OBJ_ON);
         if (!gPaletteFade.active)
             sTradeAnim->state++;
         break;
@@ -2096,10 +2096,10 @@ static bool8 DoTradeAnim_Wireless(void)
         break;
     case STATE_PAN_TO_GBA_WIRELESS:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG1_ON |
-                                      DISPCNT_BG2_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG1_ON |
+            DISPCNT_BG2_ON |
+            DISPCNT_OBJ_ON);
         sTradeAnim->bg1vofs += 3;
         sTradeAnim->bg2vofs += 3;
         if (++sTradeAnim->timer == 10)
@@ -2182,9 +2182,9 @@ static bool8 DoTradeAnim_Wireless(void)
         break;
     case STATE_WAIT_FADE_IN_TO_NEW_MON:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG2_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG2_ON |
+            DISPCNT_OBJ_ON);
         if (!gPaletteFade.active)
             sTradeAnim->state++;
         break;
@@ -2206,9 +2206,9 @@ static bool8 DoTradeAnim_Wireless(void)
         if (gSprites[sTradeAnim->bouncingPokeballSpriteId].callback == SpriteCallbackDummy)
         {
             HandleLoadSpecialPokePic(&gMonFrontPicTable[sTradeAnim->monSpecies[TRADE_PARTNER]],
-                                     gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
-                                     sTradeAnim->monSpecies[TRADE_PARTNER],
-                                     sTradeAnim->monPersonalities[TRADE_PARTNER]);
+                gMonSpritesGfxPtr->sprites[B_POSITION_OPPONENT_RIGHT],
+                sTradeAnim->monSpecies[TRADE_PARTNER],
+                sTradeAnim->monPersonalities[TRADE_PARTNER]);
             sTradeAnim->state++;
         }
         break;
@@ -2225,10 +2225,10 @@ static bool8 DoTradeAnim_Wireless(void)
         break;
     case STATE_NEW_MON_MSG:
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 |
-                                      DISPCNT_OBJ_1D_MAP |
-                                      DISPCNT_BG0_ON |
-                                      DISPCNT_BG2_ON |
-                                      DISPCNT_OBJ_ON);
+            DISPCNT_OBJ_1D_MAP |
+            DISPCNT_BG0_ON |
+            DISPCNT_BG2_ON |
+            DISPCNT_OBJ_ON);
         StringExpandPlaceholders(gStringVar4, gText_XSentOverY);
         DrawTextOnTradeWindow(0, gStringVar4, 0);
         sTradeAnim->state = STATE_DELAY_FOR_MON_ANIM;
@@ -2356,7 +2356,7 @@ static void HandleLinkDataReceive(void)
     }
 }
 
-static void SpriteCB_BouncingPokeball(struct Sprite *sprite)
+static void SpriteCB_BouncingPokeball(struct Sprite* sprite)
 {
     sprite->y += sprite->data[0] / 10;
     sprite->data[5] += sprite->data[1];
@@ -2377,7 +2377,7 @@ static void SpriteCB_BouncingPokeball(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_BouncingPokeballDepart(struct Sprite *sprite)
+static void SpriteCB_BouncingPokeballDepart(struct Sprite* sprite)
 {
     sprite->y2 += sTradeBallVerticalVelocityTable[sprite->data[0]];
     if (sprite->data[0] == 22)
@@ -2391,7 +2391,7 @@ static void SpriteCB_BouncingPokeballDepart(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite *sprite)
+static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite* sprite)
 {
     if (sprite->data[1] == 20)
         StartSpriteAffineAnim(sprite, 1);
@@ -2406,7 +2406,7 @@ static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_BouncingPokeballArrive(struct Sprite *sprite)
+static void SpriteCB_BouncingPokeballArrive(struct Sprite* sprite)
 {
     if (sprite->data[2] == 0)
     {
@@ -2437,7 +2437,7 @@ u16 GetInGameTradeSpeciesInfo(void)
     // Populates gStringVar1 with the name of the requested species and
     // gStringVar2 with the name of the offered species.
     // Returns the requested species.
-    const struct InGameTrade * inGameTrade = &sInGameTrades[gSpecialVar_0x8004];
+    const struct InGameTrade* inGameTrade = &sInGameTrades[gSpecialVar_0x8004];
     StringCopy(gStringVar1, gSpeciesNames[inGameTrade->requestedSpecies]);
     StringCopy(gStringVar2, gSpeciesNames[inGameTrade->species]);
     return inGameTrade->requestedSpecies;
@@ -2448,7 +2448,7 @@ static void BufferInGameTradeMonName(void)
     // Populates gStringVar1 with the nickname of the sent Pokemon and
     // gStringVar2 with the name of the offered species.
     u8 nickname[30];
-    const struct InGameTrade * inGameTrade = &sInGameTrades[gSpecialVar_0x8004];
+    const struct InGameTrade* inGameTrade = &sInGameTrades[gSpecialVar_0x8004];
     GetMonData(&gPlayerParty[gSpecialVar_0x8005], MON_DATA_NICKNAME, nickname);
     StringCopy_Nickname(gStringVar1, nickname);
     StringCopy(gStringVar2, gSpeciesNames[inGameTrade->species]);
@@ -2456,11 +2456,11 @@ static void BufferInGameTradeMonName(void)
 
 static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
 {
-    const struct InGameTrade * inGameTrade = &sInGameTrades[inGameTradeIdx];
+    const struct InGameTrade* inGameTrade = &sInGameTrades[inGameTradeIdx];
     u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL);
     struct Mail mail;
     u8 metLocation = METLOC_IN_GAME_TRADE;
-    struct Pokemon * tradeMon = &gEnemyParty[0];
+    struct Pokemon* tradeMon = &gEnemyParty[0];
     u8 mailNum;
     CreateMon(tradeMon, inGameTrade->species, level, USE_RANDOM_IVS, TRUE, inGameTrade->personality, TRUE, inGameTrade->otId);
     SetMonData(tradeMon, MON_DATA_HP_IV, &inGameTrade->ivs[0]);
@@ -2498,7 +2498,7 @@ static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
     CalculateMonStats(&gEnemyParty[0]);
 }
 
-static void GetInGameTradeMail(struct Mail * mail, const struct InGameTrade * inGameTrade)
+static void GetInGameTradeMail(struct Mail* mail, const struct InGameTrade* inGameTrade)
 {
     int i;
     for (i = 0; i < MAIL_WORDS_COUNT; i++)
@@ -2674,7 +2674,7 @@ static void CB2_SaveAndEndTrade(void)
         if (IsLinkTaskFinished())
         {
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-            gMain.state ++;
+            gMain.state++;
         }
         break;
     case 7:
@@ -2773,7 +2773,7 @@ void LoadTradeAnimGfx(void)
     TradeAnimInit_LoadGfx();
 }
 
-void DrawTextOnTradeWindow(u8 windowId, const u8 *str, s8 speed)
+void DrawTextOnTradeWindow(u8 windowId, const u8* str, s8 speed)
 {
     FillWindowPixelBuffer(windowId, PIXEL_FILL(15));
     sTradeAnim->textColor[0] = 15;
@@ -2785,7 +2785,7 @@ void DrawTextOnTradeWindow(u8 windowId, const u8 *str, s8 speed)
 
 static void Task_AnimateWirelessSignal(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u16 paletteIdx = 16 * sWirelessSignalAnimParams[tIdx][0];
 
     if (!tSignalComingBack)
@@ -2825,7 +2825,7 @@ static void Task_AnimateWirelessSignal(u8 taskId)
 
 static void Task_OpenCenterWhiteColumn(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (data[0] == 0)
     {
@@ -2835,8 +2835,8 @@ static void Task_OpenCenterWhiteColumn(u8 taskId)
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN0_ON);
         SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_OBJ);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 |
-                                    WININ_WIN0_BG1 |
-                                    WININ_WIN0_OBJ);
+            WININ_WIN0_BG1 |
+            WININ_WIN0_OBJ);
     }
 
     SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE2(sTradeAnim->win0left, sTradeAnim->win0right));
@@ -2852,7 +2852,7 @@ static void Task_OpenCenterWhiteColumn(u8 taskId)
 
 static void Task_CloseCenterWhiteColumn(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (data[0] == 0)
     {
@@ -2860,8 +2860,8 @@ static void Task_CloseCenterWhiteColumn(u8 taskId)
         sTradeAnim->win0right = DISPLAY_WIDTH - 80;
         SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_OBJ);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 |
-                                    WININ_WIN0_BG1 |
-                                    WININ_WIN0_OBJ);
+            WININ_WIN0_BG1 |
+            WININ_WIN0_OBJ);
     }
 
     SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE2(sTradeAnim->win0left, sTradeAnim->win0right));

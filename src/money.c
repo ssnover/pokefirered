@@ -9,17 +9,17 @@
 
 EWRAM_DATA static u8 sMoneyBoxWindowId = 0;
 
-u32 GetMoney(u32 *moneyPtr)
+u32 GetMoney(u32* moneyPtr)
 {
     return *moneyPtr ^ gSaveBlock2Ptr->encryptionKey;
 }
 
-void SetMoney(u32 *moneyPtr, u32 newValue)
+void SetMoney(u32* moneyPtr, u32 newValue)
 {
     *moneyPtr = gSaveBlock2Ptr->encryptionKey ^ newValue;
 }
 
-bool8 IsEnoughMoney(u32 *moneyPtr, u32 cost)
+bool8 IsEnoughMoney(u32* moneyPtr, u32 cost)
 {
     if (GetMoney(moneyPtr) >= cost)
         return TRUE;
@@ -27,7 +27,7 @@ bool8 IsEnoughMoney(u32 *moneyPtr, u32 cost)
         return FALSE;
 }
 
-void AddMoney(u32 *moneyPtr, u32 toAdd)
+void AddMoney(u32* moneyPtr, u32 toAdd)
 {
     u32 toSet = GetMoney(moneyPtr);
 
@@ -47,7 +47,7 @@ void AddMoney(u32 *moneyPtr, u32 toAdd)
     SetMoney(moneyPtr, toSet);
 }
 
-void RemoveMoney(u32 *moneyPtr, u32 toSub)
+void RemoveMoney(u32* moneyPtr, u32 toSub)
 {
     u32 toSet = GetMoney(moneyPtr);
 
@@ -72,7 +72,7 @@ void SubtractMoneyFromVar0x8005(void)
 
 void PrintMoneyAmountInMoneyBox(u8 windowId, int amount, u8 speed)
 {
-    u8 *txtPtr;
+    u8* txtPtr;
     s32 strLength;
 
     ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, 6);
@@ -89,7 +89,7 @@ void PrintMoneyAmountInMoneyBox(u8 windowId, int amount, u8 speed)
 
 void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
 {
-    u8 *txtPtr;
+    u8* txtPtr;
     s32 strLength;
 
     ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, 6);

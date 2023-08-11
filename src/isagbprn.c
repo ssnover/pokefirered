@@ -39,9 +39,9 @@ void AGBPrintFlush1Block(void);
 
 void AGBPrintInit(void)
 {
-    struct AGBPrintStruct *pPrint = (struct AGBPrintStruct *)AGB_PRINT_STRUCT_ADDR;
-    u16 *pWSCNT = (u16 *)REG_ADDR_WAITCNT;
-    u16 *pProtect = (u16 *)AGB_PRINT_PROTECT_ADDR;
+    struct AGBPrintStruct* pPrint = (struct AGBPrintStruct*)AGB_PRINT_STRUCT_ADDR;
+    u16* pWSCNT = (u16*)REG_ADDR_WAITCNT;
+    u16* pProtect = (u16*)AGB_PRINT_PROTECT_ADDR;
     u16 nOldWSCNT = *pWSCNT;
     *pWSCNT = WSCNT_DATA;
     *pProtect = 0x20;
@@ -53,9 +53,9 @@ void AGBPrintInit(void)
 
 static void AGBPutcInternal(const char cChr)
 {
-    volatile struct AGBPrintStruct *pPrint = (struct AGBPrintStruct *)AGB_PRINT_STRUCT_ADDR;
-    u16 *pPrintBuf = (u16 *)(0x8000000 + (pPrint->m_nBank << 16));
-    u16 *pProtect = (u16 *)AGB_PRINT_PROTECT_ADDR;
+    volatile struct AGBPrintStruct* pPrint = (struct AGBPrintStruct*)AGB_PRINT_STRUCT_ADDR;
+    u16* pPrintBuf = (u16*)(0x8000000 + (pPrint->m_nBank << 16));
+    u16* pProtect = (u16*)AGB_PRINT_PROTECT_ADDR;
     u16 nData = pPrintBuf[pPrint->m_nPut / 2];
     *pProtect = 0x20;
     nData = (pPrint->m_nPut & 1) ? (nData & 0xFF) | (cChr << 8) : (nData & 0xFF00) | cChr;
@@ -66,21 +66,21 @@ static void AGBPutcInternal(const char cChr)
 
 void AGBPutc(const char cChr)
 {
-    u16 *pWSCNT = (u16 *)REG_ADDR_WAITCNT;
+    u16* pWSCNT = (u16*)REG_ADDR_WAITCNT;
     u16 nOldWSCNT = *pWSCNT;
-    struct AGBPrintStruct *pPrint;
+    struct AGBPrintStruct* pPrint;
     *pWSCNT = WSCNT_DATA;
     AGBPutcInternal(cChr);
     *pWSCNT = nOldWSCNT;
-    pPrint = (struct AGBPrintStruct *)AGB_PRINT_STRUCT_ADDR;
+    pPrint = (struct AGBPrintStruct*)AGB_PRINT_STRUCT_ADDR;
     if (pPrint->m_nPut == ((pPrint->m_nGet - 1) & 0xFFFF))
         AGBPrintFlush1Block();
 }
 
-void AGBPrint(const char *pBuf)
+void AGBPrint(const char* pBuf)
 {
-    struct AGBPrintStruct *pPrint = (struct AGBPrintStruct *)AGB_PRINT_STRUCT_ADDR;
-    u16 *pWSCNT = (u16 *)REG_ADDR_WAITCNT;
+    struct AGBPrintStruct* pPrint = (struct AGBPrintStruct*)AGB_PRINT_STRUCT_ADDR;
+    u16* pWSCNT = (u16*)REG_ADDR_WAITCNT;
     u16 nOldWSCNT = *pWSCNT;
     *pWSCNT = WSCNT_DATA;
     while (*pBuf)
@@ -91,20 +91,20 @@ void AGBPrint(const char *pBuf)
     *pWSCNT = nOldWSCNT;
 }
 
-void AGBPrintf(const char *pBuf, ...)
+void AGBPrintf(const char* pBuf, ...)
 {
     char bufPrint[0x100];
     va_list vArgv;
     va_start(vArgv, pBuf);
-    #if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
+#if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
     vsprintf(bufPrint, pBuf, vArgv);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
     mini_vsnprintf(bufPrint, 0x100, pBuf, vArgv);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
     vsnprintf(bufPrint, 0x100, pBuf, vArgv);
-    #else
-    #error "unspecified pretty printing handler."
-    #endif
+#else
+#error "unspecified pretty printing handler."
+#endif
     va_end(vArgv);
     AGBPrint(bufPrint);
 }
@@ -112,19 +112,19 @@ void AGBPrintf(const char *pBuf, ...)
 static void AGBPrintTransferDataInternal(u32 bAllData)
 {
     LPFN_PRINT_FLUSH lpfnFuncFlush;
-    u16 *pIME;
+    u16* pIME;
     u16 nIME;
-    u16 *pWSCNT;
+    u16* pWSCNT;
     u16 nOldWSCNT;
-    u16 *pProtect;
-    volatile struct AGBPrintStruct *pPrint;
+    u16* pProtect;
+    volatile struct AGBPrintStruct* pPrint;
 
-    pProtect = (u16 *)AGB_PRINT_PROTECT_ADDR;
-    pPrint = (struct AGBPrintStruct *)AGB_PRINT_STRUCT_ADDR;
+    pProtect = (u16*)AGB_PRINT_PROTECT_ADDR;
+    pPrint = (struct AGBPrintStruct*)AGB_PRINT_STRUCT_ADDR;
     lpfnFuncFlush = (LPFN_PRINT_FLUSH)AGB_PRINT_FLUSH_ADDR;
-    pIME = (u16 *)REG_ADDR_IME;
+    pIME = (u16*)REG_ADDR_IME;
     nIME = *pIME;
-    pWSCNT = (u16 *)REG_ADDR_WAITCNT;
+    pWSCNT = (u16*)REG_ADDR_WAITCNT;
     nOldWSCNT = *pWSCNT;
     *pIME = nIME & ~1;
     *pWSCNT = WSCNT_DATA;
@@ -159,7 +159,7 @@ void AGBPrintFlush(void)
     AGBPrintTransferDataInternal(TRUE);
 }
 
-void AGBAssert(const char *pFile, int nLine, const char *pExpression, int nStopProgram)
+void AGBAssert(const char* pFile, int nLine, const char* pExpression, int nStopProgram)
 {
     if (nStopProgram)
     {
@@ -176,30 +176,30 @@ void AGBAssert(const char *pFile, int nLine, const char *pExpression, int nStopP
 
 // no$gba print functions
 #if (LOG_HANDLER == LOG_HANDLER_NOCASH_PRINT)
-void NoCashGBAPrint(const char *pBuf)
+void NoCashGBAPrint(const char* pBuf)
 {
-    *(volatile u32 *)NOCASHGBAPRINTADDR2 = (u32)pBuf;
+    *(volatile u32*)NOCASHGBAPRINTADDR2 = (u32)pBuf;
 }
 
-void NoCashGBAPrintf(const char *pBuf, ...)
+void NoCashGBAPrintf(const char* pBuf, ...)
 {
     char bufPrint[0x100];
     va_list vArgv;
     va_start(vArgv, pBuf);
-    #if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
+#if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
     vsprintf(bufPrint, pBuf, vArgv);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
     mini_vsnprintf(bufPrint, 0x100, pBuf, vArgv);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
     vsnprintf(bufPrint, 0x100, pBuf, vArgv);
-    #else
-    #error "unspecified pretty printing handler."
-    #endif
+#else
+#error "unspecified pretty printing handler."
+#endif
     va_end(vArgv);
     NoCashGBAPrint(bufPrint);
 }
 
-void NoCashGBAAssert(const char *pFile, s32 nLine, const char *pExpression, bool32 nStopProgram)
+void NoCashGBAAssert(const char* pFile, s32 nLine, const char* pExpression, bool32 nStopProgram)
 {
     if (nStopProgram)
     {
@@ -234,20 +234,20 @@ void MgbaPrintf(s32 level, const char* ptr, ...)
 
     level &= 0x7;
     va_start(args, ptr);
-    #if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
+#if (PRETTY_PRINT_HANDLER == PRETTY_PRINT_OFF)
     vsprintf(REG_DEBUG_STRING, ptr, args);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_MINI_PRINTF)
     mini_vsnprintf(REG_DEBUG_STRING, MGBA_REG_DEBUG_MAX, ptr, args);
-    #elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
+#elif (PRETTY_PRINT_HANDLER == PRETTY_PRINT_LIBC)
     vsnprintf(REG_DEBUG_STRING, MGBA_REG_DEBUG_MAX, ptr, args);
-    #else
-    #error "unspecified pretty printing handler."
-    #endif
+#else
+#error "unspecified pretty printing handler."
+#endif
     va_end(args);
     *REG_DEBUG_FLAGS = level | 0x100;
 }
 
-void MgbaAssert(const char *pFile, s32 nLine, const char *pExpression, bool32 nStopProgram)
+void MgbaAssert(const char* pFile, s32 nLine, const char* pExpression, bool32 nStopProgram)
 {
     if (nStopProgram)
     {

@@ -36,25 +36,25 @@ struct FameCheckerData
     MainCallback savedCallback;
     u16 listMenuTopIdx;
     u8 scrollIndicatorPairTaskId;
-    u8 personHasUnlockedPanels:1;
-    u8 inPickMode:1;
-    u8 numUnlockedPersons:6;
+    u8 personHasUnlockedPanels : 1;
+    u8 inPickMode : 1;
+    u8 numUnlockedPersons : 6;
     u8 listMenuTaskId;
     u8 listMenuCurIdx;
     u8 listMenuTopIdx2;
     u8 listMenuDrawnSelIdx;
     u8 unlockedPersons[NUM_FAMECHECKER_PERSONS + 1];
     u8 spriteIds[6];
-    u8 viewingFlavorText:1;
-    u8 unk_23_1:1; // unused
-    u8 pickModeOverCancel:1;
+    u8 viewingFlavorText : 1;
+    u8 unk_23_1 : 1; // unused
+    u8 pickModeOverCancel : 1;
 };
 
-static EWRAM_DATA u16 * sBg3TilemapBuffer = NULL;
-static EWRAM_DATA u16 * sBg1TilemapBuffer = NULL;
-static EWRAM_DATA u16 * sBg2TilemapBuffer = NULL;
-static EWRAM_DATA struct FameCheckerData * sFameCheckerData = NULL;
-static EWRAM_DATA struct ListMenuItem * sListMenuItems = NULL;
+static EWRAM_DATA u16* sBg3TilemapBuffer = NULL;
+static EWRAM_DATA u16* sBg1TilemapBuffer = NULL;
+static EWRAM_DATA u16* sBg2TilemapBuffer = NULL;
+static EWRAM_DATA struct FameCheckerData* sFameCheckerData = NULL;
+static EWRAM_DATA struct ListMenuItem* sListMenuItems = NULL;
 static EWRAM_DATA s32 sLastMenuIdx = 0;
 
 struct ListMenuTemplate gFameChecker_ListMenuTemplate;
@@ -88,21 +88,21 @@ static void FCSetup_ResetBGCoords(void);
 static bool8 HasUnlockedAllFlavorTextsForCurrentPerson(void);
 static void FreeSelectionCursorSpriteResources(void);
 static u8 CreateFlavorTextIconSelectorCursorSprite(s16 where);
-static void SpriteCB_DestroyFlavorTextIconSelectorCursor(struct Sprite *sprite);
+static void SpriteCB_DestroyFlavorTextIconSelectorCursor(struct Sprite* sprite);
 static void FreeQuestionMarkSpriteResources(void);
 static u8 PlaceQuestionMarkTile(u8 x, u8 y);
 static void FreeSpinningPokeballSpriteResources(void);
 static u8 CreateSpinningPokeballSprite(void);
-static void SpriteCB_DestroySpinningPokeball(struct Sprite *sprite);
+static void SpriteCB_DestroySpinningPokeball(struct Sprite* sprite);
 static void FreeNonTrainerPicTiles(void);
 static u8 CreatePersonPicSprite(u8 fcPersonIdx);
 static void DestroyPersonPicSprite(u8 taskId, u16 who);
 static void UpdateIconDescriptionBox(u8 whichText);
 static void UpdateIconDescriptionBoxOff(void);
 static void FC_CreateListMenu(void);
-static void SpriteCB_FCSpinningPokeball(struct Sprite *sprite);
+static void SpriteCB_FCSpinningPokeball(struct Sprite* sprite);
 static void InitListMenuTemplate(void);
-static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu * list);
+static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list);
 static void Task_SwitchToPickMode(u8 taskId);
 static void PrintCancelDescription(void);
 static void FC_DoMoveCursor(s32 itemIndex, bool8 onInit);
@@ -133,9 +133,9 @@ static const u16 sOakSpritePalette[] = INCBIN_U16("graphics/fame_checker/prof_oa
 static const u16 sUnkPalette[] = INCBIN_U16("graphics/fame_checker/unk.gbapal"); // unused?
 static const u16 sSilhouettePalette[] = INCBIN_U16("graphics/fame_checker/silhouette.gbapal");
 
-static const u8 sTextColor_White[3]  = {0, 1, 2};
-static const u8 sTextColor_DkGrey[3] = {0, 2, 3};
-static const u8 sTextColor_Green[3]  = {0, 6, 7};
+static const u8 sTextColor_White[3] = { 0, 1, 2 };
+static const u8 sTextColor_DkGrey[3] = { 0, 2, 3 };
+static const u8 sTextColor_Green[3] = { 0, 6, 7 };
 
 #define FAME_CHECKER_PROF_OAK  (FC_NONTRAINER_START + 0)
 #define FAME_CHECKER_DAISY_OAK (FC_NONTRAINER_START + 1)
@@ -143,25 +143,25 @@ static const u8 sTextColor_Green[3]  = {0, 6, 7};
 #define FAME_CHECKER_MR_FUJI   (FC_NONTRAINER_START + 3)
 
 static const u16 sTrainerIdxs[] = {
-    [FAMECHECKER_OAK]      = FAME_CHECKER_PROF_OAK,
-    [FAMECHECKER_DAISY]    = FAME_CHECKER_DAISY_OAK,
-    [FAMECHECKER_BROCK]    = TRAINER_LEADER_BROCK,
-    [FAMECHECKER_MISTY]    = TRAINER_LEADER_MISTY,
-    [FAMECHECKER_LTSURGE]  = TRAINER_LEADER_LT_SURGE,
-    [FAMECHECKER_ERIKA]    = TRAINER_LEADER_ERIKA,
-    [FAMECHECKER_KOGA]     = TRAINER_LEADER_KOGA,
-    [FAMECHECKER_SABRINA]  = TRAINER_LEADER_SABRINA,
-    [FAMECHECKER_BLAINE]   = TRAINER_LEADER_BLAINE,
-    [FAMECHECKER_LORELEI]  = TRAINER_ELITE_FOUR_LORELEI,
-    [FAMECHECKER_BRUNO]    = TRAINER_ELITE_FOUR_BRUNO,
-    [FAMECHECKER_AGATHA]   = TRAINER_ELITE_FOUR_AGATHA,
-    [FAMECHECKER_LANCE]    = TRAINER_ELITE_FOUR_LANCE,
-    [FAMECHECKER_BILL]     = FAME_CHECKER_BILL,
-    [FAMECHECKER_MRFUJI]   = FAME_CHECKER_MR_FUJI,
+    [FAMECHECKER_OAK] = FAME_CHECKER_PROF_OAK,
+    [FAMECHECKER_DAISY] = FAME_CHECKER_DAISY_OAK,
+    [FAMECHECKER_BROCK] = TRAINER_LEADER_BROCK,
+    [FAMECHECKER_MISTY] = TRAINER_LEADER_MISTY,
+    [FAMECHECKER_LTSURGE] = TRAINER_LEADER_LT_SURGE,
+    [FAMECHECKER_ERIKA] = TRAINER_LEADER_ERIKA,
+    [FAMECHECKER_KOGA] = TRAINER_LEADER_KOGA,
+    [FAMECHECKER_SABRINA] = TRAINER_LEADER_SABRINA,
+    [FAMECHECKER_BLAINE] = TRAINER_LEADER_BLAINE,
+    [FAMECHECKER_LORELEI] = TRAINER_ELITE_FOUR_LORELEI,
+    [FAMECHECKER_BRUNO] = TRAINER_ELITE_FOUR_BRUNO,
+    [FAMECHECKER_AGATHA] = TRAINER_ELITE_FOUR_AGATHA,
+    [FAMECHECKER_LANCE] = TRAINER_ELITE_FOUR_LANCE,
+    [FAMECHECKER_BILL] = FAME_CHECKER_BILL,
+    [FAMECHECKER_MRFUJI] = FAME_CHECKER_MR_FUJI,
     [FAMECHECKER_GIOVANNI] = TRAINER_BOSS_GIOVANNI
 };
 
-static const u8 *const sNonTrainerNamePointers[] = {
+static const u8* const sNonTrainerNamePointers[] = {
     gFameCheckerOakName,
     gFameCheckerDaisyName,
     gFameCheckerBillName,
@@ -169,44 +169,44 @@ static const u8 *const sNonTrainerNamePointers[] = {
 };
 
 static const u8 sFameCheckerTrainerPicIdxs[] = {
-    [FAMECHECKER_OAK]      = TRAINER_PIC_CAMPER,
-    [FAMECHECKER_DAISY]    = TRAINER_PIC_LASS,
-    [FAMECHECKER_BROCK]    = TRAINER_PIC_LEADER_BROCK,
-    [FAMECHECKER_MISTY]    = TRAINER_PIC_LEADER_MISTY,
-    [FAMECHECKER_LTSURGE]  = TRAINER_PIC_LEADER_LT_SURGE,
-    [FAMECHECKER_ERIKA]    = TRAINER_PIC_LEADER_ERIKA,
-    [FAMECHECKER_KOGA]     = TRAINER_PIC_LEADER_KOGA,
-    [FAMECHECKER_SABRINA]  = TRAINER_PIC_LEADER_SABRINA,
-    [FAMECHECKER_BLAINE]   = TRAINER_PIC_LEADER_BLAINE,
-    [FAMECHECKER_LORELEI]  = TRAINER_PIC_ELITE_FOUR_LORELEI,
-    [FAMECHECKER_BRUNO]    = TRAINER_PIC_ELITE_FOUR_BRUNO,
-    [FAMECHECKER_AGATHA]   = TRAINER_PIC_ELITE_FOUR_AGATHA,
-    [FAMECHECKER_LANCE]    = TRAINER_PIC_ELITE_FOUR_LANCE,
-    [FAMECHECKER_BILL]     = TRAINER_PIC_PSYCHIC_M,
-    [FAMECHECKER_MRFUJI]   = TRAINER_PIC_GENTLEMAN,
+    [FAMECHECKER_OAK] = TRAINER_PIC_CAMPER,
+    [FAMECHECKER_DAISY] = TRAINER_PIC_LASS,
+    [FAMECHECKER_BROCK] = TRAINER_PIC_LEADER_BROCK,
+    [FAMECHECKER_MISTY] = TRAINER_PIC_LEADER_MISTY,
+    [FAMECHECKER_LTSURGE] = TRAINER_PIC_LEADER_LT_SURGE,
+    [FAMECHECKER_ERIKA] = TRAINER_PIC_LEADER_ERIKA,
+    [FAMECHECKER_KOGA] = TRAINER_PIC_LEADER_KOGA,
+    [FAMECHECKER_SABRINA] = TRAINER_PIC_LEADER_SABRINA,
+    [FAMECHECKER_BLAINE] = TRAINER_PIC_LEADER_BLAINE,
+    [FAMECHECKER_LORELEI] = TRAINER_PIC_ELITE_FOUR_LORELEI,
+    [FAMECHECKER_BRUNO] = TRAINER_PIC_ELITE_FOUR_BRUNO,
+    [FAMECHECKER_AGATHA] = TRAINER_PIC_ELITE_FOUR_AGATHA,
+    [FAMECHECKER_LANCE] = TRAINER_PIC_ELITE_FOUR_LANCE,
+    [FAMECHECKER_BILL] = TRAINER_PIC_PSYCHIC_M,
+    [FAMECHECKER_MRFUJI] = TRAINER_PIC_GENTLEMAN,
     [FAMECHECKER_GIOVANNI] = TRAINER_PIC_LEADER_GIOVANNI,
 };
 
 static const u8 sFameCheckerTrainerGenders_Unused[] = {
-    [FAMECHECKER_OAK]      = MALE,
-    [FAMECHECKER_DAISY]    = FEMALE,
-    [FAMECHECKER_BROCK]    = MALE,
-    [FAMECHECKER_MISTY]    = FEMALE,
-    [FAMECHECKER_LTSURGE]  = MALE,
-    [FAMECHECKER_ERIKA]    = FEMALE,
-    [FAMECHECKER_KOGA]     = MALE,
-    [FAMECHECKER_SABRINA]  = FEMALE,
-    [FAMECHECKER_BLAINE]   = MALE,
-    [FAMECHECKER_LORELEI]  = FEMALE,
-    [FAMECHECKER_BRUNO]    = MALE,
-    [FAMECHECKER_AGATHA]   = FEMALE,
-    [FAMECHECKER_LANCE]    = MALE,
-    [FAMECHECKER_BILL]     = MALE,
-    [FAMECHECKER_MRFUJI]   = MALE,
+    [FAMECHECKER_OAK] = MALE,
+    [FAMECHECKER_DAISY] = FEMALE,
+    [FAMECHECKER_BROCK] = MALE,
+    [FAMECHECKER_MISTY] = FEMALE,
+    [FAMECHECKER_LTSURGE] = MALE,
+    [FAMECHECKER_ERIKA] = FEMALE,
+    [FAMECHECKER_KOGA] = MALE,
+    [FAMECHECKER_SABRINA] = FEMALE,
+    [FAMECHECKER_BLAINE] = MALE,
+    [FAMECHECKER_LORELEI] = FEMALE,
+    [FAMECHECKER_BRUNO] = MALE,
+    [FAMECHECKER_AGATHA] = FEMALE,
+    [FAMECHECKER_LANCE] = MALE,
+    [FAMECHECKER_BILL] = MALE,
+    [FAMECHECKER_MRFUJI] = MALE,
     [FAMECHECKER_GIOVANNI] = MALE,
 };
 
-static const u8 *const sFameCheckerNameAndQuotesPointers[2 * NUM_FAMECHECKER_PERSONS] =
+static const u8* const sFameCheckerNameAndQuotesPointers[2 * NUM_FAMECHECKER_PERSONS] =
 {
     gFameCheckerPersonName_ProfOak,
     gFameCheckerPersonName_Daisy,
@@ -243,7 +243,7 @@ static const u8 *const sFameCheckerNameAndQuotesPointers[2 * NUM_FAMECHECKER_PER
     gFameCheckerPersonQuote_Giovanni
 };
 
-static const u8 *const sFameCheckerFlavorTextPointers[] = {
+static const u8* const sFameCheckerFlavorTextPointers[] = {
     gFameCheckerFlavorText_ProfOak0, gFameCheckerFlavorText_ProfOak1, gFameCheckerFlavorText_ProfOak2, gFameCheckerFlavorText_ProfOak3, gFameCheckerFlavorText_ProfOak4, gFameCheckerFlavorText_ProfOak5,
     gFameCheckerFlavorText_Daisy0, gFameCheckerFlavorText_Daisy1, gFameCheckerFlavorText_Daisy2, gFameCheckerFlavorText_Daisy3, gFameCheckerFlavorText_Daisy4, gFameCheckerFlavorText_Daisy5,
     gFameCheckerFlavorText_Brock0, gFameCheckerFlavorText_Brock1, gFameCheckerFlavorText_Brock2, gFameCheckerFlavorText_Brock3, gFameCheckerFlavorText_Brock4, gFameCheckerFlavorText_Brock5,
@@ -377,7 +377,7 @@ static const u8 sFameCheckerArrayNpcGraphicsIds[] = {
     OBJ_EVENT_GFX_SCIENTIST
 };
 
-static const u8 *const sFlavorTextOriginLocationTexts[] = {
+static const u8* const sFlavorTextOriginLocationTexts[] = {
     gFameCheckerFlavorTextOriginLocation_ProfOak0, gFameCheckerFlavorTextOriginLocation_ProfOak1, gFameCheckerFlavorTextOriginLocation_ProfOak2, gFameCheckerFlavorTextOriginLocation_ProfOak3, gFameCheckerFlavorTextOriginLocation_ProfOak4, gFameCheckerFlavorTextOriginLocation_ProfOak5,
     gFameCheckerFlavorTextOriginLocation_Daisy0, gFameCheckerFlavorTextOriginLocation_Daisy1, gFameCheckerFlavorTextOriginLocation_Daisy2, gFameCheckerFlavorTextOriginLocation_Daisy3, gFameCheckerFlavorTextOriginLocation_Daisy4, gFameCheckerFlavorTextOriginLocation_Daisy5,
     gFameCheckerFlavorTextOriginLocation_Brock0, gFameCheckerFlavorTextOriginLocation_Brock1, gFameCheckerFlavorTextOriginLocation_Brock2, gFameCheckerFlavorTextOriginLocation_Brock3, gFameCheckerFlavorTextOriginLocation_Brock4, gFameCheckerFlavorTextOriginLocation_Brock5,
@@ -396,7 +396,7 @@ static const u8 *const sFlavorTextOriginLocationTexts[] = {
     gFameCheckerFlavorTextOriginLocation_Giovanni0, gFameCheckerFlavorTextOriginLocation_Giovanni1, gFameCheckerFlavorTextOriginLocation_Giovanni2, gFameCheckerFlavorTextOriginLocation_Giovanni3, gFameCheckerFlavorTextOriginLocation_Giovanni4, gFameCheckerFlavorTextOriginLocation_Giovanni5
 };
 
-static const u8 *const sFlavorTextOriginObjectNameTexts[] = {
+static const u8* const sFlavorTextOriginObjectNameTexts[] = {
     gFameCheckerFlavorTextOriginObjectName_ProfOak0, gFameCheckerFlavorTextOriginObjectName_ProfOak1, gFameCheckerFlavorTextOriginObjectName_ProfOak2, gFameCheckerFlavorTextOriginObjectName_ProfOak3, gFameCheckerFlavorTextOriginObjectName_ProfOak4, gFameCheckerFlavorTextOriginObjectName_ProfOak5,
     gFameCheckerFlavorTextOriginObjectName_Daisy0, gFameCheckerFlavorTextOriginObjectName_Daisy1, gFameCheckerFlavorTextOriginObjectName_Daisy2, gFameCheckerFlavorTextOriginObjectName_Daisy3, gFameCheckerFlavorTextOriginObjectName_Daisy4, gFameCheckerFlavorTextOriginObjectName_Daisy5,
     gFameCheckerFlavorTextOriginObjectName_Brock0, gFameCheckerFlavorTextOriginObjectName_Brock1, gFameCheckerFlavorTextOriginObjectName_Brock2, gFameCheckerFlavorTextOriginObjectName_Brock3, gFameCheckerFlavorTextOriginObjectName_Brock4, gFameCheckerFlavorTextOriginObjectName_Brock5,
@@ -436,7 +436,7 @@ static const struct BgTemplate sUIBgTemplates[4] = {
     {
         .bg = 3,
         .charBaseIndex = 3,
-        .mapBaseIndex =  30,
+        .mapBaseIndex = 30,
         .screenSize = 0,
         .paletteMode = FALSE,
         .priority = 3,
@@ -445,7 +445,7 @@ static const struct BgTemplate sUIBgTemplates[4] = {
     {
         .bg = 2,
         .charBaseIndex = 3,
-        .mapBaseIndex =  27,
+        .mapBaseIndex = 27,
         .screenSize = 0,
         .paletteMode = FALSE,
         .priority = 2,
@@ -454,7 +454,7 @@ static const struct BgTemplate sUIBgTemplates[4] = {
     {
         .bg = 1,
         .charBaseIndex = 3,
-        .mapBaseIndex =  28,
+        .mapBaseIndex = 28,
         .screenSize = 1,
         .paletteMode = FALSE,
         .priority = 0,
@@ -463,7 +463,7 @@ static const struct BgTemplate sUIBgTemplates[4] = {
     {
         .bg = 0,
         .charBaseIndex = 0,
-        .mapBaseIndex =  31,
+        .mapBaseIndex = 31,
         .screenSize = 0,
         .paletteMode = FALSE,
         .priority = 2,
@@ -512,12 +512,12 @@ static const struct WindowTemplate sUIWindowTemplates[] = {
 };
 
 static const union AnimCmd sSelectorCursorAnim0[] = {
-    ANIMCMD_FRAME( 0, 15),
+    ANIMCMD_FRAME(0, 15),
     ANIMCMD_FRAME(16, 15),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sSelectorCursorAnims[] = {
+static const union AnimCmd* const sSelectorCursorAnims[] = {
     sSelectorCursorAnim0
 };
 
@@ -539,11 +539,11 @@ static const struct OamData sQuestionMarkTileOamData = {
 };
 
 static const union AnimCmd sQuestionMarkTileAnim0[] = {
-    ANIMCMD_FRAME( 0, 10),
+    ANIMCMD_FRAME(0, 10),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sQuestionMarkTileAnims[] = {
+static const union AnimCmd* const sQuestionMarkTileAnims[] = {
     sQuestionMarkTileAnim0
 };
 
@@ -552,11 +552,11 @@ static const struct SpriteTemplate sQuestionMarkTileSpriteTemplate = {
 };
 
 static const union AnimCmd sSpinningPokeballAnim0[] = {
-    ANIMCMD_FRAME( 0, 10),
+    ANIMCMD_FRAME(0, 10),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpinningPokeballAnims[] = {
+static const union AnimCmd* const sSpinningPokeballAnims[] = {
     sSpinningPokeballAnim0
 };
 
@@ -570,7 +570,7 @@ static const union AffineAnimCmd sSpinningPokeballAffineAnim0[] = {
     AFFINEANIMCMD_JUMP(0)
 };
 
-static const union AffineAnimCmd *const sSpinningPokeballAffineAnims[] = {
+static const union AffineAnimCmd* const sSpinningPokeballAffineAnims[] = {
     sSpinningPokeballAffineAnim0
 };
 
@@ -579,11 +579,11 @@ static const struct SpriteTemplate sSpinningPokeballSpriteTemplate = {
 };
 
 static const union AnimCmd sDaisyFujiOakBillAnim0[] = {
-    ANIMCMD_FRAME( 0, 15),
+    ANIMCMD_FRAME(0, 15),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sDaisyFujiOakBillAnims[] = {
+static const union AnimCmd* const sDaisyFujiOakBillAnims[] = {
     sDaisyFujiOakBillAnim0
 };
 
@@ -639,78 +639,78 @@ static void MainCB2_LoadFameChecker(void)
 {
     switch (gMain.state)
     {
-        case 0:
-            SetVBlankCallback(NULL);
-            FCSetup_ClearVideoRegisters();
+    case 0:
+        SetVBlankCallback(NULL);
+        FCSetup_ClearVideoRegisters();
+        gMain.state++;
+        break;
+    case 1:
+        FCSetup_ResetTasksAndSpriteResources();
+        gMain.state++;
+        break;
+    case 2:
+        sBg3TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE);     // 256x256
+        sBg1TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE * 2); // 512x256
+        sBg2TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE);     // 256x256
+        ResetBgsAndClearDma3BusyFlags(0);
+        InitBgsFromTemplates(0, sUIBgTemplates, NELEMS(sUIBgTemplates));
+        SetBgTilemapBuffer(3, sBg3TilemapBuffer);
+        SetBgTilemapBuffer(2, sBg2TilemapBuffer);
+        SetBgTilemapBuffer(1, sBg1TilemapBuffer);
+        FCSetup_ResetBGCoords();
+        gMain.state++;
+        break;
+    case 3:
+        LoadBgTiles(3, gFameCheckerBgTiles, sizeof(gFameCheckerBgTiles), 0);
+        CopyToBgTilemapBufferRect(3, gFameCheckerBg3Tilemap, 0, 0, 32, 32);
+        LoadPalette(&gFameCheckerBgPals[0], BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP);
+        LoadPalette(&gFameCheckerBgPals[1], BG_PLTT_ID(1), PLTT_SIZE_4BPP);
+        CopyToBgTilemapBufferRect(2, gFameCheckerBg2Tilemap, 0, 0, 32, 32);
+        CopyToBgTilemapBufferRect_ChangePalette(1, sFameCheckerTilemap, 30, 0, 32, 32, 0x11);
+        LoadPalette(GetTextWindowPalette(2), BG_PLTT_ID(15), PLTT_SIZE_4BPP);
+        gMain.state++;
+        break;
+    case 4:
+        if (IsDma3ManagerBusyWithBgCopy() != TRUE)
+        {
+            ShowBg(0);
+            ShowBg(1);
+            ShowBg(2);
+            ShowBg(3);
+            CopyBgTilemapBufferToVram(3);
+            CopyBgTilemapBufferToVram(2);
+            CopyBgTilemapBufferToVram(1);
             gMain.state++;
-            break;
-        case 1:
-            FCSetup_ResetTasksAndSpriteResources();
-            gMain.state++;
-            break;
-        case 2:
-            sBg3TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE);     // 256x256
-            sBg1TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE * 2); // 512x256
-            sBg2TilemapBuffer = AllocZeroed(BG_SCREEN_SIZE);     // 256x256
-            ResetBgsAndClearDma3BusyFlags(0);
-            InitBgsFromTemplates(0, sUIBgTemplates, NELEMS(sUIBgTemplates));
-            SetBgTilemapBuffer(3, sBg3TilemapBuffer);
-            SetBgTilemapBuffer(2, sBg2TilemapBuffer);
-            SetBgTilemapBuffer(1, sBg1TilemapBuffer);
-            FCSetup_ResetBGCoords();
-            gMain.state++;
-            break;
-        case 3:
-            LoadBgTiles(3, gFameCheckerBgTiles, sizeof(gFameCheckerBgTiles), 0);
-            CopyToBgTilemapBufferRect(3, gFameCheckerBg3Tilemap, 0, 0, 32, 32);
-            LoadPalette(&gFameCheckerBgPals[0], BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP);
-            LoadPalette(&gFameCheckerBgPals[1], BG_PLTT_ID(1), PLTT_SIZE_4BPP);
-            CopyToBgTilemapBufferRect(2, gFameCheckerBg2Tilemap, 0, 0, 32, 32);
-            CopyToBgTilemapBufferRect_ChangePalette(1, sFameCheckerTilemap, 30, 0, 32, 32, 0x11);
-            LoadPalette(GetTextWindowPalette(2), BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-            gMain.state++;
-            break;
-        case 4:
-            if (IsDma3ManagerBusyWithBgCopy() != TRUE)
-            {
-                ShowBg(0);
-                ShowBg(1);
-                ShowBg(2);
-                ShowBg(3);
-                CopyBgTilemapBufferToVram(3);
-                CopyBgTilemapBufferToVram(2);
-                CopyBgTilemapBufferToVram(1);
-                gMain.state++;
-            }
-            break;
-        case 5:
-            InitWindows(sUIWindowTemplates);
-            DeactivateAllTextPrinters();
-            Setup_DrawMsgAndListBoxes();
-            sListMenuItems = AllocZeroed(17 * sizeof(struct ListMenuItem));
-            FC_CreateListMenu();
-            gMain.state++;
-            break;
-        case 6:
-            LoadUISpriteSheetsAndPalettes();
-            CreateAllFlavorTextIcons(FAMECHECKER_OAK);
-            WipeMsgBoxAndTransfer();
-            BeginNormalPaletteFade(PALETTES_ALL,0, 16, 0, 0);
-            gMain.state++;
-            break;
-        case 7:
-            FCSetup_TurnOnDisplay();
-            SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_BG0 | BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ | BLDCNT_TGT2_BD);
-            SetGpuReg(REG_OFFSET_BLDALPHA, 0x07);
-            SetGpuReg(REG_OFFSET_BLDY, 0x08);
-            SetVBlankCallback(FC_VBlankCallback);
-            sFameCheckerData->listMenuTopIdx = 0;
-            FC_CreateScrollIndicatorArrowPair();
-            UpdateInfoBoxTilemap(1, 4);
-            CreateTask(Task_WaitFadeOnInit, 0x08);
-            SetMainCallback2(MainCB2_FameCheckerMain);
-            gMain.state = 0;
-            break;
+        }
+        break;
+    case 5:
+        InitWindows(sUIWindowTemplates);
+        DeactivateAllTextPrinters();
+        Setup_DrawMsgAndListBoxes();
+        sListMenuItems = AllocZeroed(17 * sizeof(struct ListMenuItem));
+        FC_CreateListMenu();
+        gMain.state++;
+        break;
+    case 6:
+        LoadUISpriteSheetsAndPalettes();
+        CreateAllFlavorTextIcons(FAMECHECKER_OAK);
+        WipeMsgBoxAndTransfer();
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, 0);
+        gMain.state++;
+        break;
+    case 7:
+        FCSetup_TurnOnDisplay();
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_BG0 | BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ | BLDCNT_TGT2_BD);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0x07);
+        SetGpuReg(REG_OFFSET_BLDY, 0x08);
+        SetVBlankCallback(FC_VBlankCallback);
+        sFameCheckerData->listMenuTopIdx = 0;
+        FC_CreateScrollIndicatorArrowPair();
+        UpdateInfoBoxTilemap(1, 4);
+        CreateTask(Task_WaitFadeOnInit, 0x08);
+        SetMainCallback2(MainCB2_FameCheckerMain);
+        gMain.state = 0;
+        break;
     }
 }
 
@@ -730,8 +730,8 @@ static void Task_TopMenuHandleInput(u8 taskId)
 {
     u16 cursorPos;
     u8 i;
-    struct Task *task = &gTasks[taskId];
-    s16 * data = gTasks[taskId].data;
+    struct Task* task = &gTasks[taskId];
+    s16* data = gTasks[taskId].data;
     if (FindTaskIdByFunc(Task_FCOpenOrCloseInfoBox) == 0xFF)
     {
         RunTextPrinters();
@@ -804,7 +804,7 @@ static void Task_TopMenuHandleInput(u8 taskId)
 
 static bool8 TryExitPickMode(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     if (sFameCheckerData->inPickMode)
     {
         gSprites[task->data[2]].data[0] = 2;
@@ -827,7 +827,7 @@ static void MessageBoxPrintEmptyText(void)
 
 static void Task_EnterPickMode(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     if (gSprites[task->data[2]].data[0] == 0)
     {
         GetPickModeText();
@@ -840,7 +840,7 @@ static void Task_EnterPickMode(u8 taskId)
 
 static void Task_ExitPickMode(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     if (GetBgX(1) != 0)
         ChangeBgX(1, 0xA00, 2);
     else
@@ -860,8 +860,8 @@ static void Task_ExitPickMode(u8 taskId)
 
 static void Task_FlavorTextDisplayHandleInput(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
-    s16 *data = gTasks[taskId].data;
+    struct Task* task = &gTasks[taskId];
+    s16* data = gTasks[taskId].data;
 
     RunTextPrinters();
     if (JOY_NEW(A_BUTTON) && !IsTextPrinterActive(2))
@@ -930,7 +930,7 @@ static void Task_FlavorTextDisplayHandleInput(u8 taskId)
 static void FC_MoveSelectorCursor(u8 taskId, s8 dx, s8 dy)
 {
     u8 i;
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     PlaySE(SE_M_SWAGGER2);
     gSprites[data[0]].x += dx;
     gSprites[data[0]].y += dy;
@@ -969,7 +969,7 @@ static void GetPickModeText(void)
 
 static void PrintSelectedNameInBrightGreen(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u16 cursorPos = FameCheckerGetCursorY();
     FillWindowPixelRect(FCWINDOWID_MSGBOX, PIXEL_FILL(1), 0, 0, 0xd0, 0x20);
     StringExpandPlaceholders(gStringVar4, sFameCheckerFlavorTextPointers[sFameCheckerData->unlockedPersons[cursorPos] * 6 + data[1]]);
@@ -1074,7 +1074,7 @@ static u8 AdjustGiovanniIndexIfBeatenInGym(u8 a0)
 static void PrintUIHelp(u8 state)
 {
     s32 width;
-    const u8 * src = gFameCheckerText_MainScreenUI;
+    const u8* src = gFameCheckerText_MainScreenUI;
     if (state != 0)
     {
         src = gFameCheckerText_FlavorTextUI;
@@ -1164,30 +1164,30 @@ void FullyUnlockFameChecker(void)
 
 static void FCSetup_ClearVideoRegisters(void)
 {
-    void *vram = (void *)VRAM;
+    void* vram = (void*)VRAM;
     DmaClearLarge16(3, vram, VRAM_SIZE, 0x1000);
     DmaClear32(3, OAM, OAM_SIZE);
     DmaClear16(3, PLTT, PLTT_SIZE);
-    SetGpuReg(REG_OFFSET_DISPCNT,  0);
-    SetGpuReg(REG_OFFSET_BG0CNT,   0);
-    SetGpuReg(REG_OFFSET_BG0HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG0VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG1CNT,   0);
-    SetGpuReg(REG_OFFSET_BG1HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG1VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG2CNT,   0);
-    SetGpuReg(REG_OFFSET_BG2HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG2VOFS,  0);
-    SetGpuReg(REG_OFFSET_BG3CNT,   0);
-    SetGpuReg(REG_OFFSET_BG3HOFS,  0);
-    SetGpuReg(REG_OFFSET_BG3VOFS,  0);
-    SetGpuReg(REG_OFFSET_WIN0H,    0);
-    SetGpuReg(REG_OFFSET_WIN0V,    0);
-    SetGpuReg(REG_OFFSET_WININ,    0);
-    SetGpuReg(REG_OFFSET_WINOUT,   0);
-    SetGpuReg(REG_OFFSET_BLDCNT,   0);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_BG0CNT, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1CNT, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2CNT, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3CNT, 0);
+    SetGpuReg(REG_OFFSET_BG3HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3VOFS, 0);
+    SetGpuReg(REG_OFFSET_WIN0H, 0);
+    SetGpuReg(REG_OFFSET_WIN0V, 0);
+    SetGpuReg(REG_OFFSET_WININ, 0);
+    SetGpuReg(REG_OFFSET_WINOUT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
-    SetGpuReg(REG_OFFSET_BLDY,     0);
+    SetGpuReg(REG_OFFSET_BLDY, 0);
 }
 
 static void FCSetup_ResetTasksAndSpriteResources(void)
@@ -1235,9 +1235,9 @@ void UpdatePickStateFromSpecialVar8005(void)
     {
         if (gSpecialVar_0x8005 == FCPICKSTATE_NO_DRAW)
             return;
-        if (   gSpecialVar_0x8005 == FCPICKSTATE_SILHOUETTE 
+        if (gSpecialVar_0x8005 == FCPICKSTATE_SILHOUETTE
             && gSaveBlock1Ptr->fameChecker[gSpecialVar_0x8004].pickState == FCPICKSTATE_COLORED
-           )
+            )
             return;
         gSaveBlock1Ptr->fameChecker[gSpecialVar_0x8004].pickState = gSpecialVar_0x8005;
     }
@@ -1263,12 +1263,12 @@ static void FreeSelectionCursorSpriteResources(void)
 
 static u8 CreateFlavorTextIconSelectorCursorSprite(s16 where)
 {
-    s16 y =  34 + 27 * (where >= 3);
-    s16 x = 114 + 47 * (where %  3);
+    s16 y = 34 + 27 * (where >= 3);
+    s16 x = 114 + 47 * (where % 3);
     return CreateSprite(&sSpriteTemplate_SelectorCursor, x, y, 0);
 }
 
-static void SpriteCB_DestroyFlavorTextIconSelectorCursor(struct Sprite *sprite)
+static void SpriteCB_DestroyFlavorTextIconSelectorCursor(struct Sprite* sprite)
 {
     DestroySprite(sprite);
 }
@@ -1297,7 +1297,7 @@ static u8 CreateSpinningPokeballSprite(void)
     return CreateSprite(&sSpinningPokeballSpriteTemplate, 0xe2, 0x42, 0);
 }
 
-static void SpriteCB_DestroySpinningPokeball(struct Sprite *sprite)
+static void SpriteCB_DestroySpinningPokeball(struct Sprite* sprite)
 {
     FreeSpriteOamMatrix(sprite);
     DestroySprite(sprite);
@@ -1311,7 +1311,7 @@ static void FreeNonTrainerPicTiles(void)
     FreeSpriteTilesByTag(SPRITETAG_BILL);
 }
 
-static void SpriteCB_FCSpinningPokeball(struct Sprite *sprite)
+static void SpriteCB_FCSpinningPokeball(struct Sprite* sprite)
 {
     if (sprite->data[0] == 1)
     {
@@ -1378,15 +1378,15 @@ static u8 CreatePersonPicSprite(u8 fcPersonIdx)
 
 static void DestroyPersonPicSprite(u8 taskId, u16 who)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u16 who_copy = who;
     if (who == sFameCheckerData->numUnlockedPersons - 1)
         who_copy = who - 1;
-    if (   sFameCheckerData->unlockedPersons[who_copy] == FAMECHECKER_DAISY
+    if (sFameCheckerData->unlockedPersons[who_copy] == FAMECHECKER_DAISY
         || sFameCheckerData->unlockedPersons[who_copy] == FAMECHECKER_MRFUJI
         || sFameCheckerData->unlockedPersons[who_copy] == FAMECHECKER_OAK
         || sFameCheckerData->unlockedPersons[who_copy] == FAMECHECKER_BILL
-    )
+        )
         DestroySprite(&gSprites[data[2]]);
     else
         FreeAndDestroyTrainerPicSprite(data[2]);
@@ -1443,7 +1443,7 @@ static void InitListMenuTemplate(void)
     gFameChecker_ListMenuTemplate.cursorKind = 0;
 }
 
-static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list)
+static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list)
 {
     u16 listMenuTopIdx;
     u8 taskId;
@@ -1454,7 +1454,7 @@ static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list
     taskId = FindTaskIdByFunc(Task_TopMenuHandleInput);
     if (taskId != 0xFF)
     {
-        struct Task *task = &gTasks[taskId];
+        struct Task* task = &gTasks[taskId];
         PlaySE(SE_SELECT);
         task->data[1] = 0;
         ListMenuGetScrollAndRow(sFameCheckerData->listMenuTaskId, &listMenuTopIdx, NULL);
@@ -1507,7 +1507,7 @@ static void FC_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list
 
 static void Task_SwitchToPickMode(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     task->data[2] = CreatePersonPicSprite(sFameCheckerData->unlockedPersons[sLastMenuIdx]);
     gSprites[task->data[2]].data[0] = 0;
     GetPickModeText();
@@ -1646,24 +1646,24 @@ static void HandleFlavorTextModeSwitch(bool8 state)
 
 static void Task_FCOpenOrCloseInfoBox(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->data[0])
     {
-        case 0:
-            if (--task->data[1] == 0)
-            {
-                UpdateInfoBoxTilemap(1, 0);
-                task->data[1] = 4;
-                task->data[0]++;
-            }
-            break;
-        case 1:
-            if (--task->data[1] == 0)
-            {
-                UpdateInfoBoxTilemap(1, task->data[2]);
-                DestroyTask(taskId);
-            }
-            break;
+    case 0:
+        if (--task->data[1] == 0)
+        {
+            UpdateInfoBoxTilemap(1, 0);
+            task->data[1] = 4;
+            task->data[0]++;
+        }
+        break;
+    case 1:
+        if (--task->data[1] == 0)
+        {
+            UpdateInfoBoxTilemap(1, task->data[2]);
+            DestroyTask(taskId);
+        }
+        break;
     }
 }
 
@@ -1671,60 +1671,60 @@ static void UpdateInfoBoxTilemap(u8 bg, s16 state)
 {
     if (state == 0 || state == 3)
     {
-        FillBgTilemapBufferRect(bg, 0x8C, 14, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0xA1, 15, 10, 10,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x8D, 25, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x8E, 26, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x8F, 14, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x00, 15, 11, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x90, 26, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x91, 14, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0xA3, 15, 12, 10,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x92, 25, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x93, 26, 12,  1,  1, 1);
+        FillBgTilemapBufferRect(bg, 0x8C, 14, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0xA1, 15, 10, 10, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x8D, 25, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x8E, 26, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x8F, 14, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x00, 15, 11, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x90, 26, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x91, 14, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0xA3, 15, 12, 10, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x92, 25, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x93, 26, 12, 1, 1, 1);
     }
     else if (state == 1)
     {
-        FillBgTilemapBufferRect(bg, 0x9B, 14, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x9C, 15, 10, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x96, 26, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x9D, 14, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x00, 15, 11, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x90, 26, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x9E, 14, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x9F, 15, 12, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x99, 26, 12,  1,  1, 1);
+        FillBgTilemapBufferRect(bg, 0x9B, 14, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x9C, 15, 10, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x96, 26, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x9D, 14, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x00, 15, 11, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x90, 26, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x9E, 14, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x9F, 15, 12, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x99, 26, 12, 1, 1, 1);
     }
     else if (state == 2)
     {
-        FillBgTilemapBufferRect(bg, 0x94, 14, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x95, 15, 10, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x96, 26, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x8F, 14, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x9A, 15, 11, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x90, 26, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x97, 14, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x98, 15, 12, 11,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x99, 26, 12,  1,  1, 1);
+        FillBgTilemapBufferRect(bg, 0x94, 14, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x95, 15, 10, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x96, 26, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x8F, 14, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x9A, 15, 11, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x90, 26, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x97, 14, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x98, 15, 12, 11, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x99, 26, 12, 1, 1, 1);
     }
     else if (state == 4)
     {
-        FillBgTilemapBufferRect(bg, 0x83, 14, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0xA0, 15, 10, 10,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x84, 25, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x85, 26, 10,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x86, 14, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0xA2, 15, 11, 10,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x87, 25, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x88, 26, 11,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x83, 14, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0xA0, 15, 12, 10,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x84, 25, 12,  1,  1, 1);
-        FillBgTilemapBufferRect(bg, 0x85, 26, 12,  1,  1, 1);
+        FillBgTilemapBufferRect(bg, 0x83, 14, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0xA0, 15, 10, 10, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x84, 25, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x85, 26, 10, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x86, 14, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0xA2, 15, 11, 10, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x87, 25, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x88, 26, 11, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x83, 14, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0xA0, 15, 12, 10, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x84, 25, 12, 1, 1, 1);
+        FillBgTilemapBufferRect(bg, 0x85, 26, 12, 1, 1, 1);
     }
     else if (state == 5)
     {
-        FillBgTilemapBufferRect(bg, 0x00, 14, 10, 13,  3, 1);
+        FillBgTilemapBufferRect(bg, 0x00, 14, 10, 13, 3, 1);
     }
     CopyBgTilemapBufferToVram(bg);
 }

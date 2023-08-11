@@ -3,7 +3,7 @@
 // Some of these functions have different signatures, so we need to make this
 // an array of void pointers or a struct. It's simpler to just make it an array
 // for now.
-void *const gMPlayJumpTableTemplate[] =
+void* const gMPlayJumpTableTemplate[] =
 {
     ply_fine,
     ply_goto,
@@ -261,7 +261,7 @@ const struct PokemonCrySong gPokemonCrySongTemplate =
     0, // block count
     255, // priority
     0, // reverb
-    (struct ToneData *)&voicegroup000,
+    (struct ToneData*)&voicegroup000,
     NULL,
     NULL,
     0,

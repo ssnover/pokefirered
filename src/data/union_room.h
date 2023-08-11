@@ -1,27 +1,27 @@
-static const u8 *const sLinkGroupActivityNameTexts[] = {
-    [ACTIVITY_NONE]            = gText_UR_EmptyString,
-    [ACTIVITY_BATTLE_SINGLE]   = gText_UR_SingleBattle,
-    [ACTIVITY_BATTLE_DOUBLE]   = gText_UR_DoubleBattle,
-    [ACTIVITY_BATTLE_MULTI]    = gText_UR_MultiBattle,
-    [ACTIVITY_TRADE]           = gText_UR_PokemonTrades,
-    [ACTIVITY_CHAT]            = gText_UR_Chat,
+static const u8* const sLinkGroupActivityNameTexts[] = {
+    [ACTIVITY_NONE] = gText_UR_EmptyString,
+    [ACTIVITY_BATTLE_SINGLE] = gText_UR_SingleBattle,
+    [ACTIVITY_BATTLE_DOUBLE] = gText_UR_DoubleBattle,
+    [ACTIVITY_BATTLE_MULTI] = gText_UR_MultiBattle,
+    [ACTIVITY_TRADE] = gText_UR_PokemonTrades,
+    [ACTIVITY_CHAT] = gText_UR_Chat,
     [ACTIVITY_WONDER_CARD_DUP] = gText_UR_WonderCards,
     [ACTIVITY_WONDER_NEWS_DUP] = gText_UR_WonderNews,
-    [ACTIVITY_CARD]            = gText_UR_Cards,
-    [ACTIVITY_POKEMON_JUMP]    = gText_UR_PokemonJump,
-    [ACTIVITY_BERRY_CRUSH]     = gText_UR_BerryCrush,
-    [ACTIVITY_BERRY_PICK]      = gText_UR_BerryPicking,
-    [ACTIVITY_SEARCH]          = gText_UR_Search,
-    [ACTIVITY_SPIN_TRADE]      = gText_UR_SpinTrade,
-    [ACTIVITY_ITEM_TRADE]      = gText_UR_ItemTrade,
-    [ACTIVITY_RECORD_CORNER]   = gText_UR_EmptyString,
-    [ACTIVITY_BERRY_BLENDER]   = gText_UR_EmptyString,
-    [ACTIVITY_ACCEPT]          = gText_UR_EmptyString,
-    [ACTIVITY_DECLINE]         = gText_UR_EmptyString,
-    [ACTIVITY_NPCTALK]         = gText_UR_EmptyString,
-    [ACTIVITY_PLYRTALK]        = gText_UR_EmptyString,
-    [ACTIVITY_WONDER_CARD]     = gText_UR_WonderCards,
-    [ACTIVITY_WONDER_NEWS]     = gText_UR_WonderNews
+    [ACTIVITY_CARD] = gText_UR_Cards,
+    [ACTIVITY_POKEMON_JUMP] = gText_UR_PokemonJump,
+    [ACTIVITY_BERRY_CRUSH] = gText_UR_BerryCrush,
+    [ACTIVITY_BERRY_PICK] = gText_UR_BerryPicking,
+    [ACTIVITY_SEARCH] = gText_UR_Search,
+    [ACTIVITY_SPIN_TRADE] = gText_UR_SpinTrade,
+    [ACTIVITY_ITEM_TRADE] = gText_UR_ItemTrade,
+    [ACTIVITY_RECORD_CORNER] = gText_UR_EmptyString,
+    [ACTIVITY_BERRY_BLENDER] = gText_UR_EmptyString,
+    [ACTIVITY_ACCEPT] = gText_UR_EmptyString,
+    [ACTIVITY_DECLINE] = gText_UR_EmptyString,
+    [ACTIVITY_NPCTALK] = gText_UR_EmptyString,
+    [ACTIVITY_PLYRTALK] = gText_UR_EmptyString,
+    [ACTIVITY_WONDER_CARD] = gText_UR_WonderCards,
+    [ACTIVITY_WONDER_NEWS] = gText_UR_WonderNews
 };
 
 static const struct WindowTemplate sWindowTemplate_BButtonCancel = {
@@ -42,15 +42,15 @@ static const struct WindowTemplate sWindowTemplate_BButtonCancel = {
 #define GROUP_MIN2(capacity)(capacity & 0xF0) // Unnecessary to have both, but needed to match
 
 static const u32 sLinkGroupToActivityAndCapacity[] = {
-    [LINK_GROUP_SINGLE_BATTLE] = ACTIVITY_BATTLE_SINGLE     | LINK_GROUP_CAPACITY(0, 2),
-    [LINK_GROUP_DOUBLE_BATTLE] = ACTIVITY_BATTLE_DOUBLE     | LINK_GROUP_CAPACITY(0, 2),
-    [LINK_GROUP_MULTI_BATTLE]  = ACTIVITY_BATTLE_MULTI      | LINK_GROUP_CAPACITY(0, 4),
-    [LINK_GROUP_TRADE]         = ACTIVITY_TRADE             | LINK_GROUP_CAPACITY(0, 2),
-    [LINK_GROUP_POKEMON_JUMP]  = ACTIVITY_POKEMON_JUMP      | LINK_GROUP_CAPACITY(2, 5),
-    [LINK_GROUP_BERRY_CRUSH]   = ACTIVITY_BERRY_CRUSH       | LINK_GROUP_CAPACITY(2, 5),
-    [LINK_GROUP_BERRY_PICKING] = ACTIVITY_BERRY_PICK        | LINK_GROUP_CAPACITY(3, 5),
-    [LINK_GROUP_WONDER_CARD]   = ACTIVITY_SPIN_TRADE        | LINK_GROUP_CAPACITY(3, 5),
-    [LINK_GROUP_WONDER_NEWS]   = ACTIVITY_ITEM_TRADE        | LINK_GROUP_CAPACITY(3, 5)
+    [LINK_GROUP_SINGLE_BATTLE] = ACTIVITY_BATTLE_SINGLE | LINK_GROUP_CAPACITY(0, 2),
+    [LINK_GROUP_DOUBLE_BATTLE] = ACTIVITY_BATTLE_DOUBLE | LINK_GROUP_CAPACITY(0, 2),
+    [LINK_GROUP_MULTI_BATTLE] = ACTIVITY_BATTLE_MULTI | LINK_GROUP_CAPACITY(0, 4),
+    [LINK_GROUP_TRADE] = ACTIVITY_TRADE | LINK_GROUP_CAPACITY(0, 2),
+    [LINK_GROUP_POKEMON_JUMP] = ACTIVITY_POKEMON_JUMP | LINK_GROUP_CAPACITY(2, 5),
+    [LINK_GROUP_BERRY_CRUSH] = ACTIVITY_BERRY_CRUSH | LINK_GROUP_CAPACITY(2, 5),
+    [LINK_GROUP_BERRY_PICKING] = ACTIVITY_BERRY_PICK | LINK_GROUP_CAPACITY(3, 5),
+    [LINK_GROUP_WONDER_CARD] = ACTIVITY_SPIN_TRADE | LINK_GROUP_CAPACITY(3, 5),
+    [LINK_GROUP_WONDER_NEWS] = ACTIVITY_ITEM_TRADE | LINK_GROUP_CAPACITY(3, 5)
 };
 
 static const struct WindowTemplate sWindowTemplate_List_PossibleGroupMembers = {
@@ -395,15 +395,15 @@ static const struct ListMenuTemplate sListMenuTemplate_Unused = {
 
 static const struct RfuPlayerData sRfuPlayerData_Dummy = {};
 
-ALIGNED(4) static const u8 sAcceptedActivityIds_SingleBattle[] = {ACTIVITY_BATTLE_SINGLE, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_DoubleBattle[] = {ACTIVITY_BATTLE_DOUBLE, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_MultiBattle[] = {ACTIVITY_BATTLE_MULTI, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_Trade[] = {ACTIVITY_TRADE, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_PokemonJump[] = {ACTIVITY_POKEMON_JUMP, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_BerryCrush[] = {ACTIVITY_BERRY_CRUSH, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_BerryPicking[] = {ACTIVITY_BERRY_PICK, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_WonderCard[] = {ACTIVITY_WONDER_CARD, 0xFF};
-ALIGNED(4) static const u8 sAcceptedActivityIds_WonderNews[] = {ACTIVITY_WONDER_NEWS, 0xFF};
+ALIGNED(4) static const u8 sAcceptedActivityIds_SingleBattle[] = { ACTIVITY_BATTLE_SINGLE, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_DoubleBattle[] = { ACTIVITY_BATTLE_DOUBLE, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_MultiBattle[] = { ACTIVITY_BATTLE_MULTI, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_Trade[] = { ACTIVITY_TRADE, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_PokemonJump[] = { ACTIVITY_POKEMON_JUMP, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_BerryCrush[] = { ACTIVITY_BERRY_CRUSH, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_BerryPicking[] = { ACTIVITY_BERRY_PICK, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_WonderCard[] = { ACTIVITY_WONDER_CARD, 0xFF };
+ALIGNED(4) static const u8 sAcceptedActivityIds_WonderNews[] = { ACTIVITY_WONDER_NEWS, 0xFF };
 ALIGNED(4) static const u8 sAcceptedActivityIds_Resume[] = {
     IN_UNION_ROOM | ACTIVITY_NONE,
     IN_UNION_ROOM | ACTIVITY_BATTLE_SINGLE,
@@ -416,7 +416,7 @@ ALIGNED(4) static const u8 sAcceptedActivityIds_Resume[] = {
     IN_UNION_ROOM | ACTIVITY_PLYRTALK,
     0xFF
 };
-ALIGNED(4) static const u8 sAcceptedActivityIds_Init[] = {ACTIVITY_SEARCH, 0xFF};
+ALIGNED(4) static const u8 sAcceptedActivityIds_Init[] = { ACTIVITY_SEARCH, 0xFF };
 ALIGNED(4) static const u8 sAcceptedActivityIds_Unk11[] = {
     ACTIVITY_BATTLE_SINGLE,
     ACTIVITY_BATTLE_DOUBLE,
@@ -439,32 +439,32 @@ ALIGNED(4) static const u8 sAcceptedActivityIds_Unk12[] = {
     0xFF
 };
 
-static const u8 *const sAcceptedActivityIds[NUM_LINK_GROUP_TYPES] = {
-    [LINK_GROUP_SINGLE_BATTLE]     = sAcceptedActivityIds_SingleBattle,
-    [LINK_GROUP_DOUBLE_BATTLE]     = sAcceptedActivityIds_DoubleBattle,
-    [LINK_GROUP_MULTI_BATTLE]      = sAcceptedActivityIds_MultiBattle,
-    [LINK_GROUP_TRADE]             = sAcceptedActivityIds_Trade,
-    [LINK_GROUP_POKEMON_JUMP]      = sAcceptedActivityIds_PokemonJump,
-    [LINK_GROUP_BERRY_CRUSH]       = sAcceptedActivityIds_BerryCrush,
-    [LINK_GROUP_BERRY_PICKING]     = sAcceptedActivityIds_BerryPicking,
-    [LINK_GROUP_WONDER_CARD]       = sAcceptedActivityIds_WonderCard,
-    [LINK_GROUP_WONDER_NEWS]       = sAcceptedActivityIds_WonderNews,
+static const u8* const sAcceptedActivityIds[NUM_LINK_GROUP_TYPES] = {
+    [LINK_GROUP_SINGLE_BATTLE] = sAcceptedActivityIds_SingleBattle,
+    [LINK_GROUP_DOUBLE_BATTLE] = sAcceptedActivityIds_DoubleBattle,
+    [LINK_GROUP_MULTI_BATTLE] = sAcceptedActivityIds_MultiBattle,
+    [LINK_GROUP_TRADE] = sAcceptedActivityIds_Trade,
+    [LINK_GROUP_POKEMON_JUMP] = sAcceptedActivityIds_PokemonJump,
+    [LINK_GROUP_BERRY_CRUSH] = sAcceptedActivityIds_BerryCrush,
+    [LINK_GROUP_BERRY_PICKING] = sAcceptedActivityIds_BerryPicking,
+    [LINK_GROUP_WONDER_CARD] = sAcceptedActivityIds_WonderCard,
+    [LINK_GROUP_WONDER_NEWS] = sAcceptedActivityIds_WonderNews,
     [LINK_GROUP_UNION_ROOM_RESUME] = sAcceptedActivityIds_Resume,
-    [LINK_GROUP_UNION_ROOM_INIT]   = sAcceptedActivityIds_Init,
-    [LINK_GROUP_UNK_11]            = sAcceptedActivityIds_Unk11,
-    [LINK_GROUP_UNK_12]            = sAcceptedActivityIds_Unk12,
+    [LINK_GROUP_UNION_ROOM_INIT] = sAcceptedActivityIds_Init,
+    [LINK_GROUP_UNK_11] = sAcceptedActivityIds_Unk11,
+    [LINK_GROUP_UNK_12] = sAcceptedActivityIds_Unk12,
 };
 
 static const u8 sLinkGroupToURoomActivity[] = {
     [LINK_GROUP_SINGLE_BATTLE] = ACTIVITY_BATTLE_SINGLE,
     [LINK_GROUP_DOUBLE_BATTLE] = ACTIVITY_BATTLE_DOUBLE,
-    [LINK_GROUP_MULTI_BATTLE]  = ACTIVITY_BATTLE_MULTI,
-    [LINK_GROUP_TRADE]         = ACTIVITY_TRADE,
-    [LINK_GROUP_POKEMON_JUMP]  = ACTIVITY_POKEMON_JUMP,
-    [LINK_GROUP_BERRY_CRUSH]   = ACTIVITY_BERRY_CRUSH,
+    [LINK_GROUP_MULTI_BATTLE] = ACTIVITY_BATTLE_MULTI,
+    [LINK_GROUP_TRADE] = ACTIVITY_TRADE,
+    [LINK_GROUP_POKEMON_JUMP] = ACTIVITY_POKEMON_JUMP,
+    [LINK_GROUP_BERRY_CRUSH] = ACTIVITY_BERRY_CRUSH,
     [LINK_GROUP_BERRY_PICKING] = ACTIVITY_BERRY_PICK,
-    [LINK_GROUP_WONDER_CARD]   = ACTIVITY_WONDER_CARD,
-    [LINK_GROUP_WONDER_NEWS]   = ACTIVITY_WONDER_NEWS
+    [LINK_GROUP_WONDER_CARD] = ACTIVITY_WONDER_CARD,
+    [LINK_GROUP_WONDER_NEWS] = ACTIVITY_WONDER_NEWS
 };
 
 // Unused

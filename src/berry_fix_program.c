@@ -32,7 +32,7 @@ enum {
     STATE_RETRY,
 };
 
-const void *gMultibootStart;
+const void* gMultibootStart;
 int gMultibootStatus;
 size_t gMultibootSize;
 struct MultiBootParam gMultibootParam;
@@ -40,7 +40,7 @@ struct MultiBootParam gMultibootParam;
 static void CB2_BerryFix(void);
 static void Task_BerryFixMain(u8 taskId);
 
-static const void *const sBerryFixGraphics[][3] = {
+static const void* const sBerryFixGraphics[][3] = {
     [SCENE_ENSURE_CONNECT] = {
         gBerryFixGameboy_Gfx,
         gBerryFixGameboy_Tilemap,
@@ -82,9 +82,9 @@ static void SetScene(int scene)
     REG_BG0HOFS = 0;
     REG_BG0VOFS = 0;
     REG_BLDCNT = 0;
-    LZ77UnCompVram(sBerryFixGraphics[scene][0], (void *)BG_CHAR_ADDR(0));
-    LZ77UnCompVram(sBerryFixGraphics[scene][1], (void *)BG_SCREEN_ADDR(31));
-    CpuCopy16(sBerryFixGraphics[scene][2], (void *)BG_PLTT, 0x200);
+    LZ77UnCompVram(sBerryFixGraphics[scene][0], (void*)BG_CHAR_ADDR(0));
+    LZ77UnCompVram(sBerryFixGraphics[scene][1], (void*)BG_SCREEN_ADDR(31));
+    CpuCopy16(sBerryFixGraphics[scene][2], (void*)BG_PLTT, 0x200);
     REG_BG0CNT = BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_16COLOR | BGCNT_SCREENBASE(31) | BGCNT_TXT256x256;
     REG_DISPCNT = DISPCNT_BG0_ON;
 }
@@ -99,8 +99,8 @@ void CB2_InitBerryFixProgram(void)
     EnableInterrupts(INTR_FLAG_VBLANK);
     m4aSoundVSyncOff();
     SetVBlankCallback(NULL);
-    DmaFill32(3, 0, (void *)VRAM, VRAM_SIZE);
-    DmaFill32(3, 0, (void *)PLTT, PLTT_SIZE);
+    DmaFill32(3, 0, (void*)VRAM, VRAM_SIZE);
+    DmaFill32(3, 0, (void*)PLTT, PLTT_SIZE);
     ResetSpriteData();
     ResetTasks();
     ScanlineEffect_Stop();
@@ -117,7 +117,7 @@ static void CB2_BerryFix(void)
 
 static void Task_BerryFixMain(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState)
     {
@@ -142,7 +142,7 @@ static void Task_BerryFixMain(u8 taskId)
     case STATE_INIT_MULTIBOOT:
         gMultibootStart = gMultiBootProgram_BerryGlitchFix_Start;
         gMultibootSize = gMultiBootProgram_BerryGlitchFix_End - gMultiBootProgram_BerryGlitchFix_Start;
-        gMultibootParam.masterp = (void *)gMultiBootProgram_BerryGlitchFix_Start;
+        gMultibootParam.masterp = (void*)gMultiBootProgram_BerryGlitchFix_Start;
         gMultibootParam.server_type = MULTIBOOT_SERVER_TYPE_NORMAL;
         MultiBootInit(&gMultibootParam);
         tTimer = 0;

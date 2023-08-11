@@ -246,20 +246,20 @@ static const struct OamData sWirelessStatusIndicatorOamData =
 };
 
 static const union AnimCmd sWirelessStatusIndicator_3Bars[] = {
-    ANIMCMD_FRAME( 4,  5),
-    ANIMCMD_FRAME( 8,  5),
+    ANIMCMD_FRAME(4,  5),
+    ANIMCMD_FRAME(8,  5),
     ANIMCMD_FRAME(12,  5),
     ANIMCMD_FRAME(16, 10),
     ANIMCMD_FRAME(12,  5),
-    ANIMCMD_FRAME( 8,  5),
+    ANIMCMD_FRAME(8,  5),
     ANIMCMD_JUMP(0)
 };
 
 static const union AnimCmd sWirelessStatusIndicator_2Bars[] = {
-    ANIMCMD_FRAME( 4,  5),
-    ANIMCMD_FRAME( 8,  5),
+    ANIMCMD_FRAME(4,  5),
+    ANIMCMD_FRAME(8,  5),
     ANIMCMD_FRAME(12, 10),
-    ANIMCMD_FRAME( 8,  5),
+    ANIMCMD_FRAME(8,  5),
     ANIMCMD_JUMP(0)
 };
 
@@ -270,23 +270,23 @@ static const union AnimCmd sWirelessStatusIndicator_1Bar[] = {
 };
 
 static const union AnimCmd sWirelessStatusIndicator_Searching[] = {
-    ANIMCMD_FRAME( 4, 10),
+    ANIMCMD_FRAME(4, 10),
     ANIMCMD_FRAME(20, 10),
     ANIMCMD_JUMP(0)
 };
 
 static const union AnimCmd sWirelessStatusIndicator_Error[] = {
     ANIMCMD_FRAME(24, 10),
-    ANIMCMD_FRAME( 4, 10),
+    ANIMCMD_FRAME(4, 10),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sWirelessStatusIndicatorAnims[] = {
-    [WIRELESS_STATUS_ANIM_3_BARS]    = sWirelessStatusIndicator_3Bars,
-    [WIRELESS_STATUS_ANIM_2_BARS]    = sWirelessStatusIndicator_2Bars,
-    [WIRELESS_STATUS_ANIM_1_BAR]     = sWirelessStatusIndicator_1Bar,
+static const union AnimCmd* const sWirelessStatusIndicatorAnims[] = {
+    [WIRELESS_STATUS_ANIM_3_BARS] = sWirelessStatusIndicator_3Bars,
+    [WIRELESS_STATUS_ANIM_2_BARS] = sWirelessStatusIndicator_2Bars,
+    [WIRELESS_STATUS_ANIM_1_BAR] = sWirelessStatusIndicator_1Bar,
     [WIRELESS_STATUS_ANIM_SEARCHING] = sWirelessStatusIndicator_Searching,
-    [WIRELESS_STATUS_ANIM_ERROR]     = sWirelessStatusIndicator_Error
+    [WIRELESS_STATUS_ANIM_ERROR] = sWirelessStatusIndicator_Error
 };
 
 static const struct CompressedSpriteSheet sWirelessStatusIndicatorSpriteSheet = {
@@ -309,7 +309,7 @@ static const struct SpriteTemplate sWirelessStatusIndicatorSpriteTemplate = {
 
 // A bunch of FIFO queues
 
-void RfuRecvQueue_Reset(struct RfuRecvQueue *queue)
+void RfuRecvQueue_Reset(struct RfuRecvQueue* queue)
 {
     s32 i;
     s32 j;
@@ -325,7 +325,7 @@ void RfuRecvQueue_Reset(struct RfuRecvQueue *queue)
     queue->full = FALSE;
 }
 
-void RfuSendQueue_Reset(struct RfuSendQueue *queue)
+void RfuSendQueue_Reset(struct RfuSendQueue* queue)
 {
     s32 i;
     s32 j;
@@ -341,7 +341,7 @@ void RfuSendQueue_Reset(struct RfuSendQueue *queue)
     queue->full = FALSE;
 }
 
-static void RfuUnusedQueue_Reset(struct RfuUnusedQueue *queue)
+static void RfuUnusedQueue_Reset(struct RfuUnusedQueue* queue)
 {
     s32 i;
     s32 j;
@@ -357,7 +357,7 @@ static void RfuUnusedQueue_Reset(struct RfuUnusedQueue *queue)
     queue->full = FALSE;
 }
 
-void RfuRecvQueue_Enqueue(struct RfuRecvQueue *queue, u8 *src)
+void RfuRecvQueue_Enqueue(struct RfuRecvQueue* queue, u8* src)
 {
     s32 i;
     u16 imeBak;
@@ -391,7 +391,7 @@ void RfuRecvQueue_Enqueue(struct RfuRecvQueue *queue, u8 *src)
     }
 }
 
-void RfuSendQueue_Enqueue(struct RfuSendQueue *queue, u8 *src)
+void RfuSendQueue_Enqueue(struct RfuSendQueue* queue, u8* src)
 {
     s32 i;
     u16 imeBak;
@@ -423,7 +423,7 @@ void RfuSendQueue_Enqueue(struct RfuSendQueue *queue, u8 *src)
     }
 }
 
-bool8 RfuRecvQueue_Dequeue(struct RfuRecvQueue *queue, u8 *dest)
+bool8 RfuRecvQueue_Dequeue(struct RfuRecvQueue* queue, u8* dest)
 {
     u16 imeBak;
     s32 i;
@@ -446,7 +446,7 @@ bool8 RfuRecvQueue_Dequeue(struct RfuRecvQueue *queue, u8 *dest)
     return TRUE;
 }
 
-bool8 RfuSendQueue_Dequeue(struct RfuSendQueue *queue, u8 *dest)
+bool8 RfuSendQueue_Dequeue(struct RfuSendQueue* queue, u8* dest)
 {
     s32 i;
     u16 imeBak;
@@ -464,7 +464,7 @@ bool8 RfuSendQueue_Dequeue(struct RfuSendQueue *queue, u8 *dest)
     return TRUE;
 }
 
-void RfuBackupQueue_Enqueue(struct RfuBackupQueue *queue, const u8 *dest)
+void RfuBackupQueue_Enqueue(struct RfuBackupQueue* queue, const u8* dest)
 {
     s32 i;
 
@@ -485,7 +485,7 @@ void RfuBackupQueue_Enqueue(struct RfuBackupQueue *queue, const u8 *dest)
     }
 }
 
-bool8 RfuBackupQueue_Dequeue(struct RfuBackupQueue *queue, u8 *dest)
+bool8 RfuBackupQueue_Dequeue(struct RfuBackupQueue* queue, u8* dest)
 {
     s32 i;
 
@@ -503,7 +503,7 @@ bool8 RfuBackupQueue_Dequeue(struct RfuBackupQueue *queue, u8 *dest)
     return TRUE;
 }
 
-static void RfuUnusedQueue_Dequeue(struct RfuUnusedQueue *queue, u8 *dest)
+static void RfuUnusedQueue_Dequeue(struct RfuUnusedQueue* queue, u8* dest)
 {
     s32 i;
 
@@ -521,7 +521,7 @@ static void RfuUnusedQueue_Dequeue(struct RfuUnusedQueue *queue, u8 *dest)
     }
 }
 
-static bool8 RfuUnusedQueue_Enqueue(struct RfuUnusedQueue *queue, u8 *dest)
+static bool8 RfuUnusedQueue_Enqueue(struct RfuUnusedQueue* queue, u8* dest)
 {
     s32 i;
 
@@ -541,7 +541,7 @@ static bool8 RfuUnusedQueue_Enqueue(struct RfuUnusedQueue *queue, u8 *dest)
 // Populates an array with a sequence of numbers (which numbers depends on the mode)
 // and sets the final element to the total of the other elements
 #define SEQ_ARRAY_MAX_SIZE 200
-static void PopulateArrayWithSequence(u8 *arr, u8 mode)
+static void PopulateArrayWithSequence(u8* arr, u8 mode)
 {
     s32 i;
     u8 rval;
@@ -558,7 +558,7 @@ static void PopulateArrayWithSequence(u8 *arr, u8 mode)
             arr[i] = i + 1;
             total += i + 1;
         }
-        *((u16 *)(arr + i)) = total;
+        *((u16*)(arr + i)) = total;
         break;
     case 1:
         // Populate with numbers 1-100
@@ -568,7 +568,7 @@ static void PopulateArrayWithSequence(u8 *arr, u8 mode)
             arr[i] = i + 1;
             total += i + 1;
         }
-        *((u16 *)(arr + SEQ_ARRAY_MAX_SIZE)) = total;
+        *((u16*)(arr + SEQ_ARRAY_MAX_SIZE)) = total;
         break;
     case 2:
         // Populate with random numbers 0-255
@@ -579,7 +579,7 @@ static void PopulateArrayWithSequence(u8 *arr, u8 mode)
             arr[i] = rval;
             total += rval;
         }
-        *((u16 *)(arr + i)) = total;
+        *((u16*)(arr + i)) = total;
         break;
     case 3:
         // Populate with numbers 1-200 + counter
@@ -589,13 +589,13 @@ static void PopulateArrayWithSequence(u8 *arr, u8 mode)
             arr[i] = i + 1 + counter;
             total += (i + 1 + counter) & 0xFF;
         }
-        *((u16 *)(arr + i)) = total;
+        *((u16*)(arr + i)) = total;
         counter++;
         break;
     }
 }
 
-static void PkmnStrToASCII(u8 *dest, const u8 *src)
+static void PkmnStrToASCII(u8* dest, const u8* src)
 {
     s32 i;
 
@@ -604,7 +604,7 @@ static void PkmnStrToASCII(u8 *dest, const u8 *src)
     dest[i] = 0;
 }
 
-static void ASCIIToPkmnStr(u8 *dest, const u8 *src)
+static void ASCIIToPkmnStr(u8* dest, const u8* src)
 {
     s32 i;
 
@@ -647,7 +647,7 @@ static u8 GetConnectedChildStrength(u8 maxFlags)
     return 0;
 }
 
-void InitHostRfuGameData(struct RfuGameData *data, u8 activity, bool32 startedActivity, s32 partnerInfo)
+void InitHostRfuGameData(struct RfuGameData* data, u8 activity, bool32 startedActivity, s32 partnerInfo)
 {
     s32 i;
 
@@ -679,7 +679,7 @@ void InitHostRfuGameData(struct RfuGameData *data, u8 activity, bool32 startedAc
  * Otherwise, blanks these.
  * ================================================================
  */
-bool8 Rfu_GetCompatiblePlayerData(struct RfuGameData *gameData, u8 *username, u8 idx)
+bool8 Rfu_GetCompatiblePlayerData(struct RfuGameData* gameData, u8* username, u8 idx)
 {
     bool8 retVal;
 
@@ -714,7 +714,7 @@ bool8 Rfu_GetCompatiblePlayerData(struct RfuGameData *gameData, u8 *username, u8
     return retVal;
 }
 
-bool8 Rfu_GetWonderDistributorPlayerData(struct RfuGameData *gameData, u8 *username, u8 idx)
+bool8 Rfu_GetWonderDistributorPlayerData(struct RfuGameData* gameData, u8* username, u8 idx)
 {
     bool8 retVal = FALSE;
     if (gRfuLinkStatus->partner[idx].serialNo == RFU_SERIAL_WONDER_DISTRIBUTOR)
@@ -731,7 +731,7 @@ bool8 Rfu_GetWonderDistributorPlayerData(struct RfuGameData *gameData, u8 *usern
     return retVal;
 }
 
-void CopyHostRfuGameDataAndUsername(struct RfuGameData *gameData, u8 *username)
+void CopyHostRfuGameDataAndUsername(struct RfuGameData* gameData, u8* username)
 {
     memcpy(gameData, &gHostRfuGameData, RFU_GAME_NAME_LENGTH);
     memcpy(username, gHostRfuUsername, RFU_USER_NAME_LENGTH);
@@ -753,7 +753,7 @@ void CreateWirelessStatusIndicatorSprite(u8 x, u8 y)
     if (x == 0 && y == 0)
     {
         x = 231;
-        y =   8;
+        y = 8;
     }
     if (gRfuLinkStatus->parentChild == MODE_PARENT)
     {
@@ -779,7 +779,7 @@ void DestroyWirelessStatusIndicatorSprite(void)
         gSprites[sWirelessStatusIndicatorSpriteId].sValidator = 0;
         DestroySprite(&gSprites[sWirelessStatusIndicatorSpriteId]);
         gMain.oamBuffer[125] = gDummyOamData;
-        CpuCopy16(&gDummyOamData, (struct OamData *)OAM + 125, sizeof(struct OamData));
+        CpuCopy16(&gDummyOamData, (struct OamData*)OAM + 125, sizeof(struct OamData));
     }
 }
 
@@ -804,7 +804,7 @@ static u8 GetParentSignalStrength(void)
     return 0;
 }
 
-static void SetAndRestartWirelessStatusIndicatorAnim(struct Sprite *sprite, s32 animNum)
+static void SetAndRestartWirelessStatusIndicatorAnim(struct Sprite* sprite, s32 animNum)
 {
     if (sprite->sCurrAnimNum != animNum)
     {
@@ -818,7 +818,7 @@ void UpdateWirelessStatusIndicatorSprite(void)
 {
     if (sWirelessStatusIndicatorSpriteId != SPRITE_NONE && gSprites[sWirelessStatusIndicatorSpriteId].sValidator == STATUS_INDICATOR_ACTIVE)
     {
-        struct Sprite *sprite = &gSprites[sWirelessStatusIndicatorSpriteId];
+        struct Sprite* sprite = &gSprites[sWirelessStatusIndicatorSpriteId];
         u8 signalStrength = RFU_LINK_ICON_LEVEL4_MAX;
         u8 i = 0;
 
@@ -869,7 +869,7 @@ void UpdateWirelessStatusIndicatorSprite(void)
         gMain.oamBuffer[125].y = sprite->y + sprite->centerToCornerVecY;
         gMain.oamBuffer[125].paletteNum = sprite->oam.paletteNum;
         gMain.oamBuffer[125].tileNum = sprite->sTileStart + sprite->anims[sprite->sCurrAnimNum][sprite->sFrameIdx].frame.imageValue;
-        CpuCopy16(gMain.oamBuffer + 125, (struct OamData *)OAM + 125, sizeof(struct OamData));
+        CpuCopy16(gMain.oamBuffer + 125, (struct OamData*)OAM + 125, sizeof(struct OamData));
         if (RfuGetStatus() == RFU_STATUS_FATAL_ERROR)
         {
             DestroyWirelessStatusIndicatorSprite();
@@ -885,7 +885,7 @@ void UpdateWirelessStatusIndicatorSprite(void)
 #undef sTileStart
 #undef sValidator
 
-static void CopyTrainerRecord(struct TrainerNameRecord *dest, u32 trainerId, const u8 *name)
+static void CopyTrainerRecord(struct TrainerNameRecord* dest, u32 trainerId, const u8* name)
 {
     int i;
     dest->trainerId = trainerId;
@@ -898,7 +898,7 @@ static void CopyTrainerRecord(struct TrainerNameRecord *dest, u32 trainerId, con
     dest->trainerName[i] = EOS;
 }
 
-static void ZeroName(u8 *name)
+static void ZeroName(u8* name)
 {
     s32 i;
 
@@ -906,7 +906,7 @@ static void ZeroName(u8 *name)
         *name++ = 0;
 }
 
-static bool32 NameIsEmpty(const u8 *name)
+static bool32 NameIsEmpty(const u8* name)
 {
     s32 i;
 
@@ -927,7 +927,7 @@ void SaveLinkTrainerNames(void)
         s32 j;
         s32 nextSpace;
         s32 connectedTrainerRecordIndices[5];
-        struct TrainerNameRecord *newRecords = AllocZeroed(sizeof(gSaveBlock1Ptr->trainerNameRecords));
+        struct TrainerNameRecord* newRecords = AllocZeroed(sizeof(gSaveBlock1Ptr->trainerNameRecords));
 
         // Check if we already have a record saved for connected trainers.
         for (i = 0; i < GetLinkPlayerCount(); i++)
@@ -935,7 +935,7 @@ void SaveLinkTrainerNames(void)
             connectedTrainerRecordIndices[i] = -1;
             for (j = 0; j < (int)ARRAY_COUNT(gSaveBlock1Ptr->trainerNameRecords); j++)
             {
-                if ((u16)gLinkPlayers[i].trainerId ==  gSaveBlock1Ptr->trainerNameRecords[j].trainerId && StringCompare(gLinkPlayers[i].name, gSaveBlock1Ptr->trainerNameRecords[j].trainerName) == 0)
+                if ((u16)gLinkPlayers[i].trainerId == gSaveBlock1Ptr->trainerNameRecords[j].trainerId && StringCompare(gLinkPlayers[i].name, gSaveBlock1Ptr->trainerNameRecords[j].trainerName) == 0)
                 {
                     connectedTrainerRecordIndices[i] = j;
                 }
@@ -975,14 +975,14 @@ void SaveLinkTrainerNames(void)
     }
 }
 
-bool32 PlayerHasMetTrainerBefore(u16 id, u8 *name)
+bool32 PlayerHasMetTrainerBefore(u16 id, u8* name)
 {
     s32 i;
 
     for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock1Ptr->trainerNameRecords); i++)
     {
         if (StringCompareN(gSaveBlock1Ptr->trainerNameRecords[i].trainerName, name, PLAYER_NAME_LENGTH) == 0
-         && gSaveBlock1Ptr->trainerNameRecords[i].trainerId == id)
+            && gSaveBlock1Ptr->trainerNameRecords[i].trainerId == id)
             return TRUE;
 
         if (NameIsEmpty(gSaveBlock1Ptr->trainerNameRecords[i].trainerName))

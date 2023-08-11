@@ -9,8 +9,8 @@
 #define PALTAG_SHADOW 55039
 #define GFXTAG_SHADOW 55129
 
-static void SpriteCB_SmokescreenImpactMain(struct Sprite *);
-static void SpriteCB_SmokescreenImpact(struct Sprite *);
+static void SpriteCB_SmokescreenImpactMain(struct Sprite*);
+static void SpriteCB_SmokescreenImpact(struct Sprite*);
 
 static const struct CompressedSpriteSheet sSmokescreenImpactSpriteSheet =
 {
@@ -71,7 +71,7 @@ static const union AnimCmd sAnim_SmokescreenImpact_3[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_SmokescreenImpact[] =
+static const union AnimCmd* const sAnims_SmokescreenImpact[] =
 {
     sAnim_SmokescreenImpact_0,
     sAnim_SmokescreenImpact_1,
@@ -132,7 +132,7 @@ u8 SmokescreenImpact(s16 x, s16 y, bool8 persist)
 {
     u8 mainSpriteId;
     u8 spriteId1, spriteId2, spriteId3, spriteId4;
-    struct Sprite *mainSprite;
+    struct Sprite* mainSprite;
 
     if (GetSpriteTileStartByTag(sSmokescreenImpactSpriteSheet.tag) == 0xFFFF)
     {
@@ -174,7 +174,7 @@ u8 SmokescreenImpact(s16 x, s16 y, bool8 persist)
     return mainSpriteId;
 }
 
-static void SpriteCB_SmokescreenImpactMain(struct Sprite *sprite)
+static void SpriteCB_SmokescreenImpactMain(struct Sprite* sprite)
 {
     if (sprite->sActiveSprites == 0)
     {
@@ -187,7 +187,7 @@ static void SpriteCB_SmokescreenImpactMain(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_SmokescreenImpact(struct Sprite *sprite)
+static void SpriteCB_SmokescreenImpact(struct Sprite* sprite)
 {
     if (sprite->animEnded)
     {

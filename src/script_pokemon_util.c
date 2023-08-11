@@ -21,7 +21,7 @@ void HealPlayerParty(void)
     u8 arg[4];
 
     // restore HP.
-    for(i = 0; i < gPlayerPartyCount; i++)
+    for (i = 0; i < gPlayerPartyCount; i++)
     {
         u16 maxHP = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP);
         arg[0] = maxHP;
@@ -30,7 +30,7 @@ void HealPlayerParty(void)
         ppBonuses = GetMonData(&gPlayerParty[i], MON_DATA_PP_BONUSES);
 
         // restore PP.
-        for(j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_MON_MOVES; j++)
         {
             arg[0] = CalculatePPWithBonus(GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j), ppBonuses, j);
             SetMonData(&gPlayerParty[i], MON_DATA_PP1 + j, arg);
@@ -50,7 +50,7 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 u
     u16 nationalDexNum;
     int sentToPc;
     u8 heldItem[2];
-    struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));
+    struct Pokemon* mon = AllocZeroed(sizeof(struct Pokemon));
 
     CreateMon(mon, species, level, 32, 0, 0, OT_ID_PLAYER_ID, 0);
     heldItem[0] = item;
@@ -59,7 +59,7 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 u
     sentToPc = GiveMonToPlayer(mon);
     nationalDexNum = SpeciesToNationalPokedexNum(species);
 
-    switch(sentToPc)
+    switch (sentToPc)
     {
     case MON_GIVEN_TO_PARTY:
     case MON_GIVEN_TO_PC:
@@ -74,7 +74,7 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 u
 
 u8 ScriptGiveEgg(u16 species)
 {
-    struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));
+    struct Pokemon* mon = AllocZeroed(sizeof(struct Pokemon));
     bool8 isEgg;
     bool8 sentToPc;
 
@@ -107,7 +107,7 @@ static bool8 CheckPartyMonHasHeldItem(u16 item)
 {
     int i;
 
-    for(i = 0; i < PARTY_SIZE; i++)
+    for (i = 0; i < PARTY_SIZE; i++)
     {
         u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
         if (species != SPECIES_NONE && species != SPECIES_EGG && GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM) == item)
@@ -152,7 +152,7 @@ void ScriptSetMonMoveSlot(u8 monIndex, u16 move, u8 slot)
 void ChooseHalfPartyForBattle(void)
 {
     gMain.savedCallback = CB2_ReturnFromChooseHalfParty;
-//    VarSet(VAR_FRONTIER_FACILITY, FACILITY_MULTI_OR_EREADER);
+    //    VarSet(VAR_FRONTIER_FACILITY, FACILITY_MULTI_OR_EREADER);
     InitChooseMonsForBattle(CHOOSE_MONS_FOR_CABLE_CLUB_BATTLE);
 }
 
@@ -196,7 +196,7 @@ static void CB2_ReturnFromChooseBattleTowerParty(void)
 
 void ReducePlayerPartyToThree(void)
 {
-    struct Pokemon * party = AllocZeroed(3 * sizeof(struct Pokemon));
+    struct Pokemon* party = AllocZeroed(3 * sizeof(struct Pokemon));
     int i;
 
     // copy the selected pokemon according to the order.

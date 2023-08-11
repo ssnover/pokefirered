@@ -12,7 +12,7 @@
 static void Task_MapNamePopup(u8 taskId);
 static u16 MapNamePopupCreateWindow(bool32 palIntoFadedBuffer);
 static void MapNamePopupPrintMapNameOnWindow(u16 windowId);
-static u8 *MapNamePopupAppendFloorNum(u8 *dest, s8 flags);
+static u8* MapNamePopupAppendFloorNum(u8* dest, s8 flags);
 
 #define tState              data[0]
 #define tTimer              data[1]
@@ -33,7 +33,7 @@ void ShowMapNamePopup(bool32 palIntoFadedBuffer)
         if (taskId == TASK_NONE)
         {
             taskId = CreateTask(Task_MapNamePopup, 90);
-            ChangeBgX(0,  0x0000, 0);
+            ChangeBgX(0, 0x0000, 0);
             ChangeBgY(0, -0x1081, 0);
             gTasks[taskId].tState = 0;
             gTasks[taskId].tPos = 0;
@@ -50,7 +50,7 @@ void ShowMapNamePopup(bool32 palIntoFadedBuffer)
 
 static void Task_MapNamePopup(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
     switch (task->tState)
     {
     case 0:
@@ -129,7 +129,7 @@ static void Task_MapNamePopup(u8 taskId)
 void DismissMapNamePopup(void)
 {
     u8 taskId;
-    s16 *data;
+    s16* data;
     taskId = FindTaskIdByFunc(Task_MapNamePopup);
     if (taskId != TASK_NONE)
     {
@@ -191,7 +191,7 @@ static void MapNamePopupPrintMapNameOnWindow(u16 windowId)
     u8 mapName[25];
     u32 maxWidth = 112;
     u32 xpos;
-    u8 *ptr = GetMapName(mapName, gMapHeader.regionMapSectionId, 0);
+    u8* ptr = GetMapName(mapName, gMapHeader.regionMapSectionId, 0);
     if (gMapHeader.floorNum != 0)
     {
         ptr = MapNamePopupAppendFloorNum(ptr, gMapHeader.floorNum);
@@ -202,7 +202,7 @@ static void MapNamePopupPrintMapNameOnWindow(u16 windowId)
     AddTextPrinterParameterized(windowId, FONT_NORMAL, mapName, xpos, 2, TEXT_SKIP_DRAW, NULL);
 }
 
-static u8 *MapNamePopupAppendFloorNum(u8 *dest, s8 floorNum)
+static u8* MapNamePopupAppendFloorNum(u8* dest, s8 floorNum)
 {
     if (floorNum == 0)
         return dest;

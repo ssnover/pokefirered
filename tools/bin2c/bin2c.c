@@ -43,9 +43,9 @@ do                                          \
 
 #endif // _MSC_VER
 
-unsigned char *ReadWholeFile(char *path, int *size)
+unsigned char* ReadWholeFile(char* path, int* size)
 {
-    FILE *fp = fopen(path, "rb");
+    FILE* fp = fopen(path, "rb");
 
     if (fp == NULL)
         FATAL_ERROR("Failed to open \"%s\" for reading.\n", path);
@@ -54,7 +54,7 @@ unsigned char *ReadWholeFile(char *path, int *size)
 
     *size = ftell(fp);
 
-    unsigned char *buffer = malloc(*size);
+    unsigned char* buffer = malloc(*size);
 
     if (buffer == NULL)
         FATAL_ERROR("Failed to allocate memory for reading \"%s\".\n", path);
@@ -69,7 +69,7 @@ unsigned char *ReadWholeFile(char *path, int *size)
     return buffer;
 }
 
-int ExtractData(unsigned char *buffer, int offset, int size)
+int ExtractData(unsigned char* buffer, int offset, int size)
 {
     switch (size)
     {
@@ -77,25 +77,25 @@ int ExtractData(unsigned char *buffer, int offset, int size)
         return buffer[offset];
     case 2:
         return (buffer[offset + 1] << 8)
-             | buffer[offset];
+            | buffer[offset];
     case 4:
         return (buffer[offset + 3] << 24)
-             | (buffer[offset + 2] << 16)
-             | (buffer[offset + 1] << 8)
-             | buffer[offset];
+            | (buffer[offset + 2] << 16)
+            | (buffer[offset + 1] << 8)
+            | buffer[offset];
     default:
         FATAL_ERROR("Invalid size passed to ExtractData.\n");
     }
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     if (argc < 3)
         FATAL_ERROR("Usage: bin2c INPUT_FILE VAR_NAME [OPTIONS...]\n");
 
     int fileSize;
-    unsigned char *buffer = ReadWholeFile(argv[1], &fileSize);
-    char *var_name = argv[2];
+    unsigned char* buffer = ReadWholeFile(argv[1], &fileSize);
+    char* var_name = argv[2];
     int col = 1;
     int pad = 0;
     int size = 1;
