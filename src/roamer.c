@@ -96,10 +96,9 @@ void ClearRoamerData(void)
     a;\
 })
 
-void CreateInitialRoamerMon(void)
+void CreateRoamerMon(u16 species)
 {
     struct Pokemon* mon = &gEnemyParty[0];
-    u16 species = GetRoamerSpecies();
     CreateMon(mon, species, 50, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
     ROAMER->species = species;
     ROAMER->level = 50;
@@ -119,8 +118,9 @@ void CreateInitialRoamerMon(void)
 
 void InitRoamer(void)
 {
+    u16 species = GetRoamerSpecies();
     ClearRoamerData();
-    CreateInitialRoamerMon();
+    CreateRoamerMon(species);
 }
 
 void UpdateLocationHistoryForRoamer(void)
@@ -244,6 +244,21 @@ void UpdateRoamerHPStatus(struct Pokemon* mon)
 void SetRoamerInactive(void)
 {
     ROAMER->active = FALSE;
+}
+
+void UpdateRoamerMon(void)
+{
+    u16 next_species = ROAMER->species + 1;
+    if (next_species > SPECIES_SUICUNE) {
+        next_species = SPECIES_RAIKOU;
+    }
+    if (next_species == GetRoamerSpecies()) {
+        // All 3 have been captured
+        SetRoamerInactive();
+    } else {
+        ClearRoamerData();
+        CreateRoamerMon(next_species);
+    }
 }
 
 void GetRoamerLocation(u8* mapGroup, u8* mapNum)
