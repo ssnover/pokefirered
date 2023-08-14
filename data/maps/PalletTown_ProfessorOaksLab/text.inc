@@ -355,3 +355,19 @@ PalletTown_ProfessorOaksLab_Text_RivalIllCompleteThePokedex::
     .string "ONE ISLAND first…\p"
     .string "Anyways, I'm outta here!$"
 
+PalletTown_ProfessorOaksLab_GiveAllStarters::
+    .string "Since you've been so diligent\n"
+    .string "I thought I might give you a few\p"
+    .string "POKéMON to help your POKéDEX!$"
+
+PalletTown_ProfessorOaksLab_Text_ObtainedBulbasaurFromOak::
+    .string "{PLAYER} obtained a BULBASAUR from\n"
+    .string "OAK!$"
+
+PalletTown_ProfessorOaksLab_Text_ObtainedCharmanderFromOak::
+    .string "{PLAYER} obtained a CHARMANDER from\n"
+    .string "OAK!$"
+
+PalletTown_ProfessorOaksLab_Text_ObtainedSquirtleFromOak::
+    .string "{PLAYER} obtained a SQUIRTLE from\n"
+    .string "OAK!$"
