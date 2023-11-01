@@ -279,6 +279,12 @@ OneIsland_PokemonCenter_1F_EventScript_GiveCelioSapphire::
 	setflag FLAG_SYS_CAN_LINK_WITH_RS
 	setflag FLAG_HIDE_CERULEAN_CAVE_GUARD
 	setflag FLAG_HIDE_LORELEI_IN_HER_HOUSE
+    setflag FLAG_RECEIVED_MYSTIC_TICKET
+    setflag FLAG_ENABLE_SHIP_NAVEL_ROCK
+    setflag FLAG_RECEIVED_AURORA_TICKET
+    setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
+    giveitem ITEM_MYSTIC_TICKET
+    giveitem ITEM_AURORA_TICKET
 	setvar VAR_MAP_SCENE_ONE_ISLAND_POKEMON_CENTER_1F, 6
 	special InitRoamer
 	release
