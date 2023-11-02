@@ -1758,44 +1758,41 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u32 personality;
     u32 value;
     u16 checksum;
-    bool32 shouldBeShiny;
-    bool32 isShiny;
     u32 shinyValue;
+    u8 shinyRollIdx;
+    u8 shinyRolls = 2 << (HasAllKantoMons() ? 1 : 0);
 
     ZeroBoxMonData(boxMon);
 
-    if (hasFixedPersonality) {
-        personality = fixedPersonality;
-    } else {
-        personality = Random32();
-    }
-    // Determine original trainer ID
-    if (otIdType == OT_ID_RANDOM_NO_SHINY) // Pokemon cannot be shiny
-    {
-        do
+    for (shinyRollIdx = 0; shinyRollIdx < shinyRolls; ++shinyRollIdx) {
+        if (hasFixedPersonality) {
+            personality = fixedPersonality;
+        } else {
+            personality = Random32();
+        }
+        // Determine original trainer ID
+        if (otIdType == OT_ID_RANDOM_NO_SHINY) // Pokemon cannot be shiny
         {
-            value = Random32();
-            shinyValue = GET_SHINY_VALUE(value, personality);
-        } while (shinyValue < SHINY_ODDS);
-    }
-    else if (otIdType == OT_ID_PRESET) // Pokemon has a preset OT ID
-    {
-        value = fixedOtId;
-    }
-    else // Player is the OT
-    {
-        value = gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
-    }
+            do
+            {
+                value = Random32();
+                shinyValue = GET_SHINY_VALUE(value, personality);
+            } while (shinyValue < SHINY_ODDS);
+            break;
+        }
+        else if (otIdType == OT_ID_PRESET) // Pokemon has a preset OT ID
+        {
+            value = fixedOtId;
+        }
+        else // Player is the OT
+        {
+            value = gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+        }
 
-    shinyValue = GET_SHINY_VALUE(value, personality);
-    // It's possible for a Pokemon to be shiny with 1/4096 odds but not 1/8192 odds
-    shouldBeShiny = shinyValue < SHINY_ODDS;
-    isShiny = shinyValue < SHINY_ODDS_CLASSIC;
-    // If we get a 1/4096 value, but not a 1/8192 value, modify personality value to get a 1/8192 value
-    // This allows shiny-ness to persist in games that have not modified shiny odds
-    if (shouldBeShiny && !isShiny && !hasFixedPersonality) {
-        // This can only occur if bit 3 is still high, so we flip that one
-        personality ^= (1 << 3);
+        shinyValue = GET_SHINY_VALUE(value, personality);
+        if (shinyValue < SHINY_ODDS_CLASSIC) {
+            break;
+        }
     }
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
