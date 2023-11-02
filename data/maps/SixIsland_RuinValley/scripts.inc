@@ -23,6 +23,36 @@ SixIsland_RuinValley_EventScript_Scientist::
 	release
 	end
 
+SixIsland_RuinValley_EventScript_Researcher::
+	lock
+	faceplayer
+	msgbox SixIsland_RuinValley_Text_ResearchingRuins
+	call_if_unset FLAG_GOT_FOSSIL_FROM_RUIN_VALLEY, SixIsland_RuinValley_EventScript_GiveOtherFossil
+	call_if_set FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE, SixIsland_RuinValley_EventScript_GreatfulResearcher
+	release
+	end
+
+SixIsland_RuinValley_EventScript_GiveOtherFossil::
+	msgbox SixIsland_RuinValley_Text_GiveFossil
+	call_if_unset FLAG_GOT_HELIX_FOSSIL, SixIsland_RuinValley_EventScript_GiveHelixFossil
+	call_if_unset FLAG_GOT_DOME_FOSSIL, SixIsland_RuinValley_EventScript_GiveDomeFossil
+	setflag FLAG_GOT_FOSSIL_FROM_RUIN_VALLEY
+	return
+
+SixIsland_RuinValley_EventScript_GiveHelixFossil::
+	giveitem ITEM_HELIX_FOSSIL
+	setflag FLAG_GOT_HELIX_FOSSIL
+	return
+
+SixIsland_RuinValley_EventScript_GiveDomeFossil::
+	giveitem ITEM_DOME_FOSSIL
+	setflag FLAG_GOT_DOME_FOSSIL
+	return
+
+SixIsland_RuinValley_EventScript_GreatfulResearcher::
+	msgbox SixIsland_RuinValley_Text_ThanksForOpening
+	return
+
 SixIsland_RuinValley_EventScript_DottedHoleDoor::
 	lockall
 	goto_if_set FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE, SixIsland_RuinValley_EventScript_DottedHoleDoorOpen

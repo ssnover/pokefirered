@@ -159,6 +159,19 @@ static const struct MenuAction sMultichoiceList_DomeAmber[] = {
     { gOtherText_Exit }
 };
 
+static const struct MenuAction sMultichoiceList_HelixDomeAmber[] = {
+    { gText_HelixFossil },
+    { gText_DomeFossil },
+    { gText_OldAmber },
+    { gOtherText_Exit }
+};
+
+static const struct MenuAction sMultichoiceList_DomeHelix[] = {
+    { gText_HelixFossil },
+    { gText_DomeFossil },
+    { gOtherText_Exit }
+};
+
 static const struct MenuAction sMultichoiceList_CeladonVendingMachine[] = {
     { gText_FreshWater_200 },
     { gText_SodaPop_300 },
@@ -523,6 +536,8 @@ static const struct MultichoiceListStruct sMultichoiceLists[] = {
     [MULTICHOICE_AMBER] = MULTICHOICE(sMultichoiceList_Amber),
     [MULTICHOICE_HELIX_AMBER] = MULTICHOICE(sMultichoiceList_HelixAmber),
     [MULTICHOICE_DOME_AMBER] = MULTICHOICE(sMultichoiceList_DomeAmber),
+    [MULTICHOICE_HELIX_DOME_AMBER] = MULTICHOICE(sMultichoiceList_HelixDomeAmber),
+    [MULTICHOICE_DOME_HELIX] = MULTICHOICE(sMultichoiceList_DomeHelix),
     [MULTICHOICE_CELADON_VENDING_MACHINE] = MULTICHOICE(sMultichoiceList_CeladonVendingMachine),
     [MULTICHOICE_GAME_CORNER_COIN_PURCHASE_COUNTER] = MULTICHOICE(sMultichoiceList_GameCornerCoinPurchaseCounter),
     [MULTICHOICE_EXCELLENT_NOT_SO_BAD] = MULTICHOICE(sMultichoiceList_Excellent_NotSoBad),
@@ -545,7 +560,6 @@ static const struct MultichoiceListStruct sMultichoiceLists[] = {
     [MULTICHOICE_ISLAND_13] = MULTICHOICE(sMultichoiceList_Island13),
     [MULTICHOICE_ISLAND_12] = MULTICHOICE(sMultichoiceList_Island12),
     [MULTICHOICE_TRADE_COLOSSEUM_CRUSH] = MULTICHOICE(sMultichoiceList_TradeColosseumCrush),
-    [MULTICHOICE_48] = MULTICHOICE(sMultichoiceList_48),
     [MULTICHOICE_POKEJUMP_DODRIO] = MULTICHOICE(sMultichoiceList_PokejumpDodrio),
     [MULTICHOICE_TRADE_COLOSSEUM_2] = MULTICHOICE(sMultichoiceList_TradeColosseum_2),
     [MULTICHOICE_MUSHROOMS] = MULTICHOICE(sMultichoiceList_Mushrooms),
@@ -559,7 +573,6 @@ static const struct MultichoiceListStruct sMultichoiceLists[] = {
     [MULTICHOICE_SEAGALLOP_V13] = MULTICHOICE(sMultichoiceList_SeagallopV13),
     [MULTICHOICE_SEAGALLOP_V12] = MULTICHOICE(sMultichoiceList_SeagallopV12),
     [MULTICHOICE_SEAGALLOP_VERMILION] = MULTICHOICE(sMultichoiceList_SeagallopVermilion),
-    [MULTICHOICE_62] = MULTICHOICE(sMultichoiceList_62),
     [MULTICHOICE_JOIN_OR_LEAD] = MULTICHOICE(sMultichoiceList_JoinOrLead),
     [MULTICHOICE_TRAINER_TOWER_MODE] = MULTICHOICE(sMultichoiceList_TrainerTowerMode),
 };

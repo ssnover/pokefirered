@@ -85,3 +85,21 @@ SixIsland_RuinValley_Text_HectorPostBattle::
     .string "engraved on the outside.\p"
     .string "I don't know what they mean,\n"
     .string "though.$"
+
+SixIsland_RuinValley_Text_ResearchingRuins::
+    .string "I've been researching\n"
+    .string "these ruins.\p"
+    .string "It hasn't been going very\n"
+    .string "well though...$"
+
+SixIsland_RuinValley_Text_GiveFossil::
+    .string "I did happen to find this\n"
+    .string "fossil!\p"
+    .string "You can have it if you\n"
+    .string "promise to help me!$"
+
+SixIsland_RuinValley_Text_ThanksForOpening::
+    .string "Thanks for opening the\n"
+    .string "door to the chamber!\p"
+    .string "I couldn't make heads or\n"
+    .string "tails of those symbols.$"
