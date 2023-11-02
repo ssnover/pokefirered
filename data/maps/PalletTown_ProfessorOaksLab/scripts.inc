@@ -576,10 +576,10 @@ PalletTown_ProfessorOaksLab_EventScript_ProfOak::
 	lock
 	faceplayer
 	goto_if_set SHOWED_OAK_COMPLETE_DEX, PalletTown_ProfessorOaksLab_EventScript_OakJustShownCompleteDex
+	goto_if_set FLAG_SYS_CAN_LINK_WITH_RS, PalletTown_ProfessorOaksLab_EventScript_TryGiveAllStarters
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 9, PalletTown_ProfessorOaksLab_EventScript_RatePokedex
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 8, PalletTown_ProfessorOaksLab_EventScript_MonsAroundWorldWait
 	goto_if_set FLAG_SYS_GAME_CLEAR, PalletTown_ProfessorOaksLab_EventScript_TryStartNationalDexScene
-	goto_if_set FLAG_SYS_CAN_LINK_WITH_RS, PalletTown_ProfessorOaksLab_EventScript_TryGiveAllStarters
 	goto_if_eq VAR_MAP_SCENE_CERULEAN_CITY_RIVAL, 1, PalletTown_ProfessorOaksLab_EventScript_RatePokedex
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 6, PalletTown_ProfessorOaksLab_EventScript_RatePokedexOrTryGiveBalls
 	goto_if_ge VAR_MAP_SCENE_VIRIDIAN_CITY_MART, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene
@@ -928,23 +928,21 @@ PalletTown_ProfessorOaksLab_EventScript_GiveAllStarters::
 	lock
 	faceplayer
 	msgbox PalletTown_ProfessorOaksLab_GiveAllStarters
+	call PalletTown_ProfessorOaksLab_EventScript_GiveBulbasaur
+	call PalletTown_ProfessorOaksLab_EventScript_GiveCharmander
+	call PalletTown_ProfessorOaksLab_EventScript_GiveSquirtle
+	setflag FLAG_GOT_ALL_STARTERS
+	release
+	end
+
+PalletTown_ProfessorOaksLab_EventScript_GiveBulbasaur::
 	setvar VAR_TEMP_1, SPECIES_BULBASAUR
 	givemon SPECIES_BULBASAUR, 5
 	goto_if_eq VAR_RESULT, 0, PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurParty
 	goto_if_eq VAR_RESULT, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurPC
 	goto_if_eq VAR_RESULT, 2, EventScript_NoMoreRoomForPokemon
-	setvar VAR_TEMP_1, SPECIES_CHARMANDER
-	givemon SPECIES_CHARMANDER, 5
-	goto_if_eq VAR_RESULT, 0, PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderParty
-	goto_if_eq VAR_RESULT, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderPC
-	goto_if_eq VAR_RESULT, 2, EventScript_NoMoreRoomForPokemon
-	setvar VAR_TEMP_1, SPECIES_SQUIRTLE
-	givemon SPECIES_SQUIRTLE, 5
-	goto_if_eq VAR_RESULT, 0, PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtleParty
-	goto_if_eq VAR_RESULT, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtlePC
-	goto_if_eq VAR_RESULT, 2, EventScript_NoMoreRoomForPokemon
-	release
-	end	
+	return
+
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurParty::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -952,7 +950,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurParty::
 	message PalletTown_ProfessorOaksLab_Text_ObtainedBulbasaurFromOak
 	waitmessage
 	waitfanfare
-	end
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurPC::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -962,7 +960,15 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveBulbasaurPC::
 	waitfanfare
 	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
 	call EventScript_TransferredToPC
-	end
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_GiveCharmander::
+	setvar VAR_TEMP_1, SPECIES_CHARMANDER
+	givemon SPECIES_CHARMANDER, 5
+	goto_if_eq VAR_RESULT, 0, PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderParty
+	goto_if_eq VAR_RESULT, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderPC
+	goto_if_eq VAR_RESULT, 2, EventScript_NoMoreRoomForPokemon
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderParty::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -970,7 +976,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderParty::
 	message PalletTown_ProfessorOaksLab_Text_ObtainedCharmanderFromOak
 	waitmessage
 	waitfanfare
-	end
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderPC::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -980,7 +986,15 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveCharmanderPC::
 	waitfanfare
 	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
 	call EventScript_TransferredToPC
-	end
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_GiveSquirtle::
+	setvar VAR_TEMP_1, SPECIES_SQUIRTLE
+	givemon SPECIES_SQUIRTLE, 5
+	goto_if_eq VAR_RESULT, 0, PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtleParty
+	goto_if_eq VAR_RESULT, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtlePC
+	goto_if_eq VAR_RESULT, 2, EventScript_NoMoreRoomForPokemon
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtleParty::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -988,8 +1002,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtleParty::
 	message PalletTown_ProfessorOaksLab_Text_ObtainedSquirtleFromOak
 	waitmessage
 	waitfanfare
-	goto PalletTown_ProfessorOaksLab_EventScript_EndReceiveAllStarters
-	end
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtlePC::
     textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -999,12 +1012,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveSquirtlePC::
 	waitfanfare
 	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
 	call EventScript_TransferredToPC
-	goto PalletTown_ProfessorOaksLab_EventScript_EndReceiveAllStarters
-	end
-
-PalletTown_ProfessorOaksLab_EventScript_EndReceiveAllStarters::
-    setflag FLAG_GOT_ALL_STARTERS
-	end
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_DontStartNationalDexScene::
 	release
