@@ -78,6 +78,7 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static u8 GetLevelFromMonExp(struct Pokemon *mon);
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
+static u8 OverrideGameVersion(u16 species);
 
 #include "data/battle_moves.h"
 
@@ -94,6 +95,59 @@ static const struct CombinedMove sCombinedMoves[2] =
     {
         {MOVE_EMBER, MOVE_GUST, MOVE_HEAT_WAVE},
         {0xFFFF, 0xFFFF, 0xFFFF}};
+
+struct OriginGameOverride {
+    u16 species;
+    u8 overrideOriginGame;
+};
+
+static const struct OriginGameOverride sSpeciesToGameOverride[45] = {
+    {SPECIES_EKANS, VERSION_FIRE_RED},
+    {SPECIES_ARBOK, VERSION_FIRE_RED},
+    {SPECIES_ODDISH, VERSION_FIRE_RED},
+    {SPECIES_GLOOM, VERSION_FIRE_RED},
+    {SPECIES_VILEPLUME, VERSION_FIRE_RED},
+    {SPECIES_BELLOSSOM, VERSION_FIRE_RED},
+    {SPECIES_PSYDUCK, VERSION_FIRE_RED},
+    {SPECIES_GOLDUCK, VERSION_FIRE_RED},
+    {SPECIES_GROWLITHE, VERSION_FIRE_RED},
+    {SPECIES_ARCANINE, VERSION_FIRE_RED},
+    {SPECIES_SHELLDER, VERSION_FIRE_RED},
+    {SPECIES_CLOYSTER, VERSION_FIRE_RED},
+    {SPECIES_ELECTABUZZ, VERSION_FIRE_RED},
+    {SPECIES_ELEKID, VERSION_FIRE_RED},
+    {SPECIES_SCYTHER, VERSION_FIRE_RED},
+    {SPECIES_SCIZOR, VERSION_FIRE_RED},
+    {SPECIES_WOOPER, VERSION_FIRE_RED},
+    {SPECIES_QUAGSIRE, VERSION_FIRE_RED},
+    {SPECIES_MURKROW, VERSION_FIRE_RED},
+    {SPECIES_QWILFISH, VERSION_FIRE_RED},
+    {SPECIES_DELIBIRD, VERSION_FIRE_RED},
+    {SPECIES_SKARMORY, VERSION_FIRE_RED},
+    {SPECIES_SANDSHREW, VERSION_LEAF_GREEN},
+    {SPECIES_SANDSLASH, VERSION_LEAF_GREEN},
+    {SPECIES_VULPIX, VERSION_LEAF_GREEN},
+    {SPECIES_NINETALES, VERSION_LEAF_GREEN},
+    {SPECIES_BELLSPROUT, VERSION_LEAF_GREEN},
+    {SPECIES_WEEPINBELL, VERSION_LEAF_GREEN},
+    {SPECIES_VICTREEBEL, VERSION_LEAF_GREEN},
+    {SPECIES_SLOWPOKE, VERSION_LEAF_GREEN},
+    {SPECIES_SLOWBRO, VERSION_LEAF_GREEN},
+    {SPECIES_SLOWKING, VERSION_LEAF_GREEN},
+    {SPECIES_STARYU, VERSION_LEAF_GREEN},
+    {SPECIES_STARMIE, VERSION_LEAF_GREEN},
+    {SPECIES_MAGMAR, VERSION_LEAF_GREEN},
+    {SPECIES_MAGBY, VERSION_LEAF_GREEN},
+    {SPECIES_PINSIR, VERSION_LEAF_GREEN},
+    {SPECIES_AZURILL, VERSION_LEAF_GREEN},
+    {SPECIES_MARILL, VERSION_LEAF_GREEN},
+    {SPECIES_AZUMARILL, VERSION_LEAF_GREEN},
+    {SPECIES_MISDREAVUS, VERSION_LEAF_GREEN},
+    {SPECIES_SNEASEL, VERSION_LEAF_GREEN},
+    {SPECIES_REMORAID, VERSION_LEAF_GREEN},
+    {SPECIES_OCTILLERY, VERSION_LEAF_GREEN},
+    {SPECIES_MANTINE, VERSION_LEAF_GREEN}
+};
 
 // NOTE: The order of the elements in the 3 arrays below is irrelevant.
 // To reorder the pokedex, see the values in include/constants/pokedex.h.
@@ -1761,6 +1815,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u32 shinyValue;
     u8 shinyRollIdx;
     u8 shinyRolls = 2 << (HasAllKantoMons() ? 1 : 0);
+    u8 metGame;
 
     ZeroBoxMonData(boxMon);
 
@@ -1811,7 +1866,8 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     value = GetCurrentRegionMapSectionId();
     SetBoxMonData(boxMon, MON_DATA_MET_LOCATION, &value);
     SetBoxMonData(boxMon, MON_DATA_MET_LEVEL, &level);
-    SetBoxMonData(boxMon, MON_DATA_MET_GAME, &gGameVersion);
+    metGame = OverrideGameVersion(species);
+    SetBoxMonData(boxMon, MON_DATA_MET_GAME, &metGame);
     value = ITEM_POKE_BALL;
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
     SetBoxMonData(boxMon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
@@ -3688,6 +3744,19 @@ static u8 SendMonToPC(struct Pokemon *mon)
     } while (boxNo != StorageGetCurrentBox());
 
     return MON_CANT_GIVE;
+}
+
+u8 OverrideGameVersion(u16 species) {
+    u8 tableIdx;
+    u8 gameOverride = gGameVersion;
+
+    for (tableIdx = 0; tableIdx < 45; ++tableIdx) {
+        if (species == sSpeciesToGameOverride[tableIdx].species) {
+            gameOverride = sSpeciesToGameOverride[tableIdx].overrideOriginGame;
+        }
+    }
+
+    return gameOverride;
 }
 
 u8 CalculatePlayerPartyCount(void)

@@ -1078,6 +1078,7 @@ static void _GiveEggFromDaycare(struct DayCare* daycare)
 
     isEgg = TRUE;
     SetMonData(&egg, MON_DATA_IS_EGG, &isEgg);
+    SetMonData(&egg, MON_DATA_MET_GAME, &gGameVersion);
     gPlayerParty[PARTY_SIZE - 1] = egg;
     CompactPartySlots();
     CalculatePlayerPartyCount();
@@ -1100,6 +1101,7 @@ void CreateEgg(struct Pokemon* mon, u16 species, bool8 setHotSpringsLocation)
     SetMonData(mon, MON_DATA_NICKNAME, sJapaneseEggNickname);
     SetMonData(mon, MON_DATA_FRIENDSHIP, &gSpeciesInfo[species].eggCycles);
     SetMonData(mon, MON_DATA_MET_LEVEL, &metLevel);
+    SetMonData(mon, MON_DATA_MET_GAME, &gGameVersion);
     SetMonData(mon, MON_DATA_LANGUAGE, &language);
     if (setHotSpringsLocation)
     {
